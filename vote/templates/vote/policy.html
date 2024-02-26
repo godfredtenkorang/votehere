@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote here</title>
+    <!-- here is the link to css -->
+    <link rel="stylesheet" href="{% static 'vote/style.css' %}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
+        integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+</head>
+
+<body>
+
+
+    <!-- header section -->
+    <header>
+        <div class="nav-bar">
+            <nav>
+                <div class="logo">
+                    <a href="">Vote Here</a>
+
+                </div>
+                <ul class="navLinks">
+                    <li><a href="">Home</a></li>
+                    <li><a  href="">About Us</a></li>
+                    <li><a class="active" href="">Privacy Policy</a></li>
+                    <li><a href="">Term& Condition </a></li>
+                    <li><a href="">Contact Us</a></li>
+                 
+                </ul>
+                <!-- search bar -->
+                <form action="">
+                    <input type="search" name="" id="" placeholder="Search Award....">
+                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+
+            </nav>
+
+            <!-- menu icon -->
+            <div class="menu-icon">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    
+    <!-- banners -->
+    <div class="banners">
+        <img src="{% static 'vote/img/banner.jpg' %}" alt="">
+        <div class="banners-content">
+            <h1>Policy</h1>
+        </div>
+
+    </div>
+
+    <!-- policy section -->
+    <section class="policy-container">
+        <div class="policy-col">
+            <p>We collect the e-mail addresses of those who communicate with us via e-mail, aggregate information on what pages consumers access or visit, and information volunteered by the consumer (such as survey information and/or site registrations). The information we collect is used to improve the content of our Web pages and the quality of our service, and is not shared with or sold to other organizations.
+
+            </p>
+        </div>
+
+        <div class="policy-col">
+            <h3> Information Gathering and Usage</h3>
+<p>When you register, we may ask for information such as your name, company name, email address, and billing address (collectively “Registration Information”) to assist in providing the services to you. You will also be asked to share information about your nominees (collectively “Nominee Information”) such as email addresses, phone numbers and mailing address so you can use our service for nominee processes such as notification of an election, confirm voting eligibility, and receive votes results. <span>voteHere</span> WILL NEVER SHARE REGISTRATION INFORMATION OR VOTER INFORMATION WITH ANY THIRD PARTY.</p>
+            </p>
+        </div>
+        <div class="policy-col">
+            <h3>Cookies</h3>
+            <p> A cookie is a small amount of data, which often includes an anonymous unique identifier, that is sent to your browser from a web site’s computers and stored on your computer’s hard drive. Cookies are required to use <span>voteHere</span>. We use cookies to record current session information, but do not use permanent cookies. You are required to log-in to your account after a certain period of inactivity has elapsed to protect you against others accidentally accessing your account contents.
+
+            </p>
+        </div>
+        <div class="policy-col">
+            <h3>Analytics</h3>
+            <p>We use Google Analytics (including Display Advertising and Google Analytics Demographics and Interest Reporting) to collect non-personally identifiable information on site visitors and their use of our website and their visits to other categories of sites across the internet. This information is used to improve and customize our website and marketing efforts. To learn how Google uses the data they collect, visit the Google Privacy Policy. You can always opt-out of Google Analytics Display Advertising across all sites: visit Google and adjust your Ad Settings.
+
+            </p>
+        </div>
+        <div class="policy-col">
+            <h3>Data Storage</h3>
+            <p><span>voteHere</span> uses third party vendors and hosting partners to provide the necessary hardware, software, networking, storage, and related technology required to run <span>voteHere</span>. Although <span>voteHere</span> owns the code, databases, and all rights to the application, you retain all rights to your data.
+
+            </p>
+        </div>
+        <div class="policy-col">
+            <h3>Disclosure</h3>
+           <p><span>voteHere</span> may disclose personally identifiable information under special circumstances, such as to comply with subpoenas or when your actions violate the Terms of Service. It may be necessary to share information in order to investigate, prevent, or take action regarding suspected or actual illegal activities, including without limitation, fraud, situations involving potential threats to the physical safety of any person, or as otherwise permitted or required by law.
+
+           </p>
+        </div>
+
+        <div class="policy-col">
+            <h3>Changes</h3>
+            <p><span>voteHere</span> may periodically update this policy. We will notify you about significant changes in the way we treat personal information by sending a notice to the primary email address specified in your account or by placing a prominent notice on our site. Questions Any questions about this Privacy Policy should be addressed to support@<span>voteHere</span>.
+
+
+            </p>
+        </div>
+    </section>
+
+
+
+
+   <!-- footer section -->
+   <footer>
+    <a href="https://wa.link/gj4et8">Godey Tech</a>
+    <p> © Copyright 2024 Vote. All right reserved </p>
+  </footer>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+    <!-- here is the link to javasc ript-->
+    <script src="{% static 'vote/app.js' %}"></script>
+
+    <!-- this script is for the whatsapp plugin -->
+  <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var gcaMain = new GetChatApp({
+  'mobileNumber' : '+233 55 391 2334',
+  'titleMessage' : '👋 Chat with me on WhatsApp!',
+  'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
+  'position' : 'right',
+  'platforms' : {
+  'whatsapp' : true,
+  'facebook' : false,
+  'email' : false,
+  'instagram' : false,
+  'telegram' : false,
+  'x' : false,
+  'tiktok' : false,
+  'linkedin' : false,
+  'phone' : false,
+  'customLink' : false
+  },
+  'facebookPageId' : '',
+  'facebookMessage' : 'Hi there!<br><br>Start chatting with us now!',
+  'facebookReplyTime' : 'a day',
+  'gcaEmailAddress' : '',
+  'gcaEmailSubject' : '',
+  'gcaInstagramUsername' : '',
+  'gcaTelegramUsername' : '',
+  'gcaXUsername' : '',
+  'gcaTiktokUsername' : '',
+  'gcaLinkedinUsername' : '',
+  'gcaPhoneNumber' : '',
+  'gcaCustomLink' : '',
+  'multipleContacts' : false
+    });
+  });
+  </script>
+</body>
+
+</html>
