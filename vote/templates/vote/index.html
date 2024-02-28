@@ -30,15 +30,15 @@
     <div class="nav-bar">
       <nav>
         <div class="logo">
-          <a href="">Vote Here</a>
+          <a href="{% url 'index' %}">Vote Here</a>
 
         </div>
         <ul class="navLinks">
-          <li><a  class="active" href="">Home</a></li>
-          <li><a href="">About Us</a></li>
-          <li><a href="">Privacy Policy</a></li>
-          <li><a href="">Term& Condition </a></li>
-          <li><a href="">Contact Us</a></li>
+          <li><a  class="active" href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'about' %}">About Us</a></li>
+          <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
+          <li><a href="{% url 'termsCondition' %}">Term& Condition </a></li>
+          <li><a href="{% url 'contact' %}">Contact Us</a></li>
          
         </ul>
         <!-- search bar -->
