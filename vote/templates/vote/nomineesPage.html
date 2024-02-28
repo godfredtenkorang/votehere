@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote here</title>
+     <!-- here is the link to css -->
+  <link rel="stylesheet" href="{% static 'vote/style.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
+        integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+</head>
+
+<body>
+
+
+    <!-- header section -->
+    <header>
+        <div class="nav-bar">
+            <nav>
+                <div class="logo">
+                    <li><a  href="{% url 'index' %}">VoteAfric</a></li>
+
+                </div>
+                <ul class="navLinks">
+                    <li><a  href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
+                    <li><a  href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
+                    <li><a  href="{% url 'contact' %}">Contact Us</a></li>
+                    
+                  </ul>
+                <!-- search bar -->
+                <form action="">
+                    <input type="search" name="" id="" placeholder="Search Award....">
+                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+
+            </nav>
+
+            <!-- menu icon -->
+            <div class="menu-icon">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- banner -->
+    <div class="banners">
+        <img src="{% static 'vote/img/award-banner.jpg' %}" alt="">
+        <div class="banners-content">
+            <h1>Category of the award</h1>
+            <div class="button">
+                <a href="">view Result</a>
+            </div>
+        </div>
+
+    </div>
+    
+    
+     <!-- end of banner section -->
+  <div class="spinner">
+    <div class="skeleton-spinner"></div>
+    <p>Please wait! We are putting everything togethere for you</p>
+</div>
+
+
+<!-- nominees section -->
+<section class="nominees-section-container content">
+    <div class="nominees-container">
+        <div class="nominees">
+          <img src="{% static 'vote/img/profile.png' %}" alt="">
+            <div class="nominees-detail">
+                <h2>Category Name</h2>
+                <h3>Nominee Name</h3>
+
+               <div class="vote-button">
+                <button>Vote</button>
+               </div>
+            </div>
+        </div>
+
+        <div class="nominees">
+          <img src="{% static 'vote/img/profile.png' %}" alt="">
+            <div class="nominees-detail">
+                <h2>Category Name</h2>
+                <h3>Nominee Name</h3>
+
+               <div class="vote-button">
+                <button>Vote</button>
+               </div>
+            </div>
+        </div>
+
+        <div class="nominees">
+          <img src="{% static 'vote/img/profile.png' %}" alt="">
+            <div class="nominees-detail">
+                <h2>Category Name</h2>
+                <h3>Nominee Name</h3>
+
+               <div class="vote-button">
+                <button>Vote</button>
+               </div>
+            </div>
+        </div>
+
+        <div class="nominees">
+          <img src="{% static 'vote/img/profile.png' %}" alt="">
+            <div class="nominees-detail">
+                <h2>Category Name</h2>
+                <h3>Nominee Name</h3>
+
+               <div class="vote-button">
+                <button>Vote</button>
+               </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- voting form -->
+<section class="voting-form-section">
+  <div class="voting-form-container">
+    <div class="vote-col">
+        <p>Vote</p>
+        <i class="fa-solid fa-xmark" id="removeVotingForm"></i>
+    </div>
+    <div class="alert">
+        <p><i class="fa-solid fa-info"></i> Note: Please be sure of the nominee you are voting for. This transaction is irreversibe</p>
+    </div>
+
+    <!-- users image and name -->
+    <div class="nominee-image-name">
+        <!-- user image -->
+       <div class="nominee-image">
+        
+       </div>
+       <!-- user-name -->
+       <div class="nominee-name">
+        <p>User Name</p>
+       </div>
+
+    </div>
+    <!-- voting form -->
+    <form action="" class="form-for-voting">
+        <label for=""><i class="fa-solid fa-user"></i> Full Name</label>
+        <input type="text" name="" id="user-name" placeholder="Your Full Name" required> <br>
+
+        <label for=""><i class="fa-solid fa-envelope"></i> Email Address</label>
+        <input type="email" name="" id="" placeholder="Email Address" required> <br>
+
+        <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label>
+        <input type="number" name="" id="" placeholder="Phone Number" required> <br>
+
+        <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote</label>
+        <input type="number" name="" id="number-of-vote" placeholder="Number of vote" required> <br>
+        <!-- alerting users on amount of money he will pay per vote -->
+        <div class="amount-to-pay-per-vote">
+            
+        </div>
+
+        <!-- pay button -->
+        <button>Pay Now</button>
+
+    </form>
+  </div>
+</section>
+
+
+
+
+    
+
+
+
+
+  <!-- footer section -->
+  <footer>
+    <a href="">Godey Tech</a>
+    <p> © Copyright 2024 Vote. All right reserved </p>
+  </footer>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+    <!-- here is the link to javasc ript-->
+    <script src="{% static 'vote/app.js' %}"></script>
+    <script src="{% static 'vote/vote.js' %}"></script>
+
+   <!-- this script is for the whatsapp plugin -->
+  <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var gcaMain = new GetChatApp({
+  'mobileNumber' : '+233 55 391 2334',
+  'titleMessage' : '👋 Chat with me on WhatsApp!',
+  'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
+  'position' : 'right',
+  'platforms' : {
+  'whatsapp' : true,
+  'facebook' : false,
+  'email' : false,
+  'instagram' : false,
+  'telegram' : false,
+  'x' : false,
+  'tiktok' : false,
+  'linkedin' : false,
+  'phone' : false,
+  'customLink' : false
+  },
+  'facebookPageId' : '',
+  'facebookMessage' : 'Hi there!<br><br>Start chatting with us now!',
+  'facebookReplyTime' : 'a day',
+  'gcaEmailAddress' : '',
+  'gcaEmailSubject' : '',
+  'gcaInstagramUsername' : '',
+  'gcaTelegramUsername' : '',
+  'gcaXUsername' : '',
+  'gcaTiktokUsername' : '',
+  'gcaLinkedinUsername' : '',
+  'gcaPhoneNumber' : '',
+  'gcaCustomLink' : '',
+  'multipleContacts' : false
+    });
+  });
+  </script>
+</body>
+
+</html>
