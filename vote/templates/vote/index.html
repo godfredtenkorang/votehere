@@ -30,15 +30,18 @@
     <div class="nav-bar">
       <nav>
         <div class="logo">
-          <a href="">Vote Here</a>
+          <li><a  href="{% url 'index' %}">VoteAfric</a></li>
 
         </div>
         <ul class="navLinks">
-          <li><a  class="active" href="">Home</a></li>
-          <li><a href="">About Us</a></li>
-          <li><a href="">Privacy Policy</a></li>
-          <li><a href="">Term& Condition </a></li>
-          <li><a href="">Contact Us</a></li>
+         
+            <li><a class="active" href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About Us</a></li>
+            <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
+            <li><a href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+       
+        
          
         </ul>
         <!-- search bar -->
@@ -95,7 +98,7 @@
     <div class="award-container">
         <!-- Individual award items -->
       <div class="award">
-        <a href="">
+        <a href="{% url 'category' %}">
           <img src="{% static 'vote/img/award.jpg' %}" alt="">
           <div class="award-text">
             <h4>Company Name</h4>
@@ -105,7 +108,7 @@
       </div>
   <!-- Individual award items -->
       <div class="award">
-        <a href="">
+        <a href="{% url 'category' %}">
           <img src="{% static 'vote/img/award-2.jpg' %}" alt="">
           <div class="award-text">
             <h4>Company Name</h4>
@@ -117,7 +120,7 @@
 
     <!-- Individual award items -->
       <div class="award">
-        <a href="">
+        <a href="{% url 'category' %}">
           <img src="{% static 'vote/img/award-3.jpg' %}" alt="">
           <div class="award-text">
             <h4>Company Name</h4>
@@ -129,7 +132,7 @@
 
     <!-- Individual award items -->
       <div class="award">
-        <a href="">
+        <a href="{% url 'category' %}">
           <img src="{% static 'vote/img/award.jpg' %}" alt="">
           <div class="award-text">
             <h4>Company Name</h4>
@@ -141,7 +144,7 @@
 
    <!-- Individual award items -->
    <div class="award">
-    <a href="">
+    <a href="{% url 'category' %}">
       <img src="{% static 'vote/img/award.jpg' %}" alt="">
       <div class="award-text">
         <h4>Company Name</h4>
@@ -151,7 +154,7 @@
   </div>
 <!-- Individual award items -->
   <div class="award">
-    <a href="">
+    <a href="{% url 'category' %}">
       <img src="{% static 'vote/img/award-2.jpg' %}" alt="">
       <div class="award-text">
         <h4>Company Name</h4>
@@ -163,7 +166,7 @@
 
 <!-- Individual award items -->
   <div class="award">
-    <a href="">
+    <a href="{% url 'category' %}">
       <img src="{% static 'vote/img/award-3.jpg' %}" alt="">
       <div class="award-text">
         <h4>Company Name</h4>
@@ -175,7 +178,7 @@
 
 <!-- Individual award items -->
   <div class="award">
-    <a href="">
+    <a href="{% url 'category' %}">
       <img src="{% static 'vote/img/award.jpg' %}" alt="">
       <div class="award-text">
         <h4>Company Name</h4>

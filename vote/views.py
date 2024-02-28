@@ -16,3 +16,13 @@ def termsCondition(request):
 
 def contact(request):
     return render(request, 'vote/contact.html')
+
+
+def nominees(request):
+    return render(request, 'vote/nomineesPage.html')
+
+def category(request):
+    return render(request, 'vote/category.html')
+
+def nominate(request):
+    return render(request, 'vote/nominate.html')
