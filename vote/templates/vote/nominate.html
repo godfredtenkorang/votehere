@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <!-- This nominate page where user can file for nomination -->
 
 
     <!-- header section -->
@@ -30,8 +31,10 @@
         <div class="nav-bar">
             <nav>
                 <div class="logo">
-                    <li><a href="{% url 'index' %}">VoteAfric</a></li>
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="">
 
+                    </a>
                 </div>
                 <ul class="navLinks">
                     <li><a href="{% url 'index' %}">Home</a></li>
@@ -70,58 +73,69 @@
     <!-- nominee-information section -->
     <section class="nominee-information-section">
         <h2>Nominee Information</h2>
-        <p class="nominationNote">Please Note: If you are nominating someone else, kindly ensure you are providing the correct details of the
+        <p class="nominationNote">Please Note: If you are nominating someone else, kindly ensure you are providing the
+            correct details of the
             person to prevent misinformation and disqualification of the nomination </p>
 
         <!-- nominee information form -->
         <form action="" class="nomination-form-container">
-            <div class="nomination-image">
-                
-                
-               
-                <div class="preview-nominee-image" id="previewNomineeImage"></div>
-                
-
-                </div>
-            </div>
+            <!-- this where nominee selected image will display -->
+           
             <div class="nomination-form">
+                
+                <div class="input choosen-image">
+                    
+                    <!-- this the input field users can use to select their the image -->
+                    <input placeholder="Select an image..." id="file-upload" type="file" class="uploadImage" required>
+                    <label for="imageInput">Click to pick image for nominee</label> <br>
+                   
+                    <!-- This section is where the choosen image will be played -->
+                    <div class="image-receiver" >
+                        <img src="{% static 'vote/img/profile.png' %}" alt="">
+                    </div>
+
+                </div>
                 <div class="input-container">
+                    
                     <div class="input">
+                        <!-- category of the award -->
                         <label for="">Category</label> <br>
-                        <input type="text" required>
+                        <input type="text" required placeholder="Category">
                     </div>
                     <div class="input">
+                        <!-- Nominee Name -->
                         <label for="">Nominee Name</label> <br>
-                        <input type="text" required>
+                        <input type="text" required placeholder="Nominee Name">
                     </div>
                 </div>
                 <div class="input-container">
                     <div class="input">
+                        <!-- Nominee Phone Number -->
                         <label for="">Nominee Phone Number</label> <br>
-                        <input type="text" required>
+                        <input type="number" required placeholder="Phone Number">
                     </div>
                     <div class="input">
+                        <!-- Nominee Email Address -->
                         <label for="">Nominee Email Address</label> <br>
-                        <input type="text" required>
+                        <input type="email" required placeholder="Email">
                     </div>
 
-                   
+
                 </div>
                 <div class="input">
+                    <!--  Reason for nomination(Include links to relevant media!)-->
                     <label for="">Reason for nomination(Include links to relevant media!)
                     </label> <br>
                     <p>You can include links to relevant media. This gives you a better chance being nominated.
                     </p> <br>
-                    <textarea name="" id=""></textarea>
+                    <textarea name="" id="" placeholder="Reason for nomination"></textarea>
                 </div>
 
-            </div>
-            <div class="input">
-                <label for="imageInput">Click to pick image for nominee</label> <br>
-                <input type="file" name="imageInput" id="imageInput" accept="image/*">
-            </div>
-            <div class="nominate-button">
-                <button>Submit</button>
+            
+
+                <div class="nominate-button">
+                    <button>Submit</button>
+                </div>
             </div>
 
         </form>
@@ -144,11 +158,11 @@
 
 
 
-  <!-- footer section -->
-  <footer>
-    <a href="">Godey Tech</a>
-    <p> © Copyright 2024 Vote. All right reserved </p>
-  </footer>
+    <!-- footer section -->
+    <footer>
+        <a href="">Godey Tech</a>
+        <p> © Copyright 2024 Vote. All right reserved </p>
+    </footer>
 
 
 
@@ -156,47 +170,48 @@
 
     <!-- here is the link to javasc ript-->
     <script src="{% static 'vote/app.js' %}"></script>
-    <script src="{% static 'vote/vote.js' %}"></script>
-<script>
-    
-</script>
-<!-- this script is for the whatsapp plugin -->
-<script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  var gcaMain = new GetChatApp({
-'mobileNumber' : '+233 55 391 2334',
-'titleMessage' : '👋 Chat with me on WhatsApp!',
-'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
-'position' : 'right',
-'platforms' : {
-'whatsapp' : true,
-'facebook' : false,
-'email' : false,
-'instagram' : false,
-'telegram' : false,
-'x' : false,
-'tiktok' : false,
-'linkedin' : false,
-'phone' : false,
-'customLink' : false
-},
-'facebookPageId' : '',
-'facebookMessage' : 'Hi there!<br><br>Start chatting with us now!',
-'facebookReplyTime' : 'a day',
-'gcaEmailAddress' : '',
-'gcaEmailSubject' : '',
-'gcaInstagramUsername' : '',
-'gcaTelegramUsername' : '',
-'gcaXUsername' : '',
-'gcaTiktokUsername' : '',
-'gcaLinkedinUsername' : '',
-'gcaPhoneNumber' : '',
-'gcaCustomLink' : '',
-'multipleContacts' : false
-  });
-});
-</script>
+    <script src="{% static 'vote/script.js' %}"></script>
+
+
+
+    </script>
+    <!-- this script is for the whatsapp plugin -->
+    <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var gcaMain = new GetChatApp({
+                'mobileNumber': '+233 55 391 2334',
+                'titleMessage': '👋 Chat with me on WhatsApp!',
+                'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
+                'position': 'right',
+                'platforms': {
+                    'whatsapp': true,
+                    'facebook': false,
+                    'email': false,
+                    'instagram': false,
+                    'telegram': false,
+                    'x': false,
+                    'tiktok': false,
+                    'linkedin': false,
+                    'phone': false,
+                    'customLink': false
+                },
+                'facebookPageId': '',
+                'facebookMessage': 'Hi there!<br><br>Start chatting with us now!',
+                'facebookReplyTime': 'a day',
+                'gcaEmailAddress': '',
+                'gcaEmailSubject': '',
+                'gcaInstagramUsername': '',
+                'gcaTelegramUsername': '',
+                'gcaXUsername': '',
+                'gcaTiktokUsername': '',
+                'gcaLinkedinUsername': '',
+                'gcaPhoneNumber': '',
+                'gcaCustomLink': '',
+                'multipleContacts': false
+            });
+        });
+    </script>
 </body>
 
 </html>

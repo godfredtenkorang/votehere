@@ -24,16 +24,18 @@
 </head>
 
 <body>
-
+<!-- terms and condition page -->
 
     <!-- header section -->
     <header>
         <div class="nav-bar">
             <nav>
                 <div class="logo">
-                    <li><a  href="{% url 'index' %}">VoteAfric</a></li>
-
-                </div>
+                    <a href="{% url 'index' %}">
+                     <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="">
+ 
+                    </a>
+                 </div>
                 <ul class="navLinks">
                     <li><a  href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'about' %}">About Us</a></li>

@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,19 +31,18 @@
     <div class="nav-bar">
       <nav>
         <div class="logo">
-          <li><a  href="{% url 'index' %}">VoteAfric</a></li>
+          <a href="{% url 'index' %}">
+           <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="">
 
-        </div>
+          </a>
+       </div>
         <ul class="navLinks">
-         
-            <li><a class="active" href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'about' %}">About Us</a></li>
-            <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
-            <li><a href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
-            <li><a href="{% url 'contact' %}">Contact Us</a></li>
-       
-        
-         
+          <li><a class="active" href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'about' %}">About Us</a></li>
+          <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
+          <li><a href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
+          <li><a href="{% url 'contact' %}">Contact Us</a></li>
+
         </ul>
         <!-- search bar -->
         <form action="">
@@ -67,7 +67,6 @@
           <h1>ONLINE VOTING SYSTEM</h1>
           <p>Online voting systems are software platforms used to securely conduct votes and elections. As a digital
             platform, they eliminate the need to cast your votes using paper or having to gather in person.</p>
-          <a href=""><button class="VoteBtn">VOTE NOW</button></a>
         </div>
 
         <div class="banner-img">
@@ -80,15 +79,12 @@
     </div>
   </section>
   <!-- end of banner section -->
-
-
-  <!-- spinner -->
   <div class="spinner">
     <div class="skeleton-spinner"></div>
     <p>Please wait! We are putting everything togethere for you</p>
-</div>
-  <!-- ongoin award -->
-  
+  </div>
+
+  <!-- ongoing award -->
   <div class="award-main-container content">
     <div class="ongoin-event">
       <h2>Ongoing Event <i class="fa-solid fa-award"></i></h2>
@@ -96,9 +92,9 @@
 
     <!-- awards -->
     <div class="award-container">
-        <!-- Individual award items -->
       <div class="award">
         <a href="{% url 'category' %}">
+
           <img src="{% static 'vote/img/award.jpg' %}" alt="">
           <div class="award-text">
             <h4>Company Name</h4>
@@ -106,33 +102,10 @@
           </div>
         </a>
       </div>
-  <!-- Individual award items -->
-      <div class="award">
-        <a href="{% url 'category' %}">
-          <img src="{% static 'vote/img/award-2.jpg' %}" alt="">
-          <div class="award-text">
-            <h4>Company Name</h4>
-            <h5>Award Name</h5>
-          </div>
-        </a>
-      </div>
-    <!-- end of   Individual award items -->
 
-    <!-- Individual award items -->
       <div class="award">
         <a href="{% url 'category' %}">
-          <img src="{% static 'vote/img/award-3.jpg' %}" alt="">
-          <div class="award-text">
-            <h4>Company Name</h4>
-            <h5>Award Name</h5>
-          </div>
-        </a>
-      </div>
-    <!-- end of   Individual award items -->
 
-    <!-- Individual award items -->
-      <div class="award">
-        <a href="{% url 'category' %}">
           <img src="{% static 'vote/img/award.jpg' %}" alt="">
           <div class="award-text">
             <h4>Company Name</h4>
@@ -140,58 +113,77 @@
           </div>
         </a>
       </div>
-  <!-- end of   Individual award items -->
+      <div class="award">
+        <a href="{% url 'category' %}">
 
-   <!-- Individual award items -->
-   <div class="award">
-    <a href="{% url 'category' %}">
-      <img src="{% static 'vote/img/award.jpg' %}" alt="">
-      <div class="award-text">
-        <h4>Company Name</h4>
-        <h5>Award Name</h5>
+          <img src="{% static 'vote/img/award.jpg' %}" alt="">
+          <div class="award-text">
+            <h4>Company Name</h4>
+            <h5>Award Name</h5>
+          </div>
+        </a>
       </div>
-    </a>
-  </div>
-<!-- Individual award items -->
-  <div class="award">
-    <a href="{% url 'category' %}">
-      <img src="{% static 'vote/img/award-2.jpg' %}" alt="">
-      <div class="award-text">
-        <h4>Company Name</h4>
-        <h5>Award Name</h5>
-      </div>
-    </a>
-  </div>
-<!-- end of   Individual award items -->
+      <div class="award">
+        <a href="{% url 'category' %}">
 
-<!-- Individual award items -->
-  <div class="award">
-    <a href="{% url 'category' %}">
-      <img src="{% static 'vote/img/award-3.jpg' %}" alt="">
-      <div class="award-text">
-        <h4>Company Name</h4>
-        <h5>Award Name</h5>
+          <img src="{% static 'vote/img/award.jpg' %}" alt="">
+          <div class="award-text">
+            <h4>Company Name</h4>
+            <h5>Award Name</h5>
+          </div>
+        </a>
       </div>
-    </a>
-  </div>
-<!-- end of   Individual award items -->
 
-<!-- Individual award items -->
-  <div class="award">
-    <a href="{% url 'category' %}">
-      <img src="{% static 'vote/img/award.jpg' %}" alt="">
-      <div class="award-text">
-        <h4>Company Name</h4>
-        <h5>Award Name</h5>
+      <div class="award">
+        <a href="{% url 'category' %}">
+
+          <img src="{% static 'vote/img/award.jpg' %}" alt="">
+          <div class="award-text">
+            <h4>Company Name</h4>
+            <h5>Award Name</h5>
+          </div>
+        </a>
       </div>
-    </a>
-  </div>
-<!-- end of   Individual award items -->
+
+      <div class="award">
+        <a href="{% url 'category' %}">
+
+          <img src="{% static 'vote/img/award.jpg' %}" alt="">
+          <div class="award-text">
+            <h4>Company Name</h4>
+            <h5>Award Name</h5>
+          </div>
+        </a>
+      </div>
+      <div class="award">
+        <a href="{% url 'category' %}">
+
+          <img src="{% static 'vote/img/award.jpg' %}" alt="">
+          <div class="award-text">
+            <h4>Company Name</h4>
+            <h5>Award Name</h5>
+          </div>
+        </a>
+      </div>
+      <div class="award">
+        <a href="{% url 'category' %}">
+
+          <img src="{% static 'vote/img/award.jpg' %}" alt="">
+          <div class="award-text">
+            <h4>Company Name</h4>
+            <h5>Award Name</h5>
+          </div>
+        </a>
+      </div>
     </div>
-
-
   </div>
-<!-- End of award container -->
+
+
+  <!-- footer section -->
+  <footer>
+    <a href="">Godey Tech</a>
+    <p> © Copyright 2024 Vote. All right reserved </p>
+  </footer>
 
 
 
@@ -207,54 +199,47 @@
 
 
 
-<!-- footer section -->
-<footer>
-  <a href="https://wa.link/gj4et8">Godey Tech</a>
-  <p> © Copyright 2024 Vote. All right reserved </p>
-</footer>
 
 
 
   <!-- here is the link to javasc ript-->
   <script src="{% static 'vote/app.js' %}"></script>
-
-
-<!-- this script is for the whatsapp plugin -->
+  <!-- this script is for the whatsapp plugin -->
   <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
   <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var gcaMain = new GetChatApp({
-  'mobileNumber' : '+233 55 391 2334',
-  'titleMessage' : '👋 Chat with me on WhatsApp!',
-  'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
-  'position' : 'right',
-  'platforms' : {
-  'whatsapp' : true,
-  'facebook' : false,
-  'email' : false,
-  'instagram' : false,
-  'telegram' : false,
-  'x' : false,
-  'tiktok' : false,
-  'linkedin' : false,
-  'phone' : false,
-  'customLink' : false
-  },
-  'facebookPageId' : '',
-  'facebookMessage' : 'Hi there!<br><br>Start chatting with us now!',
-  'facebookReplyTime' : 'a day',
-  'gcaEmailAddress' : '',
-  'gcaEmailSubject' : '',
-  'gcaInstagramUsername' : '',
-  'gcaTelegramUsername' : '',
-  'gcaXUsername' : '',
-  'gcaTiktokUsername' : '',
-  'gcaLinkedinUsername' : '',
-  'gcaPhoneNumber' : '',
-  'gcaCustomLink' : '',
-  'multipleContacts' : false
-    });
-  });
+    document.addEventListener("DOMContentLoaded", function () {
+      var gcaMain = new GetChatApp({
+        'mobileNumber': '+233 55 391 2334',
+        'titleMessage': '👋 Chat with me on WhatsApp!',
+        'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
+        'position': 'right',
+        'platforms': {
+          'whatsapp': true,
+          'facebook': false,
+          'email': false,
+          'instagram': false,
+          'telegram': false,
+          'x': false,
+          'tiktok': false,
+          'linkedin': false,
+          'phone': false,
+          'customLink': false
+        },
+        'facebookPageId': '',
+        'facebookMessage': 'Hi there!<br><br>Start chatting with us now!',
+        'facebookReplyTime': 'a day',
+        'gcaEmailAddress': '',
+        'gcaEmailSubject': '',
+        'gcaInstagramUsername': '',
+        'gcaTelegramUsername': '',
+        'gcaXUsername': '',
+        'gcaTiktokUsername': '',
+        'gcaLinkedinUsername': '',
+        'gcaPhoneNumber': '',
+        'gcaCustomLink': '',
+        'multipleContacts': false
+      });
+    });
   </script>
 </body>
 

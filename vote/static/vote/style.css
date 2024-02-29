@@ -10,7 +10,7 @@
 
 /* Define colors using CSS variables */
 :root {
-    --voiletColor: #a517ba;
+    --voiletColor: #522a83;
     --orangeColor: #fb812b;
     --whiteColor: #fff;
 }
@@ -24,7 +24,7 @@ header {
     position: relative;
     min-height: 8vh;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    background-image: linear-gradient(to right, #5f1178, #a517ba);
+    background-image: linear-gradient(to right, #522a83, #a517ba);
 }
 
 /* Navigation bar styling */
@@ -42,20 +42,33 @@ nav {
     width: 100%;
 }
 
-/* Logo styling */
-.logo a {
-    color: var(--orangeColor);
-    font-size: 2vw;
-    font-weight: 1000;
+
+/* Navigation bar styling */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+
 }
 
-/* Navigation links styling */
-.navLinks {
+nav {
+    display: flex;
+    gap: 3rem;
+    justify-content: space-between;
+    width: 100%;
+}
+.navLinks{
     display: flex;
     gap: 2rem;
-    padding-top: 5px;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Logo styling */
+.logo img {
+   width: 150px; 
+   
+}
 .navLinks a {
     color: var(--whiteColor);
     font-size: 1.1vw;
@@ -80,20 +93,25 @@ nav {
     text-align: center;
     cursor: pointer;
     display: none;
+    justify-content: center;
+    align-items: center;
     z-index: 1;
     right: 0;
+    padding: 20px 0;
     position: absolute;
 }
 
 /* Search bar styling */
 nav form {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 nav input {
     width: 100%;
     max-width: 200px;
-    min-height: 4vh;
+    min-height: 5vh;
     outline: none;
     background-color: transparent;
     border: solid 1px #fff;
@@ -107,7 +125,7 @@ nav input::placeholder {
 
 nav button {
     width: 30px;
-    min-height: 4vh;
+    min-height: 5vh;
     cursor: pointer;
     border: none;
 }
@@ -118,7 +136,7 @@ nav button {
 #banner {
     width: 100%;
     min-height: 40vh;
-    background-image: linear-gradient(to right, #5f1178, #a517ba);
+    background-image: linear-gradient(to right, #522a83, #a517ba);
     color: white;
     padding: 7% 5%;
 
@@ -154,17 +172,6 @@ nav button {
 .banner-content p {
     font-size: 1.3vw;
     padding-bottom: 5%;
-}
-
-/* style for vote button on the home page */
-.VoteBtn {
-    width: 100%;
-    max-width: 200px;
-    min-height: 9vh;
-    border: 1px solid #fff;
-    background-image: linear-gradient(to right, #a517ba, #5f1178);
-    color: var(--whiteColor);
-    cursor: pointer;
 }
 
 
@@ -237,7 +244,7 @@ nav button {
     padding: 10px 0;
 }
 
-/* spninner */
+/* this is the loading styling */
 .spinner {
     flex-direction: column-reverse;
     justify-content: center;
@@ -245,6 +252,8 @@ nav button {
     margin-top: 1%;
     margin-bottom: 5%;
     display: none;
+    height: 55vh;
+ 
 }
 
 .spinner p {
@@ -259,8 +268,8 @@ nav button {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #5f1178;
+    border: 8px solid #fb812b;
+    border-top: 8px solid #522a83;
     animation: spin 1s linear infinite;
 }
 
@@ -273,11 +282,11 @@ nav button {
         transform: rotate(360deg);
     }
 }
-/* end of spinner */
 
 
 
-/* banners */
+
+/* this is banner on the other pages */
 .banners {
     position: relative;
 }
@@ -566,13 +575,14 @@ nav button {
     top: 2px;
 }
 
-/* styling for vote forms */
+/*  this styling is for the forms voters will use to vote */
 .voting-form-section {
     display: none;
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(82, 42, 131, 0.8); 
+    ;
     min-height: 100vh;
     justify-content: center;
     z-index: 1;
@@ -611,11 +621,9 @@ nav button {
     min-height: 20px;
     border-radius: 50%;
 }
-
 .fa-xmark {
     cursor: pointer;
 }
-
 .nominee-image-name {
     margin-top: 5%;
     padding-bottom: 3%;
@@ -625,21 +633,18 @@ nav button {
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    border-bottom: solid 2px rgba(165, 23, 186, 0.3);
-
+    border-bottom: solid 2px rgba(82, 42, 131, 0.5); 
+    ;
 }
-
 .nominee-image img {
     width: 100%;
     max-width: 150px;
     height: 150px;
     border-radius: 50%;
 }
-
 .form-for-voting {
     padding: 5% 0;
 }
-
 .form-for-voting input {
     width: 100%;
     min-height: 6vh;
@@ -647,10 +652,9 @@ nav button {
     padding: 10px;
     caret-color: var(--voiletColor);
     outline-width: 1px;
-    outline-color: rgba(165, 23, 186, 0.7);
-
+    outline-color: rgba(82, 42, 131, 0.5); 
+    ;
 }
-
 .form-for-voting label {
     color: var(--orangeColor);
     font-weight: 900;
@@ -664,11 +668,13 @@ nav button {
 .amount-to-pay-per-vote {
     width: 100%;
     min-height: 10vh;
-    background-color: rgba(165, 23, 186, 0.3);
+    background-color: rgba(82, 42, 131, 0.1); 
+    ;
     display: none;
     justify-content: center;
     align-items: center;
     font-weight: 900;
+    font-size: 1rem;
 }
 
 .form-for-voting button {
@@ -682,9 +688,9 @@ nav button {
 }
 
 
-/* nominate page styling */
+/* this styling is for  nominate page*/
 .nominee-information-section {
-    padding: 5% 15%;
+    padding: 3% 15%;
 
     display: flex;
     flex-direction: column;
@@ -694,9 +700,33 @@ nav button {
 .nominationNote {
     padding: 1% 2%;
     margin: 2% 0;
-    background-color: rgba(165, 23, 186, 0.3);
+    background-color: rgba(82, 42, 131, 0.5); 
+
 }
 
+.nomination-form{
+background-color: rgba(165, 23, 186, 0.1);
+padding: 2%;
+}
+/* styling for nominee selected image */
+.choosen-image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+}
+.image-receiver{
+    width: 100%;
+    max-width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+.image-receiver img{
+   width: 100%;
+    height: 200px;
+    border-radius: 50%;
+}
 .input-container {
     display: flex;
     gap: 2rem;
@@ -706,7 +736,7 @@ nav button {
 
 .input {
     width: 100%;
-    margin: 2% 0;
+    margin: 10px 0;
 }
 
 .input-container input {
@@ -715,6 +745,9 @@ nav button {
     margin-top: 1%;
     padding: 10px;
     outline: none;
+    background-color: transparent;
+    border: 2px solid #522a83;
+    color: var(--voiletColor);
 }
 
 .input textarea {
@@ -722,7 +755,10 @@ nav button {
     min-height: 15vh;
     resize: none;
     outline: none;
-
+    padding: 10px;
+    background-color: transparent;
+    border: 2px solid #522a83;
+    color: var(--voiletColor);
 }
 
 .input label {
@@ -752,17 +788,92 @@ nav button {
 }
 
 
+
+/* contact us page styling */
+.contact-us-section{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  
+    padding: 5%;
+}
+.contact-details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 350px;
+    background-color: var(--voiletColor);
+    min-height: 30vh;
+    box-shadow: 1px 0 9px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 10px;
+
+}
+.socials{
+    display: flex;
+    gap: 2rem;
+}
+.contact-details i{
+    margin: 3% 0;
+    color: var(--orangeColor);
+    font-size: 1.3rem;
+    padding: 10px;
+    background-color: var(--whiteColor);
+    border-radius: 50%;
+}
+.contact-details p{
+    color: var(--whiteColor);
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+
+/* result page styling */
+.nominees-result-section{
+    padding: 5% 10%;
+    text-align: center;
+}
+.nominees-result-section h2{
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--voiletColor);
+}
+.nominee-result{
+    margin-top: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+   background-color: rgba(82, 42, 131, 0.5); /* 50% opacity */
+   ;
+   padding: 20px 4%;
+   min-height: 20vh;
+   border-radius: 10px;
+}
+.nominee-img img{
+    width: 90px;
+}
+
+
+
+
+
+
 /* styling for footer */
 footer {
     position: absolute;
-    background-color: var(--voiletColor);
+    background-image: linear-gradient(to right, #522a83, #a517ba);
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
     align-items: center;
     padding: 20px 10px;
-    height: 15vh;
+    min-height: 20vh;
     width: 100%;
 }
 
@@ -802,7 +913,7 @@ footer p {
 
     .award,
     .category,
-    .nominees {
+    .nominees , .contact-details{
         max-width: none;
     }
 
@@ -821,6 +932,12 @@ footer p {
     .nominee-information-section {
         padding: 5%;
     }
+    .contact-us-section{
+        flex-wrap: wrap;
+    }
+    .nominees-result-section{
+        padding: 2%;
+    }
 
 
 }
@@ -836,7 +953,7 @@ footer p {
         top: 0;
         display: none;
         flex-direction: column;
-        background-image: linear-gradient(to right, #a517ba, #5f1178);
+        background-image: linear-gradient(to right, #a517ba, #522a83);
         width: 100%;
         height: 100vh;
     }
@@ -850,7 +967,7 @@ footer p {
     }
 
     .navLinks.showNavLinks {
-        display: block;
+        display: flex;
     }
 
     .menu-icon {

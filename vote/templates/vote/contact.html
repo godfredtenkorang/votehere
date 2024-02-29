@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +9,6 @@
     <title>Vote here</title>
     <!-- here is the link to css -->
     <link rel="stylesheet" href="{% static 'vote/style.css' %}">
-
     <!-- Font Awesome -->
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
@@ -25,24 +25,28 @@
 
 <body>
 
+    <!-- This he contact us page .It features essential contact details 
+        like phone numbers and email addresses, along with social media links for additional engagement.
+         -->
 
     <!-- header section -->
     <header>
         <div class="nav-bar">
             <nav>
                 <div class="logo">
-                    <li><a  href="{% url 'index' %}">VoteAfric</a></li>
-
-                </div>
+                    <a href="{% url 'index' %}">
+                     <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="">
+ 
+                    </a>
+                 </div>
                 <ul class="navLinks">
-                    <li><a  href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'about' %}">About Us</a></li>
                     <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
                     <li><a href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
-                    <li><a class="active" href="{% url 'contact' %}">Contact Us</a></li>
-               
-                   
-                </ul>
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                    
+                  </ul>
                 <!-- search bar -->
                 <form action="">
                     <input type="search" name="" id="" placeholder="Search Award....">
@@ -67,6 +71,36 @@
  
     </div>
 
+    <!-- contact us section -->
+    <section class="contact-us-section">
+        <div class="contact-details">
+            <p>Call Us on</p>
+            
+            <i class="fa-solid fa-phone" id="call"></i>
+            <p>+233 55 391 2334</p>
+
+        </div>
+
+        <div class="contact-details">
+            <p>Email Us On</p>
+            <i class="fa-solid fa-phone"></i>
+            <p>putyouremail@email.com</p>
+        </div>
+
+
+ <div class="contact-details social-media">
+    <p>Follow Us VoteAfric on</p>
+    <div class="socials">
+    <a href=""><i class="fa-brands fa-facebook"></i></a>
+<a href="">    <i class="fa-brands fa-instagram"></i></a>
+    <a href=""><i class="fa-brands fa-tiktok"></i></a>
+    <a href="">    <i class="fa-brands fa-twitter"></i>
+    </a>
+    </div>
+   
+        </div>
+    </section>
+
 
     
 
@@ -78,6 +112,11 @@
 
 
 
+  <!-- footer section -->
+  <footer>
+    <a href="">Godey Tech</a>
+    <p> © Copyright 2024 Vote. All right reserved </p>
+  </footer>
 
 
 
@@ -88,7 +127,7 @@
 
     <!-- here is the link to javasc ript-->
     <script src="{% static 'vote/app.js' %}"></script>
-   <!-- this script is for the whatsapp plugin -->
+    <!-- this script is for the whatsapp plugin -->
   <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
   <script>
   document.addEventListener("DOMContentLoaded", function() {

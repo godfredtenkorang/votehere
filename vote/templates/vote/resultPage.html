@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,8 +24,10 @@
 </head>
 
 <body>
-    <!-- This category page where users can see categories of an award -->
-
+    <!-- This page represents the voting result section where users can view the outcome of the nominees.
+         Each nominee result entry includes their image, name, and the number of votes received. 
+       
+ -->
 
     <!-- header section -->
     <header>
@@ -32,19 +35,18 @@
             <nav>
                 <div class="logo">
                     <a href="{% url 'index' %}">
-                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="">
-
+                     <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="">
+ 
                     </a>
-                </div>
+                 </div>
                 <ul class="navLinks">
-                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a  href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'about' %}">About Us</a></li>
                     <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
-                    <li><a href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
-                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
-
-
-                </ul>
+                    <li><a  href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
+                    <li><a  href="{% url 'contact' %}">Contact Us</a></li>
+                    
+                  </ul>
                 <!-- search bar -->
                 <form action="">
                     <input type="search" name="" id="" placeholder="Search Award....">
@@ -64,95 +66,49 @@
     <div class="banners">
         <img src="{% static 'vote/img/award-banner.jpg' %}" alt="">
         <div class="banners-content">
-            <h1>Award Name</h1>
-            <div class="button">
-                <a href="{% url 'nominate' %}">Nominate</a>
+            <h1>Category Name</h1>
+        </div>
+    </div>
+
+    <!-- result of the nominees -->
+    <section class="nominees-result-section">
+        <h2>Voting Result</h2>
+        <div class="nominee-result">
+
+            <!-- nominee image -->
+            <div class="nominee-img">
+                <img src="{% static 'vote/img/profile.png' %}" alt="">
             </div>
+
+            <!-- nominee name -->
+            <div class="nominee-name">
+                <h4>Nominee Name</h4>
+            </div>
+
+            <!-- number of vote nominee has -->
+            <div class="number-of-vote-currently">
+                <p>00</p>
+            </div>
+            
         </div>
-
-    </div>
-
-
-    <!-- end of banner section -->
-    <div class="spinner">
-        <div class="skeleton-spinner"></div>
-        <p>Please wait! We are putting everything togethere for you</p>
-    </div>
+       
+    </section>
 
 
-
-
-    <!-- Award category section -->
-    <div class="award-category-section content">
-        <div class="award-category-container">
-            <!-- first category -->
-            <a href="{% url 'nominee' %}" class="category">
-                <div class="category">
-                    <img src="{% static 'vote/img/award.jpg' %}" alt="">
-
-                    <div class="category-details">
-                        <h2>Award Name</h2>
-                        <h3>Category Name</h3>
-
-                    </div>
-
-                </div>
-            </a>
-
-            <!-- second category -->
-            <a href="{% url 'nominee' %}" class="category">
-                <div class="category">
-                    <img src="{% static 'vote/img/award.jpg' %}" alt="">
-
-                    <div class="category-details">
-                        <h2>Award Name</h2>
-                        <h3>Category Name</h3>
-
-                    </div>
-
-                </div>
-            </a>
-
-            <!-- third category -->
-            <a href="{% url 'nominee' %}" class="category">
-                <div class="category">
-                    <img src="{% static 'vote/img/award.jpg' %}" alt="">
-
-                    <div class="category-details">
-                        <h2>Award Name</h2>
-                        <h3>Category Name</h3>
-
-                    </div>
-
-                </div>
-            </a>
-
-            <!-- fourth category -->
-            <a href="{% url 'nominee' %}" class="category">
-                <div class="category">
-                    <img src="{% static 'vote/img/award.jpg' %}" alt="">
-
-                    <div class="category-details">
-                        <h2>Award Name</h2>
-                        <h3>Category Name</h3>
-
-                    </div>
-
-                </div>
-            </a>
-        </div>
-    </div>
+    
+<!-- footer section -->
+<footer>
+    <a href="">Godey Tech</a>
+    <p> © Copyright 2024 Vote. All right reserved </p>
+  </footer>
 
 
 
 
 
 
-    <!-- footer section -->
-    <footer>
-        <a href="">Godey Tech</a>
-        <p> © Copyright 2024 Vote. All right reserved </p>
-    </footer>
+
+
 
 
 
@@ -168,7 +124,6 @@
 
     <!-- here is the link to javasc ript-->
     <script src="{% static 'vote/app.js' %}"></script>
-    <!-- this script is for the whatsapp plugin -->
     <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -205,6 +160,7 @@
             });
         });
     </script>
+
 </body>
 
 </html>
