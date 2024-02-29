@@ -11,6 +11,4 @@ urlpatterns = [
  path('nominees/', views.nominees, name='nominee'), 
  path('category/', views.category, name='category'), 
   path('nominate/', views.nominate, name='nominate'), 
-    path('result/', views.result, name='result'), 
-
 ]
