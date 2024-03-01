@@ -1,38 +1,34 @@
 from django.db import models
+from django.urls import reverse
 
-# Create your models here.
 
-class Main_Category(models.Model):
-    name = models.CharField(max_length=100)
-    content = models.CharField(max_length=100)
-    image= models.ImageField(upload_to="main_category")
-    
-    class Meta:
-        verbose_name_plural = "main categories"
-
-    def __str__(self):
-        return self.name
-    
 class Category(models.Model):
-    main_category = models.ForeignKey(Main_Category, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    award = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, null=True)
     content = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="main_category")
+    image = models.ImageField(upload_to="category")
+    slug = models.SlugField(unique=True)
     
     class Meta:
         verbose_name_plural = "categories"
+        ordering = ('-award',)
 
     def __str__(self):
-        return self.name
+        return self.title
+    # def get_absolute_url(self):
+    #     return reverse('award:award_by_category', args=[self.slug])
+
     
 class Nominees(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     content = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="main_category")
+    image = models.ImageField(upload_to="nominees")
+    slug = models.SlugField(unique=True, null=True)
 
     class Meta:
         verbose_name_plural = "nominees"
+        ordering = ('-name',)
 
     def __str__(self):
         return self.name
