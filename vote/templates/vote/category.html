@@ -5,7 +5,7 @@
 
 <!-- banner -->
 <div class="banners">
-    <img src="{% static 'vote/img/award-banner.jpg' %}" alt="">
+    <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
     <div class="banners-content">
 
 
@@ -31,7 +31,7 @@
         {% for a in award %}
         <a href="{% url 'nominee_detail' a.slug %}" class="category">
             <div class="category">
-                <img src="{{ a.category.image.url }}" alt="">
+                <img src="{{ a.category.image.url }}" alt="image">
 
                 <div class="category-details">
                     <h2>{{ a.category.title }}</h2>
@@ -41,6 +41,10 @@
 
             </div>
         </a>
+    </div>
+</div>
+</div>
+
         {% endfor %}
 
         

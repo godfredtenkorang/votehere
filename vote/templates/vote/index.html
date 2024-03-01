@@ -10,11 +10,10 @@
         <h1>ONLINE VOTING SYSTEM</h1>
         <p>Online voting systems are software platforms used to securely conduct votes and elections. As a digital
           platform, they eliminate the need to cast your votes using paper or having to gather in person.</p>
-        <a href=""><button class="VoteBtn">VOTE NOW</button></a>
       </div>
 
       <div class="banner-img">
-        <img src="{% static 'vote/img/2.svg' %}" alt="" srcset="" height="400vh ">
+        <img src="{% static 'vote/img/2.svg' %}" alt="image" >
       </div>
     </div>
     </div>
@@ -39,13 +38,17 @@
     {% for c in categories %}
     <div class="award">
       <a href="{% url 'award_by_category' c.slug %}">
-        <img src="{{ c.image.url }}" alt="">
+        <img src="{{ c.image.url }}" alt="image">
         <div class="award-text">
           <h4>{{ c.title }}</h4>
           <h5>{{ c.award }}</h5>
         </div>
       </a>
     </div>
-    {% endfor %}
 
+
+    {% endfor %}
+  </div>
+  </div>
+  
 {% endblock content %}
