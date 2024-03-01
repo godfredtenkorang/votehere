@@ -24,24 +24,26 @@
 </head>
 
 <body>
-
+<!-- This is about us page -->
 
     <!-- header section -->
     <header>
         <div class="nav-bar">
             <nav>
                 <div class="logo">
-                    <li><a  href="{% url 'index' %}">VoteAfric</a></li>
-
-                </div>
+                    <a href="{% url 'index' %}">
+                     <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="">
+ 
+                    </a>
+                 </div>
                 <ul class="navLinks">
-                    <li><a  href="{% url 'index' %}">Home</a></li>
-            <li><a class="active"  href="{% url 'about' %}">About Us</a></li>
-            <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
-            <li><a href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
-            <li><a href="{% url 'contact' %}">Contact Us</a></li>
-       
-                   
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a class="active" href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'termsCondition' %}">Terms & Conditions</a></li>
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
+
+
                 </ul>
                 <!-- search bar -->
                 <form action="">
@@ -57,7 +59,7 @@
             </div>
         </div>
     </header>
-    
+
     <!-- banners -->
     <div class="banners">
         <img src="{% static 'vote/img/banner.jpg' %}" alt="">
@@ -114,12 +116,12 @@
 
 
 
-   <!-- footer section -->
-<footer>
-    <a href="https://wa.link/gj4et8">Godey Tech</a>
-    <p> © Copyright 2024 Vote. All right reserved </p>
-  </footer>
-  
+    <!-- footer section -->
+    <footer>
+        <a href="https://wa.link/gj4et8">Godey Tech</a>
+        <p> © Copyright 2024 Vote. All right reserved </p>
+    </footer>
+
 
 
 
@@ -127,42 +129,42 @@
     <script src="{% static 'vote/app.js' %}"></script>
 
     <!-- this script is for the whatsapp plugin -->
-  <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var gcaMain = new GetChatApp({
-  'mobileNumber' : '+233 55 391 2334',
-  'titleMessage' : '👋 Chat with me on WhatsApp!',
-  'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
-  'position' : 'right',
-  'platforms' : {
-  'whatsapp' : true,
-  'facebook' : false,
-  'email' : false,
-  'instagram' : false,
-  'telegram' : false,
-  'x' : false,
-  'tiktok' : false,
-  'linkedin' : false,
-  'phone' : false,
-  'customLink' : false
-  },
-  'facebookPageId' : '',
-  'facebookMessage' : 'Hi there!<br><br>Start chatting with us now!',
-  'facebookReplyTime' : 'a day',
-  'gcaEmailAddress' : '',
-  'gcaEmailSubject' : '',
-  'gcaInstagramUsername' : '',
-  'gcaTelegramUsername' : '',
-  'gcaXUsername' : '',
-  'gcaTiktokUsername' : '',
-  'gcaLinkedinUsername' : '',
-  'gcaPhoneNumber' : '',
-  'gcaCustomLink' : '',
-  'multipleContacts' : false
-    });
-  });
-  </script>
+    <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var gcaMain = new GetChatApp({
+                'mobileNumber': '+233 55 391 2334',
+                'titleMessage': '👋 Chat with me on WhatsApp!',
+                'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
+                'position': 'right',
+                'platforms': {
+                    'whatsapp': true,
+                    'facebook': false,
+                    'email': false,
+                    'instagram': false,
+                    'telegram': false,
+                    'x': false,
+                    'tiktok': false,
+                    'linkedin': false,
+                    'phone': false,
+                    'customLink': false
+                },
+                'facebookPageId': '',
+                'facebookMessage': 'Hi there!<br><br>Start chatting with us now!',
+                'facebookReplyTime': 'a day',
+                'gcaEmailAddress': '',
+                'gcaEmailSubject': '',
+                'gcaInstagramUsername': '',
+                'gcaTelegramUsername': '',
+                'gcaXUsername': '',
+                'gcaTiktokUsername': '',
+                'gcaLinkedinUsername': '',
+                'gcaPhoneNumber': '',
+                'gcaCustomLink': '',
+                'multipleContacts': false
+            });
+        });
+    </script>
 </body>
 
 </html>

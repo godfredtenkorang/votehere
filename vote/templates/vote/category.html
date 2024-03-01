@@ -1,5 +1,6 @@
 {% extends 'vote/base.html' %}
 {% load static %}
+
 {% block content %}
 
 <!-- banner -->
@@ -7,21 +8,19 @@
     <img src="{% static 'vote/img/award-banner.jpg' %}" alt="">
     <div class="banners-content">
 
+
         <h1>{% if category %}{{ category.name }}{% else %}Award Name{% endif %}</h1>
         <div class="button">
             <a href="{% url 'nominate' %}">Nominate</a>
         </div>
     </div>
-    8
-</div>
 
 
-<!-- end of banner section -->
-<div class="spinner">
-    <div class="skeleton-spinner"></div>
-    <p>Please wait! We are putting everything togethere for you</p>
-</div>
-
+    <!-- end of banner section -->
+    <div class="spinner">
+        <div class="skeleton-spinner"></div>
+        <p>Please wait! We are putting everything togethere for you</p>
+    </div>
 
 
 
@@ -44,14 +43,6 @@
         </a>
         {% endfor %}
 
-        <!-- second category -->
+        
 
-
-        <!-- third category -->
-
-
-        <!-- fourth category -->
-
-    </div>
-</div>
 {% endblock content %}

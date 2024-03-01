@@ -1,24 +1,24 @@
 {% extends 'vote/base.html' %}
 {% load static %}
-{% block content %}
-<!-- banner -->
-<div class="banners">
-    <img src="{% static 'vote/img/award-banner.jpg' %}" alt="">
-    <div class="banners-content">
-        <h1>Category of the award</h1>
-        <div class="button">
-            <a href="">view Result</a>
+
+    <!-- banner -->
+    <div class="banners">
+        <img src="{% static 'vote/img/award-banner.jpg' %}" alt="">
+        <div class="banners-content">
+            <h1>Category of the award</h1>
+            <div class="button">
+                <a href="{% url 'result' %}">view Result</a>
+            </div>
         </div>
+
     </div>
 
-</div>
 
-
-<!-- end of banner section -->
-<div class="spinner">
-    <div class="skeleton-spinner"></div>
-    <p>Please wait! We are putting everything togethere for you</p>
-</div>
+    <!-- end of banner section -->
+    <div class="spinner">
+        <div class="skeleton-spinner"></div>
+        <p>Please wait! We are putting everything togethere for you</p>
+    </div>
 
 
 <!-- nominees section -->
@@ -34,8 +34,52 @@
                     <button>Vote</button>
                 </div>
             </div>
+          
         </div>
+    </section>
 
+
+    <!-- This is the form voters can use to vote.
+it is hidden so when voters click on the vote button, the it appears -->
+    <section class="voting-form-section">
+        <div class="voting-form-container">
+            <div class="vote-col">
+                <p>Vote</p>
+                <i class="fa-solid fa-xmark" id="removeVotingForm"></i>
+            </div>
+            <div class="alert">
+                <p><i class="fa-solid fa-info"></i> Note: Please be sure of the nominee you are voting for. This
+                    transaction is irreversibe</p>
+            </div>
+
+            <!-- This section receive the nominee image and name to the form when the vote button is clicked -->
+            <div class="nominee-image-name">
+                <div class="nominee-image"></div>
+                <div class="nominee-name"></div>
+            </div>
+
+            <!-- voting form -->
+            <form action="" class="form-for-voting">
+                <label for=""><i class="fa-solid fa-user"></i> Full Name</label>
+                <input type="text" name="" id="user-name" placeholder="Your Full Name" required> <br>
+
+                <label for=""><i class="fa-solid fa-envelope"></i> Email Address</label>
+                <input type="email" name="" id="" placeholder="Email Address" required> <br>
+
+                <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label>
+                <input type="number" name="" id="" placeholder="Phone Number" required> <br>
+
+                <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote</label>
+                <input type="number" name="" id="number-of-vote" placeholder="Number of vote" required> <br>
+                
+                <!-- alerting users on amount of money he will pay per vote -->
+                <div class="amount-to-pay-per-vote">
+                </div>
+
+                <!-- pay button -->
+                <button>Pay Now</button>
+
+            </form>
         <!-- <div class="nominees">
             <img src="{% static 'vote/img/profile.png' %}" alt="">
             <div class="nominees-detail">
@@ -74,54 +118,7 @@
     </div>
 </section>
 
-<!-- voting form -->
-<section class="voting-form-section">
-    <div class="voting-form-container">
-        <div class="vote-col">
-            <p>Vote</p>
-            <i class="fa-solid fa-xmark" id="removeVotingForm"></i>
-        </div>
-        <div class="alert">
-            <p><i class="fa-solid fa-info"></i> Note: Please be sure of the nominee you are voting for. This transaction
-                is irreversibe</p>
-        </div>
 
-        <!-- users image and name -->
-        <div class="nominee-image-name">
-            <!-- user image -->
-            <div class="nominee-image">
-
-            </div>
-            <!-- user-name -->
-            <div class="nominee-name">
-                <p>User Name</p>
-            </div>
-
-        </div>
-        <!-- voting form -->
-        <form action="" class="form-for-voting">
-            <label for=""><i class="fa-solid fa-user"></i> Full Name</label>
-            <input type="text" name="" id="user-name" placeholder="Your Full Name" required> <br>
-
-            <label for=""><i class="fa-solid fa-envelope"></i> Email Address</label>
-            <input type="email" name="" id="" placeholder="Email Address" required> <br>
-
-            <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label>
-            <input type="number" name="" id="" placeholder="Phone Number" required> <br>
-
-            <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote</label>
-            <input type="number" name="" id="number-of-vote" placeholder="Number of vote" required> <br>
-            <!-- alerting users on amount of money he will pay per vote -->
-            <div class="amount-to-pay-per-vote">
-
-            </div>
-
-            <!-- pay button -->
-            <button>Pay Now</button>
-
-        </form>
-    </div>
-</section>
 
 
 {% endblock content %}

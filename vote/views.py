@@ -53,3 +53,6 @@ def category(request, category_slug=None):
 
 def nominate(request):
     return render(request, 'vote/nominate.html')
+
+def result(request):
+    return render(request, 'vote/resultPage.html')
