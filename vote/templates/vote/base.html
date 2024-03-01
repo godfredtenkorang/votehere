@@ -13,17 +13,13 @@
     <!-- here is the link to css -->
     <link rel="stylesheet" href="{% static 'vote/style.css' %}">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
-        integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- our logo favicon -->
+    <link rel="icon" href="{% static 'vote/img/our-logo.jpg' %}" type="image/jpeg">
 
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
 </head>
 
@@ -35,15 +31,22 @@
         <div class="nav-bar">
             <nav>
                 <div class="logo">
-                    <a href="{% url 'index' %}">VoteAfric</a>
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+
+
+                    </a>
 
                 </div>
                 <ul class="navLinks">
-                    <li><a class="active" href="{% url 'index' %}">Home</a></li>
+                    <li><a  href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'about' %}">About Us</a></li>
                     <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
                     <li><a href="{% url 'termsCondition' %}">Term& Condition </a></li>
                     <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                    <div class="remove-navbar">
+                        <i class="fas fa-times"></i>
+                    </div>
 
                 </ul>
                 <!-- search bar -->
@@ -59,6 +62,7 @@
                 <i class="fa-solid fa-bars"></i>
             </div>
         </div>
+        
     </header>
 
     {% block content %} {% endblock %}
