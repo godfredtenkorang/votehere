@@ -7,10 +7,9 @@ urlpatterns = [
    path('about/', views.about, name='about'),
    path('policy/', views.policy, name='policy'), 
    path('termsCondition/', views.termsCondition, name='termsCondition'), 
- path('contact/', views.contact, name='contact'), 
- path('nominees/', views.nominees, name='nominee'), 
- path('category/', views.category, name='category'), 
-  path('nominate/', views.nominate, name='nominate'), 
-    path('result/', views.result, name='result'), 
-
+   path('contact/', views.contact, name='contact'), 
+   path('nominee/<slug:nominee_slug>/', views.nominees, name='nominee_detail'), 
+   path('<slug:category_slug>/', views.category, name='award_by_category'),
+   path('nominate/', views.nominate, name='nominate'), 
+   path('contact/', views.contact, name='contact'), 
 ]
