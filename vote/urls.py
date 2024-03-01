@@ -11,5 +11,7 @@ urlpatterns = [
    path('nominee/<slug:nominee_slug>/', views.nominees, name='nominee_detail'), 
    path('<slug:category_slug>/', views.category, name='award_by_category'),
    path('nominate/', views.nominate, name='nominate'), 
-   path('contact/', views.contact, name='contact'), 
+   path('contact/', views.contact, name='contact'),
+   path('result/', views.result, name='result'),
+   
 ]
