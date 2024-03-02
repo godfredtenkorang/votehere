@@ -9,9 +9,9 @@
     <div class="banners-content">
 
 
-        <h1>{% if category %}{{ category.name }}{% else %}Award Name{% endif %}</h1>
+        <h1>{% if category %}{{ category.award }}{% else %}Award Name{% endif %}</h1>
         <div class="button">
-            <a href="{% url 'nominate' %}">Nominate</a>
+            <a href="{% url 'nominate' category.slug %}">Nominate</a>
         </div>
     </div>
 
@@ -24,29 +24,26 @@
 
 
 
-<!-- Award category section -->
-<div class="award-category-section content">
-    <div class="award-category-container">
-        <!-- first category -->
-        {% for a in award %}
-        <a href="{% url 'nominee_detail' a.slug %}" class="category">
-            <div class="category">
-                <img src="{{ a.category.image.url }}" alt="image">
+    <!-- Award category section -->
+    <div class="award-category-section content">
+        <div class="award-category-container">
+            <!-- first category -->
+            {% for a in award %}
+            <a href="{% url 'nominee_detail' a.slug %}" class="category">
+                <div class="category">
+                    <img src="{{ a.category.image.url }}" alt="image">
 
-                <div class="category-details">
-                    <h2>{{ a.category.title }}</h2>
-                    <h3>{{ a.content }}</h3>
+                    <div class="category-details">
+                        <h2>{{ a.category.title }}</h2>
+                        <h3>{{ a.content }}</h3>
+
+                    </div>
 
                 </div>
-
-            </div>
-        </a>
+            </a>
+            {% endfor %}
+        </div>
     </div>
 </div>
-</div>
-
-        {% endfor %}
-
-        
 
 {% endblock content %}

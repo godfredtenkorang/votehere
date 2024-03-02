@@ -14,7 +14,7 @@ class Category(models.Model):
         ordering = ('-award',)
 
     def __str__(self):
-        return self.title
+        return self.award
     # def get_absolute_url(self):
     #     return reverse('award:award_by_category', args=[self.slug])
 
