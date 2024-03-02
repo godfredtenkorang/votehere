@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Register(models.Model):
     award = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
-    image = models.ImageField(default='register_img')
+    image = models.ImageField(default='profile.png', upload_to='register_img')
     category = models.CharField(max_length=250)
     name = models.CharField(max_length=225)
     phone = models.CharField(max_length=10)

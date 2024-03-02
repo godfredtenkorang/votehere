@@ -1,0 +1,61 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- banner section -->
+<section id="banner">
+    <div class="container">
+        <div class="row">
+            <div class="banner-content">
+                <h1>ONLINE VOTING SYSTEM</h1>
+                <p>Online voting systems are software platforms used to securely conduct votes and elections. As a
+                    digital
+                    platform, they eliminate the need to cast your votes using paper or having to gather in person.</p>
+            </div>
+
+            <div class="banner-img">
+                <img src="{% static 'vote/img/2.svg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</section>
+<!-- end of banner section -->
+<div class="spinner">
+    <div class="skeleton-spinner"></div>
+    <p>Please wait! We are putting everything togethere for you</p>
+</div>
+
+<!-- ongoing award -->
+<div class="award-main-container content">
+    
+
+    <div class="">
+        {% if category %}
+        <h2>{{category.award}}</h2>
+        {% else %}
+        <h2>No searched item</h2>
+        {% endif %}
+    </div>
+
+    <!-- awards -->
+    <div class="award-container">
+        <!-- Individual award items -->
+        {% for p in allcategories %}
+        <div class="award">
+            <a href="{% url 'award_by_category' p.slug %}">
+                <img src="{{ p.image.url }}" alt="image">
+                <div class="award-text">
+                    <h4>{{ p.title }}</h4>
+                    <h5>{{ p.award }}</h5>
+                </div>
+            </a>
+        </div>
+
+
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,13 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
+from django.db.models import Q  # New
 
 
 def index(request):
-    categories = Category.objects.all()
+    search_item = request.GET.get('search')
+    
+    if search_item:
+        categories = Category.objects.filter(Q(award__icontains=search_item))
+    else:
+        categories = Category.objects.all()
 
     context = {
         'categories': categories,
-
     }
     return render(request, 'vote/index.html', context)
 
@@ -54,3 +59,16 @@ def category(request, category_slug=None):
 
 def result(request):
     return render(request, 'vote/resultPage.html')
+
+
+def search_view(request, category_slug=None):
+    
+    category = get_object_or_404(Category, slug=category_slug)
+    allcategories = Category.objects.filter(category=category)
+        
+    context = {
+        "category": category,
+        "allcategories": allcategories,
+    }
+    
+    return render(request, "vote/search.html", context)

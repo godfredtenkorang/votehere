@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -8,10 +9,11 @@ class Category(models.Model):
     content = models.CharField(max_length=100)
     image = models.ImageField(upload_to="category")
     slug = models.SlugField(unique=True)
+    date = models.DateTimeField(timezone.now, null=True)
     
     class Meta:
         verbose_name_plural = "categories"
-        ordering = ('-award',)
+        ordering = ('-date',)
 
     def __str__(self):
         return self.award

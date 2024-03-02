@@ -10,6 +10,8 @@
 
 
         <h1>{% if category %}{{ category.award }}{% else %}Award Name{% endif %}</h1>
+        <br>
+        <p>{% if category %}{{ category.title }}{% else %}Award Name{% endif %}</p>
         <div class="button">
             <a href="{% url 'nominate' category.slug %}">Nominate</a>
         </div>

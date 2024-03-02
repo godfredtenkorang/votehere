@@ -5,7 +5,9 @@
 <div class="banners">
     <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
     <div class="banners-content">
-        <h1>Category of the award</h1>
+        <h1>{% if nominee %}{{ nominee.content }}{% else %}Award Name{% endif %}</h1>
+        <br>
+        <p>{% if nominee %}{{ nominee.category }}{% else %}Award Name{% endif %}</p>
         <div class="button">
             <a href="{% url 'result' %}">view Result</a>
         </div>
