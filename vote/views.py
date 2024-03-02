@@ -33,12 +33,7 @@ def contact(request):
     return render(request, 'vote/contact.html')
 
 
-def nominees(request, nominee_slug):
-    nominee = get_object_or_404(Nominees, slug=nominee_slug)
-    context = {
-        'nominee': nominee,
-    }
-    return render(request, 'vote/nomineesPage.html', context)
+
 
 
 def category(request, category_slug=None):
@@ -54,11 +49,6 @@ def category(request, category_slug=None):
         'title': 'Category Detail'
     }
     return render(request, 'vote/category.html', context)
-
-
-
-def result(request):
-    return render(request, 'vote/resultPage.html')
 
 
 def search_view(request, category_slug=None):

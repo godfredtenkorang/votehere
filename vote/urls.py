@@ -8,10 +8,10 @@ urlpatterns = [
     path('policy/', views.policy, name='policy'),
     path('termsCondition/', views.termsCondition, name='termsCondition'),
     path('contact/', views.contact, name='contact'),
-    path('nominee/<slug:nominee_slug>/', views.nominees, name='nominee_detail'),
+    
     path('<slug:category_slug>/', views.category, name='award_by_category'),
     
-    path('result/', views.result, name='result'),
+    
     
     path('search/<slug:category_slug>/', views.search_view, name='search')
 
