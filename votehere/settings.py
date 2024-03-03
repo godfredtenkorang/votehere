@@ -122,6 +122,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+PAYSTACK_SECRET_KEY = config("PAYSTACK_SECRET_KEY")
+PAYSTACK_PUBLIC_KEY = config("PAYSTACK_PUBLIC_KEY")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
