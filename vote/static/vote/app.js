@@ -84,26 +84,49 @@ removeVotingForm.addEventListener("click", () => {
 // Handling vote button clicks.This function handles when when a user click on the vote button, it  takes the nominee image and name
 const voteButtons = document.querySelectorAll(".vote-button button");
 
+// Function to handle vote button click event
 function handleVoteButtonClick(event) {
+    // Find the closest parent element with class "nominees-detail"
     const nomineesDetail = event.target.closest(".nominees-detail");
+
+    // Get the source of the nominee image
     const nomineeImageSrc = nomineesDetail.parentElement.querySelector("img").src;
+
+    // Get the text content of the nominee name
     const nomineeName = nomineesDetail.querySelector("h3").textContent;
 
+    // Get the text content of the nominee category
+    const nomineeCategory = nomineesDetail.querySelector("h2").textContent;
+
+    // Create a div element for the nominee image
     const nomineeImage = document.createElement("div");
     nomineeImage.classList.add("nominee-image");
     nomineeImage.innerHTML = `<img src="${nomineeImageSrc}" alt="">`;
 
+    // Create a div element for the nominee name
     const nomineeNameElement = document.createElement("div");
     nomineeNameElement.classList.add("nominee-name");
     nomineeNameElement.textContent = nomineeName;
 
+    // Create a div element for the nominee category
+    const nomineeCategoryContainer = document.createElement("div");
+    nomineeCategoryContainer.textContent = nomineeCategory;
+
+    // Find the container for nominee image and name
     const nomineeImageNameContainer = document.querySelector(".nominee-image-name");
+
+    // Clear any existing content in the container
     nomineeImageNameContainer.innerHTML = "";
+
+    // Append the nominee image, name, and category to the container
     nomineeImageNameContainer.appendChild(nomineeImage);
     nomineeImageNameContainer.appendChild(nomineeNameElement);
+    nomineeImageNameContainer.appendChild(nomineeCategoryContainer);
 
-    votingFormSection.style.display = "flex"; // Showing the voting form section
+    // Display the voting form section by setting its style display property to "flex"
+    votingFormSection.style.display = "flex"; 
 }
+
 
 // Adding click event listeners to each vote button
 voteButtons.forEach(button => {
