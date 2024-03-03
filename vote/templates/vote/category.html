@@ -16,7 +16,12 @@
             <a href="{% url 'nominate' category.slug %}">Nominate</a>
         </div>
     </div>
-
+ <!-- search bar -->
+ <div class="search-bar-section">
+    <form action="">
+      <input type="search" name="" id="" placeholder="Search Category....">
+  </form>
+</div>
 
     <!-- end of banner section -->
     <div class="spinner">
@@ -32,7 +37,7 @@
             <!-- first category -->
             {% for a in award %}
             <a href="{% url 'nominee_detail' a.slug %}" class="category">
-                <div class="category">
+                <div class="category-sub">
                     <img src="{{ a.category.image.url }}" alt="image">
 
                     <div class="category-details">

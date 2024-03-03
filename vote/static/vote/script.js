@@ -1,30 +1,19 @@
-// Selecting the necessary elements
-const uploadImage = document.querySelector(".uploadImage");
-const imageReceiver = document.querySelector(".image-receiver");
+const inputFile = document.getElementById("input-file");
+const imageView = document.getElementById("img-view");
+const image_note = document.querySelector(".image-upload-note")
+const imageExample = document.querySelector(".imageExmple")
 
-// Adding an event listener to the image input field
-uploadImage.addEventListener("change", handleImageUpload);
+if (inputFile && imageView) {
+    inputFile.addEventListener("change", uploadImage);
+}
 
-// Function to handle image upload
-function handleImageUpload(event) {
-    const selectedImg = event.target.files[0];
-    
-    if (selectedImg) {
-        // Creating a FileReader object
-        const reader = new FileReader();
-        
-        // Callback function when the image is loaded
-        reader.onload = function(event) {
-            // Creating an image element
-            const createImage = document.createElement("img");
-            createImage.src = event.target.result;
-            
-            // Clearing the previous image and displaying the new one
-            imageReceiver.innerHTML = "";
-            imageReceiver.appendChild(createImage);
-        };
-        
-        // Reading the selected image as a data URL
-        reader.readAsDataURL(selectedImg);
+function uploadImage() {
+    if (inputFile.files.length > 0) {
+        const imgLink = URL.createObjectURL(inputFile.files[0]);
+        imageView.querySelector("img").src = imgLink;
+        image_note.textContent = "Nominee image selected"
+        imageExample.style.displya = "none"
+    } else {
+        console.error("No file selected.");
     }
 }
