@@ -45,6 +45,7 @@ function voteForm() {
     // Selecting the input field for the number of votes and the display area for the amount to be paid per vote
     const numberOfVote = document.getElementById("number-of-vote");
     const amountToPayDisplay = document.querySelector(".amount-to-pay-per-vote");
+    const amount_top_pay = document.getElementById("amount-top-pay")
 
     // Constant representing the amount to be paid for each vote
     const amountPerVote = 0.70;
@@ -61,11 +62,7 @@ function voteForm() {
         const totalAmountToPay = numberOfVotes * amountPerVote;
 
         // Displaying the calculated amount to be paid
-        amountToPayDisplay.textContent = `Dear ${userName}, you will pay Ghs ${totalAmountToPay.toFixed(2)} for ${numberOfVotes} votes`;
-        amountToPayDisplay.style.display = "flex"; // Showing the amount to be paid
-        if (numberOfVote.value === "") {
-            amountToPayDisplay.style.display = "none"; // Hiding the amount display if the input field is empty
-        }
+       amount_top_pay.value= totalAmountToPay.toFixed(2)
     });
 }
 
