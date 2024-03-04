@@ -42,7 +42,7 @@
     <!-- awards -->
     <div class="award-container">
         <!-- Individual award items -->
-        {% for p in allcategories %}
+        {% for p in categories %}
         <div class="award">
             <a href="{% url 'award_by_category' p.slug %}">
                 <img src="{{ p.image.url }}" alt="image">

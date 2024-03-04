@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from vote.models import Nominees
 import secrets
 from .paystack import PayStack
@@ -10,7 +11,7 @@ class Payment(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=14, null=True)
     amount = models.PositiveBigIntegerField()
-    votes = models.IntegerField(default=0)
+    vote = models.IntegerField(default=0)
     ref = models.CharField(max_length=200)
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -42,3 +43,8 @@ class Payment(models.Model):
         if self.verified:
             return True
         return False
+
+    def get_absolute_url(self):
+        return reverse("verify-payment", kwargs={
+            "ref": self.ref,
+        })

@@ -13,35 +13,35 @@
       </div>
 
       <div class="banner-img">
-        <img src="{% static 'vote/img/2.svg' %}" alt="image" >
+        <img src="{% static 'vote/img/2.svg' %}" alt="image">
       </div>
     </div>
-    </div>
-    </div>
-    </div>
-  </section>
-   <!-- search bar -->
-  <div class="search-bar-section">
-      <form action="">
-        <input type="search" name="" id="" placeholder="Search Award....">
-    </form>
   </div>
-  <!-- end of banner section -->
-  <div class="spinner">
-    <div class="skeleton-spinner"></div>
-    <p>Please wait! We are putting everything togethere for you</p>
   </div>
+  </div>
+</section>
+<!-- search bar -->
+<div class="search-bar-section">
+  <form action="{% url 'index' %}">
+    <input type="search" name="search" id="search" placeholder="Search Award....">
+  </form>
+</div>
+<!-- end of banner section -->
+<div class="spinner">
+  <div class="skeleton-spinner"></div>
+  <p>Please wait! We are putting everything togethere for you</p>
+</div>
 
-  <!-- ongoing award -->
-  <div class="award-main-container content">
-    <div class="ongoin-event">
-      <h2>Ongoing Event <i class="fa-solid fa-award"></i></h2>
-    </div>
+<!-- ongoing award -->
+<div class="award-main-container content">
+  <div class="ongoin-event">
+    <h2>Ongoing Event <i class="fa-solid fa-award"></i></h2>
+  </div>
 
   <!-- awards -->
   <div class="award-container">
     <!-- Individual award items -->
-    {% for c in categories %}
+    {% for c in all_categories %}
     <div class="award">
       <a href="{% url 'award_by_category' c.slug %}">
         <img src="{{ c.image.url }}" alt="image">
@@ -55,6 +55,6 @@
 
     {% endfor %}
   </div>
-  </div>
-  
+</div>
+
 {% endblock content %}

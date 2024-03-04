@@ -16,14 +16,14 @@
 
 <div class="nomination-forms">
     <!-- Nomination Form -->
-    <form action="">
+    <form method="POST" enctype="multipart/form-data">
         <h3>Please, fill out the forms for nomination</h3>
-
+        {% csrf_token %}
         <!-- Image display section -->
         <div class="hero">
             <label for="input-file" id="drop-area">
                 <!-- File input for image upload -->
-                <input type="file" accept="image/" id="input-file" hidden required>
+                <input type="file" accept="image/" name="image" id="input-file" hidden required>
                 
                 <!-- Image view container -->
                 <div id="img-view">
@@ -41,12 +41,12 @@
                     <!-- Category input -->
                     <div class="input">
                         <label for=""><i class="fa-solid fa-list"></i> Category</label> <br>
-                        <input type="text" placeholder="Category" required>
+                        <input type="text" name="category" placeholder="Category" required>
                     </div>
                     <!-- Phone Number input -->
                     <div class="input">
                         <label for=""><i class="fa fa-phone-volume"></i>  Phone Number</label> <br>
-                        <input type="text" placeholder="Phone Number" required>
+                        <input type="text" name="phone" placeholder="Phone Number" required>
                     </div>
                 </div>
     
@@ -54,12 +54,12 @@
                     <!-- Name input -->
                     <div class="input">
                         <label for=""><i class="fa-solid fa-signature"></i>  Name</label> <br>
-                        <input type="text" placeholder="Name" required>
+                        <input type="text" name="name" placeholder="Name" required>
                     </div>
                     <!-- Email input -->
                     <div class="input">
                         <label for=""><i class="fa-solid fa-envelope"></i>  Email</label> <br>
-                        <input type="email" placeholder="Email" required>
+                        <input type="email" name="email" placeholder="Email" required>
                     </div>
                 </div> 
             </div>
@@ -68,7 +68,7 @@
             <div class="textarea">
                 <label for=""> <i class="fa-regular fa-message"></i> Reason for nomination(Include links to relevant media!)
                 </label> <br>
-                <textarea name="" id="" placeholder="Reason for nomination"></textarea>
+                <textarea name="content" id="" placeholder="Reason for nomination"></textarea>
             </div>
         </div>
 

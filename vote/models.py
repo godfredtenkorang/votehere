@@ -27,6 +27,7 @@ class Nominees(models.Model):
     content = models.CharField(max_length=100)
     image = models.ImageField(upload_to="nominees")
     slug = models.SlugField(unique=True, null=True)
+    can_vote = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "nominees"

@@ -2,5 +2,41 @@
 
 {% block content %}
 
+<section class="pt-3" style="height: 40%;">
+    <div class="container">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Make Payment for GH¢{{ payment.amount }}</legend>
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-secondary" onclick="payWithPayStack()" id="django-paystack-button"
+                type="submit">Make Payment</button>
+        </div>
+    </div>
+</section>
 
+<script>
+    function payWithPayStack() {
+        let currency = "GHS";
+        let plan = "";
+        let ref = "{{ payment.ref }}";
+        let obj = {
+            key: "{{ paystack_public_key }}",
+            email: "{{ payment.email }}",
+            amount: "{{ payment.amount_value }}",
+            ref: ref,
+            callback: function (response) {
+                window.location.href = "{{ payment.get_absolute_url }}";
+            },
+        }
+        if (Boolean(currency)) {
+            obj.currency = currency.toUpperCase()
+        }
+        if (Boolean(plan)) {
+            obj.plan = plan;
+        }
+        var handler = PaystackPop.setup(obj);
+        handler.openIframe();
+    }
+</script>
 {% endblock %}

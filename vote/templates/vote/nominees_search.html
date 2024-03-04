@@ -1,0 +1,116 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- banner section -->
+<section id="banner">
+    <div class="container">
+        <div class="row">
+            <div class="banner-content">
+                <h1>ONLINE VOTING SYSTEM</h1>
+                <p>Online voting systems are software platforms used to securely conduct votes and elections. As a
+                    digital
+                    platform, they eliminate the need to cast your votes using paper or having to gather in person.</p>
+            </div>
+
+            <div class="banner-img">
+                <img src="{% static 'vote/img/2.svg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</section>
+<!-- end of banner section -->
+<div class="spinner">
+    <div class="skeleton-spinner"></div>
+    <p>Please wait! We are putting everything togethere for you</p>
+</div>
+
+<!-- ongoing award -->
+<div class="award-main-container content">
+
+
+    <div class="">
+        {% if category %}
+        <h2>{{category.award}}</h2>
+        {% else %}
+        <h2>No searched item</h2>
+        {% endif %}
+    </div>
+
+    <!-- awards -->
+    <div class="award-container">
+        <!-- Individual award items -->
+        {% for p in categories %}
+        <div class="award">
+            <a href="{% url 'award_by_category' p.slug %}">
+                <img src="{{ p.image.url }}" alt="image">
+                <div class="award-text">
+                    <h4>{{ p.title }}</h4>
+                    <h5>{{ p.award }}</h5>
+                </div>
+            </a>{% extends 'vote/base.html' %}
+            {% load static %}
+            
+            {% block content %}
+            
+            <!-- banner -->
+            <div class="banners">
+                <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
+                <div class="banners-content">
+            
+            
+                    <h1>{% if category %}{{ category.award }}{% else %}Award Name{% endif %}</h1>
+                    <br>
+                    <p>{% if category %}{{ category.title }}{% else %}Award Name{% endif %}</p>
+                    <div class="button">
+                        <a href="{% url 'nominate' category.slug %}">Nominate</a>
+                    </div>
+                </div>
+                <!-- search bar -->
+                <div class="search-bar-section">
+                    <form action="">
+                        <input type="search" name="search" id="search" placeholder="Search Category....">
+                    </form>
+                </div>
+            
+                <!-- end of banner section -->
+                <div class="spinner">
+                    <div class="skeleton-spinner"></div>
+                    <p>Please wait! We are putting everything togethere for you</p>
+                </div>
+            
+            
+            
+                <!-- Award category section -->
+                <div class="award-category-section content">
+                    <div class="award-category-container">
+                        <!-- first category -->
+                        {% for a in award %}
+                        <a href="{% url 'nominee_detail' a.slug %}" class="category">
+                            <div class="category-sub">
+                                <img src="{{ a.category.image.url }}" alt="image">
+            
+                                <div class="category-details">
+                                    <h2>{{ a.category.title }}</h2>
+                                    <h3>{{ a.content }}</h3>
+            
+                                </div>
+            
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            {% endblock content %}
+        </div>
+
+
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

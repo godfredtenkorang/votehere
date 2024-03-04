@@ -16,10 +16,17 @@
 </div>
 
 
+<div style="justify-content: center; text-align:center; padding: 5px;">
+  {% if nominee %}
+
+  {% else %}
+  <h1>Not Casting Vote At The Moment.</h1>
+  {% endif %}
+</div>
  <!-- search bar -->
   <div class="search-bar-section">
       <form action="">
-        <input type="search" name="" id="" placeholder="Search Nominee....">
+        <input type="search" name="search" id="search" placeholder="Search Nominee....">
     </form>
   </div>
 
@@ -42,7 +49,10 @@
                 <h3>{{ nominee.name }}</h3>
 
                 <div class="vote-button">
+                    {% if nominee.can_vote %}
                     <button>Vote</button>
+                    {% else %}
+                    {% endif %}
                 </div>
             </div>
 
@@ -72,25 +82,26 @@ it is hidden so when voters click on the vote button, the it appears -->
         </div>
 
         <!-- voting form -->
-        <form action="" class="form-for-voting">
+        <form class="form-for-voting" method="POST">
+            {% csrf_token %}
             <label for=""><i class="fa-solid fa-user"></i> Full Name</label>
-            <input type="text" name="" id="user-name" placeholder="Your Full Name" required> <br>
+            <input type="text" name="name" id="user-name" placeholder="Your Full Name" required> <br>
 
             <label for=""><i class="fa-solid fa-envelope"></i> Email Address</label>
-            <input type="email" name="" id="" placeholder="Email Address" required> <br>
+            <input type="email" name="email" id="" placeholder="Email Address" required> <br>
 
             <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label>
-            <input type="number" name="" id="" placeholder="Phone Number" required> <br>
+            <input type="number" name="phone" id="" placeholder="Phone Number" required> <br>
 
             <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote</label>
-            <input type="number" name="" id="number-of-vote" placeholder="Number of vote" required> <br>
+            <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
 
             <!-- alerting users on amount of money he will pay per vote -->
             <div class="amount-to-pay-per-vote">
             </div>
 
             <!-- pay button -->
-            <button>Pay Now</button>
+            <button type="submit">Pay Now</button>
 
         </form>
         <!-- <div class="nominees">
