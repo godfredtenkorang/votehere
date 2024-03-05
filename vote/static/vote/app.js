@@ -39,12 +39,9 @@ function loader() {
 loader();
 
 
-
-// Function to handle the voting form
 function voteForm() {
     // Selecting the input field for the number of votes and the display area for the amount to be paid per vote
     const numberOfVote = document.getElementById("number-of-vote");
-    const amountToPayDisplay = document.querySelector(".amount-to-pay-per-vote");
     const amount_top_pay = document.getElementById("amount-top-pay");
 
     // Constant representing the amount to be paid for each vote
@@ -58,11 +55,21 @@ function voteForm() {
         // Calculating the total amount to be paid based on the number of votes
         const totalAmountToPay = parseFloat((numberOfVotes * amountPerVote).toFixed(2));
 
-        // Displaying the calculated amount to be paid
+        // Displaying the calculated amount to be paid as a number
         amount_top_pay.value = totalAmountToPay;
+
+        // Ensure that the value is a number, not a string
+        if (isNaN(amount_top_pay.value)) {
+            amount_top_pay.value = 0; // Set a default value if NaN
+        }
+    });
+
+    // Add a submit event listener to the form
+    document.querySelector(".form-for-voting").addEventListener("submit", (event) => {
+        // Convert the value of the 'Amount To pay' field to a number before form submission
+        amount_top_pay.value = parseFloat(amount_top_pay.value);
     });
 }
-
 
 // Calling the voteForm function to enable vote calculation and display
 voteForm();
