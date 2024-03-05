@@ -10,7 +10,7 @@ class Payment(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=14, null=True)
-    amount = models.IntegerField(default=0)
+    amount = models.FloatField(default=0)
     vote = models.IntegerField(default=0)
     ref = models.CharField(max_length=200)
     verified = models.BooleanField(default=False)
