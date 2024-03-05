@@ -22,7 +22,7 @@ def nominees(request: HttpRequest, nominee_slug) -> HttpResponse:
         phone = request.POST['phone']
         vote = request.POST['vote']
         amount = request.POST['amount']
-        votes = Payment(name=name, email=email, phone=phone,
+        votes = Payment(nominee=nominee, name=name, email=email, phone=phone,
                         vote=vote, amount=amount)
         payment = votes.save()
         return render(request, 'payment/make_payment.html', {'payment': payment, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
