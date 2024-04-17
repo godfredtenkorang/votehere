@@ -1,0 +1,75 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block content %}
+<!-- banner -->
+<div class="banners">
+    <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
+    <div class="banners-content">
+        <h1>{% if nominee %}{{ nominee.content }}{% else %}Award Name{% endif %}</h1>
+        <br>
+        <p>{% if nominee %}{{ nominee.category }}{% else %}Award Name{% endif %}</p>
+        <div class="button">
+            
+        </div>
+    </div>
+
+</div>
+
+
+<div style="justify-content: center; text-align:center; padding: 5px;">
+    {% if nominee %}
+
+    {% else %}
+    <h1>Not Casting Vote At The Moment.</h1>
+    {% endif %}
+</div>
+
+
+<!-- end of banner section -->
+<div class="spinner">
+    <div class="skeleton-spinner"></div>
+    <p>Please wait! We are putting everything togethere for you</p>
+</div>
+
+
+<div class="nominee-image-name">
+    <div class="nominee-image"></div>
+    <div class="nominee-name"></div>
+    <div class="categoryName"></div>
+</div>
+
+<!-- This is the form voters can use to vote.
+it is hidden so when voters click on the vote button, the it appears -->
+<section >
+
+            <form method="POST">
+                {% csrf_token %}
+                <label for=""><i class="fa-solid fa-user"></i> Full Name</label>
+                <input type="text" name="name" id="user-name" placeholder="Your Full Name" required> <br>
+            
+                <label for=""><i class="fa-solid fa-envelope"></i> Email Address</label>
+                <input type="email" name="email" id="" placeholder="Email Address" required> <br>
+            
+                <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label>
+                <input type="number" name="phone" id="" placeholder="Phone Number" required> <br>
+            
+                <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote</label>
+                <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
+            
+                <label for=""><i class="fa-solid fa-check-to-slot"></i>Amount To pay</label>
+                <input type="number" name="total_amount" id="amount-top-pay" placeholder="Amount to pay per vote"  required>
+                <br>
+            
+                <input type="number" name="amount" id="total-amount-top-pay" placeholder="Amount to pay per vote"  required
+                    > <br>
+                <!-- pay button -->
+                <button type="submit">Pay Now</button>
+            
+            </form>
+
+</section>
+
+
+
+
+{% endblock content %}

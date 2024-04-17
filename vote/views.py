@@ -38,7 +38,7 @@ def contact(request):
 
 def category(request, category_slug=None):
     category = None
-    award = Nominees.objects.all()
+    award = SubCategory.objects.all()
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         award = award.filter(category=category)

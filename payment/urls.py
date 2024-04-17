@@ -4,7 +4,12 @@ from . import views
 
 urlpatterns = [
     path('', views.make_payment, name='make-payment'),
-    path('result/', views.result, name='result'),
+    path('result/<slug:result_slug>/', views.result, name='result'),
     path('nominee/<slug:nominee_slug>/', views.nominees, name='nominee_detail'),
-    path('make_payment/<str:ref>/',views.verify_payment, name='verify-payment')
+
+    path('make_payment/<str:ref>/',views.verify_payment, name='verify-payment'),
+    path('vote/<slug:nominee_slug>/', views.vote, name='vote-page'),
+    
+    path('vote_success/', views.vote_success, name='vote-success'),
+    path('vote_failed/', views.vote_failed, name='vote-failed'),
 ]

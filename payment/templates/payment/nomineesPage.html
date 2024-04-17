@@ -5,11 +5,13 @@
 <div class="banners">
     <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
     <div class="banners-content">
-        <h1>{% if nominee %}{{ nominee.content }}{% else %}Award Name{% endif %}</h1>
+        <h1>{% if sub_category %}{{ sub_category.content }}{% else %}Award Name{% endif %}</h1>
         <br>
-        <p>{% if nominee %}{{ nominee.category }}{% else %}Award Name{% endif %}</p>
+        <p>{% if sub_category %}{{ sub_category.category }}{% else %}Award Name{% endif %}</p>
         <div class="button">
-            <a href="{% url 'result' %}">view Result</a>
+
+            <a href="{% url 'result' sub_category.slug %}">view Result</a>
+
         </div>
     </div>
 
@@ -17,7 +19,7 @@
 
 
 <div style="justify-content: center; text-align:center; padding: 5px;">
-  {% if nominee %}
+  {% if nominees %}
 
   {% else %}
   <h1>Not Casting Vote At The Moment.</h1>
@@ -42,21 +44,24 @@
 <!-- nominees section -->
 <section class="nominees-section-container content">
     <div class="nominees-container">
+        {% for n in nominees %}
         <div class="nominees">
-            <img src="{{ nominee.image.url }}" alt="image">
+            <img src="{{ n.image.url }}" alt="image">
             <div class="nominees-detail">
-                <h2>{{ nominee.category.content }}</h2>
-                <h3>{{ nominee.name }}</h3>
+                <h2>{{ n.sub_category.content }}</h2>
+                <h3>{{ n.name }}</h3>
 
                 <div class="vote-button">
-                    {% if nominee.can_vote %}
-                    <button>Vote</button>
+                    {% if n.can_vote %}
+                    <a href="{% url 'vote-page' n.slug %}">Vote</a>
+                   
                     {% else %}
                     {% endif %}
                 </div>
             </div>
 
         </div>
+        {% endfor %}
     </div>
 </section>
 
@@ -97,8 +102,9 @@ it is hidden so when voters click on the vote button, the it appears -->
             <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
            
             <label for=""><i class="fa-solid fa-check-to-slot"></i>Amount To pay</label>
-            <input type="number" name="amount" id="amount-top-pay" placeholder="Amount to pay per vote" readonly required> <br>
+            <input type="number" name="total_amount" id="amount-top-pay" placeholder="Amount to pay per vote" readonly required> <br>
 
+            <input type="number" name="amount" id="total-amount-top-pay" placeholder="Amount to pay per vote" readonly required hidden> <br>
             <!-- pay button -->
             <button type="submit">Pay Now</button>
 
@@ -140,8 +146,6 @@ it is hidden so when voters click on the vote button, the it appears -->
         </div> -->
     </div>
 </section>
-
-
 
 
 {% endblock content %}

@@ -1,20 +1,45 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
-from payment.models import Payment
-from vote.models import Nominees
+from payment.models import Payment, Nominees
+from vote.models import SubCategory, Category
 from django.http import HttpRequest
 from django.contrib import messages
 from django.conf import settings
+from . import forms
 
 # Create your views here.
 def make_payment(request):
     return render(request, 'payment/make_payment.html')
 
 
-def result(request):
-    return render(request, 'payment/resultPage.html')
+def result(request, result_slug):
+    sub_category = None
+    results = Nominees.objects.all()
+    if result_slug:
+        sub_category = get_object_or_404(SubCategory, slug=result_slug)
+        results = results.filter(sub_category=sub_category)
+    # results = get_object_or_404(Nominees, slug=result_slug)
+    
+    context = {
+        'sub_category': sub_category,
+        'results': results,
+        'title': 'Results'
+    }
+    
+    return render(request, 'payment/resultPage.html', context)
 
 
-def nominees(request: HttpRequest, nominee_slug) -> HttpResponse:
+
+# def nominees(request, nominee_slug):
+#     nominee = get_object_or_404(Nominees, slug=nominee_slug)
+
+#     context = {
+#         'nominee': nominee,
+#     }
+#     return render(request, 'payment/nomineesPage.html', context)
+
+
+
+def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
     nominee = get_object_or_404(Nominees, slug=nominee_slug)
     if request.method == 'POST':
         name = request.POST['name']
@@ -22,21 +47,45 @@ def nominees(request: HttpRequest, nominee_slug) -> HttpResponse:
         phone = request.POST['phone']
         vote = request.POST['vote']
         amount = request.POST['amount']
-        votes = Payment(nominee=nominee, name=name, email=email, phone=phone,
-                        vote=vote, amount=amount)
-        payment = votes.save()
+        total_amount = request.POST['total_amount']
+        payment = Payment(nominee=nominee, name=name, email=email, phone=phone,
+                        vote=vote, amount=amount, total_amount=total_amount)
+        payment.save()
         return render(request, 'payment/make_payment.html', {'payment': payment, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
+
+
     context = {
+        
         'nominee': nominee,
+    }
+    return render(request, 'payment/vote.html', context)
+
+
+def nominees(request: HttpRequest, nominee_slug) -> HttpResponse:
+    sub_category = None
+    nominees = Nominees.objects.all()
+    if nominee_slug:
+        sub_category = get_object_or_404(SubCategory, slug=nominee_slug)
+        nominees = nominees.filter(sub_category=sub_category)
+    
+    
+    context = {
+        'sub_category': sub_category,
+        'nominees': nominees,
     }
     return render(request, 'payment/nomineesPage.html', context)
 
 
-def verify_payment(request: HttpRequest, ref: str) -> HttpResponse:
+def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     payment = get_object_or_404(Payment, ref=ref)
     verified = payment.verify_payment()
     if verified:
-        messages.success(request, 'Verification Successful')
+        return render(request, 'payment/vote_success.html')
     else:
-        messages.error(request, 'Verification Failed')
-    return redirect('nominee_detail')
+        messages.error(request, 'payment/vote_failed.html')
+
+def vote_success(request):
+    return render(request, 'payment/vote_success.html')
+
+def vote_failed(request):
+    return render(request, 'payment/vote_failed.html')

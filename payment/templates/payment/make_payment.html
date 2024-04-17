@@ -2,19 +2,18 @@
 
 {% block content %}
 
-<section class="pt-3" style="height: 40%;">
-    <div class="container">
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Make Payment for GH¢{{ payment.amount }}</legend>
+<section class="donate-section-cont">
+    <div class="donate-secs">
+        <div class="donate-sec">
+            <h1>Make Payment for GH¢{{ payment.total_amount }}</h1>
             <script src="https://js.paystack.co/v1/inline.js"></script>
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-secondary" onclick="payWithPayStack()" id="django-paystack-button"
-                type="submit">Make Payment</button>
+        </div>
+        <div>
+            <button class="donate-btn" onclick="payWithPayStack()" id="django-paystack-button" type="submit">Make
+                Payment</button>
         </div>
     </div>
 </section>
-
 <script>
     function payWithPayStack() {
         let currency = "GHS";
@@ -26,7 +25,7 @@
             amount: "{{ payment.amount_value }}",
             ref: ref,
             callback: function (response) {
-                window.location.href = "{{ payment.get_absolute_url }}";
+                window.location.href = "{% url 'verify-payment' payment.ref %}";
             },
         }
         if (Boolean(currency)) {

@@ -1105,3 +1105,38 @@ footer p {
 
 
 
+
+
+.donate-section-cont{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 7% 6%;
+}
+.donate-secs{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    min-height: 35vh;
+    background-color: var(--whiteColor);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+
+.donate-btn {
+    background-color: #a517ba;
+    padding: 10px;
+    margin:2% 5px;
+    color: var(--whiteColor);
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    min-height: 6vh;
+    font-size: 19px;
+}

@@ -44,19 +44,39 @@ function voteForm() {
     // Selecting the input field for the number of votes and the display area for the amount to be paid per vote
     const numberOfVote = document.getElementById("number-of-vote");
     const amount_top_pay = document.getElementById("amount-top-pay");
+    const total_amount_top_pay = document.getElementById(
+      "total-amount-top-pay"
+    );
     // Constant representing the amount to be paid for each vote
-    const amountPerVote = 0.70;
+    const amountPerVote = 0.7;
+
+
+    const totalAmountTopPay = amountPerVote * 100
+
     // Adding an input event listener to the number of votes input field
     numberOfVote.addEventListener("input", () => {
         // Parsing the number of votes entered by the user
         const numberOfVotes = parseFloat(numberOfVote.value);
         // Calculating the total amount to be paid based on the number of votes
-        const totalAmountToPay = parseFloat((numberOfVotes * amountPerVote).toFixed(2));
+        const userNumberOfVote = parseFloat(
+          (numberOfVotes * amountPerVote).toFixed(2)
+        );
+
+        const totalAmountToPay = parseFloat(
+          (numberOfVotes * totalAmountTopPay).toFixed(2)
+        );
+
         // Displaying the calculated amount to be paid as a number
-        amount_top_pay.value = totalAmountToPay;
+        amount_top_pay.value = userNumberOfVote;
+
+        total_amount_top_pay.value = totalAmountToPay;
+
         // Ensure that the value is a number, not a string
         if (isNaN(amount_top_pay.value)) {
             amount_top_pay.value = 0; // Set a default value if NaN
+        }
+        if (isNaN(total_amount_top_pay.value)) {
+          total_amount_top_pay.value = 0; // Set a default value if NaN
         }
     });
     // Add a submit event listener to the form
