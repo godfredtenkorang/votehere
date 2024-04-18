@@ -18,7 +18,7 @@
 /* Header styling */
 header {
     width: 100%;
-    padding: 20px 3%;
+    padding: 20px 10%;
     z-index: 1;
     color: #fff;
     position: relative;
@@ -437,6 +437,7 @@ nav {
 /* styling category container */
 .category,
 .nominees {
+    width: 100%;
     max-width: 320px;
     min-height: 55vh;
     background-color: var(--whiteColor);
@@ -477,17 +478,16 @@ nav {
 }
 
 /* vote button styling */
-.vote-button a{
+.vote-button {
     width: 100%;
     padding: 5%;
 }
 
 .vote-button a {
     padding: 10px 25px;
-    font-family: "Roboto", sans-serif;
     font-weight: 500;
     background-color: var(--voiletColor);
-    outline: none !important;
+   
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -497,7 +497,7 @@ nav {
     width: 100%;
     min-height: 7vh;
     text-align: center;
-    border-radius: 25px;
+   
     border: 2px solid rgb(255, 255, 255);
     z-index: 0;
     color: var(--whiteColor);
@@ -598,6 +598,7 @@ nav {
 .paymentForm{
    display: flex;
    padding: 5%;
+   gap: 2rem;
 }
 .paymentForm form{
     display: flex;
@@ -605,7 +606,7 @@ nav {
     
   padding: 10px;
     width: 100%;
-   min-height: 60vh;
+  
    
     max-width: 100%;
    min-height: 70vh;
@@ -614,7 +615,7 @@ nav {
 
 .paymentForm input{
     width: 100%;
-    min-height: 5vh;
+    min-height: 7vh;
     padding: 5px;
    
 }
@@ -633,8 +634,7 @@ nav {
 
 .pay-img img{
     width: 100%;
-    height: 80vh;
-    object-fit: cover;
+    min-height: 100vh;
 }
 
 .paymentForm form label span{
@@ -655,20 +655,75 @@ nav {
 }
 
 .alert{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     background-color:var(--voiletColor);
     width: 100%;
-    min-height: 5vh;
+    min-height: 7vh;
     margin-bottom: 2%;
    color: var(--whiteColor);
    font-weight: 800;
-    padding: 10px;  
+    padding: 10px; 
+    margin: 3% 0; 
+}
+.alert i{
+    background-color: var(--orangeColor);
+    padding:10px 12px;
+    border-radius: 50%;
+}
+
+.nominee-details{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.nominee-details img{
+    width: 100%;
+    max-width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: solid 5px #522a83;
 }
 
 
+/* vote-succes-or-fail */
+.vote-succes-or-fail{
+    width: 100%;
+ padding: 5% 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 
-
-
+}
+.vote-condition{
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2);
+    min-height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: var(--voiletColor);
+    font-weight: 900;
+  
+}
+.vote-condition h1{
+    font-size: 2rem;
+    padding: 5px 0;
+}
+.vote-condition i{
+    font-size: 3rem;
+}
+.vote-condition a{
+    color: var(--orangeColor);
+    text-decoration: underline;
+}
 
 /* .voting-form-section {
     display: none;
@@ -798,7 +853,7 @@ nav {
 .nomination-forms h3 {
     text-align: center;
     padding-bottom: 4%;
-    color: var(--voiletColor); /* Assuming this is a custom variable */
+    color: var(--voiletColor); 
     font-weight: 900;
     font-size: 1.3rem;
 }
@@ -827,7 +882,7 @@ nav {
 
 /* Styles for the form container */
 .nomination-forms form {
-    background-color: var(--whiteColor); /* Assuming this is a custom variable */
+    background-color: var(--whiteColor); 
     box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
     border: solid 1px #522a83;
     width: 100%;
@@ -857,7 +912,7 @@ nav {
 .nomination-alert {
     padding: 10px;
     text-align: center;
-    color: var(--voiletColor); /* Assuming this is a custom variable */
+    color: var(--voiletColor); 
     padding-bottom: 5%;
     font-size: 1.1rem;
     background-color: rgba(82, 42, 131, 0.1);
@@ -882,7 +937,7 @@ nav {
     min-height: 7vh;
     margin: 5% 0;
     padding: 10px;
-    caret-color: var(--voiletColor); /* Assuming this is a custom variable */
+    caret-color: var(--voiletColor); 
     outline: none;
     border: solid 2px #522a83;
     color: var(--voiletColor);
@@ -925,6 +980,7 @@ nav {
     color: var(--whiteColor); 
     cursor: pointer;
 }
+
 
 
 
@@ -988,7 +1044,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-   background-color: rgba(82, 42, 131, 0.5); /* 50% opacity */
+   background-color: rgba(82, 42, 131, 0.5); 
    ;
    padding: 20px 4%;
    min-height: 20vh;
@@ -1092,10 +1148,7 @@ footer p {
         margin:0;
     }
 
-    .paymentForm{
-        flex-direction: column;
-    }
-
+   
 }
 
 @media(max-width:930px) {
@@ -1158,6 +1211,18 @@ footer p {
     .about-image,
     .about-us-content {
         max-width: none;
+    }
+    .paymentForm{
+        flex-direction: column;
+        padding: 1px;
+       
+    }
+    .paymentForm form{
+        box-shadow: none;
+    }
+    .pay-img {
+     display: none;
+    
     }
 
 }

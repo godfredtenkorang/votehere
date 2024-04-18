@@ -32,17 +32,21 @@
 </div>
 
 
-<div class="nominee-image-name">
-    <div class="nominee-image"></div>
-    <div class="nominee-name"></div>
-    <div class="categoryName"></div>
-</div>
+
 
 <!-- This is the form voters can use to vote.
 it is hidden so when voters click on the vote button, the it appears -->
 <section  class="paymentForm">
    
             <form class="form-for-voting" method="POST">
+
+                <!-- get the nominee image, name and the category -->
+                <div class="nominee-details">
+                    <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
+                    <h4>Nominee Name</h4>
+                    <p>The Catgory</p>
+                </div>
+
                 <div class="alert">
                     <p><i class="fa-solid fa-info"></i> Note: Please be sure of the nominee you are voting for. This
                         transaction is irreversibe</p>
@@ -60,12 +64,11 @@ it is hidden so when voters click on the vote button, the it appears -->
                 <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote <span>(GHS 0.70 per vote)</span></label> <br>
                 <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
             
-                <label for=""><i class="fa-solid fa-check-to-slot"></i>Amount To pay</label> <br>
-                <input type="" name="total_amount" id="amount-top-pay" placeholder="Amount to pay per vote"  required>
+                <input type="" hidden  name="total_amount" id="amount-top-pay" placeholder="Amount to pay per vote" required>
                 <br>
             
                 <input type="number"  hidden name="amount" id="total-amount-top-pay" placeholder="Amount to pay per vote"  required
-                    > <br>
+                    > 
                     <div class="alert-amount-to-pay">
 
                     </div>
