@@ -18,19 +18,31 @@ def index(request):
 
 
 def about(request):
-    return render(request, 'vote/about.html')
+    context = {
+        'title': 'About us'
+    }
+    return render(request, 'vote/about.html', context)
 
 
 def policy(request):
-    return render(request, 'vote/policy.html')
+    context = {
+        'title': 'About us'
+    }
+    return render(request, 'vote/policy.html', context)
 
 
 def termsCondition(request):
-    return render(request, 'vote/termsCondition.html')
+    context = {
+        'title': 'About us'
+    }
+    return render(request, 'vote/termsCondition.html', context)
 
 
 def contact(request):
-    return render(request, 'vote/contact.html')
+    context = {
+        'title': 'About us'
+    }
+    return render(request, 'vote/contact.html', context)
 
 
 

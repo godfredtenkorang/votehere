@@ -55,7 +55,7 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
 
 
     context = {
-        
+        'title': 'Vote',
         'nominee': nominee,
     }
     return render(request, 'payment/vote.html', context)
@@ -72,6 +72,7 @@ def nominees(request: HttpRequest, nominee_slug) -> HttpResponse:
     context = {
         'sub_category': sub_category,
         'nominees': nominees,
+        'title': 'Nominees',
     }
     return render(request, 'payment/nomineesPage.html', context)
 
@@ -89,12 +90,12 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
 
 def vote_success(request):
     context = {
-
+        'title': 'Vote success'
     }
     return render(request, 'payment/vote_success.html', context)
 
 def vote_failed(request):
     context = {
-        
+        'title': 'Vote failed'
     }
     return render(request, 'payment/vote_failed.html', context)

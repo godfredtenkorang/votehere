@@ -21,7 +21,7 @@ class Nominees(models.Model):
         ordering = ('-total_vote',)
 
     def __str__(self):
-        return f"{self.category}"
+        return f"{self.category} - {self.sub_category} - {self.name}"
 
 
 class Payment(models.Model):
