@@ -1,17 +1,17 @@
 
 
-// // Selecting the navigation links and menu icon elements from the HTML document
-// const navLinks = document.querySelector(".navLinks");
-// const menuIcon = document.querySelector(".menu-icon");
-// const removeNavBar = document.querySelector(".fa-times");
+// Selecting the navigation links and menu icon elements from the HTML document
+const navLinks = document.querySelector(".navLinks");
+const menuIcon = document.querySelector(".menu-icon");
+const removeNavBar = document.querySelector(".fa-times");
 
-// removeNavBar.addEventListener("click", () => {
-//     navLinks.classList.toggle("showNavLinks");
-// });
-// // Adding a click event listener to the menu icon to toggle the visibility of the navigation links
-// menuIcon.addEventListener("click", () => {
-//     navLinks.classList.toggle("showNavLinks");
-// });
+removeNavBar.addEventListener("click", () => {
+    navLinks.classList.toggle("showNavLinks");
+});
+// Adding a click event listener to the menu icon to toggle the visibility of the navigation links
+menuIcon.addEventListener("click", () => {
+    navLinks.classList.toggle("showNavLinks");
+});
 
 
 
