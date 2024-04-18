@@ -5,12 +5,13 @@
 <section class="donate-section-cont">
     <div class="donate-secs">
         <div class="donate-sec">
-            <h1>Make Payment for GH¢{{ payment.total_amount }}</h1>
+            <h1 style="justify-content: center; text-align:center;">Cast {{ payment.vote }} votes for GH¢{{ payment.total_amount }} to <br> {{ payment.nominee.name }} - ({{ payment.content }})</h1>
             <script src="https://js.paystack.co/v1/inline.js"></script>
         </div>
+        <br>
         <div>
-            <button class="donate-btn" onclick="payWithPayStack()" id="django-paystack-button" type="submit">Make
-                Payment</button>
+            <button class="donate-btn" onclick="payWithPayStack()" id="django-paystack-button" type="submit">Pay
+                Now</button>
         </div>
     </div>
 </section>

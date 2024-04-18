@@ -5,9 +5,9 @@
 <div class="banners">
     <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
     <div class="banners-content">
-        <h1>{% if nominee %}{{ nominee.content }}{% else %}Award Name{% endif %}</h1>
-        <br>
         <h1>{% if nominee %}{{ nominee.sub_category }}{% else %}Award Name{% endif %}</h1>
+        <br>
+        <p>{% if nominee %}{{ nominee.category }}{% else %}Award Name{% endif %}</p>
         <div class="button">
             
         </div>
@@ -42,9 +42,9 @@ it is hidden so when voters click on the vote button, the it appears -->
 
                 <!-- get the nominee image, name and the category -->
                 <div class="nominee-details">
-                    <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
-                    <h4>Nominee Name</h4>
-                    <p>The Catgory</p>
+                    <img src="{{ nominee.image.url }}" alt="image">
+                    <br>
+                    <h4>{{ nominee.name }}</h4>
                 </div>
 
                 <div class="alert">

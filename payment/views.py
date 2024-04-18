@@ -85,10 +85,16 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
         nominee_obj.save()
         return render(request, 'payment/vote_success.html')
     else:
-        messages.error(request, 'payment/vote_failed.html')
+        return render(request, 'payment/vote_failed.html')
 
 def vote_success(request):
-    return render(request, 'payment/vote_success.html')
+    context = {
+
+    }
+    return render(request, 'payment/vote_success.html', context)
 
 def vote_failed(request):
-    return render(request, 'payment/vote_failed.html')
+    context = {
+        
+    }
+    return render(request, 'payment/vote_failed.html', context)
