@@ -48,7 +48,7 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
         vote = request.POST['vote']
         amount = request.POST['amount']
         total_amount = request.POST['total_amount']
-        payment = Payment(nominee=nominee, name=name, email=email, phone=phone,
+        payment = Payment(nominee=nominee, content=nominee.sub_category, name=name, email=email, phone=phone,
                         vote=vote, amount=amount, total_amount=total_amount)
         payment.save()
         return render(request, 'payment/make_payment.html', {'payment': payment, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
@@ -80,6 +80,9 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     payment = get_object_or_404(Payment, ref=ref)
     verified = payment.verify_payment()
     if verified:
+        nominee_obj = payment.nominee
+        nominee_obj.total_vote += payment.vote
+        nominee_obj.save()
         return render(request, 'payment/vote_success.html')
     else:
         messages.error(request, 'payment/vote_failed.html')
