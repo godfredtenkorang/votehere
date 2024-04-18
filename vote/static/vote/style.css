@@ -477,12 +477,12 @@ nav {
 }
 
 /* vote button styling */
-.vote-button {
+.vote-button a{
     width: 100%;
     padding: 5%;
 }
 
-.vote-button button {
+.vote-button a {
     padding: 10px 25px;
     font-family: "Roboto", sans-serif;
     font-weight: 500;
@@ -504,7 +504,7 @@ nav {
     font-weight: 900;
 }
 
-.vote-button button:after {
+.vote-button a:after {
     position: absolute;
     content: "";
     width: 100%;
@@ -517,19 +517,19 @@ nav {
     border-radius: 25px;
 }
 
-.vote-button button:hover {
+.vote-button a:hover {
     color: var(--whiteColor);
     border-radius: 25px;
 
 }
 
-.vote-button button:hover:after {
+.vote-button a:hover:after {
     top: 0;
     height: 100%;
     border-radius: 25px;
 }
 
-.vote-button button:active {
+.vote-button a:active {
     top: 2px;
 }
 
@@ -595,7 +595,82 @@ nav {
 }
 
 /*  this styling is for the forms voters will use to vote */
-.voting-form-section {
+.paymentForm{
+   display: flex;
+   padding: 5%;
+}
+.paymentForm form{
+    display: flex;
+    flex-direction: column;
+    
+  padding: 10px;
+    width: 100%;
+   min-height: 60vh;
+   
+    max-width: 100%;
+   min-height: 70vh;
+    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.paymentForm input{
+    width: 100%;
+    min-height: 5vh;
+    padding: 5px;
+   
+}
+.paymentForm button{
+    min-height: 7vh;
+    background-color: var(--voiletColor);
+    cursor: pointer;
+    color: var(--whiteColor);
+    border: none;
+}
+
+.pay-img{
+    width: 100%;
+    max-width: 100%;
+}
+
+.pay-img img{
+    width: 100%;
+    height: 80vh;
+    object-fit: cover;
+}
+
+.paymentForm form label span{
+    color: var(--orangeColor);
+}
+.paymentForm label{
+    color: var(--voiletColor);
+    font-weight: 800;
+}
+
+.alert-amount-to-pay{
+    background-color:rgba(165, 23, 186, 0.5);
+    width: 100%;
+    min-height: 5vh;
+    margin-bottom: 2%;
+    display: none;
+    padding: 10px;
+}
+
+.alert{
+    background-color:var(--voiletColor);
+    width: 100%;
+    min-height: 5vh;
+    margin-bottom: 2%;
+   color: var(--whiteColor);
+   font-weight: 800;
+    padding: 10px;  
+}
+
+
+
+
+
+
+
+/* .voting-form-section {
     display: none;
     position: fixed;
     top: 0;
@@ -653,8 +728,8 @@ nav {
     align-items: center;
     gap: 1rem;
     border-bottom: solid 2px rgba(82, 42, 131, 0.5); 
-    ;
-}
+  }  ; */
+/* 
 .nominee-image img {
     width: 100%;
     max-width: 200px;
@@ -684,8 +759,8 @@ nav {
 
 ::placeholder {
     color: #000;
-}
-
+} */
+/* 
 .amount-to-pay-per-vote {
     width: 100%;
     min-height: 10vh;
@@ -706,7 +781,7 @@ nav {
     border: none;
     color: var(--whiteColor);
     cursor: pointer;
-}
+} */
 
 
 
@@ -1015,6 +1090,10 @@ footer p {
     }
     .nomination-forms{
         margin:0;
+    }
+
+    .paymentForm{
+        flex-direction: column;
     }
 
 }
