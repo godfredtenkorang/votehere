@@ -5,7 +5,13 @@
 <div class="banners">
     <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image">
 
-
+    <div class="banners-content">
+        <div class="button">
+    
+            <a href="{% url 'index' %}">Return Home</a>
+    
+        </div>
+    </div>
 </div>
 
 <section class="vote-succes-or-fail">
@@ -13,9 +19,6 @@
     <div class="vote-condition">
         <i class="fa-solid fa-ban"></i>
         <h1> Vote Failed</h1>
-
-        <p>Please try Again <a href="" >Click here</a></p>
-
     </div>
    
   </section>

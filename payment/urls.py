@@ -10,6 +10,6 @@ urlpatterns = [
     path('make_payment/<str:ref>/',views.verify_payment, name='verify-payment'),
     path('vote/<slug:nominee_slug>/', views.vote, name='vote-page'),
     
-    path('vote_success/', views.vote_success, name='vote-success'),
-    path('vote_failed/', views.vote_failed, name='vote-failed'),
+    path('vote_success/<slug:nominee_slug>/', views.vote_success, name='vote-success'),
+    path('vote_failed/<slug:nominee_slug>/', views.vote_failed, name='vote-failed'),
 ]

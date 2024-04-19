@@ -61,7 +61,7 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
     return render(request, 'payment/vote.html', context)
 
 
-def nominees(request: HttpRequest, nominee_slug) -> HttpResponse:
+def nominees(request, nominee_slug):
     sub_category = None
     nominees = Nominees.objects.all()
     if nominee_slug:
@@ -87,15 +87,17 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
         return render(request, 'payment/vote_success.html')
     else:
         return render(request, 'payment/vote_failed.html')
+    
+    
 
 def vote_success(request):
     context = {
-        'title': 'Vote success'
+        'title': 'Vote success',
     }
     return render(request, 'payment/vote_success.html', context)
 
 def vote_failed(request):
     context = {
-        'title': 'Vote failed'
+        'title': 'Vote failed',
     }
     return render(request, 'payment/vote_failed.html', context)
