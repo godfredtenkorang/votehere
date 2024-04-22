@@ -7,9 +7,9 @@
   <div class="container">
     <div class="row">
       <div class="banner-content">
-        <h1>ONLINE VOTING SYSTEM</h1>
-        <p>Online voting systems are software platforms used to securely conduct votes and elections. As a digital
-          platform, they eliminate the need to cast your votes using paper or having to gather in person.</p>
+        <h1>POURS EVERYTHING ON ME!</h1>
+        <p>Greetings from our virtual polling booth! Our goal is to completely transform the way individuals take part in awards by
+        offering an easy and convenient voting process.</p>
       </div>
 
       <div class="banner-img">
@@ -35,7 +35,10 @@
 <!-- ongoing award -->
 <div class="award-main-container content">
   <div class="ongoin-event">
-    <h2>Ongoing Event <i class="fa-solid fa-award"></i></h2>
+    {% if all_categories %}
+    <h2>Ongoing Events <i class="fa-solid fa-award"></i></h2>
+    {% else %}
+    {% endif %}
   </div>
 
   <!-- awards -->
