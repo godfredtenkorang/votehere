@@ -23,7 +23,7 @@ class Register(models.Model):
     category = models.CharField(max_length=100)
     name = models.CharField(max_length=225)
     phone = models.CharField(max_length=10)
-    email = models.EmailField()
+    email = models.EmailField(null=True)
     content = models.TextField(null=True)
     date_registered = models.DateTimeField(default=timezone.now)
     
