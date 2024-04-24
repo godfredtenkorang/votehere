@@ -16,19 +16,19 @@
 
 <div class="nomination-forms">
     <!-- Nomination Form -->
-    <form method="POST" enctype="multipart/form-data">
+    <form id="nominationForm" method="POST" enctype="multipart/form-data">
         <h3>Please, fill out the forms for nomination</h3>
         {% csrf_token %}
         <!-- Image display section -->
         <div class="hero">
-            <label for="input-file" id="drop-area">
+            <label for="input-file" id="drop-area" >
                 <!-- File input for image upload -->
-                <input type="file" accept="image/" name="image" id="input-file" hidden required>
+                <input  type="file" accept="image/" name="image" id="input-file" hidden required>
                 
                 <!-- Image view container -->
                 <div id="img-view">
                     <!-- Default image with upload note -->
-                    <img src="{% static 'vote/img/508-icon.png' %}" alt="" class="imageExmple">
+                    <img loading="lazy" src="{% static 'vote/img/508-icon.png' %}" alt="" class="imageExmple">
                     <p class="image-upload-note">Click to upload <br> nominee image </p>
                 </div>
             </label>
@@ -81,14 +81,55 @@
             <p>Please Note: If you are nominating someone else, kindly ensure you are providing the correct details of
                 the person to prevent misinformation and disqualification of the nomination</p>
         </div>
-
         <!-- Submit button -->
         <button>Submit</button>
     </form>
+    
 </div>
 
+<div class="alert-user-submition">
+    <div class="alert-message">
+     <p>You have successfuly submitted nominee's details</p>
+    </div>
+    <div class="remov-alert">
+        <i class="fa-solid fa-xmark"></i>
+    </div>
+</div>
+
+<script defer> 
+
+// Nomination alert
+const alert_user_submition = document.querySelector(".alert-user-submition")
+const removeAlert = document.querySelector(".remov-alert")
+
+function removeNominationAlert(){
+removeAlert.addEventListener("click",()=>{
+    alert_user_submition.style.display = "none"
+})
+}
+
+removeNominationAlert()
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("nominationForm");
+    const submissionAlert = document.querySelector(".alert-user-submition");
+    const formSubmitted = sessionStorage.getItem("formSubmitted");
+
+    if (formSubmitted) {
+        submissionAlert.style.display = "block";
+        setTimeout(() => {
+            submissionAlert.style.display = "none";
+            sessionStorage.removeItem("formSubmitted");
+        }, 5000);
+    }
+});
+const nominateForm = document.getElementById("nominationForm");
+
+nominateForm.addEventListener("submit", (event) => {
+    sessionStorage.setItem("formSubmitted", true);
+});
 
 
 
+</script>
 
 {% endblock content %}

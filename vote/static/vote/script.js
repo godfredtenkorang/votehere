@@ -17,3 +17,4 @@ function uploadImage() {
         console.error("No file selected.");
     }
 }
+

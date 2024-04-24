@@ -42,7 +42,7 @@ it is hidden so when voters click on the vote button, the it appears -->
 
                 <!-- get the nominee image, name and the category -->
                 <div class="nominee-details">
-                    <img src="{{ nominee.image.url }}" alt="image">
+                    <img src="{{ nominee.image.url }}" alt="image" loading="lazy">
                     <br>
                     <h4>{{ nominee.name }}</h4>
                 </div>
@@ -76,12 +76,12 @@ it is hidden so when voters click on the vote button, the it appears -->
             
             </form>
             <div class="pay-img">
-                <img src="{% static 'vote/img/pay.jpg' %}" alt="image">
+                <img src="{% static 'vote/img/pay.jpg' %}" alt="image" loading="lazy">
         
             </div>
 </section>
 
-<script>
+<script defer>
     
     function voteForm() {
     const numberOfVotesInput = document.getElementById("number-of-vote");

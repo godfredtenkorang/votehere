@@ -73,18 +73,32 @@
 
 
     <!-- here is the link to javasc ript-->
-    <script src="{% static 'vote/app.js' %}"></script>
-    <script src="{% static 'vote/script.js' %}"></script>
+    <script defer src="{% static 'vote/app.js' %}"></script>
+    <script defer src="{% static 'vote/script.js' %}"></script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript" defer>
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6628c5ada0c6737bd12fa7f9/1hs7k8c6v';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- this script is for the whatsapp plugin -->
-    <script src="https://getchat.app/assets/js/min/getchatapp.js"></script>
-    <script>
+    <script defer src="https://getchat.app/assets/js/min/getchatapp.js"></script>
+    <script defer>
         document.addEventListener("DOMContentLoaded", function () {
             var gcaMain = new GetChatApp({
                 'mobileNumber': '+233 55 391 2334',
                 'titleMessage': '👋 Chat with me on WhatsApp!',
                 'welcomeMessage': 'Hello Dear, Message us<br><br>Get in touch with me by typing a message here. It will go straight to my phone! 🔥<br><br>Godey Tech',
-                'position': 'right',
+                'position': 'left',
                 'platforms': {
                     'whatsapp': true,
                     'facebook': false,
