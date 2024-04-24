@@ -237,7 +237,7 @@ nav {
 /* Styling for award images */
 .award img {
     width: 100%;
-    height: 50vh;
+    height: 40vh;
     object-fit: cover;
 }
 
@@ -452,7 +452,7 @@ nav {
 .category img,
 .nominees img {
     width: 100%;
-    height: 65vh;
+    height: 45vh;
     object-fit: cover;
 }
 

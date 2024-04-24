@@ -47,7 +47,7 @@
     {% for c in all_categories %}
     <div class="award">
       <a href="{% url 'award_by_category' c.slug %}">
-        <img src="{{ c.image.url }}" alt="image" loading="lazy">
+        <img src="{{ c.image.url }}" alt="image" height="250px" loading="lazy">
         <div class="award-text">
           <h4>{{ c.title }}</h4>
           <h5>{{ c.award }}</h5>
