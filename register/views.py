@@ -16,8 +16,7 @@ def nominate(request, nominate_slug):
         
         nominate_user = Register(image=image, category=category, name=name, phone=phone, email=email, content=content, award=award)
         nominate_user.save()
-        messages.success(request, "Your form is submitted!")
-        return redirect('index')
+    return render(request, 'register/nominate.html')
     context = {
         'title': 'Nominate',
         'award': award

@@ -46,7 +46,7 @@
     <div class="nominees-container">
         {% for n in nominees %}
         <div class="nominees">
-            <img src="{{ n.image.url }}" alt="image">
+            <img src="{{ n.image.url }}" alt="image" loading="lazy">
             <div class="nominees-detail">
                 <h2>{{ n.sub_category.content }}</h2>
                 <h3>{{ n.name }}</h3>
