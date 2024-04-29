@@ -18,7 +18,7 @@
 /* Header styling */
 header {
     width: 100%;
-    padding: 20px 10%;
+    padding: 20px 7%;
     z-index: 1;
     color: #fff;
     position: relative;
@@ -58,12 +58,12 @@ nav {
 
 /* Logo styling */
 .logo img {
-   width: 150px; 
+   width: 170px; 
    
 }
 .navLinks a {
     color: var(--whiteColor);
-    font-size: 1.1vw;
+    font-size: 1.4vw;
     font-weight: 900;
     padding: 0 10px;
 }
@@ -114,7 +114,7 @@ nav {
 }
  .search-bar-section input {
     width: 100%;
-    max-width: 400px;
+    max-width: 700px;
     height: 7vh;
     outline: none;
     border: solid 2px #522a83;
@@ -158,7 +158,7 @@ nav {
 /* Banner image styling */
 .banner-img {
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
 }
 
 .banner-img img {
@@ -170,18 +170,40 @@ nav {
 /* Banner content styling */
 .banner-content {
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
 }
 
 .banner-content h1 {
-    font-size: 3vw;
+    font-size: 2.8vw;
     padding-bottom: 2%;
+    font-weight: 900;
 }
 .banner-content p {
     font-size: 1.3rem;
     padding-bottom: 5%;
 }
 
+.text-slide .text h1{
+   animation: textslide 0.9s;
+}
+.text-slide span{
+    color: var(--orangeColor);
+}
+.text-slide .text p{
+    animation: textslide2 0.9s;
+ }
+@keyframes textslide {
+    0%{
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+}
+@keyframes textslide2 {
+    0%{
+        transform: translateY(50px);
+        opacity: 0;
+    }
+}
 
 /* Award styling home page */
 /* Styling for the container of ongoing events */
@@ -190,19 +212,29 @@ nav {
     display: flex;
     justify-content: center;
     background-color: var(--whiteColor);
+    width: 100%;
 }
 
 /* Styling for the heading of ongoing events */
 .ongoin-event h2 {
-    font-size: 2.5rem;
-    padding: 10px 30px;
-    min-height: 4vh;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.2);
-    color: var(--voiletColor);
-    font-weight: 900;
-    border-radius: 10px;
+    font-size: 3rem;
+  font-weight: 800;
+  outline: none;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #5335cf 0%, #de005e 25%, #f66e48 50%, #de005e 75%, #5335cf 100%);
+  background-size: 400%;
+border: solid 2px #a517ba;
+padding: 10px;
+border-radius: 25px;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: animates 10s linear infinite;
 }
-
+@keyframes animates {
+    to{
+      background-position: 400%;
+    }
+  }
 /* Styling for the container of awards */
 .award-container {
     padding: 2% 3%;
@@ -219,9 +251,9 @@ nav {
     flex-grow: 1;
     width: 100%;
     max-width: 350px;
-    min-height: 55vh;
+    min-height: 40vh;
     background-color: var(--whiteColor);
-    border: solid 1px #a517ba;
+    border: solid 2px #a517ba;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
     transition: transform 0.5s;
 }
@@ -441,21 +473,26 @@ nav {
 .nominees {
     width: 100%;
     max-width: 320px;
-    min-height: 55vh;
+    min-height: 40vh;
     background-color: var(--whiteColor);
-    border: solid 1px rgba(165, 23, 186, 0.5);
+    border: solid 2px #a517ba;
     box-shadow: 1px 0 5px rgba(0, 0, 0, 0.5);
     transition: transform 0.5s;
 }
 
 
-.category img,
-.nominees img {
+.category img {
     width: 100%;
-    height: 45vh;
+    height: 65vh;
     object-fit: cover;
 }
 
+
+.nominees img {
+    width: 100%;
+    height: 50vh;
+    object-fit: cover;
+}
 .category-details,
 .nominees-detail {
     display: flex;
