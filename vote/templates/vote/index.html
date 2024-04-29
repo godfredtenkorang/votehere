@@ -7,9 +7,24 @@
   <div class="container">
     <div class="row">
       <div class="banner-content">
-        <h1>POURS EVERYTHING ON ME!</h1>
-        <p>Greetings from our virtual polling booth! Our goal is to completely transform the way individuals take part in awards by
-        offering an easy and convenient voting process.</p>
+       <div class="text-slide">
+        <div class="text">
+          <h1>WELCOME TO THE TRUSTED ONLINE <span>VOTING </span> PLATFORM</h1>
+          <p>Greetings from our virtual polling booth! Our goal is to completely transform the way individuals take part in awards by
+            offering an easy and convenient voting process.</p>
+        </div>
+        <div class="text">
+          <h1>MAKE YOUR VOICE HEARD WITH OUR SECURE <span>VOTING</span> SYSTEM</h1>          
+          <p>Our secure online voting platform empowers individuals to participate in the democratic process from anywhere in the world. With state-of-the-art security measures in place, your vote is safeguarded and your voice matters.</p>
+        </div>
+        <div class="text">
+          <h1>EXPERIENCE THE FUTURE OF <span>VOTING</span> TODAY</h1>
+
+          <p>Join us in revolutionizing the way we participate in voting. Our innovative platform ensures transparency, accessibility, and integrity, making voting easier and more reliable than ever before.</p>
+        
+        </div>
+       </div>
+        
       </div>
 
       <div class="banner-img">
@@ -36,7 +51,7 @@
 <div class="award-main-container content">
   <div class="ongoin-event">
     {% if all_categories %}
-    <h2>Ongoing Events <i class="fa-solid fa-award"></i></h2>
+    <h2>Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
     {% else %}
     {% endif %}
   </div>
@@ -60,4 +75,20 @@
   </div>
 </div>
 
+<script>
+  const textSlide = document.querySelector(".text-slide")
+  const textElement = document.querySelectorAll(".text")
+  let = currentSlide = 0
+  function showslideText (){
+    textElement.forEach((element)=>{
+      element.style.display="none"
+    })
+
+    textElement[currentSlide].style.display ='block'
+    currentSlide=(currentSlide + 1) % textElement.length
+    setTimeout(showslideText, 5000)
+  }
+
+  showslideText()
+</script>
 {% endblock content %}
