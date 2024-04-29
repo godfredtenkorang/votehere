@@ -33,6 +33,7 @@ class VoteNomineeAdmin(admin.ModelAdmin):
     fieldsets = [(None, {'fields': ['category', 'sub_category', 'name', 'image', 'slug', 'total_vote', 'can_vote', 'can_see_result']}), ('Date Information', {
         'fields': ['date_added'], 'classes': ['collapse']}), ]
     inlines = [PaymentInLine]
+    prepopulated_fields = {"slug": ("name",)}
   
   
 admin.site.register(Nominees, VoteNomineeAdmin)
