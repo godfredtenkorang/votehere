@@ -1,0 +1,450 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, 
+				initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
+
+</head>
+
+<body>
+
+    <!-- for header part -->
+    <header>
+
+        <div class="logosec">
+            <div class="logo">
+                <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+
+
+            </div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+                class="icn menuicn" id="menuicn" alt="menu-icon">
+        </div>
+
+
+
+        <div class="message">
+            <h1>Admin Dashboard</h1>
+        </div>
+
+    </header>
+
+    <div class="main-container">
+        <div class="navcontainer sidebar">
+            <nav class="nav">
+                <div class="nav-upper-options">
+
+                    <!-- acivities button -->
+                    <div class="nav-option option1 button" data-target="activities">
+                        <h3>Activities</h3>
+                    </div>
+
+
+                    <!-- registration button -->
+                    <div class="nav-option option3 button" data-target="Registration">
+                        <h3>Registration</h3>
+                    </div>
+                    <!-- registration button -->
+                    <div class="nav-option option4 button" data-target="Transaction">
+                        <h3>Transaction</h3>
+                    </div>
+
+                </div>
+            </nav>
+        </div>
+
+        <!-- interface that will show when a button is clicked the main conntainer -->
+        <div class="main">
+            <div class="data awards-ongoing" id="activities">
+                <div class="heading">
+                    <h1>List of Awards ongoing</h1>
+                </div>
+
+                <!-- THE INTERFACE FOR THE ACTIVITY BUTTON -->
+                <!-- ongoing awards -->
+                <div class="ongoin-awards-container">
+                    <div class="awards-container">
+                        <!-- awards img -->
+                        <div class="awards-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="awards-name">
+                            <h2>Benjamin Awards</h2>
+                        </div>
+                    </div>
+                    <div class="awards-container">
+                        <!-- awards img -->
+                        <div class="awards-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="awards-name">
+                            <h2>Benjamin Awards</h2>
+                        </div>
+                    </div>
+                    <div class="awards-container">
+                        <!-- awards img -->
+                        <div class="awards-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="awards-name">
+                            <h2>Benjamin Awards</h2>
+                        </div>
+                    </div>
+                    <div class="awards-container">
+                        <!-- awards img -->
+                        <div class="awards-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="awards-name">
+                            <h2>Benjamin Awards</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- category interface: the inter face of list of category when an award is clicked -->
+            <div class="category-interface-container">
+                <div class="heading">
+                    <h2>List of Category for awards name</h2>
+                </div>
+
+                <div class="categories-container">
+                    <div class="category">
+                        <!-- cat img -->
+                        <div class="cat-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- cat name -->
+                        <div class="cat-name">
+                            <h2>Benjamin category</h2>
+                        </div>
+
+                    </div>
+                    <div class="category">
+                        <!-- awards img -->
+                        <div class="cat-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="cat-name">
+                            <h2>Benjain category</h2>
+                        </div>
+
+                    </div>
+                    <div class="category">
+                        <!-- awards img -->
+                        <div class="cat-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="cat-name">
+                            <h2>Benjamin Category</h2>
+                        </div>
+
+                    </div>
+                    <div class="category">
+                        <!-- awards img -->
+                        <div class="cat-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="cat-name">
+                            <h2>Benjamin category</h2>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- nominees interface: the interface for nominees when a category button is clicked -->
+            <div class="nominee-interface-container">
+                <div class="heading">
+                    <h2>List of Nominees</h2>
+                </div>
+                <div class="nominees-interface">
+                    <div class="list-of-nominees">
+                        <div class="nominee-container">
+                            <div class="nominee-img">
+                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                            </div>
+                            <div class="nominee-name">
+                                <p>Benjamin</p>
+                            </div>
+                            <div class="nominee-number-vote">
+                                <p>670 votes</p>
+                            </div>
+                        </div>
+
+                        <div class="nominee-container">
+                            <div class="nominee-img">
+                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                            </div>
+                            <div class="nominee-name">
+                                <p>Benjamin</p>
+                            </div>
+                            <div class="nominee-number-vote">
+                                <p>670 votes</p>
+                            </div>
+                        </div>
+
+                        <div class="nominee-container">
+                            <div class="nominee-img">
+                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                            </div>
+                            <div class="nominee-name">
+                                <p>Benjamin</p>
+                            </div>
+                            <div class="nominee-number-vote">
+                                <p>670 votes</p>
+                            </div>
+                        </div>
+                        <div class="nominee-container">
+                            <div class="nominee-img">
+                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                            </div>
+                            <div class="nominee-name">
+                                <p>Benjamin</p>
+                            </div>
+                            <div class="nominee-number-vote">
+                                <p>670 votes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- total number of vote -->
+                    <div class="total-number-of-vote-cast">
+                        <img src="{% static 'vote/img/illustration.jpg' %}" alt="geima">
+                       
+
+                        <p>Total Votes Cast</p>
+                        <div class="total">
+                            <p>6000</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- THE INTERFACE FOR THE REGISTRATION BUTTON -->
+            <!-- list of people who file nomination -->
+            <div class="data" id="Registration">
+                <div class="heading">
+                    <h1>Registration</h1>
+                </div>
+                <div class="registered-awards-container">
+                    <div class="registered-awards">
+                        <!-- awards img -->
+                        <div class="registered-awards-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="awards-name">
+                            <h2>Benjamin Awards</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- catgory -->
+            <div class="registered-category-container">
+                <div class="heading">
+                    <h2>List of category</h2>
+                </div>
+                <div class="registered-category">
+                    <div class="category">
+                        <!-- cat img -->
+                        <div class="cat-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- cat name -->
+                        <div class="cat-name">
+                            <h2>Benjamin category</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="category">
+                        <!-- cat img -->
+                        <div class="cat-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- cat name -->
+                        <div class="cat-name">
+                            <h2>Benjamin category</h2>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- registered people -->
+            <div class="list-of-registered-nominee">
+                <div class="heading">
+                    <h1>Nominee Filing</h1>
+                </div>
+                <div class="list-of-nominees-container">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nominee Image</th>
+                                    <th>Category</th>
+                                    <th>Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Justification</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                    </td>
+                                    <td>Most Handsome</td>
+                                    <td>Highly Spiritual</td>
+                                    <td>0558156844</td>
+                                    <td>john.doe@example.com</td>
+                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                                </tr>
+
+                                <tr>
+                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                    </td>
+                                    <td>Most Handsome</td>
+                                    <td>Highly Spiritual</td>
+                                    <td>0558156844</td>
+                                    <td>john.doe@example.com</td>
+                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                                </tr>
+
+                                <tr>
+                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                    </td>
+                                    <td>Most Handsome</td>
+                                    <td>Highly Spiritual</td>
+                                    <td>0558156844</td>
+                                    <td>john.doe@example.com</td>
+                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+                    <div class="total-number-of-nomiees">
+                        <p>Total number of Nominees </p>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+            <!-- transaction interface -->
+            <div class=" data transaction-interface-container" id="Transaction">
+                <div class="heading">
+                    <h1>Transaction</h1>
+                </div>
+
+                <div class="transaction-for-awards">
+                    <div class="awards-transaction-container">
+                        <!-- awards img -->
+                        <div class="awards-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="awards-name">
+                            <h2>Benjamin Awards</h2>
+                        </div>
+                    </div>
+                    <div class="awards-transaction-container">
+                        <!-- awards img -->
+                        <div class="awards-img">
+                            <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                        </div>
+                        <!-- awards name -->
+                        <div class="awards-name">
+                            <h2>Benjamin Awards</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="transation-details-container">
+                <div class="heading">
+                    <h1>Total Revenue for each category</h1>
+                </div>
+
+                <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Total Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Category 1</td>
+                            <td>$10,000</td>
+                        </tr>
+
+                        <tr>
+                            <td>Category 2</td>
+                            <td>$150,000</td>
+                        </tr>
+
+                        <tr>
+                            <td>Category 2</td>
+                            <td>$250,000</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+        <script defer src="{% static 'vote/adminScript.js' %}"></script>
+        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+
+
+</body>
+
+</html>
