@@ -3,7 +3,6 @@ from django.urls import reverse
 from vote.models import SubCategory, Category
 import secrets
 from .paystack import PayStack
-from django.utils import timezone
 
 class Nominees(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
@@ -14,7 +13,8 @@ class Nominees(models.Model):
     total_vote = models.IntegerField(default=0, null=True)
     can_vote = models.BooleanField(default=True)
     can_see_result = models.BooleanField(default=True)
-    date_added = models.DateTimeField(timezone.now, null=True)
+    date_added = models.DateTimeField('date added', null=True)
+    end_date = models.DateTimeField('end date', null=True)
 
     class Meta:
         verbose_name_plural = "nominees"

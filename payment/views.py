@@ -5,6 +5,7 @@ from django.http import HttpRequest
 from django.contrib import messages
 from django.conf import settings
 from . import forms
+from django.utils import timezone
 
 # Create your views here.
 def make_payment(request):
@@ -64,6 +65,7 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
 def nominees(request, nominee_slug):
     sub_category = None
     nominees = Nominees.objects.all()
+    current_time = timezone.now()
     if nominee_slug:
         sub_category = get_object_or_404(SubCategory, slug=nominee_slug)
         nominees = nominees.filter(sub_category=sub_category)
@@ -72,6 +74,7 @@ def nominees(request, nominee_slug):
     context = {
         'sub_category': sub_category,
         'nominees': nominees,
+        'current_time': current_time,
         'title': 'Nominees',
     }
     return render(request, 'payment/nomineesPage.html', context)
