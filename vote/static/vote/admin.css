@@ -568,3 +568,6 @@ table tbody tr:hover {
 }
 
 
+ .active{
+    background-color: var(--orangeColor);
+}
