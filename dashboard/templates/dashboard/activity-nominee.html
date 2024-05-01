@@ -66,7 +66,12 @@
                             <h3>Transaction</h3>
                         </div>
                     </a>
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
 
                 </div>
             </nav>
@@ -81,8 +86,32 @@
             <div class="nominee-interface-container">
                 <div class="heading">
                     <h2>List of Nominees</h2>
+                    <p>List of nominees and the votes so far</p>
                 </div>
                 <div class="nominees-interface">
+<<<<<<< HEAD
+
+
+                    <div class="table-container">
+                        <table id="nominees-table">
+                            <thead>
+                                <tr>
+                                    <th>Nominee Image</th>
+                                    <th>Name</th>
+                                    <th>Number of Votes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for nominee in nominees %}
+                                <tr>
+                                    <td><img src="{{ nominee.image.url }}" alt="{{ nominee.name }}"></td>
+                                    <td>{{ nominee.name }}</td>
+                                    <td>{{ nominee.total_vote }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+=======
                     <div class="list-of-nominees">
                         {% for n in nominees %}
                         <div class="nominee-container">
@@ -97,7 +126,26 @@
                             </div>
                         </div>
                         {% endfor %}
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                     </div>
+
+
+
+
+                    <!-- {% for n in nominees %}
+                        <div class="nominee-container">
+                            <div class="nominee-img">
+                                <img src="{{ n.image.url }}" alt="geima">
+                            </div>
+                            <div class="nominee-name">
+                                <p>{{ n.name }}</p>
+                            </div>
+                            <div class="nominee-number-vote">
+                                <p>{{ n.total_vote }}</p>
+                            </div>
+                        </div>
+                        {% endfor %} -->
+
                     <!-- total number of vote -->
                     <div class="total-number-of-vote-cast">
                         <img src="{% static 'vote/img/illustration.jpg' %}" alt="geima">
@@ -109,6 +157,19 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="chart">
+                    <h3>See who is toping chart</h3>
+                    <canvas id="revenue-chart"></canvas>
+
+                </div>
+                <div class="back-button">
+                    <a class="active" href="{% url 'adminPage' %}">
+                        <button>Go Back</button>
+                    </a>
+
+                </div>
             </div>
 
 
@@ -116,20 +177,63 @@
 
 
 
+    </div>
 
 
 
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function updateChart() {
+                const nominees = [];
+                const votes = [];
+
+                const rows = document.querySelectorAll('#nominees-table tbody tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    nominees.push(cells[1].innerText);
+                    votes.push(parseInt(cells[2].innerText));
+                });
+
+                const maxVotes = Math.max(...votes);
+
+                const percentages = votes.map(vote => (vote / maxVotes) * 100);
+
+                const ctx = document.getElementById('revenue-chart').getContext('2d');
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: nominees,
+                        datasets: [{
+                            label: 'Number of Votes',
+                            data: percentages,
+                            backgroundColor: '#fb812b',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            updateChart();
+        });
+    </script>
 
 
-
-
-
-
-        <script defer src="{% static 'vote/adminScript.js' %}"></script>
-        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+    <script defer src="{% static 'vote/adminScript.js' %}"></script>
+    <script defer src="{% static 'vote/adminScript2.js' %}"></script>
 
 
 </body>

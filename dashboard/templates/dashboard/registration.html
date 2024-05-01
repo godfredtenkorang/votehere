@@ -68,7 +68,12 @@
                         </div>
                     </a>
 
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
                 </div>
             </nav>
         </div>
@@ -79,7 +84,8 @@
             <!-- catgory -->
             <div class="registered-category-container">
                 <div class="heading">
-                    <h2>List of category</h2>
+                    <h2>List of Awards</h2>
+                    <p>List of awards people file nomination for</p>
                 </div>
                 {% for award in awards %}
                 <div class="registered-category">

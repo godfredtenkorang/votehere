@@ -1,0 +1,150 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, 
+				initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
+
+</head>
+
+<body>
+
+    <!-- for header part -->
+    <header>
+
+        <div class="logosec">
+            <div class="logo">
+                <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+
+
+            </div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+                class="icn menuicn" id="menuicn" alt="menu-icon">
+        </div>
+
+
+
+        <div class="message">
+            <h1>Admin Dashboard</h1>
+        </div>
+
+    </header>
+
+    <div class="main-container">
+        <div class="navcontainer sidebar">
+            <nav class="nav">
+                <div class="nav-upper-options">
+
+                    <!-- acivities button -->
+                    <a  href="{% url 'adminPage' %}">
+
+                        <div class="nav-option option1 button">
+                            <h3>Activities</h3>
+                        </div>
+                    </a>
+
+
+                    <!-- registration button -->
+                    <a href="{% url 'registration' %}">
+
+                        <div class="nav-option option1 button">
+                            <h3>Registration</h3>
+                        </div>
+                    </a>
+
+
+                    <!-- registration button -->
+                    <a href="{% url 'transaction' %}">
+                        <div class="nav-option option1 button">
+                            <h3>Transaction</h3>
+                        </div>
+                    </a>
+                    <!-- team button -->
+                    <a  href="{% url 'team' %}">
+                        <div class="nav-option option1 button active">
+                            <h3>Team</h3>
+                        </div>
+                    </a>
+
+
+                </div>
+            </nav>
+        </div>
+
+
+
+        <div class="main">
+
+            <div class="the-team-container">
+                <div class="heading">
+                    <h1>Team Members</h1>
+                </div>
+                <div class="team-container">
+                    
+                    <div class="team">
+                        <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                        <div class="team-detail">
+                            <p>Benjamin Ohene Asare</p>
+                            <p>Front-End Developer <span> @VoteAfric</span></p>
+                            <p>benjaminoheneasare65@gmail.com</p>
+
+                            <a href="https://wa.link/ire2u1" title="Click to message me on whatsapp">O55 815 6844</a>
+                        </div>
+                    </div>
+                    <div class="team">
+                        <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                        <div class="team-detail">
+                            <p>Benjamin Ohene Asare</p>
+                            <p>Front-End Developer <span> @VoteAfric</span></p>
+                            <p>benjaminoheneasare65@gmail.com</p>
+
+                            <a href="https://wa.link/ire2u1" title="Click to message me on whatsapp">O55 815 6844</a>
+                        </div>
+                    </div>
+                    <div class="team">
+                        <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                        <div class="team-detail">
+                            <p>Benjamin Ohene Asare</p>
+                            <p>Front-End Developer <span> @VoteAfric</span></p>
+                            <p>benjaminoheneasare65@gmail.com</p>
+
+                            <a href="https://wa.link/ire2u1" title="Click to message me on whatsapp">O55 815 6844</a>
+                        </div>
+                    </div>
+                    <div class="team">
+                        <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                        <div class="team-detail">
+                            <p>Benjamin Ohene Asare</p>
+                            <p>Front-End Developer <span> @VoteAfric</span></p>
+                            <p>benjaminoheneasare65@gmail.com</p>
+
+                            <a href="https://wa.link/ire2u1" title="Click to message me on whatsapp">O55 815 6844</a>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+      
+
+        </div>
+
+
+
+
+        <script defer src="{% static 'vote/adminScript.js' %}"></script>
+        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+
+
+</body>
+
+</html>

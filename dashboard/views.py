@@ -90,6 +90,15 @@ def transaction(request):
     }
     return render(request, 'dashboard/transaction.html', context)
 
+<<<<<<< HEAD
+def team(request):
+   
+    context = {
+      
+        'title': 'team'
+    }
+    return render(request, 'dashboard/team.html', context)
+
 
 def transaction_category(request, transaction_slug):
     content = None
@@ -99,6 +108,17 @@ def transaction_category(request, transaction_slug):
         payments = payments.filter(content=content)
 
     context = {
+=======
+
+def transaction_category(request, transaction_slug):
+    content = None
+    payments = Payment.objects.all()
+    if transaction_slug:
+        content = get_object_or_404(SubCategory, slug=transaction_slug)
+        payments = payments.filter(content=content)
+
+    context = {
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
         'content': content,
         'payments': payments,
         'title': 'adminPage'

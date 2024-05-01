@@ -67,7 +67,12 @@
                         </div>
                     </a>
 
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
                 </div>
             </nav>
         </div>
@@ -79,7 +84,8 @@
             <!-- registered people -->
             <div class="list-of-registered-nominee">
                 <div class="heading">
-                    <h1>Nominee Filing</h1>
+                    <h1>Awards Name Nominee Filing</h1>
+                    <p>List of People whole file for nomination</p>
                 </div>
                 <div class="list-of-nominees-container">
                     <div class="table-container">
@@ -119,7 +125,12 @@
                 </div>
 
 
-
+                <div class="back-button">
+                    <a href="{% url 'registration' %}">
+                        <button>Go Back</button>
+                    </a>
+                    
+                </div>
             </div>
 
 

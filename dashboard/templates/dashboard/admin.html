@@ -12,6 +12,10 @@
     <title>Admin Page</title>
     <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -67,7 +71,12 @@
                         </div>
                     </a>
 
-
+                    <!-- team button -->
+                    <a href="{% url 'team' %}">
+                        <div class="nav-option option1 button">
+                            <h3>Team</h3>
+                        </div>
+                    </a>
                 </div>
             </nav>
         </div>
@@ -77,13 +86,22 @@
             <div class=" awards-ongoing">
                 <div class="heading">
                     <h1>List of Awards ongoing</h1>
+                    <p> The listed awards are currently in the midst of ongoing voting processes.</p>
                 </div>
 
                 <!-- THE INTERFACE FOR THE ACTIVITY BUTTON -->
                 <!-- ongoing awards -->
+<<<<<<< HEAD
+
+                <div class="ongoin-awards-container">
+                    {% for a in awards %}
+                    <a href="{% url 'activity_category' a.slug %}">
+
+=======
                 {% for a in awards %}
                 <div class="ongoin-awards-container">
                     <a href="{% url 'activity_category' a.slug %}">
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                         <div class="awards-container">
                             <!-- awards img -->
                             <div class="awards-img">
@@ -92,12 +110,45 @@
                             <!-- awards name -->
                             <div class="awards-name">
                                 <h2>{{ a.award }}</h2>
+<<<<<<< HEAD
+                            </div>
+
+                            <div class="duration">
+                                <div class="start-date column">
+                                    <div class="start-col">
+                                        <p>Start Date</p>
+
+                                    </div>
+                                    <div class="start-col">
+
+                                        <p>24th April 2090</p>
+                                    </div>
+                                </div>
+
+                                <div class="endDate column">
+                                    <div class="start-col">
+                                        <p>End Date</p>
+
+                                    </div>
+                                    <div class="start-col">
+
+                                        <p>24th April 2090</p>
+                                    </div>
+                                </div>
+=======
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                             </div>
                         </div>
 
                     </a>
+<<<<<<< HEAD
+                    {% endfor %}
+                </div>
+
+=======
                 </div>
                 {% endfor %}
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
             </div>
 
 

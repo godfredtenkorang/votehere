@@ -66,7 +66,12 @@
                             <h3>Transaction</h3>
                         </div>
                     </a>
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
 
                 </div>
             </nav>
@@ -81,9 +86,15 @@
                 <div class="heading">
                     <h2>List of Category for awards name</h2>
                 </div>
+<<<<<<< HEAD
+              
+                <div class="categories-container">
+                    {% for n in award %}
+=======
                 {% for n in award %}
                 <div class="categories-container">
 
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                     <a href="{% url 'activity_nominee' n.slug %}">
                         <div class="category">
                             <!-- cat img -->
@@ -97,6 +108,17 @@
 
                         </div>
                     </a>
+<<<<<<< HEAD
+                    {% endfor %}
+                </div>
+              
+                <div class="back-button">
+                    <a class="active" href="{% url 'adminPage' %}">
+                        <button>Go Back</button>
+                    </a>
+                    
+=======
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                 </div>
                 {% endfor %}
             </div>
