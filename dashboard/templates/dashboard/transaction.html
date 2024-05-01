@@ -86,9 +86,14 @@
                     <h1>Transaction</h1>
                     <p> When clicking on a specific award scheme, you will be able to view transactions for each category associated with that award. </p>
                 </div>
+<<<<<<< HEAD
                
                 <div class="transaction-for-awards">
                     {% for a in awards %}
+=======
+                {% for a in awards %}
+                <div class="transaction-for-awards">
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                     <a href="{% url 'transaction_category' a.slug %}">
                         <div class="awards-transaction-container">
                             <!-- awards img -->
@@ -103,7 +108,11 @@
                     </a>
                     {% endfor %}
                 </div>
+<<<<<<< HEAD
               
+=======
+                {% endfor %}
+>>>>>>> 37b63edc546a8ef31df3356af536718672c448db
             </div>
 
 
