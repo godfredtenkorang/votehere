@@ -67,7 +67,12 @@
                         </div>
                     </a>
 
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
                 </div>
             </nav>
         </div>
@@ -81,6 +86,7 @@
             <div class="transation-details-container">
                 <div class="heading">
                     <h1>Total Revenue for each category</h1>
+                    <p>Total Revenue made for each category</p>
                 </div>
 
                 <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
@@ -88,27 +94,27 @@
                         <tr>
                             <th>Category</th>
                             <th>Total Revenue</th>
+                            <th>Verification</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
+                    {% for p in payments %}
                     <tbody>
                         <tr>
-                            <td>Category 1</td>
-                            <td>$10,000</td>
+                            <td>{{ p.content }}</td>
+                            <td>GH¢{{ p.total_amount }}</td>
                         </tr>
 
-                        <tr>
-                            <td>Category 2</td>
-                            <td>$150,000</td>
-                        </tr>
-
-                        <tr>
-                            <td>Category 2</td>
-                            <td>$250,000</td>
-                        </tr>
                         <!-- Add more rows as needed -->
                     </tbody>
+                    {% endfor %}
                 </table>
-
+                <div class="back-button">
+                    <a href="{% url 'transaction' %}">
+                        <button>Go Back</button>
+                    </a>
+                    
+                </div>
             </div>
 
 

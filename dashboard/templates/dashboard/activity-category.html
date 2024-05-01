@@ -66,7 +66,12 @@
                             <h3>Transaction</h3>
                         </div>
                     </a>
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
 
                 </div>
             </nav>
@@ -81,30 +86,30 @@
                 <div class="heading">
                     <h2>List of Category for awards name</h2>
                 </div>
-
+              
                 <div class="categories-container">
-
-                    <a href="{% url 'activity_nominee' %}">
+                    {% for n in award %}
+                    <a href="{% url 'activity_nominee' n.slug %}">
                         <div class="category">
                             <!-- cat img -->
                             <div class="cat-img">
-                                <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                                <img src="{{ n.category.image.url }}" alt="geima">
                             </div>
                             <!-- cat name -->
                             <div class="cat-name">
-                                <h2>Benjamin category</h2>
+                                <h2>{{ n.content }}</h2>
                             </div>
 
                         </div>
                     </a>
-
-
-
-
-
-
-
-
+                    {% endfor %}
+                </div>
+              
+                <div class="back-button">
+                    <a class="active" href="{% url 'adminPage' %}">
+                        <button>Go Back</button>
+                    </a>
+                    
                 </div>
             </div>
 

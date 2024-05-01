@@ -67,7 +67,12 @@
                         </div>
                     </a>
 
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
                 </div>
             </nav>
         </div>
@@ -79,23 +84,26 @@
             <div class="transaction-interface-container">
                 <div class="heading">
                     <h1>Transaction</h1>
+                    <p> When clicking on a specific award scheme, you will be able to view transactions for each category associated with that award. </p>
                 </div>
-
+               
                 <div class="transaction-for-awards">
-                    <a href="{% url 'transaction_category' %}">
+                    {% for a in awards %}
+                    <a href="{% url 'transaction_category' a.slug %}">
                         <div class="awards-transaction-container">
                             <!-- awards img -->
                             <div class="awards-img">
-                                <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                                <img src="{{ a.category.image.url }}" alt="geima">
                             </div>
                             <!-- awards name -->
                             <div class="awards-name">
-                                <h2>Benjamin Awards</h2>
+                                <h2>{{ a.category.award }}</h2>
                             </div>
                         </div>
                     </a>
-
+                    {% endfor %}
                 </div>
+              
             </div>
 
 

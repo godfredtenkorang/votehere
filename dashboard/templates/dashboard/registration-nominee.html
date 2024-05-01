@@ -67,7 +67,12 @@
                         </div>
                     </a>
 
-
+ <!-- team button -->
+ <a href="{% url 'team' %}">
+    <div class="nav-option option1 button">
+        <h3>Team</h3>
+    </div>
+</a>
                 </div>
             </nav>
         </div>
@@ -79,7 +84,8 @@
             <!-- registered people -->
             <div class="list-of-registered-nominee">
                 <div class="heading">
-                    <h1>Nominee Filing</h1>
+                    <h1>Awards Name Nominee Filing</h1>
+                    <p>List of People whole file for nomination</p>
                 </div>
                 <div class="list-of-nominees-container">
                     <div class="table-container">
@@ -94,38 +100,19 @@
                                     <th>Justification</th>
                                 </tr>
                             </thead>
+                            {% for r in registers %}
                             <tbody>
                                 <tr>
-                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                    <td> <img src="{{ r.image.url }}" alt="geima">
                                     </td>
-                                    <td>Most Handsome</td>
-                                    <td>Highly Spiritual</td>
-                                    <td>0558156844</td>
-                                    <td>john.doe@example.com</td>
-                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                                    <td>{{ r.category }}</td>
+                                    <td>{{ r.name }}</td>
+                                    <td>{{ r.phone }}</td>
+                                    <td>{{ r.email }}</td>
+                                    <td>{{ r.content }}</td>
                                 </tr>
-
-                                <tr>
-                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
-                                    </td>
-                                    <td>Most Handsome</td>
-                                    <td>Highly Spiritual</td>
-                                    <td>0558156844</td>
-                                    <td>john.doe@example.com</td>
-                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-                                </tr>
-
-                                <tr>
-                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
-                                    </td>
-                                    <td>Most Handsome</td>
-                                    <td>Highly Spiritual</td>
-                                    <td>0558156844</td>
-                                    <td>john.doe@example.com</td>
-                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
-                                </tr>
-                                <!-- Add more rows as needed -->
                             </tbody>
+                            {% endfor %}
                         </table>
                     </div>
 
@@ -133,12 +120,17 @@
 
 
                     <div class="total-number-of-nomiees">
-                        <p>Total number of Nominees </p>
+                        <p>Total number of Nominees <br> {{register_count}}</p>
                     </div>
                 </div>
 
 
-
+                <div class="back-button">
+                    <a href="{% url 'registration' %}">
+                        <button>Go Back</button>
+                    </a>
+                    
+                </div>
             </div>
 
 
