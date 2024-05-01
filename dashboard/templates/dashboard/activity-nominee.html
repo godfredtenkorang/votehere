@@ -84,52 +84,19 @@
                 </div>
                 <div class="nominees-interface">
                     <div class="list-of-nominees">
+                        {% for n in nominees %}
                         <div class="nominee-container">
                             <div class="nominee-img">
-                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                <img src="{{ n.image.url }}" alt="geima">
                             </div>
                             <div class="nominee-name">
-                                <p>Benjamin</p>
+                                <p>{{ n.name }}</p>
                             </div>
                             <div class="nominee-number-vote">
-                                <p>670 votes</p>
+                                <p>{{ n.total_vote }}</p>
                             </div>
                         </div>
-
-                        <div class="nominee-container">
-                            <div class="nominee-img">
-                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
-                            </div>
-                            <div class="nominee-name">
-                                <p>Benjamin</p>
-                            </div>
-                            <div class="nominee-number-vote">
-                                <p>670 votes</p>
-                            </div>
-                        </div>
-
-                        <div class="nominee-container">
-                            <div class="nominee-img">
-                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
-                            </div>
-                            <div class="nominee-name">
-                                <p>Benjamin</p>
-                            </div>
-                            <div class="nominee-number-vote">
-                                <p>670 votes</p>
-                            </div>
-                        </div>
-                        <div class="nominee-container">
-                            <div class="nominee-img">
-                                <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
-                            </div>
-                            <div class="nominee-name">
-                                <p>Benjamin</p>
-                            </div>
-                            <div class="nominee-number-vote">
-                                <p>670 votes</p>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     <!-- total number of vote -->
                     <div class="total-number-of-vote-cast">
@@ -138,7 +105,7 @@
 
                         <p>Total Votes Cast</p>
                         <div class="total">
-                            <p>6000</p>
+                            <p>{{ total_votes }}</p>
                         </div>
                     </div>
                 </div>

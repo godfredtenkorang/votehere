@@ -80,22 +80,23 @@
                 <div class="heading">
                     <h1>Transaction</h1>
                 </div>
-
+                {% for a in awards %}
                 <div class="transaction-for-awards">
-                    <a href="{% url 'transaction_category' %}">
+                    <a href="{% url 'transaction_category' a.slug %}">
                         <div class="awards-transaction-container">
                             <!-- awards img -->
                             <div class="awards-img">
-                                <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                                <img src="{{ a.category.image.url }}" alt="geima">
                             </div>
                             <!-- awards name -->
                             <div class="awards-name">
-                                <h2>Benjamin Awards</h2>
+                                <h2>{{ a.category.award }}</h2>
                             </div>
                         </div>
                     </a>
 
                 </div>
+                {% endfor %}
             </div>
 
 

@@ -90,23 +90,16 @@
                             <th>Total Revenue</th>
                         </tr>
                     </thead>
+                    {% for p in payments %}
                     <tbody>
                         <tr>
-                            <td>Category 1</td>
-                            <td>$10,000</td>
+                            <td>{{ p.content }}</td>
+                            <td>GH¢{{ p.total_amount }}</td>
                         </tr>
 
-                        <tr>
-                            <td>Category 2</td>
-                            <td>$150,000</td>
-                        </tr>
-
-                        <tr>
-                            <td>Category 2</td>
-                            <td>$250,000</td>
-                        </tr>
                         <!-- Add more rows as needed -->
                     </tbody>
+                    {% endfor %}
                 </table>
 
             </div>

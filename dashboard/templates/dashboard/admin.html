@@ -81,24 +81,23 @@
 
                 <!-- THE INTERFACE FOR THE ACTIVITY BUTTON -->
                 <!-- ongoing awards -->
+                {% for a in awards %}
                 <div class="ongoin-awards-container">
-                    <a href="{% url 'activity_category' %}">
+                    <a href="{% url 'activity_category' a.slug %}">
                         <div class="awards-container">
                             <!-- awards img -->
                             <div class="awards-img">
-                                <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                                <img src="{{ a.image.url }}" alt="geima">
                             </div>
                             <!-- awards name -->
                             <div class="awards-name">
-                                <h2>Benjamin Awards</h2>
+                                <h2>{{ a.award }}</h2>
                             </div>
                         </div>
 
                     </a>
-
-
-
                 </div>
+                {% endfor %}
             </div>
 
 

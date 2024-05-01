@@ -81,16 +81,17 @@
                 <div class="heading">
                     <h2>List of category</h2>
                 </div>
+                {% for award in awards %}
                 <div class="registered-category">
-                    <a href="{% url 'registration_category' %}">
+                    <a href="{% url 'registration_nominee' award.slug %}">
                         <div class="category">
                             <!-- cat img -->
                             <div class="cat-img">
-                                <img src="{% static 'vote/img/award-2.jpg' %}" alt="geima">
+                                <img src="{{ award.image.url }}" alt="geima">
                             </div>
                             <!-- cat name -->
                             <div class="cat-name">
-                                <h2>Benjamin category</h2>
+                                <h2>{{ award.award }}</h2>
                             </div>
 
                         </div>
@@ -99,6 +100,7 @@
                     </a>
 
                 </div>
+                {% endfor %}
             </div>
 
 
