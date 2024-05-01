@@ -3,9 +3,10 @@ from vote.models import Category, SubCategory
 from payment.models import Nominees, Payment
 from register.models import Register
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required(login_url='login')
 def admin(request):
     awards = Category.objects.all()
     context = {

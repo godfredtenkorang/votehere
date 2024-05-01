@@ -1,0 +1,19 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="paymentForm">
+
+    <form class="form-for-voting" method="POST">
+
+        
+        {% csrf_token %}
+        {{form}}
+        
+        <!-- pay button -->
+        <button type="submit">Login</button>
+
+    </form>
+</section>
+
+{% endblock content %}

@@ -67,12 +67,18 @@
                         </div>
                     </a>
 
- <!-- team button -->
- <a href="{% url 'team' %}">
-    <div class="nav-option option1 button">
-        <h3>Team</h3>
-    </div>
-</a>
+                    <!-- team button -->
+                    <a href="{% url 'team' %}">
+                        <div class="nav-option option1 button">
+                            <h3>Team</h3>
+                        </div>
+                    </a>
+                    <!-- logout button -->
+                    <a href="{% url 'logout' %}">
+                        <div class="nav-option option1 button">
+                            <h3>Logout</h3>
+                        </div>
+                    </a>
                 </div>
             </nav>
         </div>
@@ -84,7 +90,8 @@
             <div class="transaction-interface-container">
                 <div class="heading">
                     <h1>Transaction</h1>
-                    <p> When clicking on a specific award scheme, you will be able to view transactions for each category associated with that award. </p>
+                    <p> When clicking on a specific award scheme, you will be able to view transactions for each
+                        category associated with that award. </p>
                 </div>
 
                 <div class="transaction-for-awards">
@@ -107,12 +114,12 @@
                 </div>
 
 
-        </div>
+            </div>
 
 
 
-        <script defer src="{% static 'vote/adminScript.js' %}"></script>
-        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+            <script defer src="{% static 'vote/adminScript.js' %}"></script>
+            <script defer src="{% static 'vote/adminScript2.js' %}"></script>
 
 
 </body>

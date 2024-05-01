@@ -66,12 +66,18 @@
                             <h3>Transaction</h3>
                         </div>
                     </a>
- <!-- team button -->
- <a href="{% url 'team' %}">
-    <div class="nav-option option1 button">
-        <h3>Team</h3>
-    </div>
-</a>
+                    <!-- team button -->
+                    <a href="{% url 'team' %}">
+                        <div class="nav-option option1 button">
+                            <h3>Team</h3>
+                        </div>
+                    </a>
+                    <!-- logout button -->
+                    <a href="{% url 'logout' %}">
+                        <div class="nav-option option1 button">
+                            <h3>Logout</h3>
+                        </div>
+                    </a>
 
                 </div>
             </nav>
@@ -107,23 +113,23 @@
                     </a>
                     {% endfor %}
                 </div>
-              
+
                 <div class="back-button">
                     <a class="active" href="{% url 'adminPage' %}">
                         <button>Go Back</button>
                     </a>
-                    
+
                 </div>
-           
-
-
-        </div>
 
 
 
+            </div>
 
-        <script defer src="{% static 'vote/adminScript.js' %}"></script>
-        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+
+
+
+            <script defer src="{% static 'vote/adminScript.js' %}"></script>
+            <script defer src="{% static 'vote/adminScript2.js' %}"></script>
 
 
 </body>
