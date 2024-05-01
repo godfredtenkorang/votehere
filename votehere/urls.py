@@ -23,4 +23,5 @@ urlpatterns = [
     path('', include('vote.urls')),
     path('payment/', include('payment.urls')),
     path('register/', include('register.urls')),
+    path('dashboard/', include('dashboard.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

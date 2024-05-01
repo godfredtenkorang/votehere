@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'vote',
     'payment',
     'register',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

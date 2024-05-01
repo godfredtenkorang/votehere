@@ -8,7 +8,6 @@ urlpatterns = [
     path('policy/', views.policy, name='policy'),
     path('termsCondition/', views.termsCondition, name='termsCondition'),
     path('contact/', views.contact, name='contact'),
-    path('adminPage/', views.admin, name='adminPage'),
 
     path('<slug:category_slug>/', views.category, name='award_by_category'),
 

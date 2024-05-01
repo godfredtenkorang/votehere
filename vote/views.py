@@ -46,16 +46,6 @@ def contact(request):
 
 
 
-def admin(request):
-    context = {
-        'title': 'adminPage'
-    }
-    return render(request, 'vote/admin.html', context)
-
-
-
-
-
 def category(request, category_slug=None):
     category = None
     award = SubCategory.objects.all()
