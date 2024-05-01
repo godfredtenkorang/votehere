@@ -85,10 +85,10 @@
             <div class="registered-category-container">
                 <div class="heading">
                     <h2>List of Awards</h2>
-                    <p>List of awards people file nomination for</p>
+                    <p>List of awards people file nomination for.</p>
                 </div>
-                {% for award in awards %}
                 <div class="registered-category">
+                    {% for award in awards %}
                     <a href="{% url 'registration_nominee' award.slug %}">
                         <div class="category">
                             <!-- cat img -->
@@ -105,8 +105,8 @@
 
                     </a>
 
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
 
 

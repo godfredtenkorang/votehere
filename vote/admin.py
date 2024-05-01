@@ -16,7 +16,7 @@ class NomineesInLine(admin.TabularInline):
   
 class CategoryAdmin(admin.ModelAdmin):
     fieldsets = [(None, {'fields': ['award', 'title', 'image', 'slug',]}), ('Date Information', {
-        'fields': ['date'], 'classes': ['collapse']}), ]
+        'fields': ['date_added', 'end_date'], 'classes': ['collapse']}), ]
     inlines = [NomineesInLine]
     prepopulated_fields = {"slug": ("award",)}
   

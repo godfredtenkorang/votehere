@@ -15,12 +15,11 @@ urlpatterns = [
     
     # Transaction
     path('transaction/', views.transaction, name='transaction'),
-<<<<<<< HEAD
-   
+
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
 
-      path('team/', views.team, name='team'),
-=======
+    path('team/', views.team, name='team'),
+
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
->>>>>>> 37b63edc546a8ef31df3356af536718672c448db
+
 ]

@@ -85,24 +85,31 @@
 
             <div class="transation-details-container">
                 <div class="heading">
-                    <h1>Total Revenue for each category</h1>
+                    {% if nominee %}
+                    <h1>Total Revenue for {{ nominee.name }} as {{ nominee.sub_category }}</h1>
                     <p>Total Revenue made for each category</p>
+                    <p>GH¢({{ total_amount }})</p>
+                    {% endif %}
                 </div>
 
                 <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
                     <thead>
                         <tr>
                             <th>Category</th>
-                            <th>Total Revenue</th>
+                            <th>Reference</th>
+                            <th>Amount</th>
                             <th>Verification</th>
-                            <th>Date</th>
+                            <th>Date & Time</th>
                         </tr>
                     </thead>
                     {% for p in payments %}
                     <tbody>
                         <tr>
                             <td>{{ p.content }}</td>
+                            <td>{{ p.ref }}</td>
                             <td>GH¢{{ p.total_amount }}</td>
+                            <td>{{ p.verified }}</td>
+                            <td>{{ p.date_created }}</td>
                         </tr>
 
                         <!-- Add more rows as needed -->

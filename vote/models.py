@@ -8,11 +8,12 @@ class Category(models.Model):
     title = models.CharField(max_length=100, null=True)
     image = models.ImageField(upload_to="category")
     slug = models.SlugField(unique=True)
-    date = models.DateTimeField(timezone.now, null=True)
+    date_added = models.DateTimeField('date added', null=True)
+    end_date = models.DateTimeField('end date', null=True)
     
     class Meta:
         verbose_name_plural = "categories"
-        ordering = ('-date',)
+        ordering = ('-date_added',)
 
     def __str__(self):
         return self.award

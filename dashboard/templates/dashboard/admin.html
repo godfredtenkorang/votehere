@@ -91,17 +91,13 @@
 
                 <!-- THE INTERFACE FOR THE ACTIVITY BUTTON -->
                 <!-- ongoing awards -->
-<<<<<<< HEAD
+
+               
 
                 <div class="ongoin-awards-container">
                     {% for a in awards %}
                     <a href="{% url 'activity_category' a.slug %}">
 
-=======
-                {% for a in awards %}
-                <div class="ongoin-awards-container">
-                    <a href="{% url 'activity_category' a.slug %}">
->>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                         <div class="awards-container">
                             <!-- awards img -->
                             <div class="awards-img">
@@ -110,7 +106,7 @@
                             <!-- awards name -->
                             <div class="awards-name">
                                 <h2>{{ a.award }}</h2>
-<<<<<<< HEAD
+
                             </div>
 
                             <div class="duration">
@@ -121,7 +117,7 @@
                                     </div>
                                     <div class="start-col">
 
-                                        <p>24th April 2090</p>
+                                        <p>{{ a.date_added|date:"N j, o" }}</p>
                                     </div>
                                 </div>
 
@@ -132,23 +128,19 @@
                                     </div>
                                     <div class="start-col">
 
-                                        <p>24th April 2090</p>
+                                        <p>{{ a.end_date|date:"N j, o" }}</p>
                                     </div>
                                 </div>
-=======
->>>>>>> 37b63edc546a8ef31df3356af536718672c448db
+
                             </div>
                         </div>
 
                     </a>
-<<<<<<< HEAD
                     {% endfor %}
                 </div>
 
-=======
-                </div>
-                {% endfor %}
->>>>>>> 37b63edc546a8ef31df3356af536718672c448db
+
+
             </div>
 
 

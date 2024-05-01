@@ -89,8 +89,6 @@
                     <p>List of nominees and the votes so far</p>
                 </div>
                 <div class="nominees-interface">
-<<<<<<< HEAD
-
 
                     <div class="table-container">
                         <table id="nominees-table">
@@ -101,17 +99,17 @@
                                     <th>Number of Votes</th>
                                 </tr>
                             </thead>
+                            {% for nominee in nominees %}
                             <tbody>
-                                {% for nominee in nominees %}
                                 <tr>
                                     <td><img src="{{ nominee.image.url }}" alt="{{ nominee.name }}"></td>
                                     <td>{{ nominee.name }}</td>
                                     <td>{{ nominee.total_vote }}</td>
                                 </tr>
-                                {% endfor %}
                             </tbody>
+                            {% endfor %}
                         </table>
-=======
+
                     <div class="list-of-nominees">
                         {% for n in nominees %}
                         <div class="nominee-container">
@@ -126,7 +124,6 @@
                             </div>
                         </div>
                         {% endfor %}
->>>>>>> 37b63edc546a8ef31df3356af536718672c448db
                     </div>
 
 

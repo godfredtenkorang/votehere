@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from vote.models import Category, SubCategory
 from payment.models import Nominees, Payment
 from register.models import Register
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -34,7 +35,8 @@ def activity_nominee(request, nominee_slug):
     if nominee_slug:
         sub_category = get_object_or_404(SubCategory, slug=nominee_slug)
         nominees = nominees.filter(sub_category=sub_category)
-        total_votes = nominees.filter(sub_category=sub_category).count()
+        total_votes = nominees.aggregate(total=Sum('total_vote'))
+
         
 
     context = {
@@ -83,14 +85,13 @@ def registration_nominee(request, register_slug):
     return render(request, 'dashboard/registration-nominee.html', context)
 
 def transaction(request):
-    awards = SubCategory.objects.all()
+    awards = Nominees.objects.all()
     context = {
         'awards': awards,
         'title': 'adminPage'
     }
     return render(request, 'dashboard/transaction.html', context)
 
-<<<<<<< HEAD
 def team(request):
    
     context = {
@@ -100,27 +101,19 @@ def team(request):
     return render(request, 'dashboard/team.html', context)
 
 
-def transaction_category(request, transaction_slug):
-    content = None
-    payments = Payment.objects.all()
-    if transaction_slug:
-        content = get_object_or_404(SubCategory, slug=transaction_slug)
-        payments = payments.filter(content=content)
-
-    context = {
-=======
 
 def transaction_category(request, transaction_slug):
-    content = None
+    nominee = None
     payments = Payment.objects.all()
     if transaction_slug:
-        content = get_object_or_404(SubCategory, slug=transaction_slug)
-        payments = payments.filter(content=content)
+        nominee = get_object_or_404(Nominees, slug=transaction_slug)
+        payments = payments.filter(nominee=nominee)
+        total_amount = payments.aggregate(Total=Sum('total_amount'))
 
     context = {
->>>>>>> 37b63edc546a8ef31df3356af536718672c448db
-        'content': content,
+        'nominee': nominee,
         'payments': payments,
+        'total_amount': total_amount,
         'title': 'adminPage'
     }
     return render(request, 'dashboard/transaction-category.html', context)
