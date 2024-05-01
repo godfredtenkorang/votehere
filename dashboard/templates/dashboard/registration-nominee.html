@@ -1,0 +1,151 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, 
+				initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
+
+</head>
+
+<body>
+
+    <!-- for header part -->
+    <header>
+
+        <div class="logosec">
+            <div class="logo">
+                <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+
+
+            </div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+                class="icn menuicn" id="menuicn" alt="menu-icon">
+        </div>
+
+
+
+        <div class="message">
+            <h1>Admin Dashboard</h1>
+        </div>
+
+    </header>
+
+    <div class="main-container">
+        <div class="navcontainer sidebar">
+            <nav class="nav">
+                <div class="nav-upper-options">
+
+                    <!-- acivities button -->
+                    <a href="{% url 'adminPage' %}">
+
+                        <div class="nav-option option1 button">
+                            <h3>Activities</h3>
+                        </div>
+                    </a>
+
+
+                    <!-- registration button -->
+                    <a href="{% url 'registration' %}">
+
+                        <div class="nav-option option1 button active">
+                            <h3>Registration</h3>
+                        </div>
+                    </a>
+
+
+                    <!-- registration button -->
+                    <a href="{% url 'transaction' %}">
+                        <div class="nav-option option1 button">
+                            <h3>Transaction</h3>
+                        </div>
+                    </a>
+
+
+                </div>
+            </nav>
+        </div>
+
+
+        <div class="main">
+
+
+            <!-- registered people -->
+            <div class="list-of-registered-nominee">
+                <div class="heading">
+                    <h1>Nominee Filing</h1>
+                </div>
+                <div class="list-of-nominees-container">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nominee Image</th>
+                                    <th>Category</th>
+                                    <th>Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Justification</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                    </td>
+                                    <td>Most Handsome</td>
+                                    <td>Highly Spiritual</td>
+                                    <td>0558156844</td>
+                                    <td>john.doe@example.com</td>
+                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                                </tr>
+
+                                <tr>
+                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                    </td>
+                                    <td>Most Handsome</td>
+                                    <td>Highly Spiritual</td>
+                                    <td>0558156844</td>
+                                    <td>john.doe@example.com</td>
+                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                                </tr>
+
+                                <tr>
+                                    <td> <img src="{% static 'vote/img/IMG_20240127_215829_062.jpg' %}" alt="geima">
+                                    </td>
+                                    <td>Most Handsome</td>
+                                    <td>Highly Spiritual</td>
+                                    <td>0558156844</td>
+                                    <td>john.doe@example.com</td>
+                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+                    <div class="total-number-of-nomiees">
+                        <p>Total number of Nominees </p>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+            <script defer src="{% static 'vote/adminScript.js' %}"></script>
+            <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+
+
+</body>
+
+</html>

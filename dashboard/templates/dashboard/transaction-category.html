@@ -1,0 +1,128 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, 
+				initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
+
+</head>
+
+<body>
+
+    <!-- for header part -->
+    <header>
+
+        <div class="logosec">
+            <div class="logo">
+                <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+
+
+            </div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+                class="icn menuicn" id="menuicn" alt="menu-icon">
+        </div>
+
+
+
+        <div class="message">
+            <h1>Admin Dashboard</h1>
+        </div>
+
+    </header>
+
+    <div class="main-container">
+        <div class="navcontainer sidebar">
+            <nav class="nav">
+                <div class="nav-upper-options">
+
+                    <!-- acivities button -->
+                    <a href="{% url 'adminPage' %}">
+
+                        <div class="nav-option option1 button">
+                            <h3>Activities</h3>
+                        </div>
+                    </a>
+
+
+                    <!-- registration button -->
+                    <a href="{% url 'registration' %}">
+
+                        <div class="nav-option option1 button">
+                            <h3>Registration</h3>
+                        </div>
+                    </a>
+
+
+                    <!-- registration button -->
+                    <a href="{% url 'transaction' %}">
+                        <div class="nav-option option1 button active">
+                            <h3>Transaction</h3>
+                        </div>
+                    </a>
+
+
+                </div>
+            </nav>
+        </div>
+
+
+
+
+        <div class="main">
+
+
+            <div class="transation-details-container">
+                <div class="heading">
+                    <h1>Total Revenue for each category</h1>
+                </div>
+
+                <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Total Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Category 1</td>
+                            <td>$10,000</td>
+                        </tr>
+
+                        <tr>
+                            <td>Category 2</td>
+                            <td>$150,000</td>
+                        </tr>
+
+                        <tr>
+                            <td>Category 2</td>
+                            <td>$250,000</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+        <script defer src="{% static 'vote/adminScript.js' %}"></script>
+        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+
+
+</body>
+
+</html>
