@@ -50,7 +50,8 @@ nav {
     justify-content: space-between;
     width: 100%;
 }
-.navLinks{
+
+.navLinks {
     display: flex;
     gap: 2rem;
     padding: 20px 0;
@@ -58,9 +59,10 @@ nav {
 
 /* Logo styling */
 .logo img {
-   width: 170px; 
-   
+    width: 170px;
+
 }
+
 .navLinks a {
     color: var(--whiteColor);
     font-size: 1.4vw;
@@ -85,10 +87,11 @@ nav {
     right: 0;
     padding: 20px 0;
     position: absolute;
-    
+
 }
+
 /* button to remove nave bar */
-.remove-navbar{
+.remove-navbar {
     position: absolute;
     display: none;
     top: 5%;
@@ -101,18 +104,20 @@ nav {
 
 
 /* search bar section */
-.search-bar-section{
+.search-bar-section {
     padding-top: 5%;
 }
+
 .search-bar-section form {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding:0  5%;
-   
-    
+    padding: 0 5%;
+
+
 }
- .search-bar-section input {
+
+.search-bar-section input {
     width: 100%;
     max-width: 700px;
     height: 7vh;
@@ -122,16 +127,16 @@ nav {
     border-radius: 10px;
     color: var(--voiletColor);
 
-    
+
 }
 
-.search-bar-section input::placeholder{
+.search-bar-section input::placeholder {
     color: var(--voiletColor);
     font-weight: 700;
 }
 
 
-  
+
 
 
 
@@ -149,12 +154,14 @@ nav {
     padding: 7% 5%;
 
 }
+
 .row {
     display: flex;
     gap: 2rem;
     justify-content: center;
     align-items: center;
 }
+
 /* Banner image styling */
 .banner-img {
     width: 100%;
@@ -164,7 +171,7 @@ nav {
 .banner-img img {
     width: 100%;
     height: 40vh;
-   
+
 }
 
 /* Banner content styling */
@@ -178,28 +185,33 @@ nav {
     padding-bottom: 2%;
     font-weight: 900;
 }
+
 .banner-content p {
     font-size: 1.3rem;
     padding-bottom: 5%;
 }
 
-.text-slide .text h1{
-   animation: textslide 0.9s;
+.text-slide .text h1 {
+    animation: textslide 0.9s;
 }
-.text-slide span{
+
+.text-slide span {
     color: var(--orangeColor);
 }
-.text-slide .text p{
+
+.text-slide .text p {
     animation: textslide2 0.9s;
- }
+}
+
 @keyframes textslide {
-    0%{
+    0% {
         transform: translateY(-50px);
         opacity: 0;
     }
 }
+
 @keyframes textslide2 {
-    0%{
+    0% {
         transform: translateY(50px);
         opacity: 0;
     }
@@ -218,23 +230,25 @@ nav {
 /* Styling for the heading of ongoing events */
 .ongoin-event h2 {
     font-size: 3rem;
-  font-weight: 800;
-  outline: none;
-  text-transform: uppercase;
-  background: linear-gradient(135deg, #5335cf 0%, #de005e 25%, #f66e48 50%, #de005e 75%, #5335cf 100%);
-  background-size: 400%;
-border: solid 2px #a517ba;
-padding: 10px;
-border-radius: 25px;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: animates 10s linear infinite;
+    font-weight: 800;
+    outline: none;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #5335cf 0%, #de005e 25%, #f66e48 50%, #de005e 75%, #5335cf 100%);
+    background-size: 400%;
+    border: solid 2px #a517ba;
+    padding: 10px;
+    border-radius: 25px;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: animates 10s linear infinite;
 }
+
 @keyframes animates {
-    to{
-      background-position: 400%;
+    to {
+        background-position: 400%;
     }
-  }
+}
+
 /* Styling for the container of awards */
 .award-container {
     padding: 2% 3%;
@@ -296,7 +310,7 @@ border-radius: 25px;
     display: none;
     padding: 10px;
     height: 55vh;
- 
+
 }
 
 .spinner p {
@@ -355,7 +369,7 @@ border-radius: 25px;
     padding: 0 10px;
 }
 
-.banners-content p{
+.banners-content p {
     font-size: 1.2rem;
 }
 
@@ -457,15 +471,15 @@ border-radius: 25px;
 .award-category-section,
 .nominees-section-container {
     padding: 5% 6%;
-    
+
 }
 
 .award-category-container,
 .nominees-container {
-   display: flex;
-   justify-content: center;
-   flex-wrap: wrap;
-   gap: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 /* styling category container */
@@ -493,6 +507,7 @@ border-radius: 25px;
     height: 50vh;
     object-fit: cover;
 }
+
 .category-details,
 .nominees-detail {
     display: flex;
@@ -526,7 +541,7 @@ border-radius: 25px;
     padding: 10px 25px;
     font-weight: 500;
     background-color: var(--voiletColor);
-   
+
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -536,7 +551,7 @@ border-radius: 25px;
     width: 100%;
     min-height: 7vh;
     text-align: center;
-   
+
     border: 2px solid rgb(255, 255, 255);
     z-index: 0;
     color: var(--whiteColor);
@@ -634,31 +649,37 @@ border-radius: 25px;
 }
 
 /*  this styling is for the forms voters will use to vote */
-.paymentForm{
-   display: flex;
-   padding: 5%;
-   gap: 2rem;
+.paymentForm {
+    display: flex;
+    padding: 1%;
+    gap: 2rem;
 }
-.paymentForm form{
+
+.pay-form {
+    padding: 5%;
+}
+
+.paymentForm form {
     display: flex;
     flex-direction: column;
-    
-  padding: 10px;
+
+    padding: 10px;
     width: 100%;
-  
-   
+
+
     max-width: 100%;
-   min-height: 70vh;
+    min-height: 70vh;
     box-shadow: 1px 0 5px rgba(0, 0, 0, 0.5);
 }
 
-.paymentForm input{
+.paymentForm input {
     width: 100%;
     min-height: 7vh;
     padding: 5px;
-   
+
 }
-.paymentForm button{
+
+.paymentForm button {
     min-height: 7vh;
     background-color: var(--voiletColor);
     cursor: pointer;
@@ -666,26 +687,27 @@ border-radius: 25px;
     border: none;
 }
 
-.pay-img{
+.pay-img {
     width: 100%;
     max-width: 100%;
 }
 
-.pay-img img{
+.pay-img img {
     width: 100%;
     min-height: 100vh;
 }
 
-.paymentForm form label span{
+.paymentForm form label span {
     color: var(--orangeColor);
 }
-.paymentForm label{
+
+.paymentForm label {
     color: var(--voiletColor);
     font-weight: 800;
 }
 
-.alert-amount-to-pay{
-    background-color:rgba(165, 23, 186, 0.5);
+.alert-amount-to-pay {
+    background-color: rgba(165, 23, 186, 0.5);
     width: 100%;
     min-height: 5vh;
     margin-bottom: 2%;
@@ -693,34 +715,36 @@ border-radius: 25px;
     padding: 10px;
 }
 
-.alert{
+.alert {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color:var(--voiletColor);
+    background-color: var(--voiletColor);
     width: 100%;
     min-height: 7vh;
     margin-bottom: 2%;
-   color: var(--whiteColor);
-   font-weight: 800;
-    padding: 10px; 
-    margin: 3% 0; 
+    color: var(--whiteColor);
+    font-weight: 800;
+    padding: 10px;
+    margin: 3% 0;
 }
-.alert i{
+
+.alert i {
     background-color: var(--orangeColor);
-    padding:10px 12px;
+    padding: 10px 12px;
     border-radius: 50%;
 }
 
-.nominee-details{
+.nominee-details {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.nominee-details img{
+
+.nominee-details img {
     width: 100%;
     max-width: 120px;
     height: 120px;
@@ -730,16 +754,17 @@ border-radius: 25px;
 
 
 /* vote-succes-or-fail */
-.vote-succes-or-fail{
+.vote-succes-or-fail {
     width: 100%;
- padding: 5% 2%;
+    padding: 5% 2%;
     display: flex;
     justify-content: center;
     align-items: center;
 
 
 }
-.vote-condition{
+
+.vote-condition {
     width: 100%;
     max-width: 700px;
     box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2);
@@ -750,16 +775,19 @@ border-radius: 25px;
     flex-direction: column;
     color: var(--voiletColor);
     font-weight: 900;
-  
+
 }
-.vote-condition h1{
+
+.vote-condition h1 {
     font-size: 2rem;
     padding: 5px 0;
 }
-.vote-condition i{
+
+.vote-condition i {
     font-size: 3rem;
 }
-.vote-condition a{
+
+.vote-condition a {
     color: var(--orangeColor);
     text-decoration: underline;
 }
@@ -892,7 +920,7 @@ border-radius: 25px;
 .nomination-forms h3 {
     text-align: center;
     padding-bottom: 4%;
-    color: var(--voiletColor); 
+    color: var(--voiletColor);
     font-weight: 900;
     font-size: 1.3rem;
 }
@@ -921,7 +949,7 @@ border-radius: 25px;
 
 /* Styles for the form container */
 .nomination-forms form {
-    background-color: var(--whiteColor); 
+    background-color: var(--whiteColor);
     box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
     border: solid 1px #522a83;
     width: 100%;
@@ -951,7 +979,7 @@ border-radius: 25px;
 .nomination-alert {
     padding: 10px;
     text-align: center;
-    color: var(--voiletColor); 
+    color: var(--voiletColor);
     padding-bottom: 5%;
     font-size: 1.1rem;
     background-color: rgba(82, 42, 131, 0.1);
@@ -976,7 +1004,7 @@ border-radius: 25px;
     min-height: 7vh;
     margin: 5% 0;
     padding: 10px;
-    caret-color: var(--voiletColor); 
+    caret-color: var(--voiletColor);
     outline: none;
     border: solid 2px #522a83;
     color: var(--voiletColor);
@@ -1014,13 +1042,13 @@ border-radius: 25px;
     width: 100%;
     margin: 3% 0;
     min-height: 6vh;
-    background-color: var(--voiletColor); 
+    background-color: var(--voiletColor);
     border: none;
-    color: var(--whiteColor); 
+    color: var(--whiteColor);
     cursor: pointer;
 }
 
-.alert-user-submition{
+.alert-user-submition {
     position: fixed;
     z-index: 1;
     top: 0;
@@ -1029,9 +1057,10 @@ border-radius: 25px;
     background-color: rgba(165, 23, 186, 0.5);
     display: none;
 }
-.alert-message{
+
+.alert-message {
     position: absolute;
-   font-size: 2rem;
+    font-size: 2rem;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -1045,29 +1074,31 @@ border-radius: 25px;
     gap: 2rem;
     text-align: center;
 }
-.remov-alert{
+
+.remov-alert {
     position: absolute;
-  background-color: var(--orangeColor);
-  padding:11px 10px;
-  border-radius: 50%;
-  color: var(--whiteColor);
-  top: 10%;
-  right: 10%;
-  cursor: pointer;
+    background-color: var(--orangeColor);
+    padding: 11px 10px;
+    border-radius: 50%;
+    color: var(--whiteColor);
+    top: 10%;
+    right: 10%;
+    cursor: pointer;
 }
 
 
 /* contact us page styling */
-.contact-us-section{
+.contact-us-section {
     display: flex;
     gap: 1rem;
     justify-content: center;
     align-items: center;
     width: 100%;
-  
+
     padding: 5%;
 }
-.contact-details{
+
+.contact-details {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1081,11 +1112,13 @@ border-radius: 25px;
     border-radius: 10px;
 
 }
-.socials{
+
+.socials {
     display: flex;
     gap: 2rem;
 }
-.contact-details i{
+
+.contact-details i {
     margin: 3% 0;
     color: var(--orangeColor);
     font-size: 1.3rem;
@@ -1093,7 +1126,8 @@ border-radius: 25px;
     background-color: var(--whiteColor);
     border-radius: 50%;
 }
-.contact-details p{
+
+.contact-details p {
     color: var(--whiteColor);
     font-size: 1.2rem;
     font-weight: 900;
@@ -1101,28 +1135,31 @@ border-radius: 25px;
 
 
 /* result page styling */
-.nominees-result-section{
+.nominees-result-section {
     padding: 5% 10%;
     text-align: center;
 }
-.nominees-result-section h2{
+
+.nominees-result-section h2 {
     font-size: 2rem;
     font-weight: 900;
     color: var(--voiletColor);
 }
-.nominee-result{
+
+.nominee-result {
     margin-top: 2%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-   background-color: rgba(82, 42, 131, 0.5); 
-   ;
-   padding: 20px 4%;
-   min-height: 20vh;
-   border-radius: 10px;
+    background-color: rgba(82, 42, 131, 0.5);
+    ;
+    padding: 20px 4%;
+    min-height: 20vh;
+    border-radius: 10px;
 }
-.nominee-img img{
+
+.nominee-img img {
     width: 90px;
 }
 
@@ -1156,6 +1193,86 @@ footer p {
 }
 
 
+
+/* admin login form style */
+.adminLogin-form {
+    width: 100%;
+    margin: 5% 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.adminLogin-form form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 700px;
+    min-height: 45vh;
+    padding: 4%;
+    border-radius: 25px;
+    border: 3px solid transparent;
+    animation: rotateBorder 5s linear infinite;
+}
+
+.adminLogin-form form input {
+    margin: 2% 0;
+    border: solid 2px #5335cf;
+}
+
+.welcome-area {
+    width: 100%;
+    height: 20vh;
+    background-image: linear-gradient(to right, #522a83, #a517ba);
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--whiteColor);
+}
+
+@keyframes rotateBorder {
+    0% {
+        border-color: var(--orangeColor);
+
+    }
+
+    25% {
+        border-color: var(--voiletColor);
+
+    }
+
+    50% {
+        border-color: var(--orangeColor);
+
+    }
+
+    75% {
+        border-color: var(--voiletColor);
+
+    }
+
+    100% {
+        border-color: var(--orangeColor);
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* media queries  */
 @media (max-width:750px) {
     .row {
@@ -1181,11 +1298,15 @@ footer p {
 
     .award,
     .category,
-    .nominees , .contact-details{
+    .nominees,
+    .contact-details {
         max-width: none;
     }
-    .award img, .category img, .nominees img{
-        height:auto;
+
+    .award img,
+    .category img,
+    .nominees img {
+        height: auto;
     }
 
     .voting-form-section {
@@ -1203,24 +1324,28 @@ footer p {
     .nominee-information-section {
         padding: 5%;
     }
-    .contact-us-section{
+
+    .contact-us-section {
         flex-wrap: wrap;
     }
-    .nominees-result-section{
+
+    .nominees-result-section {
         padding: 2%;
     }
 
-    .banner-img{
+    .banner-img {
         display: none;
     }
-    .form{
+
+    .form {
         flex-direction: column;
     }
-    .nomination-forms{
-        margin:0;
+
+    .nomination-forms {
+        margin: 0;
     }
 
-   
+
 }
 
 @media(max-width:930px) {
@@ -1242,12 +1367,12 @@ footer p {
     }
 
     @keyframes slideIn {
-        0%{
+        0% {
             transform: translate(-10px);
         }
     }
 
-    .remove-navbar{
+    .remove-navbar {
         display: block;
     }
 
@@ -1284,49 +1409,55 @@ footer p {
     .about-us-content {
         max-width: none;
     }
-    .paymentForm{
+
+    .paymentForm {
         flex-direction: column;
         padding: 1px;
-       
+
     }
-    .paymentForm form{
+
+    .paymentForm form {
         box-shadow: none;
     }
+
     .pay-img {
-     display: none;
-    
+        display: none;
+
     }
 
 }
 
-@media (max-width:650px){
-    .banner-content h1{
+@media (max-width:650px) {
+    .banner-content h1 {
         font-size: 1.9rem;
     }
-    .banner-content p{
+
+    .banner-content p {
         font-size: 1.2rem;
     }
-    .logo img{
+
+    .logo img {
         width: 120px;
     }
 
     .award-category-container,
-.nominees-container, .award-container {
-    flex-direction: column;
-    gap: 2rem;
-    margin-bottom: 5%;
+    .nominees-container,
+    .award-container {
+        flex-direction: column;
+        gap: 2rem;
+        margin-bottom: 5%;
+    }
+
+    .banners-content h1 {
+        font-size: 1.2rem;
+    }
 }
 
-.banners-content h1{
-    font-size: 1.2rem;
-}
-}
 
 
 
 
-
-.donate-section-cont{
+.donate-section-cont {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1336,7 +1467,8 @@ footer p {
     margin-bottom: 7%;
     min-height: 100vh;
 }
-.donate-secs{
+
+.donate-secs {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1353,7 +1485,7 @@ footer p {
 .donate-btn {
     background-color: #a517ba;
     padding: 10px;
-    margin:2% 5px;
+    margin: 2% 5px;
     color: var(--whiteColor);
     border: none;
     cursor: pointer;

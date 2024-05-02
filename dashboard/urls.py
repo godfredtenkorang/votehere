@@ -21,5 +21,6 @@ urlpatterns = [
     path('team/', views.team, name='team'),
 
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
+    path('adminHome/', views.adminHome, name='adminHome'),
 
 ]

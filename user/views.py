@@ -24,7 +24,7 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
                 
-                return redirect("adminPage")
+                return redirect("adminHome")
         
     context = {
         'form': form
@@ -36,4 +36,4 @@ def login(request):
 def logout(request):
     auth.logout(request)
     
-    return redirect('index')
+    return redirect('login')

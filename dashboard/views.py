@@ -102,6 +102,15 @@ def team(request):
     return render(request, 'dashboard/team.html', context)
 
 
+def adminHome(request):
+   
+    context = {
+      
+        'title': 'adminHome'
+    }
+    return render(request, 'dashboard/adminHome.html', context)
+
+
 
 def transaction_category(request, transaction_slug):
     nominee = None

@@ -10,10 +10,13 @@
     <meta name="viewport" content="width=device-width, 
 				initial-scale=1.0">
     <title>Admin Page</title>
-    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
+
 </head>
 
 <body>
@@ -35,8 +38,6 @@
 
         <div class="message">
             <h1>Admin Dashboard</h1>
-
-
         </div>
 
     </header>
@@ -49,7 +50,7 @@
                     <!-- home button -->
                     <a href="{% url 'adminHome' %}">
 
-                        <div class="nav-option option1 button ">
+                        <div class="nav-option option1 button active">
                             <h3><i class="fa-solid fa-house"></i> Home</h3>
                         </div>
                     </a>
@@ -65,7 +66,7 @@
                     <!-- registration button -->
                     <a href="{% url 'registration' %}">
 
-                        <div class="nav-option option1 button active">
+                        <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> Nominations</h3>
                         </div>
                     </a>
@@ -94,55 +95,81 @@
                         <button class="darkMode-button">Change background Mode</button>
                     </div>
 
-
-
-
-
                     <!-- logout button -->
 
                     <div class="nav-option option1 button logout-btn">
                         <h3>Logout</h3>
                     </div>
 
+
+
+
                 </div>
             </nav>
         </div>
 
-        <!-- interface that will show when a button is clicked the main conntainer -->
+
         <div class="main">
 
-            <!-- catgory -->
-            <div class="registered-category-container">
+            <div class="admin-main-page">
                 <div class="heading">
-                    <h2>List of Awards</h2>
-                    <p>List of awards people file nomination for.</p>
+                    <h1>Welcome to the admin dashboard</h1>
                 </div>
-                <div class="registered-category">
-                    {% for award in awards %}
-                    <a href="{% url 'registration_nominee' award.slug %}">
-                        <div class="category">
-                            <!-- cat img -->
-                            <div class="cat-img">
-                                <img src="{{ award.image.url }}" alt="geima">
-                            </div>
-                            <!-- cat name -->
-                            <div class="cat-name">
-                                <h2>{{ award.award }}</h2>
-                            </div>
 
-                        </div>
+                <div class="statistics-container">
+                    <div class="stat-row">
+                        <h4>Total Awards organized</h4>
 
+                        <p>700</p>
 
-                    </a>
+                    </div>
+                    <div class="stat-row">
+                        <h4>Total Awards organized</h4>
 
-                    {% endfor %}
+                        <p>700</p>
+
+                    </div>
+                    <div class="stat-row">
+                        <h4>Total Awards organized</h4>
+
+                        <p>700</p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-project">
+                <h3>Recent Project</h3>
+
+                <div class="tables">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Awards Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ghana Awards</td>
+                                <td>In Progress</td>
+
+                            </tr>
+                            <tr>
+                                <td>Ghana Awards</td>
+                                <td>Ended</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
 
-
-
         </div>
+
+
+
     </div>
     <div class="logout-pop">
         <div class="logout">
@@ -159,6 +186,8 @@
         </div>
 
     </div>
+
+
 
 
     <script defer src="{% static 'vote/adminScript.js' %}"></script>

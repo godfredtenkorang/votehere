@@ -9,6 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, 
 				initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Admin Page</title>
     <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
 
@@ -33,6 +36,7 @@
 
         <div class="message">
             <h1>Admin Dashboard</h1>
+
         </div>
 
     </header>
@@ -42,11 +46,18 @@
             <nav class="nav">
                 <div class="nav-upper-options">
 
+                    <!-- home button -->
+                    <a href="{% url 'adminHome' %}">
+
+                        <div class="nav-option option1 button ">
+                            <h3><i class="fa-solid fa-house"></i> Home</h3>
+                        </div>
+                    </a>
                     <!-- acivities button -->
-                    <a class="active" href="{% url 'adminPage' %}">
+                    <a href="{% url 'adminPage' %}">
 
                         <div class="nav-option option1 button active">
-                            <h3>Activities</h3>
+                            <h3><i class="fa-solid fa-chart-simple"></i> Activities</h3>
                         </div>
                     </a>
 
@@ -54,8 +65,8 @@
                     <!-- registration button -->
                     <a href="{% url 'registration' %}">
 
-                        <div class="nav-option option1 button">
-                            <h3>Registration</h3>
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> Nominations</h3>
                         </div>
                     </a>
 
@@ -63,21 +74,33 @@
                     <!-- registration button -->
                     <a href="{% url 'transaction' %}">
                         <div class="nav-option option1 button">
-                            <h3>Transaction</h3>
+                            <h3> <i class="fa-solid fa-money-bill"></i> Transaction</h3>
                         </div>
                     </a>
+
                     <!-- team button -->
                     <a href="{% url 'team' %}">
                         <div class="nav-option option1 button">
-                            <h3>Team</h3>
+                            <h3><i class="fa-solid fa-people-group"></i> Team</h3>
                         </div>
                     </a>
-                    <!-- logout button -->
-                    <a href="{% url 'logout' %}">
-                        <div class="nav-option option1 button">
-                            <h3>Logout</h3>
+
+                    <div class="nav-option option1 button Settings">
+                        <div class="sett-but">
+                            <h3><i class="fa-solid fa-sliders"></i> Settings </h3>
+                            <i class="fa-solid fa-caret-down"></i>
                         </div>
-                    </a>
+
+                        <button class="darkMode-button">Change background Mode</button>
+                    </div>
+
+
+
+
+
+                    <div class="nav-option option1 button logout-btn">
+                        <h3>Logout</h3>
+                    </div>
 
                 </div>
             </nav>
@@ -127,9 +150,26 @@
 
 
 
+        </div>
+    </div>
+    <div class="logout-pop">
+        <div class="logout">
+            <p>Are you sure you want to log out from the admin pannel ?</p>
+            <div class="log-button">
+                <a href="{% url 'logout' %}">
+                    <button>Log Out</button>
+                </a>
 
-            <script defer src="{% static 'vote/adminScript.js' %}"></script>
-            <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+                <p>Or</p>
+
+                <button class="DontLogout">No</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script defer src="{% static 'vote/adminScript.js' %}"></script>
+    <script defer src="{% static 'vote/adminScript2.js' %}"></script>
 
 
 </body>
