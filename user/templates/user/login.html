@@ -2,14 +2,18 @@
 {% load static %}
 {% block content %}
 
-<section class="paymentForm">
+<section class="paymentForm adminLogin-form">
+
+
 
     <form class="form-for-voting" method="POST">
+        <div class="welcome-area">
+            <h2>Login as admin</h2>
+        </div>
 
-        
         {% csrf_token %}
         {{form}}
-        
+
         <!-- pay button -->
         <button type="submit">Login</button>
 

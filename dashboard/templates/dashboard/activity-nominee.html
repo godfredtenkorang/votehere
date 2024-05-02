@@ -11,7 +11,9 @@
 				initial-scale=1.0">
     <title>Admin Page</title>
     <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -42,11 +44,18 @@
             <nav class="nav">
                 <div class="nav-upper-options">
 
+                    <!-- home button -->
+                    <a href="{% url 'adminHome' %}">
+
+                        <div class="nav-option option1 button ">
+                            <h3><i class="fa-solid fa-house"></i> Home</h3>
+                        </div>
+                    </a>
                     <!-- acivities button -->
                     <a href="{% url 'adminPage' %}">
 
                         <div class="nav-option option1 button active">
-                            <h3>Activities</h3>
+                            <h3><i class="fa-solid fa-chart-simple"></i> Activities</h3>
                         </div>
                     </a>
 
@@ -54,8 +63,8 @@
                     <!-- registration button -->
                     <a href="{% url 'registration' %}">
 
-                        <div class="nav-option option1 button">
-                            <h3>Registration</h3>
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> Nominations</h3>
                         </div>
                     </a>
 
@@ -63,21 +72,32 @@
                     <!-- registration button -->
                     <a href="{% url 'transaction' %}">
                         <div class="nav-option option1 button">
-                            <h3>Transaction</h3>
+                            <h3> <i class="fa-solid fa-money-bill"></i> Transaction</h3>
                         </div>
                     </a>
+
                     <!-- team button -->
                     <a href="{% url 'team' %}">
                         <div class="nav-option option1 button">
-                            <h3>Team</h3>
+                            <h3><i class="fa-solid fa-people-group"></i> Team</h3>
                         </div>
                     </a>
-                    <!-- logout button -->
-                    <a href="{% url 'logout' %}">
-                        <div class="nav-option option1 button">
-                            <h3>Logout</h3>
+
+                    <div class="nav-option option1 button Settings">
+                        <div class="sett-but">
+                            <h3><i class="fa-solid fa-sliders"></i> Settings </h3>
+                            <i class="fa-solid fa-caret-down"></i>
                         </div>
-                    </a>
+
+                        <button class="darkMode-button">Change background Mode</button>
+                    </div>
+
+
+
+
+                    <div class="nav-option option1 button logout-btn">
+                        <h3>Logout</h3>
+                    </div>
 
                 </div>
             </nav>
@@ -116,129 +136,109 @@
                             {% endfor %}
                         </table>
                     </div>
-<!-- <
 
-                        <div class="list-of-nominees">
-                            {% for n in nominees %}
-                            <div class="nominee-container">
-                                <div class="nominee-img">
-                                    <img src="{{ n.image.url }}" alt="geima">
-                                </div>
-                                <div class="nominee-name">
-                                    <p>{{ n.name }}</p>
-                                </div>
-                                <div class="nominee-number-vote">
-                                    <p>{{ n.total_vote }}</p>
-                                </div>
-                            </div>
-                            {% endfor %}
+                    <!-- total number of vote -->
+                    <div class="total-number-of-vote-cast">
+                        <img src="{% static 'vote/img/illustration.jpg' %}" alt="geima">
+
+
+                        <p>Total Votes Cast</p>
+                        <div class="total">
+                            <p>{{ total_votes }}</p>
                         </div>
-
- -->
-
-
-                        <!-- {% for n in nominees %}
-                        <div class="nominee-container">
-                            <div class="nominee-img">
-                                <img src="{{ n.image.url }}" alt="geima">
-                            </div>
-                            <div class="nominee-name">
-                                <p>{{ n.name }}</p>
-                            </div>
-                            <div class="nominee-number-vote">
-                                <p>{{ n.total_vote }}</p>
-                            </div>
-                        </div>
-                        {% endfor %} -->
-
-                        <!-- total number of vote -->
-                        <div class="total-number-of-vote-cast">
-                            <img src="{% static 'vote/img/illustration.jpg' %}" alt="geima">
-
-
-                            <p>Total Votes Cast</p>
-                            <div class="total">
-                                <p>{{ total_votes }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="chart">
-                        <h3>See who is toping chart</h3>
-                        <canvas id="revenue-chart"></canvas>
-
-                    </div>
-                    <div class="back-button">
-                        <a class="active" href="{% url 'adminPage' %}">
-                            <button>Go Back</button>
-                        </a>
-
                     </div>
                 </div>
 
 
-            </div>
+                <div class="chart">
+                    <h3>See who is toping chart</h3>
+                    <canvas id="revenue-chart"></canvas>
 
+                </div>
+                <div class="back-button">
+                    <a class="active" href="{% url 'adminPage' %}">
+                        <button>Go Back</button>
+                    </a>
+
+                </div>
+            </div>
 
 
         </div>
 
 
 
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="logout-pop">
+        <div class="logout">
+            <p>Are you sure you want to log out from the admin pannel ?</p>
+            <div class="log-button">
+                <a href="{% url 'logout' %}">
+                    <button>Log Out</button>
+                </a>
+
+                <p>Or</p>
+
+                <button class="DontLogout">No</button>
+            </div>
+        </div>
+
+    </div>
 
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                function updateChart() {
-                    const nominees = [];
-                    const votes = [];
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                    const rows = document.querySelectorAll('#nominees-table tbody tr');
-                    rows.forEach(row => {
-                        const cells = row.querySelectorAll('td');
-                        nominees.push(cells[1].innerText);
-                        votes.push(parseInt(cells[2].innerText));
-                    });
 
-                    const maxVotes = Math.max(...votes);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function updateChart() {
+                const nominees = [];
+                const votes = [];
 
-                    const percentages = votes.map(vote => (vote / maxVotes) * 100);
+                const rows = document.querySelectorAll('#nominees-table tbody tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    nominees.push(cells[1].innerText);
+                    votes.push(parseInt(cells[2].innerText));
+                });
 
-                    const ctx = document.getElementById('revenue-chart').getContext('2d');
-                    const chart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: nominees,
-                            datasets: [{
-                                label: 'Number of Votes',
-                                data: percentages,
-                                backgroundColor: '#fb812b',
-                                borderWidth: 1
+                const maxVotes = Math.max(...votes);
+
+                const percentages = votes.map(vote => (vote / maxVotes) * 100);
+
+                const ctx = document.getElementById('revenue-chart').getContext('2d');
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: nominees,
+                        datasets: [{
+                            label: 'Number of Votes',
+                            data: percentages,
+                            backgroundColor: '#fb812b',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
                             }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true,
-                                        max: 100
-                                    }
-                                }]
-                            }
                         }
-                    });
-                }
+                    }
+                });
+            }
 
-                updateChart();
-            });
-        </script>
+            updateChart();
+        });
+    </script>
 
 
-        <script defer src="{% static 'vote/adminScript.js' %}"></script>
-        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+    <script defer src="{% static 'vote/adminScript.js' %}"></script>
+    <script defer src="{% static 'vote/adminScript2.js' %}"></script>
 
 
 </body>
