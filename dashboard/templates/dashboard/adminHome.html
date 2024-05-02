@@ -113,26 +113,26 @@
 
             <div class="admin-main-page">
                 <div class="heading">
-                    <h1>Welcome to the admin dashboard</h1>
+                    <h1>Welcome to the admin dashboard, {{ user }}</h1>
                 </div>
 
                 <div class="statistics-container">
                     <div class="stat-row">
                         <h4>Total Awards organized</h4>
 
-                        <p>700</p>
+                        <p>{{ award_count }}</p>
 
                     </div>
                     <div class="stat-row">
                         <h4>Total Awards organized</h4>
 
-                        <p>700</p>
+                        <p>{{ category_count }}</p>
 
                     </div>
                     <div class="stat-row">
                         <h4>Total Awards organized</h4>
 
-                        <p>700</p>
+                        <p>{{ nominee_count }}</p>
 
                     </div>
                 </div>
@@ -143,23 +143,28 @@
 
                 <div class="tables">
                     <table>
+                        
                         <thead>
                             <tr>
                                 <th>Awards Name</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
+                            {% for a in awards %}
                             <tr>
-                                <td>Ghana Awards</td>
-                                <td>In Progress</td>
+                                <td>{{ a.award }}</td>
+                                <td>
+                                    {% if current_time < a.end_date %}
+                                        In Progress
+                                    {% else %}
+                                        Ended
+                                    {% endif %}
+                                </td>
 
                             </tr>
-                            <tr>
-                                <td>Ghana Awards</td>
-                                <td>Ended</td>
-
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

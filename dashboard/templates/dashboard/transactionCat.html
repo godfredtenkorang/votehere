@@ -117,49 +117,21 @@
 
 
                 <div class="transaction-for-awards">
-                    <a href="">
+                    {% for n in award %}
+                    <a href="{% url 'transaction' n.slug %}">
                         <div class="awards-transaction-container">
                             <!-- awards img -->
                             <div class="awards-img">
-                                <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
+                                <img src="{{ n.category.image.url }}" alt="geima">
                             </div>
                             <!-- Category name -->
                             <div class="awards-name">
-                                <h2>Category name</h2>
+                                <h2>{{ n.content }}</h2>
 
                             </div>
                         </div>
                     </a>
-
-                    <a href="">
-                        <div class="awards-transaction-container">
-                            <!-- awards img -->
-                            <div class="awards-img">
-                                <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
-                            </div>
-                            <!-- Category name -->
-                            <div class="awards-name">
-                                <h2>Category name</h2>
-
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="">
-                        <div class="awards-transaction-container">
-                            <!-- awards img -->
-                            <div class="awards-img">
-                                <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
-                            </div>
-                            <!-- Category name -->
-                            <div class="awards-name">
-                                <h2>Category name</h2>
-
-                            </div>
-                        </div>
-                    </a>
-
-
+                    {% endfor %}
                 </div>
                 <div class="back-button">
                     <a class="active" href="{% url 'TransactionMain' %}">

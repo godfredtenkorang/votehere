@@ -118,18 +118,18 @@
                 </div>
 
                 <div class="transaction-for-awards">
-                    {% for a in awards %}
+                    {% for x in nominees %}
 
-                    <a href="{% url 'transaction_category' a.slug %}">
+                    <a href="{% url 'transaction_category' x.slug %}">
                         <div class="awards-transaction-container">
                             <!-- awards img -->
                             <div class="awards-img">
-                                <img src="{{ a.category.image.url }}" alt="geima">
+                                <img src="{{ x.category.image.url }}" alt="geima">
                             </div>
                             <!-- awards name -->
                             <div class="awards-name">
-                                <h2>{{ a.category.award }}</h2>
-                                <h2>{{ a.sub_category }} - {{ a.name }}</h2>
+                                <!-- <h2>{{ x.sub_category }}</h2> -->
+                                <h2>{{ x.name }}</h2>
                             </div>
                         </div>
                     </a>

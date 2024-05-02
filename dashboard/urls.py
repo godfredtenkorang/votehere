@@ -14,7 +14,7 @@ urlpatterns = [
     path('registration-nominee/<slug:register_slug>/', views.registration_nominee, name='registration_nominee'),
     
     # Transaction
-    path('transaction/', views.transaction, name='transaction'),
+    path('transaction/<slug:nominee_slug>/', views.transaction, name='transaction'),
 
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
 
@@ -23,6 +23,6 @@ urlpatterns = [
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
     path('adminHome/', views.adminHome, name='adminHome'),
     path('TransactionMain/', views.TransactionMain, name='TransactionMain'),
-    path('TransactionCat/', views.TransactionCat, name='TransactionCat'),
+    path('TransactionCat/<slug:category_slug>/', views.TransactionCat, name='TransactionCat'),
 
 ]

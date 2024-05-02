@@ -117,48 +117,21 @@
             </div>
 
             <div class="transaction-for-awards">
-                <a href="{% url 'TransactionCat'%}">
+                {% for a in awards %}
+                <a href="{% url 'TransactionCat' a.slug %}">
                     <div class="awards-transaction-container">
                         <!-- awards img -->
                         <div class="awards-img">
-                            <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
+                            <img src="{{ a.image.url }}" alt="geima">
                         </div>
                         <!-- awards name -->
                         <div class="awards-name">
-                            <h2>Awards name</h2>
+                            <h2>{{ a.award }}</h2>
                           
                         </div>
                     </div>
                 </a>
-
-                <a href="{% url 'TransactionCat'%}">
-                    <div class="awards-transaction-container">
-                        <!-- awards img -->
-                        <div class="awards-img">
-                            <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
-                        </div>
-                        <!-- awards name -->
-                        <div class="awards-name">
-                            <h2>Awards name</h2>
-                          
-                        </div>
-                    </div>
-                </a>
-
-                <a href="{% url 'TransactionCat'%}">
-                    <div class="awards-transaction-container">
-                        <!-- awards img -->
-                        <div class="awards-img">
-                            <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
-                        </div>
-                        <!-- awards name -->
-                        <div class="awards-name">
-                            <h2>Awards name</h2>
-                          
-                        </div>
-                    </div>
-                </a>
-
+                {% endfor %}
 
             </div>
 
