@@ -22,5 +22,7 @@ urlpatterns = [
 
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
     path('adminHome/', views.adminHome, name='adminHome'),
+    path('TransactionMain/', views.TransactionMain, name='TransactionMain'),
+    path('TransactionCat/', views.TransactionCat, name='TransactionCat'),
 
 ]

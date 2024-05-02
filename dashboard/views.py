@@ -111,6 +111,24 @@ def adminHome(request):
     return render(request, 'dashboard/adminHome.html', context)
 
 
+def TransactionMain(request):
+   
+    context = {
+      
+        'title': 'TransactionMain'
+    }
+    return render(request, 'dashboard/transactionMain.html', context)
+
+
+def TransactionCat(request):
+   
+    context = {
+      
+        'title': 'TransactionCat'
+    }
+    return render(request, 'dashboard/transactionCat.html', context)
+
+
 
 def transaction_category(request, transaction_slug):
     nominee = None

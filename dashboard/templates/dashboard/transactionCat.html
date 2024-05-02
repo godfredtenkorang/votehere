@@ -36,6 +36,7 @@
         <div class="message">
             <h1>Admin Dashboard</h1>
 
+
         </div>
 
     </header>
@@ -83,6 +84,7 @@
                             <h3><i class="fa-solid fa-people-group"></i> Team</h3>
                         </div>
                     </a>
+
                     <div class="nav-option option1 button Settings">
                         <div class="sett-but">
                             <h3><i class="fa-solid fa-sliders"></i> Settings </h3>
@@ -105,58 +107,69 @@
         </div>
 
 
-
-
         <div class="main">
-
-
-            <div class="transation-details-container">
+            <div class="transaction-main">
                 <div class="heading">
-                    {% if nominee %}
-                    <h1>Total Revenue for {{ nominee.name }} as {{ nominee.sub_category }}</h1>
-                    <p>Total Revenue made for each category</p>
-                    <p>GH¢({{ total_amount }})</p>
-                    {% endif %}
+                    <h2>Transaction for each Category</h2>
+                    <p> When clicking on a specific Category, you will be able to view transactions for each
+                        nominee associated with that award. </p>
                 </div>
 
-                <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Reference</th>
-                            <th>Amount</th>
-                            <th>Verification</th>
-                            <th>Date & Time</th>
-                        </tr>
-                    </thead>
-                    {% for p in payments %}
-                    <tbody>
-                        <tr>
-                            <td>{{ p.content }}</td>
-                            <td>{{ p.ref }}</td>
-                            <td>GH¢{{ p.total_amount }}</td>
-                            <td>{{ p.verified }}</td>
-                            <td>{{ p.date_created }}</td>
-                        </tr>
 
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                    {% endfor %}
-                </table>
+                <div class="transaction-for-awards">
+                    <a href="">
+                        <div class="awards-transaction-container">
+                            <!-- awards img -->
+                            <div class="awards-img">
+                                <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
+                            </div>
+                            <!-- Category name -->
+                            <div class="awards-name">
+                                <h2>Category name</h2>
+
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="">
+                        <div class="awards-transaction-container">
+                            <!-- awards img -->
+                            <div class="awards-img">
+                                <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
+                            </div>
+                            <!-- Category name -->
+                            <div class="awards-name">
+                                <h2>Category name</h2>
+
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="">
+                        <div class="awards-transaction-container">
+                            <!-- awards img -->
+                            <div class="awards-img">
+                                <img src="{% static 'vote/img/award.jpg' %}" alt="geima">
+                            </div>
+                            <!-- Category name -->
+                            <div class="awards-name">
+                                <h2>Category name</h2>
+
+                            </div>
+                        </div>
+                    </a>
+
+
+                </div>
                 <div class="back-button">
-                    <a href="{% url 'transaction' %}">
+                    <a class="active" href="{% url 'TransactionMain' %}">
                         <button>Go Back</button>
                     </a>
 
                 </div>
             </div>
 
-
-
-
-
         </div>
-
     </div>
     <div class="logout-pop">
         <div class="logout">
@@ -173,6 +186,7 @@
         </div>
 
     </div>
+
 
     <script defer src="{% static 'vote/adminScript.js' %}"></script>
     <script defer src="{% static 'vote/adminScript2.js' %}"></script>
