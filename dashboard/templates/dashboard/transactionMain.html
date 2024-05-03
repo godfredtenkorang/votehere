@@ -1,112 +1,6 @@
+{% extends 'dashboard/base.html' %}
 {% load static %}
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, 
-				initial-scale=1.0">
-    <title>Admin Page</title>
-    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-
-<body>
-
-    <!-- for header part -->
-    <header>
-
-        <div class="logosec">
-            <div class="logo">
-                <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
-
-
-            </div>
-            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
-                class="icn menuicn" id="menuicn" alt="menu-icon">
-        </div>
-
-
-
-        <div class="message">
-            <h1>Admin Dashboard</h1>
-
-
-        </div>
-
-    </header>
-
-    <div class="main-container">
-        <div class="navcontainer sidebar">
-            <nav class="nav">
-                <div class="nav-upper-options">
-
-                    <!-- home button -->
-                    <a href="{% url 'adminHome' %}">
-
-                        <div class="nav-option option1 button">
-                            <h3><i class="fa-solid fa-house"></i> Home</h3>
-                        </div>
-                    </a>
-                    <!-- acivities button -->
-                    <a href="{% url 'adminPage' %}">
-
-                        <div class="nav-option option1 button">
-                            <h3><i class="fa-solid fa-chart-simple"></i> Activities</h3>
-                        </div>
-                    </a>
-
-
-                    <!-- registration button -->
-                    <a href="{% url 'registration' %}">
-
-                        <div class="nav-option option1 button ">
-                            <h3> <i class="fa-solid fa-cash-register"></i> Nominations</h3>
-                        </div>
-                    </a>
-
-
-                    <!-- registration button -->
-                    <a href="{% url 'TransactionMain' %}">
-                        <div class="nav-option option1 button active ">
-                            <h3> <i class="fa-solid fa-money-bill"></i> Transaction</h3>
-                        </div>
-                    </a>
-
-                    <!-- team button -->
-                    <a href="{% url 'team' %}">
-                        <div class="nav-option option1 button">
-                            <h3><i class="fa-solid fa-people-group"></i> Team</h3>
-                        </div>
-                    </a>
-
-                    <div class="nav-option option1 button Settings">
-                        <div class="sett-but">
-                            <h3><i class="fa-solid fa-sliders"></i> Settings </h3>
-                            <i class="fa-solid fa-caret-down"></i>
-                        </div>
-
-                        <button class="darkMode-button">Change background Mode</button>
-                    </div>
-
-
-
-                    <!-- logout button -->
-
-                    <div class="nav-option option1 button logout-btn">
-                        <h3>Logout</h3>
-                    </div>
-
-                </div>
-            </nav>
-        </div>
-
-
+{% block content %}
         <div class="main">
             <div class="transaction-main">
                 <div class="heading">
@@ -115,7 +9,6 @@
                         category associated with that award. </p>
                 </div>
             </div>
-
             <div class="transaction-for-awards">
                 {% for a in awards %}
                 <a href="{% url 'TransactionCat' a.slug %}">
@@ -153,12 +46,4 @@
         </div>
 
     </div>
-
-
-    <script defer src="{% static 'vote/adminScript.js' %}"></script>
-    <script defer src="{% static 'vote/adminScript2.js' %}"></script>
-
-
-</body>
-
-</html>
+{% endblock %}
