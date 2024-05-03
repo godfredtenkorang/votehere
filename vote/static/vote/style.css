@@ -492,12 +492,13 @@ nav {
     border: solid 2px #a517ba;
     box-shadow: 1px 0 5px rgba(0, 0, 0, 0.5);
     transition: transform 0.5s;
+    padding: 5px;
 }
 
 
 .category img {
     width: 100%;
-    height: 65vh;
+    height: 35vh;
     object-fit: cover;
 }
 
@@ -791,119 +792,6 @@ nav {
     color: var(--orangeColor);
     text-decoration: underline;
 }
-
-/* .voting-form-section {
-    display: none;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: rgba(82, 42, 131, 0.8); 
-    ;
-    min-height: 100vh;
-    justify-content: center;
-    z-index: 1;
-    padding: 1% 3%;
-}
-
-.voting-form-container {
-    width: 100%;
-    max-width: 700px;
-    height: 100vh;
-    background: var(--whiteColor);
-    overflow-y: scroll;
-    padding: 3%;
-}
-
-.vote-col {
-    display: flex;
-    justify-content: space-between;
-
-}
-
-.alert {
-    background-color: rgba(165, 23, 186, 0.5);
-    width: 100%;
-    min-height: 4vh;
-    margin-top: 3%;
-    padding: 10px;
-    color: var(--whiteColor);
-    text-align: center;
-}
-
-.alert i {
-    background-color: var(--voiletColor);
-
-    width: 20px;
-    min-height: 20px;
-    border-radius: 50%;
-}
-.fa-xmark {
-    cursor: pointer;
-}
-.nominee-image-name {
-    margin-top: 5%;
-    padding-bottom: 3%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    border-bottom: solid 2px rgba(82, 42, 131, 0.5); 
-  }  ; */
-/* 
-.nominee-image img {
-    width: 100%;
-    max-width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #522a83;
-}
-.form-for-voting {
-    padding: 5% 0;
-}
-.form-for-voting input {
-    width: 100%;
-    min-height: 6vh;
-    margin: 3% 0;
-    padding: 10px;
-    caret-color: var(--voiletColor);
-    outline-width: 1px;
-    outline-color: rgba(82, 42, 131, 0.5); 
-    ;
-}
-.form-for-voting label {
-    color: var(--orangeColor);
-    font-weight: 900;
-    font-size: 13px;
-}
-
-::placeholder {
-    color: #000;
-} */
-/* 
-.amount-to-pay-per-vote {
-    width: 100%;
-    min-height: 10vh;
-    background-color: rgba(82, 42, 131, 0.1); 
-    ;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    font-weight: 900;
-    font-size: 1rem;
-}
-
-.form-for-voting button {
-    width: 100%;
-    min-height: 7vh;
-    margin-top: 5%;
-    background-color: var(--voiletColor);
-    border: none;
-    color: var(--whiteColor);
-    cursor: pointer;
-} */
 
 
 
