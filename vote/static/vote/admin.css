@@ -11,7 +11,7 @@
     --background-color1: #fafaff;
     --background-color2: #ffffff;
     --background-color3: #ededed;
-    --background-color4: #cad7fda4;
+    --background-color4: #afc0f0a4;
     --primary-color: #4b49ac;
     --secondary-color: #0c007d;
     --Border-color: #3f0097;
@@ -92,7 +92,10 @@ header {
     border-radius: 5px;
     margin-bottom: 1%;
     color: var(--voiletColor);
-
+    font-weight: 900;
+}
+.heading span{
+    color: var(--orangeColor);
 }
 
 .data {
@@ -118,16 +121,7 @@ header {
     top: 8px;
 }
 
-.dp {
-    height: 40px;
-    width: 40px;
-    background-color: #626262;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
+
 
 .main-container {
     display: flex;
@@ -137,9 +131,6 @@ header {
     z-index: 1;
 }
 
-.dpicn {
-    height: 42px;
-}
 
 .main {
     height: calc(100vh - 70px);
@@ -258,13 +249,6 @@ header {
     align-items: center;
     gap: 30px;
 }
-
-
-
-
-
-
-
 .ongoin-awards-container,
 .categories-container,
 .registered-awards-container,
@@ -274,10 +258,7 @@ header {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-
 }
-
-
 .ongoin-awards-container h2,
 .categories-container h2,
 .list-of-nominees h2,
@@ -290,11 +271,6 @@ header {
     color: var(--voiletColor);
     padding: 10px;
 }
-
-
-
-
-
 
 .ongoin-awards-container a,
 .categories-container a,

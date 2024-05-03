@@ -5,7 +5,7 @@
          <div class="transation-details-container">
                 <div class="heading">
                     {% if nominee %}
-                    <h1>Total Revenue for {{ nominee.name }} as {{ nominee.sub_category }}</h1>
+                    <h1>Total Revenue for <span>{{ nominee.name }} </span> as <span> {{ nominee.sub_category }}</span></h1>
                     <p>Total Revenue made for each category</p>
                     <p>GH¢({{ total_amount }})</p>
                     {% endif %}
