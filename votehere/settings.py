@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['godfred10.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['godfred10.pythonanywhere.com', 'e3d4-154-161-14-203.ngrok-free.app', '127.0.0.1']
 
 
 # Application definition
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'register',
     'dashboard',
     'user',
+    'ussd',
 ]
 
 MIDDLEWARE = [
