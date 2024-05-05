@@ -4,7 +4,7 @@ from payment.models import Nominees
 
 
 @csrf_exempt
-def index(request):
+def ussd(request):
     if request.method == 'POST':
         session_id = request.POST.get('sessionId')
         service_code = request.POST.get('serviceCode')
