@@ -744,8 +744,22 @@ table tbody tr:hover {
 
 }
 
-
-
+.preview-download-button{
+    padding: 5% 0;
+    display: flex;
+    gap: 2rem;
+}
+.preview-download-button button{
+    width: 200px;
+    min-height: 7vh;
+    background-color: var(--orangeColor);
+    cursor: pointer;
+    color: var(--white);
+    border: none;
+}
+.preview-download-button button:first-child{
+    background-color: var(--voiletColor);
+}
 
 /* Apply responsive styles for smaller screens */
 
