@@ -19,14 +19,28 @@
                     <img src="{{ x.image.url }}" alt="geima">
                 </div>
                 <!-- awards name -->
-                <div class="awards-name">
+                <div class="awards-name nominee-name">
                     <a href="{% url 'transaction_category' x.slug %}">
+                        <div class="award-name">
+                            {{ x.name }}
+                        </div>
                         <!-- <h2>{{ x.sub_category }}</h2> -->
-                        {{ x.name }}
+                    
                     </a>
-                    <a href="{% url 'generate' x.id %}">Preview</a>
-                    <a href="{% url 'pdf' x.id %}">Download Transactions</a>
+                    
                 </div>
+               
+                   
+                    <div class="preview-download-button">
+                       
+                            <a href="{% url 'pdf' x.id %}">
+                                <div class="download">
+                                   <p> Download Transactions</p>
+                                </div>
+
+                            </a>
+                      
+                    </div>
             </div>
             {% endfor %}
         </div>
