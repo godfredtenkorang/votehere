@@ -6,33 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{% static 'vote/img/our-logo.jpg' %}" type="image/jpeg">
     <title>Document</title>
+   
+<style>
+ 
+.revenue-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.transation-details-container h1{
+    color: #522a83;
+}
+
+.revenue-table th,
+.revenue-table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+.revenue-table td{
+    font-size: 8px;
+  white-space: normal;
+  word-wrap: break-word;  
+}
+.revenue-table th {
+background-color: #522a83;
+color: #fff;
+}
+
+.revenue-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+</style>
 </head>
 <body>
-    <div class="pdf-header">
-    <img src="{% static 'vote/img/voteafric-logo.png' %}" height="70px" alt="">
-</div>
+    
     <div class="main">
         
         
-    
-            <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
+    <div class="transation-details-container">
+        <h1>Vote Afric</h1>
+        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+
+            <table class="revenue-table"> 
+              
+                <p>Award Name Nominee Transaction Detail</p>
+                <p>Category Name</p>
+                <p>Nominee Name</p>
+            
                 <thead>
                     <tr>
-                        <th>Category</th>
-                        <th>Reference</th>
+                       
+                       
                         <th>Amount</th>
                         <th>Verification</th>
                         <th>Date & Time</th>
+                        <th>Reference</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for form in forms %}
                     <tr>
-                        <td>{{ form.content }}</td>
-                        <td>{{ form.ref }}</td>
-                        <td>GH¢{{ form.total_amount }}</td>
-                        <td>{{ form.verified }}</td>
-                        <td>{{ form.date_created }}</td>
+                        
+                      
+                        <td style="width: 200px; word-wrap: break-word;">GH{{ form.total_amount }}</td>
+                        <td style="width: 150px; word-wrap: break-word;">{{ form.verified }}</td>
+                        <td style="width: 200px; word-wrap: break-word;">{{ form.date_created }}</td>
+                        <td style="width: 90%; word-wrap: break-word;">{{ form.ref }}</td>
+                        
                     </tr>
                     {% endfor %}
                     <!-- Add more rows as needed -->

@@ -274,21 +274,27 @@ header {
 
 .ongoin-awards-container a,
 .categories-container a,
-.registered-category a,
-.transaction-for-awards a {
+.registered-category a {
     padding: 5px;
     width: 100%;
-    max-width: 250px;
+    max-width: 300px;
     box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     min-height: 40vh;
     background-color: var(--white);
 }
-
+.awards-transaction-container{
+    padding: 5px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    min-height: 40vh;
+    background-color: var(--white);  
+}
 .ongoin-awards-container a:hover,
 .categories-container a:hover,
-.registered-category a:hover,
-.transaction-for-awards a:hover {
+.registered-category a:hover {
     padding: 5px;
     width: 100%;
     max-width: 250px;
@@ -744,21 +750,23 @@ table tbody tr:hover {
 
 }
 
-.preview-download-button{
-    padding: 5% 0;
-    display: flex;
-    gap: 2rem;
-}
-.preview-download-button button{
-    width: 200px;
-    min-height: 7vh;
-    background-color: var(--orangeColor);
-    cursor: pointer;
+
+ .award-name, .download{
     color: var(--white);
-    border: none;
-}
-.preview-download-button button:first-child{
     background-color: var(--voiletColor);
+    width: 100%;
+    min-height: 7vh;
+   padding: 15px 20px;
+   text-align: center;
+   
+}
+
+.download {
+    color:var(--white);
+    background-color: var(--orangeColor);
+    margin-top: 5%;
+
+  
 }
 
 /* Apply responsive styles for smaller screens */
