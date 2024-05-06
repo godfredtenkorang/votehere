@@ -45,15 +45,17 @@ color: #fff;
         
         
     <div class="transation-details-container">
-        <h1>Vote Afric</h1>
-        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+        <div>
+            <img src="dashboard/assets/img/voteafric-logo.png" height="50px" alt="geima">
+        </div>
+        
 
             <table class="revenue-table"> 
-              
-                <p>Award Name Nominee Transaction Detail</p>
-                <p>Category Name</p>
-                <p>Nominee Name</p>
-            
+            {% if nominee %}
+                <p>{{ nominee.category.award }} Nominee Transaction Detail</p>
+                <p>{{ nominee.sub_category }}</p>
+                <p>{{ nominee.name }}</p>
+            {% endif %}
                 <thead>
                     <tr>
                        
