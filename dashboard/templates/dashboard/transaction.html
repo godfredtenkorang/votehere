@@ -1,51 +1,52 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
-        <div class="main">
-            <!-- transaction interface -->
-            <div class="transaction-interface-container">
-                <div class="heading">
-                    <h1>Transaction</h1>
-                    <p> When clicking on a specific award scheme, you will be able to view transactions for each
-                        category associated with that award. </p>
+<div class="main">
+    <!-- transaction interface -->
+    <div class="transaction-interface-container">
+        <div class="heading">
+            <h1>Transaction</h1>
+            <p> When clicking on a specific award scheme, you will be able to view transactions for each
+                category associated with that award. </p>
+        </div>
+
+        <div class="transaction-for-awards">
+            {% for x in nominees %}
+
+            <div class="awards-transaction-container">
+                <!-- awards img -->
+                <div class="awards-img">
+                    <img src="{{ x.image.url }}" alt="geima">
                 </div>
-
-                <div class="transaction-for-awards">
-                    {% for x in nominees %}
-
+                <!-- awards name -->
+                <div class="awards-name">
                     <a href="{% url 'transaction_category' x.slug %}">
-                        <div class="awards-transaction-container">
-                            <!-- awards img -->
-                            <div class="awards-img">
-                                <img src="{{ x.image.url }}" alt="geima">
-                            </div>
-                            <!-- awards name -->
-                            <div class="awards-name">
-                                <!-- <h2>{{ x.sub_category }}</h2> -->
-                                <h2>{{ x.name }}</h2>
-                            </div>
-                        </div>
+                        <!-- <h2>{{ x.sub_category }}</h2> -->
+                        {{ x.name }}
                     </a>
-                    {% endfor %}
+                    <a href="{% url 'generate' x.id %}">Preview</a>
+                    <a href="{% url 'pdf' x.id %}">Download Transactions</a>
                 </div>
-
-
             </div>
-        </div>
-    </div>
-    <div class="logout-pop">
-        <div class="logout">
-            <p>Are you sure you want to log out from the admin pannel ?</p>
-            <div class="log-button">
-                <a href="{% url 'logout' %}">
-                    <button>Log Out</button>
-                </a>
-
-                <p>Or</p>
-
-                <button class="DontLogout">No</button>
-            </div>
+            {% endfor %}
         </div>
 
+
     </div>
+</div>
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

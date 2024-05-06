@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+from .views import GeneratePdf
+
 
 urlpatterns = [
     # Activities
@@ -25,4 +27,7 @@ urlpatterns = [
     path('TransactionMain/', views.TransactionMain, name='TransactionMain'),
     path('TransactionCat/<slug:category_slug>/', views.TransactionCat, name='TransactionCat'),
 
+    # PDF
+    path('generate/<pdf>/', views.generate, name='generate'),
+    path('pdf/<form>/', GeneratePdf.as_view(), name='pdf'),
 ]

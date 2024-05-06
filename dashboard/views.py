@@ -6,6 +6,10 @@ from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
+from django.http import HttpResponse
+from django.views.generic import View
+from .utils import render_to_pdf
+
 # Create your views here.
 
 def admin(request):
@@ -170,3 +174,36 @@ def transaction_category(request, transaction_slug):
         'title': 'adminPage'
     }
     return render(request, 'dashboard/transaction-category.html', context)
+
+
+class GeneratePdf(View):
+    def get(self, request, form, *args, **kwargs):
+        nominee = None
+        forms = Payment.objects.all()
+        if form:
+            nominee = get_object_or_404(Nominees, pk=form)
+            forms = forms.filter(nominee=nominee)
+
+        context = {
+            'forms':forms
+        }
+        pdf = render_to_pdf('dashboard/generate.html', context)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
+def generate(request, pdf):
+    nominee = None
+    forms = Payment.objects.all()
+    if pdf:
+        nominee = get_object_or_404(Nominees, pk=pdf)
+        forms = forms.filter(nominee=nominee)
+        total_amount = forms.aggregate(Total=Sum('total_amount'))
+
+    context = {
+        'nominee': nominee,
+        'forms': forms,
+        'total_amount': total_amount,
+        'title': 'adminPage'
+    }
+
+    return render(request, 'dashboard/generate.html', context)
