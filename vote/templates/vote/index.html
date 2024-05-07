@@ -1,5 +1,9 @@
 {% extends 'vote/base.html' %}
 {% load static %}
+{% block og-caption %}{{ c.award }}{% endblock %}
+{% block og-description %}posted by {{ c.author }} - @{{ c.award }}{% endblock %}
+{% block og-image %}{{ c.image }}{% endblock %}
+{% block tw-image %}{{ c.image }}{% endblock %}
 {% block content %}
 
 <!-- banner section -->

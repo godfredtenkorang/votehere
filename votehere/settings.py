@@ -34,6 +34,8 @@ ALLOWED_HOSTS = ['.voteafric.com','165.227.125.214', 'localhost','127.0.0.1']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -45,6 +47,8 @@ INSTALLED_APPS = [
     'user',
     'ussd',
 ]
+
+SITE_ID=1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

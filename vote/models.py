@@ -17,8 +17,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.award
-    # def get_absolute_url(self):
-    #     return reverse('award:award_by_category', args=[self.slug])
+    
+    def get_absolute_url(self):
+        return f"/category/{self.slug}"
 
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -33,3 +34,6 @@ class SubCategory(models.Model):
     def __str__(self):
         return self.content
     
+    
+    def get_absolute_url(self):
+        return f"/subcategory/{self.id}"

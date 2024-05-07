@@ -17,8 +17,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from vote.sitemaps import *
+from django.views.generic.base import TemplateView
+
+# Sitemaps
+from django.contrib.sitemaps.views import sitemap
+
+sitemaps = {
+    'static': StaticSitemap,
+    'categories': CategorySitemap,
+    'subcategorypages': SubcategorySitemap
+}
 
 urlpatterns = [
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt/', TemplateView.as_view(template_name="vote/robots.txt", content_type="text/plain")),
     path('admin/', admin.site.urls),
     path('', include('vote.urls')),
     path('payment/', include('payment.urls')),

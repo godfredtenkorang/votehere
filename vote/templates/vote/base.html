@@ -6,10 +6,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if title %}
-    <title>VoteAfric - {{ title }}</title>
+    <title>VoteAfric | {{ title }}</title>
     {% else %}
     <title>VoteAfric</title>
     {% endif %}
+    <meta name="description" content="Online voting platform and hosting events">
+    <meta name="keywords" content="voting, image, category, social platform, award">
+    <meta name="author" content="Godfred Tenkorang">
+
+    <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}{{ request.path }}">
+    <meta property="og:title" content="{% block og-caption %}VoteAfric{% endblock %}">
+    <meta property="og:description" content="{% block og-description %}Online voting platform and hosting events{% endblock %}">
+    <meta property="og:image" content="{% block og-image %}http://{{ request.META.HTTP_HOST }}{% static 'vote/img/voteafric-logo.png' %}{% endblock %}">
+    <meta property="twitter:image" content="{% block tw-image %}http://{{ request.META.HTTP_HOST }}{% static 'vote/img/our-logo.jpg' %}{% endblock %}">
+
     <!-- here is the link to css -->
     <link rel="stylesheet" href="{% static 'vote/style.css' %}">
 
@@ -32,7 +42,7 @@
             <nav>
                 <div class="logo">
                     <a href="{% url 'index' %}">
-                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="voteafric">
 
 
                     </a>
