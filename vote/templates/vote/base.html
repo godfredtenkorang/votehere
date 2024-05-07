@@ -3,6 +3,15 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2KG9MT6V1Z"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-2KG9MT6V1Z');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if title %}
@@ -15,6 +24,7 @@
     <meta name="author" content="Godfred Tenkorang">
 
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}{{ request.path }}">
+    <meta property="og:type" content="website" />
     <meta property="og:title" content="{% block og-caption %}VoteAfric{% endblock %}">
     <meta property="og:description" content="{% block og-description %}Online voting platform and hosting events{% endblock %}">
     <meta property="og:image" content="{% block og-image %}http://{{ request.META.HTTP_HOST }}{% static 'vote/img/voteafric-logo.png' %}{% endblock %}">
