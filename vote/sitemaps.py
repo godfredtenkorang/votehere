@@ -5,7 +5,7 @@ from .models import Category, SubCategory
 
 class StaticSitemap(Sitemap):
     def items(self):
-        return ['index']
+        return ['index', 'about', 'policy', 'termsCondition', 'contact']
     
     def location(self, item):
         return reverse(item)

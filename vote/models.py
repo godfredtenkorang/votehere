@@ -36,4 +36,4 @@ class SubCategory(models.Model):
     
     
     def get_absolute_url(self):
-        return f"/subcategory/{self.id}"
+        return reverse('award_by_category', args=[self.id])
