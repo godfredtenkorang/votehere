@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from payment.models import Nominees
 import requests
 
@@ -48,7 +48,7 @@ def ussd(request):
                     message = "You are voting for Godfred as Most Talented"
                     response = sendResponse(message, True)
                     
-            return HttpResponse(response)
+                return JsonResponse(response)
         
         
 
