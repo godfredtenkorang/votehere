@@ -23,22 +23,22 @@ def ussd(request):
         
         if userid == 'GODEY100':
         
-            response = {}
+            response_data = {}
             
             session = requests.Session()
             if msgtype == True:
                 session.next = 'initialise'
                 message = "Welcome to voteafric \n Enter nominee's code"
-                response = sendResponse(message, True)
+                response_data = sendResponse(message, True)
                 
             else:
                 level = session.next
                 if level == 'initialise':
                     message = "Enter number of votes"
-                    response = sendResponse(message, True)
+                    response_data = sendResponse(message, True)
                     session.next = 'vote'
                 elif level == 'vote':
                     message = "You are voting for Godfred as Most Talented"
-                    response = sendResponse(message, True)
+                    response_data = sendResponse(message, True)
                     
-                return JsonResponse(response)
+                return JsonResponse(response_data)
