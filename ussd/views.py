@@ -1,6 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from payment.models import Nominees
+from requests_oauthlib import OAuth1Session
 import requests
 
 
@@ -48,7 +49,18 @@ def ussd(request):
                     message = "You are voting for Godfred as Most Talented"
                     response = sendResponse(message, True)
                     
-                return HttpResponse(response)
+            oauth = OAuth1Session(
+                'aamecjsju58x!shnojyy9yhj4f!d)0!j2n1hs9cj2ityto2pf3qcs2oc2at@ryb1'
+            )
+                    
+            api_url = 'https://api.nalosolutions.com/ussd/send'
+            
+            response = oauth.post(api_url)
+            
+            if response.status_code == 200:
+                return HttpResponse(response.text)
+            else:
+                return HttpResponse('Error sending USSD response')
     
     
 
