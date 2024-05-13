@@ -19,38 +19,38 @@ def ussd(request):
         sessionid = request.POST.get('SESSIONID')
         network = request.POST.get('NETWORK')
         
-        if userid != 'GODEY100':
-            def sendResponse(msg, status=True):
-                return {
-                    'USERID': userid,
-                    'MSISDN': msisdn,
-                    'MSG': msg,
-                    'MSGTYPE': status
-                }
-                
+        # if userid != 'GODEY100':
+        def sendResponse(msg, status=True):
+            return {
+                'USERID': userid,
+                'MSISDN': msisdn,
+                'MSG': msg,
+                'MSGTYPE': status
+            }
             
+        
+        
+        response = {}
+        
+        session = requests.Session()
+        if msgtype == True:
+            session.next = 'initialise'
+            message = "Welcome to voteafric \n Enter nominee's code"
+            response = sendResponse(message, True)
             
-            response = {}
-            
-            session = requests.Session()
-            if msgtype == True:
-                session.next = 'initialise'
-                message = "Welcome to voteafric \n Enter nominee's code"
+        else:
+            level = session.next
+            if level == 'initialise':
+                message = "Enter number of votes"
+                response = sendResponse(message, True)
+                session.next = 'vote'
+            elif level == 'vote':
+                message = "You are voting for Godfred as Most Talented"
                 response = sendResponse(message, True)
                 
-            else:
-                level = session.next
-                if level == 'initialise':
-                    message = "Enter number of votes"
-                    response = sendResponse(message, True)
-                    session.next = 'vote'
-                elif level == 'vote':
-                    message = "You are voting for Godfred as Most Talented"
-                    response = sendResponse(message, True)
-                    
-                return JsonResponse(response)
-        
-        
+            return JsonResponse(response)
+    
+    
 
         # if text == "":
         #     response = "CON Welcome to VoteAfric \n contact \n 0553912334 for any challenges \n"
