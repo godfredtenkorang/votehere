@@ -48,7 +48,7 @@ def ussd(request):
                     message = "You are voting for Godfred as Most Talented"
                     response = sendResponse(message, True)
                     
-                return JsonResponse(response)
+            return JsonResponse(response)
     
     
 
