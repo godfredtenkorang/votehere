@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('ussd', views.ussd, name='ussd'),
+    path('ussd/', views.ussd, name='ussd'),
 ]
