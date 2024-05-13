@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from payment.models import Nominees
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def ussd(request):
     if request.method == 'POST':
         # Extracting data from the POST request
@@ -21,7 +23,7 @@ def ussd(request):
             }
 
         # Check if the user is authorized (e.g., using userid)
-        if userid == 'GODEY100':
+        if userid != 'GODEY100':
             if msgtype == 'INITIALIZE':
                 # If it's an initialization message, send the welcome message
                 message = "Welcome to VoteAfrica. Enter nominee's code."
