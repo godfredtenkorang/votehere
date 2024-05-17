@@ -1,54 +1,63 @@
 from django.http import JsonResponse
-from payment.models import Nominees
-import requests
+from django.views.decorators.csrf import csrf_exempt
 
-
+@csrf_exempt
 def ussd(request):
     if request.method == 'POST':
-        
         userid = request.POST.get('USERID')
         msisdn = request.POST.get('MSISDN')
         userdata = request.POST.get('USERDATA')
-        msgtype = request.POST.get('MSDTYPE')
+        msgtype = request.POST.get('MSGTYPE')
         sessionid = request.POST.get('SESSIONID')
         network = request.POST.get('NETWORK')
         
+        def send_response(TheMsg, MsgType=True):
+            return {
+                'USERID': userid,
+                'MSISDN': msisdn, 
+                'MSG': TheMsg,
+                'MSGTYPE': MsgType,
+            }
+
         if userid == 'GODEY100':
-            if msgtype:
-                session = requests.Session()
+            session = request.session
+            if msgtype == 'INITIALIZE':
                 session['level'] = 'start'
-                response = dict(userid="GODEY100", msisdn="+233553912334", msg="Welcome to vote afric \n Enter nominee's code", msgtype=True)
+                response = send_response("Welcome to voteafric \n Enter nominee's code", True)
             else:
-                if 'level' in session:
-                    level = session['level']
-                    if level == 'start':
-                        session['level'] = 'candidate'
-                        session['candidate_id'] = userdata
-                        
-                        name = 'Godfred Yaw Tenkorang'
-                        response = dict(userid="GODEY100", msisdn="+233553912334", msg=f"Confirm candidate\nName: {name}\n1) Confirm\n Cancel", msgtype=True)
-                    elif level == 'candidate':
-                        if userdata == 1:
-                            session['level'] = 'votes'
-                            session['votes'] = userdata
-                            response = dict(userid="GODEY100", msisdn="+233553912334", msg="Enter the number of votes", msgtype=True)
-                        elif userdata == 2:
-                            session.clear()
-                            response = dict(userid="GODEY100", msisdn="+233553912334", msg="You have cancelled", msgtype=False)
-                        else:
-                            session.clear()
-                            response = dict(userid="GODEY100", msisdn="+233553912334", msg="You have entered an invalid data", msgtype=False)
-                    elif level == 'votes':
-                        votes = session['votes']
-                        response = dict(userid="GODEY100", msisdn="+233553912334", msg=f"You have entered {votes} votes", msgtype=False)
+                level = session.get('level')
+                if level == 'start':
+                    session['level'] = 'candidate'
+                    session['candidate_id'] = userdata
+                    name = 'Godfred Yaw Tenkorang'  # This should be fetched from the database
+                    response = send_response(f"Confirm candidate\nName: {name}\n1) Confirm\n2) Cancel", True)
+                elif level == 'candidate':
+                    if userdata == '1':  # '1' as a string, because POST data are strings
+                        session['level'] = 'votes'
+                        response = send_response("Enter the number of votes", True)
+                    elif userdata == '2':  # '2' as a string, because POST data are strings
+                        session.flush()
+                        response = send_response("You have cancelled", False)
                     else:
-                        response = dict(userid="GODEY100", msisdn="+233553912334", msg="Welcome to VoteAfric", msgtype=False)
+                        session.flush()
+                        response = send_response("You have entered invalid data", False)
+                elif level == 'votes':
+                    try:
+                        votes = int(userdata)
+                        # Here you would typically save the votes to your database
+                        response = send_response(f"You have entered {votes} votes", False)
+                        session.flush()  # Clear the session after voting
+                    except ValueError:
+                        response = send_response("Invalid input. Please enter a valid number of votes.", True)
                 else:
-                    response = dict(userid="GODEY100", msisdn="+233553912334", msg="You are not in a session", msgtype=False)
+                    response = send_response("Welcome to VoteAfric", True)
         else:
-            response = dict(userid="GODEY100", msisdn="+233553912334", msg="you have entered a wrong value", msgtype=False)
+            response = send_response("You have entered a wrong value", False)
                         
         return JsonResponse(response)
+    else:
+        return JsonResponse({'error': 'Method not allowed.'}, status=405)
+
 
 # def ussd(request):
 #     if request.method == 'POST':
