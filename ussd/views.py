@@ -12,7 +12,6 @@ def ussd(request):
         msgtype = request.POST.get('MSDTYPE')
         sessionid = request.POST.get('SESSIONID')
         network = request.POST.get('NETWORK')
-        msg = request.POST.get('MSG')
         
         if userid == 'GODEY100':
             if msgtype:
@@ -28,6 +27,26 @@ def ussd(request):
                         
                         name = 'Godfred Yaw Tenkorang'
                         response = dict(userid="GODEY100", msisdn="+233553912334", msg=f"Confirm candidate\nName: {name}\n1) Confirm\n Cancel", msgtype=True)
+                    elif level == 'candidate':
+                        if userdata == 1:
+                            session['level'] = 'votes'
+                            session['votes'] = userdata
+                            response = dict(userid="GODEY100", msisdn="+233553912334", msg="Enter the number of votes", msgtype=True)
+                        elif userdata == 2:
+                            session.clear()
+                            response = dict(userid="GODEY100", msisdn="+233553912334", msg="You have cancelled", msgtype=False)
+                        else:
+                            session.clear()
+                            response = dict(userid="GODEY100", msisdn="+233553912334", msg="You have entered an invalid data", msgtype=False)
+                    elif level == 'votes':
+                        votes = session['votes']
+                        response = dict(userid="GODEY100", msisdn="+233553912334", msg=f"You have entered {votes} votes", msgtype=False)
+                    else:
+                        response = dict(userid="GODEY100", msisdn="+233553912334", msg="Welcome to VoteAfric", msgtype=False)
+                else:
+                    response = dict(userid="GODEY100", msisdn="+233553912334", msg="You are not in a session", msgtype=False)
+        else:
+            response = dict(userid="GODEY100", msisdn="+233553912334", msg="you have entered a wrong value", msgtype=False)
                         
         return JsonResponse(response)
 
