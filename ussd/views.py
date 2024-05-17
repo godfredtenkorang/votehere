@@ -1,10 +1,13 @@
 from django.http import JsonResponse
 import requests
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 @csrf_exempt
 def ussd(request):
     if request.method == 'POST':
+        
+        # data = json.loads(request.body)
         
         userid = request.POST.get('USERID')
         msisdn = request.POST.get('MSISDN')
@@ -15,10 +18,10 @@ def ussd(request):
         
         def send_response(TheMsg, MsgType=True):
             return {
-                'USERID':userid,
-                'MSISDN':msisdn, 
-                'MSG':TheMsg,
-                'MSGTYPE':MsgType,
+                'USERID': userid,
+                'MSISDN': msisdn,
+                'MSG': f"{TheMsg}",
+                'MSGTYPE': MsgType
             }
             
         
@@ -27,44 +30,48 @@ def ussd(request):
                 session = request.session
                 session['level'] = 'start'
                 message = "Welcome to vote afric \n Enter nominee's code"
-                response_data = send_response(message, msgtype=True) 
+                response_data = send_response(message, True) 
             else:
                 if 'level' in session:
                     level = session['level']
+                    userdata = userdata
                     if level == 'start':
-                        session['level'] = 'candidate'
-                        session['candidate_id'] = userdata
+                        
                         
                         name = 'Godfred Yaw Tenkorang'
-                        message = f"Confirm candidate\nName: {name}\n1) Confirm\n Cancel"
-                        response_data = send_response(message, msgtype=True) 
+                        message = f"Confirm candidate\nName: {name}\n1) Confirm\n2) Cancel"
+                        session['candidate_id'] = userdata
+                        session['level'] = 'candidate'
+                        
+                        response_data = send_response(message) 
                     elif level == 'candidate':
                         if userdata == 1:
                             session['level'] = 'votes'
-                            session['votes'] = userdata
+                            # session['votes'] = userdata
                             message = "Enter the number of votes"
-                            response_data = send_response(message, msgtype=True) 
+                            response_data = send_response(message, True) 
                         elif userdata == 2:
-                            session.clear()
+                            
                             message = "You have cancelled"
-                            response_data = send_response(message, msgtype=False) 
+                            response_data = send_response(message, False) 
+                            session.clear()
                         else:
                             session.clear()
                             message = "You have entered an invalid data"
-                            response_data = send_response(message, msgtype=False) 
+                            response_data = send_response(message, False) 
                     elif level == 'votes':
-                        votes = session['votes']
+                        votes = userdata
                         message = f"You have entered {votes} votes"
-                        response_data = send_response(message, msgtype=False) 
+                        response_data = send_response(message, True) 
                     else:
                         message = "Welcome to VoteAfric"
-                        response_data = send_response(message, msgtype=False) 
+                        response_data = send_response(message, False) 
                 else:
                     message = "You are not in a session"
-                    response_data = send_response(message, msgtype=False) 
+                    response_data = send_response(message, False) 
         else:
             message = "you have entered a wrong value"
-            response_data = send_response(message) 
+            response_data = send_response(message, False) 
                         
         return JsonResponse(response_data)
 
