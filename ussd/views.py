@@ -1,79 +1,71 @@
 from django.http import JsonResponse
-import requests
 from django.views.decorators.csrf import csrf_exempt
-import json
 
 @csrf_exempt
 def ussd(request):
     if request.method == 'POST':
-        
-        # data = json.loads(request.body)
-        
         userid = request.POST.get('USERID')
         msisdn = request.POST.get('MSISDN')
         userdata = request.POST.get('USERDATA')
         msgtype = request.POST.get('MSDTYPE')
         sessionid = request.POST.get('SESSIONID')
         network = request.POST.get('NETWORK')
-        
+
         def send_response(TheMsg, MsgType=True):
             return {
                 'USERID': userid,
                 'MSISDN': msisdn,
-                'MSG': f"{TheMsg}",
+                'MSG': TheMsg,
                 'MSGTYPE': MsgType
             }
-            
-        
+
         if userid == 'GODEY100':
-            if msgtype:
-                session = request.session
+            session = request.session
+
+            if msgtype == 'true':  # Corrected to string comparison
                 session['level'] = 'start'
-                message = "Welcome to vote afric \n Enter nominee's code"
-                response_data = send_response(message, True) 
+                message = "Welcome to VoteAfric \n Enter nominee's code"
+                response_data = send_response(message, True)
             else:
                 if 'level' in session:
                     level = session['level']
-                    userdata = userdata
                     if level == 'start':
-                        
-                        
+                        session['candidate_id'] = userdata
                         name = 'Godfred Yaw Tenkorang'
                         message = f"Confirm candidate\nName: {name}\n1) Confirm\n2) Cancel"
-                        session['candidate_id'] = userdata
                         session['level'] = 'candidate'
-                        
-                        response_data = send_response(message) 
+                        response_data = send_response(message, True)
                     elif level == 'candidate':
-                        if userdata == 1:
+                        if userdata == '1':
                             session['level'] = 'votes'
-                            # session['votes'] = userdata
                             message = "Enter the number of votes"
-                            response_data = send_response(message, True) 
-                        elif userdata == 2:
-                            
+                            response_data = send_response(message, True)
+                        elif userdata == '2':
                             message = "You have cancelled"
-                            response_data = send_response(message, False) 
-                            session.clear()
+                            response_data = send_response(message, False)
+                            session.flush()
                         else:
-                            session.clear()
-                            message = "You have entered an invalid data"
-                            response_data = send_response(message, False) 
+                            message = "You have entered invalid data"
+                            response_data = send_response(message, False)
+                            session.flush()
                     elif level == 'votes':
                         votes = userdata
                         message = f"You have entered {votes} votes"
-                        response_data = send_response(message, True) 
+                        response_data = send_response(message, True)
+                        session.flush()  # Clear session after voting
                     else:
-                        message = "Welcome to VoteAfric"
-                        response_data = send_response(message, False) 
+                        message = "Invalid session state"
+                        response_data = send_response(message, False)
                 else:
                     message = "You are not in a session"
-                    response_data = send_response(message, False) 
+                    response_data = send_response(message, False)
         else:
-            message = "you have entered a wrong value"
-            response_data = send_response(message, False) 
-                        
+            message = "You have entered a wrong value"
+            response_data = send_response(message, False)
+
         return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 # def ussd(request):
 #     if request.method == 'POST':
