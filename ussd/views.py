@@ -17,7 +17,7 @@ def ussd(request):
         }
 
     # Simulate valid USERIDs for the sake of this example
-    valid_user_ids = ['gobrite', 'GODEY100']
+    valid_user_ids = ['GODEY100']
 
     if data['USERID'] in valid_user_ids:
         session = request.session
