@@ -1,75 +1,69 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+import json
 
 @csrf_exempt
+@require_POST
 def ussd(request):
-    if request.method == 'POST':
-        
-        userid = request.POST.get('USERID')
-        msisdn = request.POST.get('MSISDN')
-        userdata = request.POST.get('USERDATA')
-        msgtype = request.POST.get('MSDTYPE')
-        sessionid = request.POST.get('SESSIONID')
-        network = request.POST.get('NETWORK')
-        
-        def send_response(TheMsg, MsgType=True):
-            return {
-                'USERID': userid,
-                'MSISDN': msisdn,
-                'MSG': f"{TheMsg}",
-                'MSGTYPE': MsgType
-            }
-            
-        
-        if userid == 'GODEY100':
-            if msgtype:
-                session = request.session
-                session['level'] = 'start'
-                message = "Welcome to vote afric \n Enter nominee's code"
-                response_data = send_response(message, True) 
-            else:
-                if 'level' in session:
-                    level = session['level']
-                    userdata = userdata
-                    if level == 'start':
-                        
-                        
-                        name = 'Godfred Yaw Tenkorang'
-                        message = f"Confirm candidate\nName: {name}\n1) Confirm\n2) Cancel"
-                        session['candidate_id'] = userdata
-                        session['level'] = 'candidate'
-                        
-                        response_data = send_response(message) 
-                    elif level == 'candidate':
-                        if userdata == 1:
-                            session['level'] = 'votes'
-                            # session['votes'] = userdata
-                            message = "Enter the number of votes"
-                            response_data = send_response(message, True) 
-                        elif userdata == 2:
-                            
-                            message = "You have cancelled"
-                            response_data = send_response(message, False) 
-                            session.clear()
-                        else:
-                            session.clear()
-                            message = "You have entered an invalid data"
-                            response_data = send_response(message, False) 
-                    elif level == 'votes':
-                        votes = userdata
-                        message = f"You have entered {votes} votes"
-                        response_data = send_response(message, True) 
-                    else:
-                        message = "Welcome to VoteAfric"
-                        response_data = send_response(message, False) 
-                else:
-                    message = "You are not in a session"
-                    response_data = send_response(message, False) 
+    data = json.loads(request.body)
+
+    def send_response(TheMsg, MsgType=True):
+        return {
+            'USERID': data['USERID'],
+            'MSISDN': data['MSISDN'],
+            'MSG': f"{TheMsg}",
+            'MSGTYPE': MsgType
+        }
+
+    # Simulate valid USERIDs for the sake of this example
+    valid_user_ids = ['gobrite', 'GODEY100']
+
+    if data['USERID'] in valid_user_ids:
+        session = request.session
+        if data['MSGTYPE']:
+            session['level'] = 'start'
+            message = "Welcome to Gooey Vote.\nEnter Nominee Id"
+            response = send_response(message, True)
         else:
-            message = "you have entered a wrong value"
-            response_data = send_response(message, False) 
-                        
-        return JsonResponse(response_data)
+            if 'level' in session:
+                level = session['level']
+                userdata = data['USERDATA']
+                if level == 'start':
+                    # Simulate fetching user from database with this ID
+                    name = "Kojo Men Sah"
+                    message = f"Confirm candidate\nName: {name}\n1) Confirm\n2) Cancel"
+                    session['candidate_id'] = userdata
+                    session['level'] = 'candidate'
+                    response = send_response(message)
+                elif level == 'candidate':
+                    if userdata == '1':
+                        session['level'] = 'votes'
+                        message = "Enter the number of votes"
+                        response = send_response(message, True)
+                    elif userdata == '2':
+                        message = "You have cancelled"
+                        response = send_response(message, False)
+                        session.flush()
+                    else:
+                        session.flush()
+                        message = "You have entered invalid data"
+                        response = send_response(message, False)
+                elif level == 'votes':
+                    votes = userdata
+                    message = f"You have entered {votes} votes"
+                    response = send_response(message, True)
+                else:
+                    message = "WKHKYD"
+                    response = send_response(message, False)
+            else:
+                message = "You are not in a session"
+                response = send_response(message, False)
+    else:
+        message = "Unknown or invalid account"
+        response = send_response(message, False)
+
+    return JsonResponse(response, status=200)
 
 # def ussd(request):
 #     if request.method == 'POST':
