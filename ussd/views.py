@@ -3,6 +3,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
 
+# Simulate a database of nominees
+
+nominees = {
+    '001': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
+    '002': {'name': 'Ohene Asare', 'category': 'Best Performer'},
+    '003': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
+}
+
 @csrf_exempt
 @require_POST
 def ussd(request):
@@ -23,7 +31,7 @@ def ussd(request):
         session = request.session
         if data['MSGTYPE']:
             session['level'] = 'start'
-            message = "Welcome to Gooey Vote.\nEnter Nominee Id"
+            message = "Welcome to VoteAfric.\n Enter Nominee's code"
             response = send_response(message, True)
         else:
             if 'level' in session:
@@ -31,11 +39,18 @@ def ussd(request):
                 userdata = data['USERDATA']
                 if level == 'start':
                     # Simulate fetching user from database with this ID
-                    name = "Kojo Men Sah"
-                    message = f"Confirm candidate\nName: {name}\n1) Confirm\n2) Cancel"
-                    session['candidate_id'] = userdata
-                    session['level'] = 'candidate'
-                    response = send_response(message)
+                    nominee_code = userdata
+                    if nominee_code in nominees:
+                        nominee = nominees[nominee_code]
+                        name = nominee['name']
+                        category = nominee['category']
+                        message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
+                        session['candidate_id'] = nominee_code
+                        session['level'] = 'candidate'
+                        response = send_response(message)
+                    else:
+                        message = 'Invalid nominee code. Please try again.'
+                        response = send_response(message, False)
                 elif level == 'candidate':
                     if userdata == '1':
                         session['level'] = 'votes'
