@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'register',
     'dashboard',
     'user',
+    'ussd',
 ]
 
 SITE_ID=1
