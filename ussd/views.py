@@ -28,14 +28,14 @@ def ussd(request):
     # valid_user_id = ['GODEY100']
 
     if data['USERID'] == 'GODEY100':
-        session = request.session
+        
         if data['MSGTYPE']:
-            session['level'] = 'start'
+            request.session['level'] = 'start'
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
             response = send_response(message, True)
         else:
-            if 'level' in session:
-                level = session['level']
+            if 'level' in request.session:
+                level = request.session['level']
                 userdata = data['USERDATA']
                 if level == 'start':
                     # Simulate fetching user from database with this ID
@@ -45,23 +45,23 @@ def ussd(request):
                         name = nominee['name']
                         category = nominee['category']
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
-                        session['candidate_id'] = nominee_id
-                        session['level'] = 'candidate'
+                        request.session['candidate_id'] = nominee_id
+                        request.session['level'] = 'candidate'
                         response = send_response(message)
                     else:
                         message = 'Invalid nominee code. Please try again.'
                         response = send_response(message, False)
                 elif level == 'candidate':
                     if userdata == '1':
-                        session['level'] = 'votes'
+                        request.session['level'] = 'votes'
                         message = "Enter the number of votes"
                         response = send_response(message, True)
                     elif userdata == '2':
                         message = "You have cancelled"
                         response = send_response(message, False)
-                        session.flush()
+                        request.session.flush()
                     else:
-                        session.flush()
+                        request.session.flush()
                         message = "You have entered invalid data"
                         response = send_response(message, False)
                 elif level == 'votes':

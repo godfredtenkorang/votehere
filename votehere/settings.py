@@ -93,7 +93,6 @@ WSGI_APPLICATION = 'votehere.wsgi.application'
 
 DATABASES = {
     'default': {
-        'SESSION_ENGINE': 'django.contrib.sessions.backends.db',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'voteafricdb',
         'USER': 'voteafricuser',
