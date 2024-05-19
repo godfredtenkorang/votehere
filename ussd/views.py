@@ -15,7 +15,7 @@ nominees = {
 @csrf_exempt
 @require_POST
 def ussd(request):
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode('utf-8'))
 
     def send_response(TheMsg, MsgType=True):
         return {
