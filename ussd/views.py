@@ -39,13 +39,13 @@ def ussd(request):
                 userdata = data['USERDATA']
                 if level == 'start':
                     # Simulate fetching user from database with this ID
-                    nominee_code = userdata
-                    if nominee_code in nominees:
-                        nominee = nominees[nominee_code]
+                    nominee_id = userdata
+                    if nominee_id in nominees:
+                        nominee = nominees[nominee_id]
                         name = nominee['name']
                         category = nominee['category']
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
-                        session['candidate_id'] = nominee_code
+                        session['candidate_id'] = nominee_id
                         session['level'] = 'candidate'
                         response = send_response(message)
                     else:
