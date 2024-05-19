@@ -60,6 +60,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+ 
+
+SESSION_COOKIE_AGE = 1200  # 20 minutes
+SESSION_SAVE_EVERY_REQUEST = True
+
 ROOT_URLCONF = 'votehere.urls'
 
 TEMPLATES = [
