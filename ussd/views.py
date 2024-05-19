@@ -32,6 +32,8 @@ def ussd(request):
     if data['USERID'] == 'GODEY100':
         if data['MSGTYPE']:
             session['level'] = 'start'
+            session['candidate_id'] = None
+            session.save()
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
             response = send_response(message, True)
         else:
@@ -48,6 +50,7 @@ def ussd(request):
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
                         session['candidate_id'] = nominee_id
                         session['level'] = 'candidate'
+                        session.save()
                         response = send_response(message)
                     else:
                         message = 'Invalid nominee code. Please try again.'
@@ -55,6 +58,7 @@ def ussd(request):
                 elif level == 'candidate':
                     if userdata == '1':
                         session['level'] = 'votes'
+                        session.save()
                         message = "Enter the number of votes"
                         response = send_response(message, True)
                     elif userdata == '2':
