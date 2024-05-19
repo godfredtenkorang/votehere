@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 import json
 import requests
 
@@ -55,34 +55,34 @@ def ussd(request):
                         response = send_response(message)
                     else:
                         message = 'Invalid nominee code. Please try again.'
-                        response = send_response(message, False)
+                        response = send_response(message, True)
                 elif level == 'candidate':
                     if userdata == '1':
                         session['level'] = 'votes'
                         session.save()
                         message = "Enter the number of votes"
-                        response = send_response(message, True)
+                        response = send_response(message, False)
                     elif userdata == '2':
                         message = "You have cancelled"
-                        response = send_response(message, False)
+                        response = send_response(message, True)
                         session.flush()
                     else:
                         session.flush()
                         message = "You have entered invalid data"
-                        response = send_response(message, False)
+                        response = send_response(message, True)
                 elif level == 'votes':
                     votes = userdata
                     message = f"You have entered {votes} votes"
-                    response = send_response(message, True)
+                    response = send_response(message, False)
                 else:
                     message = "WKHKYD"
-                    response = send_response(message, False)
+                    response = send_response(message, True)
             else:
                 message = "You are not in a session"
-                response = send_response(message, False)
+                response = send_response(message, True)
     else:
         message = "Unknown or invalid account"
-        response = send_response(message, False)
+        response = send_response(message, True)
 
     return JsonResponse(response, status=200)
 
