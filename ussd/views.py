@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from payment.models import Nominee
+from payment.models import Nominees
 import json
 
 # Simulate a database of nominees
@@ -41,7 +41,7 @@ def ussd(request):
                 if level == 'start':
                     # Simulate fetching user from database with this ID
                     try:
-                        nominee = Nominee.objects.get(code=userdata)
+                        nominee = Nominees.objects.get(code=userdata)
                         name = nominee.name
                         category = nominee.category
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
