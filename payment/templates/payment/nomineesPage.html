@@ -52,7 +52,7 @@
                 <h3>{{ n.name }}</h3>
 
                 <div class="vote-button">
-                    {% if current_time > n.end_date %}
+                    {% if current_time < n.end_date %}
                     <a href="{% url 'vote-page' n.slug %}">Vote</a>
                    
                     {% else %}

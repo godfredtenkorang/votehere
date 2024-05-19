@@ -1,16 +1,15 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from payment.models import Nominees
 import json
 
 # Simulate a database of nominees
 
-# nominees = {
-#     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
-#     'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
-#     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
-# }
+nominees = {
+    'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
+    'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
+    'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
+}
 
 @csrf_exempt
 @require_POST
@@ -40,15 +39,16 @@ def ussd(request):
                 userdata = data['USERDATA']
                 if level == 'start':
                     # Simulate fetching user from database with this ID
-                    try:
-                        nominee = Nominees.objects.get(code=userdata)
-                        name = nominee.name
-                        category = nominee.category
+                    nominee_id = userdata
+                    if nominee_id in nominees:
+                        nominee = nominees[nominee_id]
+                        name = nominee['name']
+                        category = nominee['category']
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
-                        session['candidate_id'] = userdata
+                        session['candidate_id'] = nominee_id
                         session['level'] = 'candidate'
                         response = send_response(message)
-                    except:
+                    else:
                         message = 'Invalid nominee code. Please try again.'
                         response = send_response(message, False)
                 elif level == 'candidate':
