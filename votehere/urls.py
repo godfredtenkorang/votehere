@@ -38,5 +38,4 @@ urlpatterns = [
     path('register/', include('register.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('user/', include('user.urls')),
-    path('ussd/', include('ussd.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
