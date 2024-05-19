@@ -25,9 +25,9 @@ def ussd(request):
         }
 
     # Simulate valid USERIDs for the sake of this example
-    valid_user_id = ['GODEY100']
+    # valid_user_id = ['GODEY100']
 
-    if data['USERID'] in valid_user_id:
+    if data['USERID'] == 'GODEY100':
         session = request.session
         if data['MSGTYPE']:
             session['level'] = 'start'
