@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
+import requests
 
 # Simulate a database of nominees
 
@@ -28,7 +29,7 @@ def ussd(request):
     valid_user_id = ['GODEY100']
 
     if data['USERID'] in valid_user_id:
-        session = request.session
+        session = requests.Session()
         if data['MSGTYPE']:
             session['level'] = 'start'
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
