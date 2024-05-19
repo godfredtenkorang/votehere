@@ -25,13 +25,13 @@ def ussd(request):
         }
 
     # Simulate valid USERIDs for the sake of this example
-    valid_user_ids = ['GODEY100']
+    valid_user_id = ['GODEY100']
 
-    if data['USERID'] in valid_user_ids:
+    if data['USERID'] in valid_user_id:
         session = request.session
         if data['MSGTYPE']:
             session['level'] = 'start'
-            message = "Welcome to VoteAfric.\n Enter Nominee's code"
+            message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
             response = send_response(message, True)
         else:
             if 'level' in session:
