@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
 import json
 import requests
 
@@ -13,7 +13,7 @@ nominees = {
 }
 
 @csrf_exempt
-@require_POST
+@require_http_methods
 def ussd(request):
     data = json.loads(request.body.decode('utf-8'))
 
