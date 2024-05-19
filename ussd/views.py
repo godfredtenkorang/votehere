@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
+import requests
 
 # Simulate a database of nominees
 
@@ -27,15 +28,15 @@ def ussd(request):
     # Simulate valid USERIDs for the sake of this example
     # valid_user_id = ['GODEY100']
 
+    session = request.session
     if data['USERID'] == 'GODEY100':
-        
         if data['MSGTYPE']:
-            request.session['level'] = 'start'
+            session['level'] = 'start'
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
             response = send_response(message, True)
         else:
-            if 'level' in request.session:
-                level = request.session['level']
+            if 'level' in session:
+                level = session['level']
                 userdata = data['USERDATA']
                 if level == 'start':
                     # Simulate fetching user from database with this ID
@@ -45,23 +46,23 @@ def ussd(request):
                         name = nominee['name']
                         category = nominee['category']
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
-                        request.session['candidate_id'] = nominee_id
-                        request.session['level'] = 'candidate'
+                        session['candidate_id'] = nominee_id
+                        session['level'] = 'candidate'
                         response = send_response(message)
                     else:
                         message = 'Invalid nominee code. Please try again.'
                         response = send_response(message, False)
                 elif level == 'candidate':
                     if userdata == '1':
-                        request.session['level'] = 'votes'
+                        session['level'] = 'votes'
                         message = "Enter the number of votes"
                         response = send_response(message, True)
                     elif userdata == '2':
                         message = "You have cancelled"
                         response = send_response(message, False)
-                        request.session.flush()
+                        session.flush()
                     else:
-                        request.session.flush()
+                        session.flush()
                         message = "You have entered invalid data"
                         response = send_response(message, False)
                 elif level == 'votes':
