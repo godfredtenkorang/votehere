@@ -6,9 +6,9 @@ import json
 # Simulate a database of nominees
 
 nominees = {
-    '001': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
-    '002': {'name': 'Ohene Asare', 'category': 'Best Performer'},
-    '003': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
+    'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
+    'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
+    'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
 }
 
 @csrf_exempt
