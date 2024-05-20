@@ -32,7 +32,6 @@ def ussd_api(request):
     session = request.session
     if data['USERID'] in valid_user_id:
         if data['MSGTYPE']:
-            session.get('SESSIONID')
             session['level'] = 'start'
             session.save()
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
@@ -42,20 +41,16 @@ def ussd_api(request):
                 level = session['level']
                 userdata = data['USERDATA']
                 if level == 'start':
-
-                    nominee_id = userdata
-                    if nominee_id in nominees:
-                        nominee = nominees[nominee_id]
-                        name = nominee['name']
-                        category = nominee['category']
-                        message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
-                        session['candidate_id'] = nominee_id
-                        session['level'] = 'candidate'
-                        session.save()
-                        response = send_response(message)
-                    else:
-                        message = 'Invalid nominee code. Please try again.'
-                        response = send_response(message, False)
+                    name = 'Godfred'
+                    category = "most fashionable"
+                   
+                    
+                    message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
+                    
+                    session['level'] = 'candidate'
+                    session.save()
+                    response = send_response(message)
+                    
                 elif level == 'candidate':
                     if userdata == '1':
                         session['level'] = 'votes'
