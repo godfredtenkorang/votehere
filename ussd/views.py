@@ -32,12 +32,12 @@ def ussd_api(request):
     session = request.session
     if data['USERID'] in valid_user_id:
         if data['MSGTYPE']:
-            session.get('level')
+            session.get('SESSIONID')
             session['level'] = 'start'
             session.save()
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
             response = send_response(message, True)
-        elif data['MSGTYPE']:
+        else:
             if 'level' in session:
                 level = session['level']
                 userdata = data['USERDATA']
