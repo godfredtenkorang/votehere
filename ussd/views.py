@@ -36,12 +36,10 @@ def ussd_api(request):
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
             response = send_response(message, True)
         else:
-            if 'level' in session:
+            if session:
                 level = session['level']
                 userdata = data['USERDATA']
                 if level == 'start':
-                    name = 'Godfred'
-                    category = "most fashionable"
                     nominee_id = userdata
                     if nominee_id in nominees:
                         nominee = nominees[nominee_id]
