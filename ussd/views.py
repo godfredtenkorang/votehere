@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
 import hashlib
@@ -14,7 +13,6 @@ nominees = {
     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
 }
 
-@csrf_exempt
 @require_POST
 def ussd_api(request):
     data = json.loads(request.body.decode('utf-8'))
