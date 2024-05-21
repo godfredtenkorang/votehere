@@ -29,8 +29,8 @@ def ussd_api(request):
 
     # valid_user_id = ['GODEY100']
 
-    session = request.session
     if data['USERID'] == 'GODEY100':
+        session = request.session
         if data['MSGTYPE']:
             session['level'] = 'start'
             message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
