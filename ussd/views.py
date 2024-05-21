@@ -17,7 +17,7 @@ def ussd_api(request):
     def send_response(TheMsg, MsgType=True):
         return dict(USERID=data['USERID'], MSISDN=data['MSISDN'], MSG=f"{TheMsg}", MSGTYPE=MsgType)
 
-    if data['USERID'] == 'gobrite':
+    if data['USERID'] == 'GODEY100':
         if data['MSGTYPE']:
             request.session['level'] = 'start'
             message = "Welcome to Gooey Vote.\nEnter Nominee Id"
