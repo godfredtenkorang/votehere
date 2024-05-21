@@ -39,7 +39,6 @@ def ussd_api(request):
             }
 
         if user_id == 'GODEY100':
-            session_id = generate_session_id(msisdn)
             request.session['session_id'] = session_id
             if msgtype:
                 request.session['level'] = 'start'
