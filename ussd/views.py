@@ -48,7 +48,7 @@ def ussd_api(request):
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
                         session['candidate_id'] = nominee_id
                         session['level'] = 'candidate'
-                        response = send_response(message)
+                        response = send_response(message, True)
                     else:
                         message = 'Invalid nominee code. Please try again.'
                         response = send_response(message, False)
