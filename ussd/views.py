@@ -50,7 +50,7 @@ def ussd_api(request):
                         session['candidate_id'] = nominee_id
                         session['level'] = 'candidate'
                         session.save()
-                        response = send_response(message, True)
+                        response = send_response(message, False)
                     else:
                         message = 'Invalid nominee code. Please try again.'
                         response = send_response(message, False)
