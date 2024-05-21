@@ -5,7 +5,6 @@ import hashlib
 import uuid
 import requests
 
-# Nominee details
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
     'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
@@ -28,7 +27,6 @@ def ussd_api(request):
         user_data = data.get('USERDATA')
         msgtype = data.get('MSGTYPE')
         network = data.get('NETWORK')
-        session_id = generate_session_id(msisdn=msisdn)
 
         def send_response(msg, msgtype=True):
             return {
@@ -39,7 +37,9 @@ def ussd_api(request):
             }
 
         if user_id == 'GODEY100':
+            session_id = generate_session_id(msisdn)
             request.session['session_id'] = session_id
+
             if msgtype:
                 request.session['level'] = 'start'
                 message = "Welcome to VoteAfric.\nContact: 0553912334\nor: 0558156844\nEnter Nominee's code"
