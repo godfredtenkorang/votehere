@@ -6,7 +6,8 @@ import hashlib
 import uuid
 import requests
 
-# Simulate a database of nominees
+
+
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
     'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
@@ -26,12 +27,13 @@ def ussd_api(request):
             'MSGTYPE': MsgType
         }
 
+    # valid_user_id = ['GODEY100']
+
     if data['USERID'] == 'GODEY100':
         session = request.session
         if data['MSGTYPE']:
             session['level'] = 'start'
-            session.save()  # Save session state
-            message = "Welcome to VoteAfric.\nContact: 0553912334\nor: 0558156844\nEnter Nominee's code"
+            message = "Welcome to VoteAfric.\n Contact: 0553912334\n or: 0558156844\n Enter Nominee's code"
             response = send_response(message, True)
         else:
             if 'level' in session:
@@ -43,18 +45,16 @@ def ussd_api(request):
                         nominee = nominees[nominee_id]
                         name = nominee['name']
                         category = nominee['category']
-                        message = f"Confirm candidate\nName: {name}\nCategory: {category}\n1) Confirm\n2) Cancel"
+                        message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
                         session['candidate_id'] = nominee_id
                         session['level'] = 'candidate'
-                        session.save()  # Save session state
                         response = send_response(message, True)
                     else:
                         message = 'Invalid nominee code. Please try again.'
-                        response = send_response(message, False)
+                        response = send_response(message, True)
                 elif level == 'candidate':
                     if userdata == '1':
                         session['level'] = 'votes'
-                        session.save()  # Save session state
                         message = "Enter the number of votes"
                         response = send_response(message, True)
                     elif userdata == '2':
@@ -68,7 +68,6 @@ def ussd_api(request):
                 elif level == 'votes':
                     votes = userdata
                     session['level'] = 'payment'
-                    session.save()  # Save session state
                     message = f"You have entered {votes} votes"
                     response = send_response(message, True)
                 elif level == 'payment':
@@ -85,7 +84,7 @@ def ussd_api(request):
                     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
                     callback = 'https://voteafric.com/ussd/ussd/'
                     item_desc = f'Payment for vote'
-                    order_id = str(uuid.uuid4())
+                    order_id = uuid.uuid4()
 
                     payload = dict(payby=network, order_id=order_id, customerNumber=telephone,
                                    customerName=telephone, isussd=1, amount=amount, merchant_id=merchant_id,
@@ -98,9 +97,9 @@ def ussd_api(request):
                     message = f"You are about to pay {amount}"
                     response = send_response(message, False)
 
-                    requests.post(endpoint, headers=headers, json=payload)
+                    requests.post(endpoint, headers=headers, data=payload)
                 else:
-                    message = "Invalid session level"
+                    message = "WKHKYD"
                     response = send_response(message, False)
             else:
                 message = "You are not in a session"
