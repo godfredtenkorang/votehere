@@ -48,10 +48,10 @@ def ussd_api(request):
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
                         session['candidate'] = nominee_id
                         session['level'] = 'candidate'
-                        response = send_response(message, True)
+                        response = send_response(message)
                     else:
                         message = 'Invalid nominee code. Please try again.'
-                        response = send_response(message, True)
+                        response = send_response(message, False)
                 elif level == 'candidate':
                     if userdata == '1':
                         session['level'] = 'votes'
