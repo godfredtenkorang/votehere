@@ -46,7 +46,7 @@ def ussd_api(request):
                         name = nominee['name']
                         category = nominee['category']
                         message = f"Confirm candidate\nName: {name}\nCategory: {category}1) Confirm\n2) Cancel"
-                        session['candidate_id'] = nominee_id
+                        session['candidate'] = nominee_id
                         session['level'] = 'candidate'
                         response = send_response(message, True)
                     else:
