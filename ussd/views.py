@@ -4,6 +4,7 @@ import json
 import hashlib
 import uuid
 import requests
+from hashlib import md5
 
 # Nominee details
 nominees = {
@@ -11,6 +12,12 @@ nominees = {
     'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
 }
+
+def generate_session_id(msisdn):
+    msisdn_bytes = msisdn.encode('utf-8')
+    hash_object = hashlib.md5(msisdn_bytes)
+    session_id = hash_object.hexdigest()
+    return session_id
 
 @csrf_exempt
 def ussd_api(request):
@@ -32,13 +39,14 @@ def ussd_api(request):
             }
 
         if user_id == 'GODEY100':
-            session = request.session
+            session_id = generate_session_id(msisdn)
+            request.session['session_id'] = session_id
             if msgtype:
-                session['level'] = 'start'
+                request.session['level'] = 'start'
                 message = "Welcome to VoteAfric.\nContact: 0553912334\nor: 0558156844\nEnter Nominee's code"
                 response = send_response(message, True)
             else:
-                level = session.get('level')
+                level = request.session.get('level')
                 if level:
                     if level == 'start':
                         nominee_id = user_data
@@ -47,28 +55,28 @@ def ussd_api(request):
                             name = nominee['name']
                             category = nominee['category']
                             message = f"Confirm candidate\nName: {name}\nCategory: {category}\n1) Confirm\n2) Cancel"
-                            session['candidate_id'] = nominee_id
-                            session['level'] = 'candidate'
+                            request.session['candidate_id'] = nominee_id
+                            request.session['level'] = 'candidate'
                             response = send_response(message)
                         else:
                             message = 'Invalid nominee code. Please try again.'
                             response = send_response(message, False)
                     elif level == 'candidate':
                         if user_data == '1':
-                            session['level'] = 'votes'
+                            request.session['level'] = 'votes'
                             message = "Enter the number of votes"
                             response = send_response(message, True)
                         elif user_data == '2':
                             message = "You have cancelled"
                             response = send_response(message, False)
-                            session.flush()
+                            request.session.flush()
                         else:
-                            session.flush()
+                            request.session.flush()
                             message = "You have entered invalid data"
                             response = send_response(message, False)
                     elif level == 'votes':
                         votes = user_data
-                        session['level'] = 'payment'
+                        request.session['level'] = 'payment'
                         message = f"You have entered {votes} votes"
                         response = send_response(message, True)
                     elif level == 'payment':
