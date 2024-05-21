@@ -4,7 +4,6 @@ import json
 import hashlib
 import uuid
 import requests
-from hashlib import md5
 
 # Nominee details
 nominees = {
@@ -29,6 +28,7 @@ def ussd_api(request):
         user_data = data.get('USERDATA')
         msgtype = data.get('MSGTYPE')
         network = data.get('NETWORK')
+        session_id = generate_session_id(msisdn=msisdn)
 
         def send_response(msg, msgtype=True):
             return {
