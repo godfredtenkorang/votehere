@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.sessions.backends.db import SessionStore
 import json
 import hashlib
 import uuid
@@ -11,11 +12,6 @@ nominees = {
     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
 }
 
-def generate_session_id(msisdn):
-    msisdn_bytes = msisdn.encode('utf-8')
-    hash_object = hashlib.md5(msisdn_bytes)
-    session_id = hash_object.hexdigest()
-    return session_id
 
 @csrf_exempt
 def ussd_api(request):
@@ -27,6 +23,7 @@ def ussd_api(request):
         user_data = data.get('USERDATA')
         msgtype = data.get('MSGTYPE')
         network = data.get('NETWORK')
+        
 
         def send_response(msg, msgtype=True):
             return {
@@ -37,15 +34,18 @@ def ussd_api(request):
             }
 
         if user_id == 'GODEY100':
-            session_key = generate_session_id(msisdn)
+            sessionid = request.session
+            session_key = hashlib.md5(msisdn.encode('utf-8')).hexdigest()
+            request.session.cycle_key()
             request.session['session_key'] = session_key
-
             if msgtype:
-                request.session['level'] = 'start'
+                
+                sessionid['level'] = 'start'
+                sessionid.save()
                 message = "Welcome to VoteAfric.\nContact: 0553912334\nor: 0558156844\nEnter Nominee's code"
                 response = send_response(message, True)
             else:
-                level = request.session.get('level')
+                level = sessionid.get('level')
                 if level:
                     if level == 'start':
                         nominee_id = user_data
@@ -54,28 +54,29 @@ def ussd_api(request):
                             name = nominee['name']
                             category = nominee['category']
                             message = f"Confirm candidate\nName: {name}\nCategory: {category}\n1) Confirm\n2) Cancel"
-                            request.session['candidate_id'] = nominee_id
-                            request.session['level'] = 'candidate'
-                            response = send_response(message)
+                            sessionid['candidate_id'] = nominee_id
+                            sessionid['level'] = 'candidate'
+                            sessionid.save()
+                            response = send_response(message, True)
                         else:
                             message = 'Invalid nominee code. Please try again.'
                             response = send_response(message, False)
                     elif level == 'candidate':
                         if user_data == '1':
-                            request.session['level'] = 'votes'
+                            sessionid['level'] = 'votes'
                             message = "Enter the number of votes"
                             response = send_response(message, True)
                         elif user_data == '2':
                             message = "You have cancelled"
                             response = send_response(message, False)
-                            request.session.flush()
+                            sessionid.flush()
                         else:
-                            request.session.flush()
+                            sessionid.flush()
                             message = "You have entered invalid data"
                             response = send_response(message, False)
                     elif level == 'votes':
                         votes = user_data
-                        request.session['level'] = 'payment'
+                        sessionid['level'] = 'payment'
                         message = f"You have entered {votes} votes"
                         response = send_response(message, True)
                     elif level == 'payment':
