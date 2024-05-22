@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.sessions.backends.db import SessionStore
+from .models import CustomSession
 import json
 import hashlib
 import uuid
@@ -12,7 +12,6 @@ nominees = {
     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
 }
 
-
 @csrf_exempt
 def ussd_api(request):
     if request.method == 'POST':
@@ -23,7 +22,6 @@ def ussd_api(request):
         user_data = data.get('USERDATA')
         msgtype = data.get('MSGTYPE')
         network = data.get('NETWORK')
-        
 
         def send_response(msg, msgtype=True):
             return {
@@ -34,18 +32,16 @@ def ussd_api(request):
             }
 
         if user_id == 'GODEY100':
-            sessionid = request.session
             session_key = hashlib.md5(msisdn.encode('utf-8')).hexdigest()
-            sessionid.cycle_key()
-            sessionid['session_key'] = session_key
+            
+            session, created = CustomSession.objects.get_or_create(session_key=session_key, defaults={'user_id':user_id})
             if msgtype:
-                
-                sessionid['level'] = 'start'
-                sessionid.save()
+                session.level = 'start'
+                session.save()
                 message = "Welcome to VoteAfric.\nContact: 0553912334\nor: 0558156844\nEnter Nominee's code"
                 response = send_response(message, True)
             else:
-                level = sessionid.get('level')
+                level = session.level
                 if level:
                     if level == 'start':
                         nominee_id = user_data
@@ -54,33 +50,37 @@ def ussd_api(request):
                             name = nominee['name']
                             category = nominee['category']
                             message = f"Confirm candidate\nName: {name}\nCategory: {category}\n1) Confirm\n2) Cancel"
-                            sessionid['candidate_id'] = nominee_id
-                            sessionid['level'] = 'candidate'
-                            sessionid.save()
-                            response = send_response(message, True)
+                            session.candidate_id = nominee_id
+                            session.level = 'candidate'
+                            session.save()
+                            response = send_response(message)
                         else:
                             message = 'Invalid nominee code. Please try again.'
                             response = send_response(message, False)
                     elif level == 'candidate':
                         if user_data == '1':
-                            sessionid['level'] = 'votes'
+                            session.level = 'votes'
+                            session.save()
                             message = "Enter the number of votes"
                             response = send_response(message, True)
                         elif user_data == '2':
                             message = "You have cancelled"
                             response = send_response(message, False)
-                            sessionid.flush()
+                            session.delete()
                         else:
-                            sessionid.flush()
+                            session.delete()
                             message = "You have entered invalid data"
                             response = send_response(message, False)
                     elif level == 'votes':
                         votes = user_data
-                        sessionid['level'] = 'payment'
+                        session.level = 'payment'
+                        session.save()
                         message = f"You have entered {votes} votes"
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = user_data
+                        session.amount = amount
+                        session.save()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
                         network = network
