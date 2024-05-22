@@ -36,8 +36,8 @@ def ussd_api(request):
         if user_id == 'GODEY100':
             sessionid = request.session
             session_key = hashlib.md5(msisdn.encode('utf-8')).hexdigest()
-            request.session.cycle_key()
-            request.session['session_key'] = session_key
+            sessionid.cycle_key()
+            sessionid['session_key'] = session_key
             if msgtype:
                 
                 sessionid['level'] = 'start'
