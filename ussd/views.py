@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import CustomSession
+from .utils import send_sms
 import json
 import hashlib
 import uuid
@@ -74,8 +75,9 @@ def ussd_api(request):
                     elif level == 'votes':
                         votes = user_data
                         session.level = 'payment'
+                        session.votes = votes
                         session.save()
-                        message = f"You have entered {votes} votes"
+                        message = f"You have entered {votes} votes \n A vote is GH¢1.00."
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = user_data
@@ -113,9 +115,10 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
 
-                        message = f"You are about to pay {amount}"
+                        message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
                         requests.post(endpoint, headers=headers, json=payload)
+                        send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
                     else:
                         message = "WKHKYD"
                         response = send_response(message, False)

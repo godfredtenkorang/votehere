@@ -8,3 +8,6 @@ class CustomSession(models.Model):
     votes = models.IntegerField(null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     # Add any other fields you need to track
+    
+    def __str__(self):
+        return self.session_key
