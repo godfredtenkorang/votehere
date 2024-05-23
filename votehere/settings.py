@@ -60,23 +60,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# settings.py
-
-# Use database-backed sessions
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default setting
-
-# Other options include:
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'  # Use cache-based sessions
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'  # Use a combination of cache and database
-# SESSION_ENGINE = 'django.contrib.sessions.backends.file'  # Use file-based sessions
-# SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'  # Use cookie-based sessions
-
-# Session settings
-SESSION_COOKIE_NAME = 'SESSIONID'  # Name of the cookie to use for sessions
-SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds
-SESSION_SAVE_EVERY_REQUEST = True  # Save the session to the database on every request
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Whether to expire the session when the user closes the browser
-
 
 ROOT_URLCONF = 'votehere.urls'
 
@@ -118,6 +101,25 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
 }
 
 

@@ -77,9 +77,9 @@ def ussd_api(request):
                         votes = int(user_data)
                         session.level = 'payment'
                         session.votes = votes
-                        session.amount = Decimal(votes) * Decimal(0.70)
+                        session.amount = Decimal(votes) * Decimal(1.00)
                         session.save()
-                        message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nA vote is GH¢0.70. Press 1 to proceed."
+                        message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nA vote is GH¢1.00. Press 1 to proceed."
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = float(session.amount)
@@ -104,7 +104,7 @@ def ussd_api(request):
                             'customerNumber': telephone,
                             'customerName': telephone,
                             'isussd': 1,
-                            'amount': amount,
+                            'amount': str(amount),
                             'merchant_id': merchant_id,
                             'secrete': secrete,
                             'key': key,
@@ -133,6 +133,9 @@ def ussd_api(request):
         return JsonResponse(response, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def payment_callback(request):
@@ -144,11 +147,13 @@ def payment_callback(request):
             transaction_id = data.get('transaction_id')
             status = data.get('status')
             amount = data.get('amount')
+            
+            logger.info(f"Received payment callback: {data}")
 
             # Update the database
             PaymentTransaction.objects.filter(transaction_id=transaction_id).update(
                 status=status,
-                amount=amount
+                amount=Decimal(amount)
             )
 
             # Respond to the external service
