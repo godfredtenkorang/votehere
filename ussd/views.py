@@ -83,7 +83,7 @@ def ussd_api(request):
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = float(session.amount)
-                        session.delete()
+                        session.save()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
                         network = network
@@ -120,6 +120,7 @@ def ussd_api(request):
                         response = send_response(message, False)
                         requests.post(endpoint, headers=headers, json=payload)
                         send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        session.delete()
                     else:
                         message = "WKHKYD"
                         response = send_response(message, False)
