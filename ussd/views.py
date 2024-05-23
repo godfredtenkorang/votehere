@@ -126,7 +126,7 @@ def ussd_api(request):
                         logger.info(f"Sending payment request: {payload}")
 
                         try:
-                            response = requests.post(endpoint, headers=headers, json=payload)
+                            response = requests.request("POST", endpoint, headers=headers, data=payload)
                             logger.info(f"Received response: {response.status_code} - {response.text}")
                             if response.status_code == 200:
                                 message = f"You are about to pay GH¢{amount}"
