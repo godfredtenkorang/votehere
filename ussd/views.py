@@ -6,6 +6,7 @@ import json
 import hashlib
 import uuid
 import requests
+from decimal import Decimal
 
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
@@ -73,15 +74,15 @@ def ussd_api(request):
                             message = "You have entered invalid data"
                             response = send_response(message, False)
                     elif level == 'votes':
-                        votes = user_data
+                        votes = int(user_data)
                         session.level = 'payment'
                         session.votes = votes
+                        session.amount = Decimal(votes) * Decimal(0.70)
                         session.save()
-                        message = f"You have entered {votes} votes \n A vote is GH¢1.00."
+                        message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nA vote is GH¢1.00. Press 1 to confirm."
                         response = send_response(message, True)
                     elif level == 'payment':
-                        amount = user_data
-                        session.amount = amount
+                        amount = float(session.amount)
                         session.delete()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
