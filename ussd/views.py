@@ -7,9 +7,6 @@ import hashlib
 import uuid
 import requests
 from decimal import Decimal
-import logging
-
-
 
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
@@ -136,32 +133,23 @@ def ussd_api(request):
         return JsonResponse(response, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
-logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def payment_callback(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            
-            merchant_id = data.get('merchant_id')
-            secrete = data.get('secrete')
-            key = data.get('key')
-            order_id = data.get('order_id')
-            customer_name = data.get('customerName')
-            amount = data.get('amount')
-            item_desc = data.get('item_desc')
-            customer_number = data.get('customerNumber')
-            payby = data.get('payby')
-            callback = data.get('callback')
-
-            # Log received data for debugging
-            logger.info(f"Received payment callback: {data}")
 
             # Extract data from the callback
-          
+            transaction_id = data.get('transaction_id')
+            status = data.get('status')
+            amount = data.get('amount')
 
-            #
+            # Update the database
+            PaymentTransaction.objects.filter(transaction_id=transaction_id).update(
+                status=status,
+                amount=amount
+            )
 
             # Respond to the external service
             return JsonResponse({'status': 'success'}, status=200)
