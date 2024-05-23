@@ -7,12 +7,19 @@ import hashlib
 import uuid
 import requests
 from decimal import Decimal
+import random
 
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
     'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
 }
+
+def generate_random_key():
+    return random.randint(1000, 9999)
+
+random_number = generate_random_key()
+
 
 @csrf_exempt
 def ussd_api(request):
@@ -90,7 +97,7 @@ def ussd_api(request):
                         username = 'votfric_gen'
                         password = 'bVdwy86yoWtdZcW'
                         merchant_id = 'NPS_000288'
-                        key = generate_random_key()
+                        key = str(generate_random_key())
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
                         secrete = hashlib.md5(concat_keys.encode()).hexdigest()
@@ -134,15 +141,7 @@ def ussd_api(request):
         return JsonResponse(response, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
-import random
 
-def generate_random_key(request):
-    min = 1000
-    max = 9999
-    
-    result = random.randint(min, max)
-    
-    return result
 
 
 import logging
