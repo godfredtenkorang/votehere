@@ -79,7 +79,7 @@ def ussd_api(request):
                         session.votes = votes
                         session.amount = Decimal(votes) * Decimal(0.70)
                         session.save()
-                        message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nA vote is GH¢1.00. Press 1 to proceed."
+                        message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nA vote is GH¢0.70. Press 1 to proceed."
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = float(session.amount)
