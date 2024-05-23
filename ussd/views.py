@@ -90,7 +90,7 @@ def ussd_api(request):
                         username = 'votfric_gen'
                         password = 'bVdwy86yoWtdZcW'
                         merchant_id = 'NPS_000288'
-                        key = 'Nrkl)CYr'
+                        key = generate_random_key()
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
                         secrete = hashlib.md5(concat_keys.encode()).hexdigest()
@@ -133,6 +133,17 @@ def ussd_api(request):
 
         return JsonResponse(response, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+import random
+
+def generate_random_key(request):
+    min = 1000
+    max = 9999
+    
+    result = random.randint(min, max)
+    
+    return result
+
 
 import logging
 
