@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import CustomSession
+from .models import CustomSession, PaymentTransaction
 from .utils import send_sms
 import json
 import hashlib
@@ -93,7 +93,7 @@ def ussd_api(request):
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
                         secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-                        callback = 'https://voteafric.com/ussd/ussd/'
+                        callback = 'https://voteafric.com/callback/'
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
 
@@ -131,3 +131,30 @@ def ussd_api(request):
 
         return JsonResponse(response, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+@csrf_exempt
+def payment_callback(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+
+            # Extract data from the callback
+            transaction_id = data.get('transaction_id')
+            status = data.get('status')
+            amount = data.get('amount')
+
+            # Update the database
+            PaymentTransaction.objects.filter(transaction_id=transaction_id).update(
+                status=status,
+                amount=amount
+            )
+
+            # Respond to the external service
+            return JsonResponse({'status': 'success'}, status=200)
+
+        except Exception as e:
+            print(f"Error processing callback: {e}")
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
