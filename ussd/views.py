@@ -121,6 +121,8 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
+                        session.delete()
+                        
                         message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
                         payment_response = requests.post(endpoint, headers=headers, json=payload)
@@ -133,7 +135,7 @@ def ussd_api(request):
                             message = "Payment request failed. Please try again."
                             response = send_response(message, False)
                         
-                        session.delete()
+                        
                         # session.delete()
                         
                         # logger.info(f"Sending payment request: {payload}")
