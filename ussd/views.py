@@ -104,6 +104,7 @@ def ussd_api(request):
                         callback = 'https://voteafric.com/callback/'
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
+                        session.delete()
 
                         payload = {
                             'payby': network,
@@ -138,7 +139,7 @@ def ussd_api(request):
                             message = "An error occurred while processing your payment. Please try again."
 
                         response = send_response(message, False)
-                        session.delete()
+                        
                     else:
                         message = "WKHKYD"
                         response = send_response(message, False)
