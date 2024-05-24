@@ -41,6 +41,8 @@ def ussd_api(request):
             session_key = hashlib.md5(msisdn.encode('utf-8')).hexdigest()
             
             session, created = CustomSession.objects.get_or_create(session_key=session_key, defaults={'user_id':user_id})
+            if created:
+                session.save()
             if msgtype:
                 session.level = 'start'
                 session.save()
@@ -131,7 +133,7 @@ def ussd_api(request):
                         
                         logger.info(f"Sending payment request: {payload}")
                         
-                        session.delete()
+                        
 
                         try:
                             response = requests.request("POST", endpoint, headers=headers, data=payload)
@@ -146,6 +148,7 @@ def ussd_api(request):
                             logger.error(f"Error sending payment request: {e}")
                             message = "An error occurred while processing your payment. Please try again."
 
+                        session.delete()
                         response = send_response(message, False)
                         
                     else:
