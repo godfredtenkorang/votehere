@@ -133,7 +133,7 @@ def ussd_api(request):
                         
                         logger.info(f"Sending payment request: {payload}")
                         
-                        
+                        session.delete()
 
                         try:
                             response = requests.request("POST", endpoint, headers=headers, data=payload)
@@ -141,14 +141,13 @@ def ussd_api(request):
                             if response.status_code == 200:
                                 message = f"You are about to pay GH¢{amount}"
                                 send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
-                                session.delete()
                             else:
                                 message = "Payment request failed. Please try again."
                         except Exception as e:
                             logger.error(f"Error sending payment request: {e}")
                             message = "An error occurred while processing your payment. Please try again."
 
-                        session.delete()
+                        
                         response = send_response(message, False)
                         
                     else:
