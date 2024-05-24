@@ -104,7 +104,7 @@ def ussd_api(request):
                         callback = 'https://voteafric.com/callback/'
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
-                        session.delete()
+                        
 
                         payload = {
                             'payby': network,
@@ -132,6 +132,7 @@ def ussd_api(request):
                             if response.status_code == 200:
                                 message = f"You are about to pay GH¢{amount}"
                                 send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                                session.delete()
                             else:
                                 message = "Payment request failed. Please try again."
                         except Exception as e:
