@@ -18,9 +18,6 @@ nominees = {
 def generate_random_key():
     return random.randint(1000, 9999)
 
-random_number = generate_random_key()
-
-
 @csrf_exempt
 def ussd_api(request):
     if request.method == 'POST':
@@ -124,22 +121,30 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                        logger.info(f"Sending payment request: {payload}")
-
-                        try:
-                            response = requests.request("POST", endpoint, headers=headers, data=payload)
-                            logger.info(f"Received response: {response.status_code} - {response.text}")
-                            if response.status_code == 200:
-                                message = f"You are about to pay GH¢{amount}"
-                                send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
-                                session.delete()
-                            else:
-                                message = "Payment request failed. Please try again."
-                        except Exception as e:
-                            logger.error(f"Error sending payment request: {e}")
-                            message = "An error occurred while processing your payment. Please try again."
-
+                        
+                        message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
+                        requests.post(endpoint, headers=headers, json=payload)
+                        
+                        send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        session.delete()
+                        
+                        # logger.info(f"Sending payment request: {payload}")
+
+                        # try:
+                        #     response = requests.request("POST", endpoint, headers=headers, data=payload)
+                        #     logger.info(f"Received response: {response.status_code} - {response.text}")
+                        #     if response.status_code == 200:
+                        #         message = f"You are about to pay GH¢{amount}"
+                        #         send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        #         session.delete()
+                        #     else:
+                        #         message = "Payment request failed. Please try again."
+                        # except Exception as e:
+                        #     logger.error(f"Error sending payment request: {e}")
+                        #     message = "An error occurred while processing your payment. Please try again."
+
+                        # response = send_response(message, False)
                         
                     else:
                         message = "WKHKYD"
