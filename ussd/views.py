@@ -131,7 +131,8 @@ def ussd_api(request):
                         
                         logger.info(f"Sending payment request: {payload}")
                         
-                        
+                        if session.session_key is not None:
+                            session.delete()
 
                         try:
                             response = requests.request("POST", endpoint, headers=headers, data=payload)
@@ -147,8 +148,7 @@ def ussd_api(request):
 
                         
                         response = send_response(message, False)
-                        if session.session_key is not None:
-                            session.delete()
+                        
                         
                     else:
                         message = "WKHKYD"
