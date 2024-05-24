@@ -133,7 +133,7 @@ def ussd_api(request):
                         
                         logger.info(f"Sending payment request: {payload}")
                         
-                        session.delete()
+                        
 
                         try:
                             response = requests.request("POST", endpoint, headers=headers, data=payload)
@@ -147,7 +147,7 @@ def ussd_api(request):
                             logger.error(f"Error sending payment request: {e}")
                             message = "An error occurred while processing your payment. Please try again."
 
-                        
+                        session.delete()
                         response = send_response(message, False)
                         
                     else:
