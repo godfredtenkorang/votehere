@@ -121,8 +121,7 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                        if session.session_key is not None:
-                            session.delete()
+                        session.delete()
                             
                         message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
