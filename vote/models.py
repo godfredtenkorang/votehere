@@ -20,6 +20,11 @@ class Category(models.Model):
     
     def get_absolute_url(self):
         return f"/category/{self.slug}"
+    
+    def get_cat_image(self):
+        if self.image:
+            return "https://voteafric.com/" + self.image.url
+        return ''
 
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -37,3 +42,8 @@ class SubCategory(models.Model):
     
     def get_absolute_url(self):
         return reverse('award_by_category', args=[self.id])
+    
+    def get_subcat_image(self):
+        if self.image:
+            return "https://voteafric.com/" + self.image.url
+        return ''

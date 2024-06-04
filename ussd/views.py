@@ -122,20 +122,12 @@ def ussd_api(request):
                         }
                         
                         session.delete()
-                        
+                            
                         message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
-                        payment_response = requests.post(endpoint, headers=headers, json=payload)
+                        requests.post(endpoint, headers=headers, json=payload)
                         
-                        logger.info(f"Received response: {payment_response.status_code} - {payment_response.text}")
-
-                        if payment_response.status_code == 200:
-                            send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
-                        else:
-                            message = "Payment request failed. Please try again."
-                            response = send_response(message, False)
-                        
-                        
+                        send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
                         # session.delete()
                         
                         # logger.info(f"Sending payment request: {payload}")

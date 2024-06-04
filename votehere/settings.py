@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'dashboard',
     'user',
     'ussd',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 SITE_ID=1
