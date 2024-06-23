@@ -22,3 +22,9 @@ class CategoryAdmin(admin.ModelAdmin):
   
   
 admin.site.register(Category, CategoryAdmin)
+
+
+@admin.register(Blog)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ['title', 'content', 'tags', 'image', 'slug', 'date_added']
+    prepopulated_fields = {"slug": ("title",)}

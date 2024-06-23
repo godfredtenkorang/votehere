@@ -47,3 +47,19 @@ class SubCategory(models.Model):
         if self.image:
             return "https://voteafric.com/" + self.image.url
         return ''
+
+
+class Blog(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    tags = models.CharField(max_length=250)
+    image = models.ImageField(upload_to='blog-img')
+    slug = models.SlugField(max_length=10, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "blogs"
+        ordering = ('-date_added',)
+
+    def __str__(self):
+        return self.title

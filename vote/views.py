@@ -23,6 +23,12 @@ def about(request):
     }
     return render(request, 'vote/about.html', context)
 
+def blog(request):
+    context = {
+        'title': 'Blog'
+    }
+    return render(request, 'vote/blog.html', context)
+
 
 def policy(request):
     context = {
