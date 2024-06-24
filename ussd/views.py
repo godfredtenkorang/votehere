@@ -121,12 +121,25 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                            
                         message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
-                        requests.post(endpoint, headers=headers, json=payload)
                         
-                        send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        try:
+                            logger.info(f"Sending payment request: {payload}")
+                            payment_response = requests.post(endpoint, headers=headers, json=payload)
+                            payment_response.raise_for_status()  # Raise an error for bad HTTP responses
+                            logger.info(f"Received response: {payment_response.status_code} - {payment_response.text}")
+                            send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        except requests.RequestException as e:
+                            logger.error(f"Error sending payment request: {e}")
+                            message = "An error occurred while processing your payment. Please try again."
+                            response = send_response(message, False)
+                            
+                        # message = f"You are about to pay GH¢{amount}"
+                        # response = send_response(message, False)
+                        # requests.post(endpoint, headers=headers, json=payload)
+                        
+                        # send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
                         # session.delete()
                         
                         # logger.info(f"Sending payment request: {payload}")
