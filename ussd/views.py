@@ -121,13 +121,12 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                        session.delete()
+                        requests.post(endpoint, headers=headers, json=payload)
+                        send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
                             
                         message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
-                        requests.post(endpoint, headers=headers, json=payload)
                         
-                        send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
                         # session.delete()
                         
                         # logger.info(f"Sending payment request: {payload}")
