@@ -123,7 +123,7 @@ def ussd_api(request):
                         
                         message = f"You are about to pay GH¢{amount}"
                         response = send_response(message, False)
-                        
+                        session.delete()
                         try:
                             logger.info(f"Sending payment request: {payload}")
                             payment_response = requests.post(endpoint, headers=headers, json=payload)
