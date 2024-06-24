@@ -67,7 +67,7 @@ def ussd_api(request):
                         if user_data == '1':
                             session.level = 'votes'
                             session.save()
-                            message = "Enter the number of votes"
+                            message = "Enter the number of votes. \n\n A vote is GH¢1.00."
                             response = send_response(message, True)
                         elif user_data == '2':
                             message = "You have cancelled"
@@ -83,7 +83,7 @@ def ussd_api(request):
                         session.votes = votes
                         session.amount = Decimal(votes) * Decimal(1.00)
                         session.save()
-                        message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nA vote is GH¢1.00. Press 1 to proceed."
+                        message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = float(session.amount)
