@@ -95,7 +95,7 @@ def ussd_api(request):
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
                         username = 'votfric_gen'
-                        password = 'Nrkl)CYr'
+                        password = 'bVdwy86yoWtdZcW'
                         merchant_id = 'NPS_000288'
                         key = str(generate_random_key())
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
