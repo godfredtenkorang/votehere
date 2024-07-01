@@ -78,7 +78,11 @@ def ussd_api(request):
                             message = "You have entered invalid data"
                             response = send_response(message, False)
                     elif level == 'votes':
-                        votes = int(user_data)
+                        try:
+                            votes = int(user_data)
+                        except ValueError:
+                            message = "Invalid number of votes entered. Please try again."
+                            return JsonResponse(send_response(message, False), status=400)
                         session.level = 'payment'
                         session.votes = votes
                         session.amount = Decimal(votes) * Decimal(1.00)
@@ -90,7 +94,6 @@ def ussd_api(request):
                         session.save()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
-                        network = network
                         username = 'votfric_gen'
                         password = 'bVdwy86yoWtdZcW'
                         merchant_id = 'NPS_000288'
@@ -121,13 +124,24 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                        session.delete()
-                            
-                        message = f"You are about to pay GH¢{amount}"
+                        logger.info(f"Sending payment request: {payload}")
+                        response = requests.post(endpoint, headers=headers, json=payload)
+                        logger.info(f"Payment request response: {response.status_code} - {response.text}")
+
+                        if response.status_code == 200:
+                            message = f"You are about to pay GH¢{amount}"
+                            send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        else:
+                            message = "Payment request failed. Please try again."
                         response = send_response(message, False)
-                        requests.post(endpoint, headers=headers, json=payload)
                         
-                        send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        # session.delete()
+                            
+                        # message = f"You are about to pay GH¢{amount}"
+                        # response = send_response(message, False)
+                        # requests.post(endpoint, headers=headers, json=payload)
+                        
+                        # send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
 
                         
                     else:

@@ -24,10 +24,18 @@ def about(request):
     return render(request, 'vote/about.html', context)
 
 def blog(request):
+    blogs = Blog.objects.all()
     context = {
-        'title': 'Blog'
+        'blogs': blogs,
+        'title': 'Blog',
     }
     return render(request, 'vote/blog.html', context)
+
+def blog_detail(request):
+    context = {
+        'title': 'Blog Detail'
+    }
+    return render(request, 'vote/blog-detail.html', context)
 
 
 def policy(request):
