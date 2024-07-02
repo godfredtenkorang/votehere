@@ -159,10 +159,6 @@ def ussd_api(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
-
-
-import logging
-
 logger = logging.getLogger(__name__)
 
 @csrf_exempt
