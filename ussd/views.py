@@ -8,6 +8,7 @@ import uuid
 import requests
 from decimal import Decimal
 import random
+import logging
 
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
@@ -97,7 +98,7 @@ def ussd_api(request):
                         username = 'votfric_gen'
                         password = 'bVdwy86yoWtdZcW'
                         merchant_id = 'NPS_000288'
-                        key = str(generate_random_key())
+                        key = str(4576)
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
                         secrete = hashlib.md5(concat_keys.encode()).hexdigest()
