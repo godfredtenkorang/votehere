@@ -92,7 +92,6 @@ def ussd_api(request):
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = float(session.amount)
-                        session.save()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
                         username = 'votfric_gen'
