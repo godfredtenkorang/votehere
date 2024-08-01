@@ -107,7 +107,7 @@ def ussd_api(request):
                         
 
                         payload = {
-                            'payby': network,
+                            'payby': 'MTN',
                             'order_id': order_id,
                             'customerNumber': telephone,
                             'customerName': telephone,
@@ -124,7 +124,20 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
+                        logger.info(f"Sending payment request: {payload}")
                         response = requests.post(endpoint, headers=headers, json=payload)
+                        logger.info(f"Payment request response: {response.status_code} - {response.text}")
+                        
+                        
+
+                        if response.status_code == 200:
+                            message = f"You are about to pay GH¢{amount}"
+                            send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                        else:
+                            message = "Payment request failed. Please try again."
+                        response = send_response(message, False)
+                        
+                        return JsonResponse(response)
                      
                     else:
                         message = "WKHKYD"
@@ -178,16 +191,18 @@ def ussd_api(request):
 #     }
 
 
-#     response = requests.post(endpoint, headers=headers, json=payload)
+    # response = requests.post(endpoint, headers=headers, json=payload)
 
-
+    # To get the response body as text
     # response_body = response.text
 
- 
+    # If the response is in JSON format
+    # response_json = response.json()
+
     # print('========================================')
     # print(response_body)
     # print('========================================')
-
+    # print(response_json)
     # print('========================================')
 
     # return jsonify(response_body)
