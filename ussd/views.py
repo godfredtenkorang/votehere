@@ -107,7 +107,7 @@ def ussd_api(request):
                         
 
                         payload = {
-                            'payby': network,
+                            'payby': 'MTN',
                             'order_id': order_id,
                             'customerNumber': telephone,
                             'customerName': telephone,
@@ -124,20 +124,7 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                        logger.info(f"Sending payment request: {payload}")
                         response = requests.post(endpoint, headers=headers, json=payload)
-                        logger.info(f"Payment request response: {response.status_code} - {response.text}")
-                        
-                        
-
-                        if response.status_code == 200:
-                            message = f"You are about to pay GH¢{amount}"
-                            send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
-                        else:
-                            message = "Payment request failed. Please try again."
-                        response = send_response(message, False)
-                        
-                        return response
                      
                     else:
                         message = "WKHKYD"
@@ -153,6 +140,57 @@ def ussd_api(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
+# @app.route("/payment", methods=["POST"])
+# def make_payment():
+#     data = request.get_json()
+
+#     endpoint = "https://api.nalosolutions.com/payplus/api/"
+#     telephone = data['telephone']
+#     username = 'votfric_gen'
+#     password = 'bVdwy86yoWtdZcW'
+#     merchant_id = 'NPS_000288'
+#     key = str(4576)
+#     hashed_password = hashlib.md5(password.encode()).hexdigest()
+#     concat_keys = username + key + hashed_password
+#     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
+#     callback = 'https://voteafric.com/callback/'
+#     item_desc = 'Payment for vote'
+#     order_id = str(uuid.uuid4())
+#     amount = 1
+
+#     payload = {
+#         'payby': 'MTN',
+#         'order_id': order_id,
+#         'customerNumber': telephone,
+#         'customerName': telephone,
+#         'isussd': 1,
+#         'amount': str(amount),
+#         'merchant_id': merchant_id,
+#         'secrete': secrete,
+#         'key': key,
+#         'callback': callback,
+#         'item_desc': item_desc
+#     }
+
+#     headers = {
+#         "Content-Type": "application/json",
+#         "Accept": "application/json",
+#     }
+
+
+#     response = requests.post(endpoint, headers=headers, json=payload)
+
+
+    # response_body = response.text
+
+ 
+    # print('========================================')
+    # print(response_body)
+    # print('========================================')
+
+    # print('========================================')
+
+    # return jsonify(response_body)
 
 
 import logging
