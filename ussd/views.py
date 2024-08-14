@@ -101,13 +101,14 @@ def ussd_api(request):
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
                         secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-                        callback = 'https://voteafric.com/callback/'
+                        callback = 'https://voteafric.com/ussd/callback/'
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
                         
+                        
 
                         payload = {
-                            'payby': 'MTN',
+                            'payby': network,
                             'order_id': order_id,
                             'customerNumber': telephone,
                             'customerName': telephone,
@@ -151,61 +152,6 @@ def ussd_api(request):
 
         return JsonResponse(response, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=405)
-
-
-# @app.route("/payment", methods=["POST"])
-# def make_payment():
-#     data = request.get_json()
-
-#     endpoint = "https://api.nalosolutions.com/payplus/api/"
-#     telephone = data['telephone']
-#     username = 'votfric_gen'
-#     password = 'bVdwy86yoWtdZcW'
-#     merchant_id = 'NPS_000288'
-#     key = str(4576)
-#     hashed_password = hashlib.md5(password.encode()).hexdigest()
-#     concat_keys = username + key + hashed_password
-#     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-#     callback = 'https://voteafric.com/callback/'
-#     item_desc = 'Payment for vote'
-#     order_id = str(uuid.uuid4())
-#     amount = 1
-
-#     payload = {
-#         'payby': 'MTN',
-#         'order_id': order_id,
-#         'customerNumber': telephone,
-#         'customerName': telephone,
-#         'isussd': 1,
-#         'amount': str(amount),
-#         'merchant_id': merchant_id,
-#         'secrete': secrete,
-#         'key': key,
-#         'callback': callback,
-#         'item_desc': item_desc
-#     }
-
-#     headers = {
-#         "Content-Type": "application/json",
-#         "Accept": "application/json",
-#     }
-
-
-    # response = requests.post(endpoint, headers=headers, json=payload)
-
-    # To get the response body as text
-    # response_body = response.text
-
-    # If the response is in JSON format
-    # response_json = response.json()
-
-    # print('========================================')
-    # print(response_body)
-    # print('========================================')
-    # print(response_json)
-    # print('========================================')
-
-    # return jsonify(response_body)
 
 
 import logging
