@@ -97,7 +97,7 @@ def ussd_api(request):
                         username = 'votfric_gen'
                         password = 'bVdwy86yoWtdZcW'
                         merchant_id = 'NPS_000288'
-                        key = str(4576)
+                        key = str(generate_random_key)
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
                         secrete = hashlib.md5(concat_keys.encode()).hexdigest()
@@ -122,7 +122,6 @@ def ussd_api(request):
                         }
                         headers = {
                             "Content-Type": "application/json",
-                            "Accept": "application/json",
                         }
                         
                         logger.info(f"Sending payment request: {payload}")
