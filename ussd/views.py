@@ -122,6 +122,7 @@ def ussd_api(request):
                         }
                         headers = {
                             "Content-Type": "application/json",
+                            "Accept": "application/json",
                         }
                         
                         logger.info(f"Sending payment request: {payload}")
