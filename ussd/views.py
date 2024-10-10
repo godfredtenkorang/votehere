@@ -8,7 +8,7 @@ import uuid
 import requests
 from decimal import Decimal
 import random
-import logging
+# import logging
 
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
@@ -125,9 +125,9 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                        logger.info(f"Sending payment request: {payload}")
+                        # logger.info(f"Sending payment request: {payload}")
                         response = requests.post(endpoint, headers=headers, json=payload)
-                        logger.info(f"Payment request response: {response.status_code} - {response.text}")
+                        # logger.info(f"Payment request response: {response.status_code} - {response.text}")
                         
                         
 
@@ -154,9 +154,9 @@ def ussd_api(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
-import logging
+# import logging
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def payment_callback(request):
@@ -169,7 +169,7 @@ def payment_callback(request):
             status = data.get('status')
             amount = data.get('amount')
             
-            logger.info(f"Received payment callback: {data}")
+            # logger.info(f"Received payment callback: {data}")
 
             # Update the database
             PaymentTransaction.objects.filter(transaction_id=transaction_id).update(
