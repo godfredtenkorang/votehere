@@ -105,7 +105,7 @@ def ussd_api(request):
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
                         
-                        
+                        session.delete()
 
                         payload = {
                             'payby': network,
@@ -122,7 +122,7 @@ def ussd_api(request):
                         }
                         headers = {
                             "Content-Type": "application/json",
-                            # "Accept": "application/json",
+                            "Accept": "application/json",
                         }
                         
                         # logger.info(f"Sending payment request: {payload}")
@@ -130,7 +130,7 @@ def ussd_api(request):
                         # logger.info(f"Payment request response: {response.status_code} - {response.text}")
                         
                         
-                        session.delete()
+                        
 
                         if response.status_code == 200:
                             message = f"You are about to pay GH¢{amount}"
