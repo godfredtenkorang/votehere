@@ -118,7 +118,7 @@ def ussd_api(request):
                             'item_desc': item_desc
                         }
                         
-                        session.delete()
+                        
                         
                         headers = {
                             "Content-Type": "application/json",
@@ -132,8 +132,10 @@ def ussd_api(request):
 
                         if response.status_code == 200:
                             message = f"You are about to pay GH¢{amount}"
+                            session.delete()
                         else:
                             message = "Payment request failed. Please try again."
+                            session.delete()
                         response = send_response(message, False)
                         return JsonResponse(response)
                      
