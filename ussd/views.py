@@ -102,7 +102,7 @@ def ussd_api(request):
                         callback = 'https://voteafric.com/ussd/callback/'
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
-                        
+                        session.level = session.delete()
                         
                         payload = {
                             'payby': str(network),
@@ -123,7 +123,7 @@ def ussd_api(request):
                             "Accept": "application/json",
                         }
                         
-                        session.delete()
+                        
        
                         response = requests.post(endpoint, headers=headers, json=payload)
                         
