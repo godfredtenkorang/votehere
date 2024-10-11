@@ -21,7 +21,7 @@ def generate_random_key():
 
 @csrf_exempt
 def ussd_api(request):
-    if request.method == 'POST':
+    if request.method == 'post':
         data = json.loads(request.body.decode('utf-8'))
         
         user_id = data.get('USERID')
