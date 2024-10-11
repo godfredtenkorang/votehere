@@ -133,11 +133,11 @@ def ussd_api(request):
 
                         if response.status_code == 200:
                             message = f"You are about to pay GH¢{amount}"
-                            send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
+                            # send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
                         else:
                             message = "Payment request failed. Please try again."
                         response = send_response(message, False)
-                        
+                        session.delete()
                         return JsonResponse(response)
                      
                     else:
