@@ -1,14 +1,12 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import CustomSession, PaymentTransaction
-from .utils import send_sms
 import json
 import hashlib
 import uuid
 import requests
 from decimal import Decimal
 import random
-# import logging
 
 nominees = {
     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
@@ -100,13 +98,12 @@ def ussd_api(request):
                         key = str(2345)
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
-                        secrete = hashlib.md5(concat_keys.encode()).hexdigest()
+                        secrete = str(hashlib.md5(concat_keys.encode()).hexdigest())
                         callback = 'https://voteafric.com/ussd/callback/'
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
                         
                         
-
                         payload = {
                             'payby': network,
                             'order_id': order_id,
@@ -120,21 +117,19 @@ def ussd_api(request):
                             'callback': callback,
                             'item_desc': item_desc
                         }
+                        
                         headers = {
                             "Content-Type": "application/json",
                             "Accept": "application/json",
                         }
-                        session.delete()
-                        # logger.info(f"Sending payment request: {payload}")
+                        
+       
                         response = requests.post(endpoint, headers=headers, json=payload)
-                        # logger.info(f"Payment request response: {response.status_code} - {response.text}")
                         
-                        
-                        
+                        session.delete()
 
                         if response.status_code == 200:
                             message = f"You are about to pay GH¢{amount}"
-                            # send_sms(phone_number=telephone, message="Thank you for voting. Dial *920*106# to vote for your favourite nominee.")
                         else:
                             message = "Payment request failed. Please try again."
                         response = send_response(message, False)
@@ -154,9 +149,7 @@ def ussd_api(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
-# import logging
 
-# logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def payment_callback(request):
@@ -169,12 +162,12 @@ def payment_callback(request):
             status = data.get('status')
             amount = data.get('amount')
             
-            # logger.info(f"Received payment callback: {data}")
+           
 
             # Update the database
             PaymentTransaction.objects.filter(transaction_id=transaction_id).update(
                 status=status,
-                amount=Decimal(amount)
+                amount=amount
             )
 
             # Respond to the external service
