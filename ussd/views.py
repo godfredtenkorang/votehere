@@ -21,7 +21,7 @@ def generate_random_key():
 
 @csrf_exempt
 def ussd_api(request):
-    if request.method == 'post':
+    if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         
         user_id = data.get('USERID')
@@ -130,6 +130,7 @@ def ussd_api(request):
                         # logger.info(f"Payment request response: {response.status_code} - {response.text}")
                         
                         
+                        session.delete()
 
                         if response.status_code == 200:
                             message = f"You are about to pay GH¢{amount}"
@@ -137,7 +138,6 @@ def ussd_api(request):
                         else:
                             message = "Payment request failed. Please try again."
                         response = send_response(message, False)
-                        session.delete()
                         return JsonResponse(response)
                      
                     else:
