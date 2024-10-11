@@ -120,7 +120,6 @@ def ussd_api(request):
                         
                         headers = {
                             "Content-Type": "application/json",
-                            "Accept": "application/json",
                         }
                         
        
