@@ -120,12 +120,13 @@ def ussd_api(request):
                         
                         headers = {
                             "Content-Type": "application/json",
+                            "Accept": "application/json",
                         }
                         
+                        session.delete()
        
                         response = requests.post(endpoint, headers=headers, json=payload)
                         
-                        session.delete()
 
                         if response.status_code == 200:
                             message = f"You are about to pay GH¢{amount}"
