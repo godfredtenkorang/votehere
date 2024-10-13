@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@fz6c&nzwp+@6&2ysu&)fl3q(4jxjnfd68mh9*2qwya6r-czz$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://voteafric-4083e14006b5.herokuapp.com/','www.voteafric.com','voteafric.com','209.38.50.218','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['.voteafric-4083e14006b5.herokuapp.com','www.voteafric.com','voteafric.com','209.38.50.218','localhost','127.0.0.1']
 
 
 # Application definition
