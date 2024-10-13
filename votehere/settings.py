@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-@fz6c&nzwp+@6&2ysu&)fl3q(4jxjnfd68mh9*2qwya6r-czz$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = True
 
 ALLOWED_HOSTS = ['www.voteafric.com','voteafric.com','209.38.50.218','localhost','127.0.0.1']
 
@@ -87,23 +86,23 @@ WSGI_APPLICATION = 'votehere.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'voteafricdb',
-        'USER': 'voteafricuser',
-        'PASSWORD': 'Gony@100',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'voteafricdb',
+#         'USER': 'voteafricuser',
+#         'PASSWORD': 'Gony@100',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 LOGGING = {
     'version': 1,
@@ -162,8 +161,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-PAYSTACK_SECRET_KEY = config("PAYSTACK_SECRET_KEY")
-PAYSTACK_PUBLIC_KEY = config("PAYSTACK_PUBLIC_KEY")
+PAYSTACK_SECRET_KEY = 'sk_test_55735c1a43924434041c1d5380f63c03656bf868'
+PAYSTACK_PUBLIC_KEY = 'pk_test_7327b044b9876e941390dcd69b04276c52d5fd90'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
