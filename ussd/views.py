@@ -127,17 +127,23 @@ def ussd_api(request):
                         }
                         
                         
+                      
                         response = requests.post(endpoint, headers=headers, json=payload)
-                        
+
                         if response.status_code == 200:
-                            session.delete()
-                            message = f"You are about to pay GH¢{amount}"
-                            return JsonResponse(send_response(message, False))
+                            response_data = response.json()  # Convert response to JSON to inspect the content
+                            print(response_data)  # Log the full response
+                            if response_data.get('status') == 'success':
+                                session.delete()
+                                message = f"You are about to pay GH¢{amount}"
+                                return JsonResponse(send_response(message, False))
+                            else:
+                                message = f"Payment request failed: {response_data.get('message', 'Unknown error')}"
                         else:
-                            session.delete()
+                            print(f"Error: {response.status_code} - {response.text}")  # Log the status code and response
                             message = "Payment request failed. Please try again."
-                        response = send_response(message, False)
-                        return JsonResponse(response)
+                        session.delete()
+                        return JsonResponse(send_response(message, False))
                      
                     else:
                         message = "WKHKYD"
