@@ -106,14 +106,14 @@ def ussd_api(request):
                         
                         
                         payload = {
-                            'payby': str(network),
+                            'payby': network,
                             'order_id': order_id,
                             'customerNumber': telephone,
-                            'customerName': 'Godfred',
+                            'customerName': telephone,
                             'isussd': 1,
                             'amount': str(amount),
                             'merchant_id': merchant_id,
-                            'secrete': str(secrete),
+                            'secrete': secrete,
                             'key': key,
                             'callback': callback,
                             'item_desc': item_desc
@@ -127,23 +127,19 @@ def ussd_api(request):
                         }
                         
                         
-                      
                         response = requests.post(endpoint, headers=headers, json=payload)
-
+                        
+                        
+                       
                         if response.status_code == 200:
-                            response_data = response.json()  # Convert response to JSON to inspect the content
-                            print(response_data)  # Log the full response
-                            if response_data.get('status') == 'success':
-                                session.delete()
-                                message = f"You are about to pay GH¢{amount}"
-                                return JsonResponse(send_response(message, False))
-                            else:
-                                message = f"Payment request failed: {response_data.get('message', 'Unknown error')}"
+                            session.delete()
+                            message = f"You are about to pay GH¢{amount}"
+                            return JsonResponse(send_response(message, False))
                         else:
-                            print(f"Error: {response.status_code} - {response.text}")  # Log the status code and response
+                            session.delete()
                             message = "Payment request failed. Please try again."
-                        session.delete()
-                        return JsonResponse(send_response(message, False))
+                        response = send_response(message, False)
+                        return JsonResponse(response)
                      
                     else:
                         message = "WKHKYD"
