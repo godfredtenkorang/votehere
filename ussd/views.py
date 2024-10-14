@@ -93,6 +93,7 @@ def ussd_api(request):
                         session.save()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
+                        network_type = network
                         username = 'votfric_gen'
                         password = 'bVdwy86yoWtdZcW'
                         merchant_id = 'NPS_000288'
@@ -106,7 +107,7 @@ def ussd_api(request):
                         
                         
                         payload = {
-                            'payby': 'MTN',
+                            'payby': network_type,
                             'order_id': order_id,
                             'customerNumber': telephone,
                             'customerName': telephone,
@@ -123,7 +124,7 @@ def ussd_api(request):
                         
                         headers = {
                             "Content-Type": "application/json",
-                            "Accept": "application/json",
+                           
                         }
                         
                         
