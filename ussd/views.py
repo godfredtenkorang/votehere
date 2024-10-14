@@ -90,6 +90,7 @@ def ussd_api(request):
                         response = send_response(message, True)
                     elif level == 'payment':
                         amount = float(session.amount)
+                        session.save()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
                         username = 'votfric_gen'
@@ -99,7 +100,7 @@ def ussd_api(request):
                         hashed_password = hashlib.md5(password.encode()).hexdigest()
                         concat_keys = username + key + hashed_password
                         secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-                        callback = 'https://voteafric-4083e14006b5.herokuapp.com/ussd/callback/'
+                        callback = 'https://voteafric.com/ussd/callback/'
                         item_desc = 'Payment for vote'
                         order_id = str(uuid.uuid4())
                         
@@ -129,9 +130,8 @@ def ussd_api(request):
        
                         response = requests.post(endpoint, headers=headers, json=payload)
                         
-
+                        session.delete()
                         if response.status_code == 200:
-                            session.delete()
                             message = f"You are about to pay GH¢{amount}"
                             return JsonResponse(send_response(message, False))
                         else:
