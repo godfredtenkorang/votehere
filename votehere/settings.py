@@ -177,9 +177,11 @@ MEDIA_URL = '/media/'
 import requests
 import os
 
+QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
+
 proxies = {
-"http": os.environ.get['QUOTAGUARDSTATIC_URL'],
-"https": os.environ.get['QUOTAGUARDSTATIC_URL']
+"http": QUOTAGUARDSTATIC_URL,
+"https": QUOTAGUARDSTATIC_URL
 }
 
 res = requests.get("http://ip.quotaguard.com/", proxies=proxies)
