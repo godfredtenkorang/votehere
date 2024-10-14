@@ -182,7 +182,7 @@ proxies = {
 "https": os.environ.get['QUOTAGUARDSTATIC_URL']
 }
 
-res = requests.get("http://3.227.95.35.quotaguard.com/", proxies=proxies)
+res = requests.get("http://voteafric.quotaguard.com/", proxies=proxies)
 print(res.text)
 
 # Default primary key field type
