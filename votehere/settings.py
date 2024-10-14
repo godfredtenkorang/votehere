@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['.voteafric-4083e14006b5.herokuapp.com','www.voteafric.com','voteafric.com','209.38.50.218','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['.voteafric-4083e14006b5.herokuapp.com','www.voteafric.com','voteafric.com','3.227.95.35', '34.199.138.158','localhost','127.0.0.1']
 
 
 # Application definition
@@ -174,6 +174,16 @@ PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+import requests
+import os
+
+proxies = {
+"http": os.environ.get['QUOTAGUARDSTATIC_URL'],
+"https": os.environ.get['QUOTAGUARDSTATIC_URL']
+}
+
+res = requests.get("http://3.227.95.35.quotaguard.com/", proxies=proxies)
+print(res.text)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
