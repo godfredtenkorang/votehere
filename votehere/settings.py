@@ -167,23 +167,9 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static)'),)
 django_heroku.settings(locals())
 
 
-# Get the QuotaGuard Static proxy URL from the environment variables
-QUOTAGUARD_STATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
 
-# Add the QuotaGuard Static proxy to the requests library
-proxies = {
-    'http': QUOTAGUARD_STATIC_URL,
-    'https': QUOTAGUARD_STATIC_URL
-}
-
-# Example: Making a request with the proxy
-import requests
-
-response = requests.get('http://3.227.95.35.quotaguard.com/', proxies=proxies)
-print(response.json())
-
-PAYSTACK_SECRET_KEY = 'sk_test_55735c1a43924434041c1d5380f63c03656bf868'
-PAYSTACK_PUBLIC_KEY = 'pk_test_7327b044b9876e941390dcd69b04276c52d5fd90'
+PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
