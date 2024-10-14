@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
 import django_heroku
 import dj_database_url
 
@@ -22,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@fz6c&nzwp+@6&2ysu&)fl3q(4jxjnfd68mh9*2qwya6r-czz$'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['.voteafric-4083e14006b5.herokuapp.com','www.voteafric.com','voteafric.com','209.38.50.218','localhost','127.0.0.1']
 
@@ -51,7 +52,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 ]
 
-SITE_ID=1
+SITE_ID=2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -164,6 +165,22 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static)'),)
 django_heroku.settings(locals())
+
+
+# Get the QuotaGuard Static proxy URL from the environment variables
+QUOTAGUARD_STATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
+
+# Add the QuotaGuard Static proxy to the requests library
+proxies = {
+    'http': QUOTAGUARD_STATIC_URL,
+    'https': QUOTAGUARD_STATIC_URL
+}
+
+# Example: Making a request with the proxy
+import requests
+
+response = requests.get('http://3.227.95.35.quotaguard.com/', proxies=proxies)
+print(response.json())
 
 PAYSTACK_SECRET_KEY = 'sk_test_55735c1a43924434041c1d5380f63c03656bf868'
 PAYSTACK_PUBLIC_KEY = 'pk_test_7327b044b9876e941390dcd69b04276c52d5fd90'
