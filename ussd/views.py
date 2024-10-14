@@ -133,14 +133,14 @@ def ussd_api(request):
                         
                        
                         if response.status_code == 200:
-                            session.delete()
+                            
                             message = f"You are about to pay GH¢{amount}"
                             return JsonResponse(send_response(message, False))
                         else:
-                            session.delete()
+                           
                             message = "Payment request failed. Please try again."
-                        response = send_response(message, False)
-                        return JsonResponse(response)
+                            response = send_response(message, False)
+                            return JsonResponse(response)
                      
                     else:
                         message = "WKHKYD"
@@ -168,7 +168,7 @@ def payment_callback(request):
             transaction_id = data.get('transaction_id')
             status = data.get('status')
             amount = data.get('amount')
-            
+            customer_number = data.get('customerNumber')
            
 
             # Update the database
@@ -176,10 +176,20 @@ def payment_callback(request):
                 status=status,
                 amount=amount
             )
+            
+            # Find and delete the session associated with this transaction
+            session = CustomSession.objects.filter(user_id=customer_number).first()
 
-            # Respond to the external service
-            return JsonResponse({'status': 'success'}, status=200)
+            if session and status == "success":
+                # Payment succeeded, delete session
+                session.delete()
+                return JsonResponse({'status': 'success', 'message': 'Payment processed and session deleted.'}, status=200)
+            else:
+                # Payment failed, do not delete session
+                return JsonResponse({'status': 'error', 'message': 'Payment failed or session not found.'}, status=400)
 
+
+            
         except Exception as e:
             print(f"Error processing callback: {e}")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
