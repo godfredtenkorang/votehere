@@ -89,7 +89,7 @@ def ussd_api(request):
                         message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                         response = send_response(message, True)
                     elif level == 'payment':
-                        amount = float(session.amount)
+                        amount = session.amount
                         session.save()
                         endpoint = "https://api.nalosolutions.com/payplus/api/"
                         telephone = msisdn
@@ -134,7 +134,7 @@ def ussd_api(request):
                        
                         if response.status_code == 200:
                             
-                            message = f"You are about to pay GH¢{amount}"
+                            message = f"You are about to pay GH¢{amount} \n\n Please approve the prompt to make payment."
                             return JsonResponse(send_response(message, False))
                         else:
                            
