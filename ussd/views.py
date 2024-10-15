@@ -124,9 +124,9 @@ def ussd_api(request):
                         
                         headers = {
                             "Content-Type": "application/json",
-                           
+                            "Accept": "application/json"
                         }
-                        
+                        session.delete()
                         
                         response = requests.post(endpoint, headers=headers, json=payload)
                         
