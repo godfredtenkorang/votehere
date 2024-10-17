@@ -95,7 +95,7 @@ def ussd_api(request):
 
                 elif level == 'payment':
                     amount = session.amount
-                    endpoint = "https://api.nalosolutions.com/payplus/api/"
+                    
                     telephone = msisdn
                     network_type = network
                     username = 'votfric_gen'
@@ -130,12 +130,12 @@ def ussd_api(request):
                     }
 
                     # Sending payment request
-                    response = requests.post(endpoint, headers=headers, json=payload)
+                    response = requests.post("https://api.nalosolutions.com/payplus/api/", json=payload, headers=headers)
                     
                     if response.status_code == 200:
-                        session.delete()
+                        data = response.json()
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
-                        return JsonResponse(send_response(message, False))
+                        return JsonResponse({"status": "success", "data": data}, status=200)
                     else:
                         return JsonResponse(send_response("Payment request failed. Please try again.", False))
 
