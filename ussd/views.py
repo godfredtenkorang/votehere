@@ -114,7 +114,7 @@ def ussd_api(request):
                         'currency': 'GHS',  # Set appropriate currency
                         "ussd": {
                             "type": "ussd",
-                            "bank": "mobile_money",
+                            
                         },
                          "metadata": {
                             "phone": telephone,
