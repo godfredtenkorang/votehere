@@ -110,7 +110,8 @@ def ussd_api(request):
                             
                         },
                          "metadata": {
-                            "phone": telephone
+                            "phone": telephone,
+                            "reference": "5bwib5v6anhe9xa"
                         }
                         
                     }
