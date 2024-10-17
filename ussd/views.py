@@ -97,35 +97,42 @@ def ussd_api(request):
                 elif level == 'payment':
                     amount = session.amount * 100
                     telephone = msisdn
-                    callback_url = 'https://voteafric.com/ussd/callback/'
+                    endpoint = "https://api.paystack.co/charge"
+                    email = f"{msisdn}@voteafric.com"
+                    amount_in_kobo = int(Decimal(amount) * 100)  # Convert to kobo
                     
                     payload = {
-                        'email': telephone,
-                        'amount': amount,
+                        'email': email,
+                        'amount': amount_in_kobo,
                         'currency': 'GHS',  # Set appropriate currency
-                        'reference': str(uuid.uuid4()),
-                        'callback_url': callback_url,
-                        'payment_type': 'mobilemoneyghana',
+                        "ussd": {
+                            "type": "ussd",
+                            
+                        },
+                         "metadata": {
+                            "phone": telephone
+                        }
+                        
                     }
                     
-                    PAYSTACK_SECRET_KEY = settings.PAYSTACK_SECRET_KEY
                     
                     headers = {
-                        "Authorization": f"Bearer {PAYSTACK_SECRET_KEY}",  # Replace with your actual secret key
+                        "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",  # Replace with your actual secret key
                         "Content-Type": "application/json",
                     }
                     
                      # Sending payment request to Paystack
-                    response = requests.post("https://api.paystack.co/transaction/initialize", json=payload, headers=headers)
+                    response = requests.post(endpoint, json=payload, headers=headers)
 
                     if response.status_code == 200:
                         data = response.json()
-                        # Redirect user to the Paystack payment page or provide the payment link
-                        payment_url = data['data']['authorization_url']
-                        message = f"You are about to pay GH¢{amount / 100:.2f}. Please approve the prompt to make payment."
-                        return JsonResponse({"status": "success", "data": {"payment_url": payment_url}}, status=200)
+                        payment_instructions = data['data']['display_text']  # USSD instructions
+                        message = f"You are about to pay GH¢{amount:.2f}. Follow the instructions below to complete payment:\n{payment_instructions}"
+                        return JsonResponse(send_response(message, False))
+
                     else:
-                        return JsonResponse(send_response("Payment request failed. Please try again.", False))
+                        error_data = response.json()
+                        return JsonResponse(send_response(f"Payment request failed: {error_data.get('message', 'Please try again.')}", False))
                 # elif level == 'payment':
                 #     amount = session.amount
                 #     endpoint = "https://api.nalosolutions.com/payplus/api/"
