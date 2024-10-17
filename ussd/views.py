@@ -104,16 +104,15 @@ def ussd_api(request):
                     
                     payload = {
                         'email': email,
-                        'amount': 1,
+                        'amount': amount_in_kobo,
                         'currency': 'GHS',  # Set appropriate currency
                         "ussd": {
                             "type": "ussd",
                             
                         },
                          "metadata": {
-                            "phone": '0553912334',
-                            "reference": telephone,
-                            "provider" : "mtn"
+                            "phone": telephone,
+                            "reference": telephone
                         }
                         
                     }
