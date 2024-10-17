@@ -94,104 +94,103 @@ def ussd_api(request):
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
 
-                elif level == 'payment':
-                    amount = session.amount * 1
-                    telephone = msisdn
-                    network_type = network
-                    endpoint = "https://api.paystack.co/charge"
-                    public_key = f"{settings.PAYSTACK_PUBLIC_KEY}"
-                    secret_key = f"{settings.PAYSTACK_SECRET_KEY}"
-                    email = f"{msisdn}@voteafric.com"
-                    # Create a unique transaction reference
-                    reference = str(uuid.uuid4())
-                    
-                    amount_in_kobo = int(Decimal(amount))  # Convert to kobo
-                    print(amount_in_kobo)
-                    
-                    payload = {
-                        'email': email,
-                        'amount': amount_in_kobo,
-                        'currency': 'GHS',  # Set appropriate currency
-                        "ussd": {
-                            "type": "bank",
-                            "bank": "MTN"
-                            
-                        },
-                         'metadata': {
-                            'custom_fields': [
-                                {
-                                    'display_name': 'Phone Number',
-                                    'variable_name': 'phone_number',
-                                    'value': telephone
-                                }
-                            ]
-                        },
-                        "reference": reference,
-                        
-                    }
-                    
-                    
-                    headers = {
-                        "Authorization": f"Bearer {secret_key}",  # Replace with your actual secret key
-                        "Content-Type": "application/json",
-                    }
-                    
-                     # Sending payment request to Paystack
-                    response = requests.post(endpoint, json=payload, headers=headers)
-
-                    if response.status_code == 200:
-                        message = f"You are about to pay GH¢{amount:.2f}. Please follow the USSD code prompt sent to your phone to complete the payment."
-                        return JsonResponse(send_response(message, False))
-
-                    else:
-                        error_data = response.json()
-                        print(error_data)
-                        return JsonResponse(send_response(f"Payment request failed: {error_data.get('message', 'Please try again.')}", False))
                 # elif level == 'payment':
-                #     amount = session.amount
-                #     endpoint = "https://api.nalosolutions.com/payplus/api/"
+                #     amount = session.amount * 1
                 #     telephone = msisdn
                 #     network_type = network
-                #     username = 'votfric_gen'
-                #     password = 'bVdwy86yoWtdZcW'
-                #     merchant_id = 'NPS_000288'
-                #     key = str(2345)
-                #     hashed_password = hashlib.md5(password.encode()).hexdigest()
-                #     concat_keys = username + key + hashed_password
-                #     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-                #     callback = 'https://voteafric.com/ussd/callback/'
-                #     item_desc = 'Payment for vote'
-                #     order_id = str(uuid.uuid4())
-
-                #     # Payment payload
-                #     payload = {
-                #         'payby': network_type,
-                #         'order_id': order_id,
-                #         'customerNumber': telephone,
-                #         'customerName': telephone,
-                #         'isussd': 1,
-                #         'amount': str(amount),
-                #         'merchant_id': merchant_id,
-                #         'secrete': str(secrete),
-                #         'key': key,
-                #         'callback': callback,
-                #         'item_desc': item_desc
-                #     }
-
-                #     headers = {
-                #         "Content-Type": "application/json",
-                #         "Accept": "application/json"
-                #     }
-
-                #     # Sending payment request
-                #     response = requests.post(endpoint, json=payload, headers=headers)
+                #     endpoint = "https://api.paystack.co/charge"
+                #     public_key = f"{settings.PAYSTACK_PUBLIC_KEY}"
+                #     secret_key = f"{settings.PAYSTACK_SECRET_KEY}"
+                #     email = f"{msisdn}@voteafric.com"
+                #     # Create a unique transaction reference
+                #     reference = str(uuid.uuid4())
                     
+                #     amount_in_kobo = int(Decimal(amount))  # Convert to kobo
+                #     print(amount_in_kobo)
+                    
+                #     payload = {
+                #         'email': email,
+                #         'amount': amount_in_kobo,
+                #         'currency': 'GHS',  # Set appropriate currency
+                #         "ussd": {
+                #             "type": "bank",
+                #             "bank": "MTN"
+                            
+                #         },
+                #          'metadata': {
+                #             'custom_fields': [
+                #                 {
+                #                     'display_name': 'Phone Number',
+                #                     'variable_name': 'phone_number',
+                #                     'value': telephone
+                #                 }
+                #             ]
+                #         },
+                #         "reference": reference,
+                        
+                #     }
+                    
+                    
+                #     headers = {
+                #         "Authorization": f"Bearer {secret_key}",  # Replace with your actual secret key
+                #         "Content-Type": "application/json",
+                #     }
+                    
+                #      # Sending payment request to Paystack
+                #     response = requests.post(endpoint, json=payload, headers=headers)
+
                 #     if response.status_code == 200:
-                #         session.delete()
-                #         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
+                #         message = f"You are about to pay GH¢{amount:.2f}. Please follow the USSD code prompt sent to your phone to complete the payment."
                 #         return JsonResponse(send_response(message, False))
+
                 #     else:
-                #         return JsonResponse(send_response("Payment request failed. Please try again.", False))
+                #         error_data = response.json()
+                #         print(error_data)
+                #         return JsonResponse(send_response(f"Payment request failed: {error_data.get('message', 'Please try again.')}", False))
+                elif level == 'payment':
+                    amount = session.amount
+                    endpoint = "https://api.nalosolutions.com/payplus/api/"
+                    telephone = msisdn
+                    network_type = network
+                    username = 'votfric_gen'
+                    password = 'bVdwy86yoWtdZcW'
+                    merchant_id = 'NPS_000288'
+                    key = str(2345)
+                    hashed_password = hashlib.md5(password.encode()).hexdigest()
+                    concat_keys = username + key + hashed_password
+                    secrete = hashlib.md5(concat_keys.encode()).hexdigest()
+                    callback = 'https://voteafric.com/ussd/callback/'
+                    item_desc = 'Payment for vote'
+                    order_id = str(uuid.uuid4())
+
+                    # Payment payload
+                    payload = {
+                        'payby': network_type,
+                        'order_id': order_id,
+                        'customerNumber': telephone,
+                        'customerName': telephone,
+                        'isussd': 1,
+                        'amount': str(amount),
+                        'merchant_id': merchant_id,
+                        'secrete': str(secrete),
+                        'key': key,
+                        'callback': callback,
+                        'item_desc': item_desc
+                    }
+
+                    headers = {
+                        "Content-Type": "application/json",
+                    }
+
+                    # Sending payment request
+                    response = requests.post(endpoint, json=payload, headers=headers)
+                    
+                    if response.status_code == 200:
+                        session.delete()
+                        message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
+                        return JsonResponse(send_response(message, False))
+                    else:
+                        return JsonResponse(send_response("Payment request failed. Please try again.", False))
 
                 else:
                     return JsonResponse(send_response("Invalid session state.", False))
