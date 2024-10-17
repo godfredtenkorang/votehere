@@ -95,44 +95,53 @@ def ussd_api(request):
                     return JsonResponse(send_response(message, True))
 
                 elif level == 'payment':
-                    amount = session.amount
+                    amount = session.amount * 100
                     telephone = msisdn
+                    network_type = network
+                    endpoint = "https://api.paystack.co/charge"
+                    public_key = f"{settings.PAYSTACK_PUBLIC_KEY}"
+                    secret_key = f"{settings.PAYSTACK_SECRET_KEY}"
+                    email = f"{msisdn}@voteafric.com"
+                    # Create a unique transaction reference
+                    reference = str(uuid.uuid4())
                     
-                    # Payload for Paystack USSD payment request
+                    amount_in_kobo = int(Decimal(amount) * 100)  # Convert to kobo
+                    
                     payload = {
-                        "email": f"{telephone}@example.com",  # Use phone number as a unique identifier
-                        "amount": int(amount * 100),  # Amount in kobo/pesewas
-                        "metadata": {
-                            "custom_fields": [
-                                {
-                                    "display_name": f"{telephone}",
-                                    "variable_name": f"{telephone}",
-                                    "value": telephone
-                                }
-                            ]
-                        },
+                        'email': email,
+                        'amount': amount_in_kobo,
+                        'currency': 'GHS',  # Set appropriate currency
                         "ussd": {
                             "type": "ussd",
-                            "bank": network  # The USSD code for the user's bank
-                        }
+                            "bank": "057",
+                        },
+                        
+                         "metadata": {
+                            "phone": msisdn,
+                            "network": network_type,
+                            "votes": session.votes
+                            
+                        },
+                        "reference": reference,
+                        
                     }
                     
                     
                     headers = {
-                        "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",  # Replace with your actual secret key
+                        "Authorization": f"Bearer {secret_key}",  # Replace with your actual secret key
                         "Content-Type": "application/json",
                     }
                     
                      # Sending payment request to Paystack
-                    response = requests.post("https://api.paystack.co/charge", json=payload, headers=headers)
+                    response = requests.post(endpoint, json=payload, headers=headers)
 
                     if response.status_code == 200:
-                        res_data = response.json()
-                        message = f"You are about to pay GH¢{amount:.2f}. Dial {res_data['data']['ussd_code']} to complete the transaction."
+                        message = f"You are about to pay GH¢{amount:.2f}. Please follow the USSD code prompt sent to your phone to complete the payment."
                         return JsonResponse(send_response(message, False))
 
                     else:
-                        return JsonResponse(send_response("Payment request failed. Please try again.", False))
+                        error_data = response.json()
+                        return JsonResponse(send_response(f"Payment request failed: {error_data.get('message', 'Please try again.')}", False))
                 # elif level == 'payment':
                 #     amount = session.amount
                 #     endpoint = "https://api.nalosolutions.com/payplus/api/"
