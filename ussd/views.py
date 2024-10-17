@@ -92,7 +92,7 @@ def ussd_api(request):
                     session.amount = Decimal(votes) * Decimal(1.00)
                     session.save()
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
-                    return JsonResponse(send_response(message, True))
+                    return JsonResponse(send_response(message, False))
 
                 elif level == 'payment':
                     amount = session.amount * 100
@@ -108,8 +108,10 @@ def ussd_api(request):
                         'payment_type': 'mobilemoneyghana',
                     }
                     
+                    PAYSTACK_SECRET_KEY = settings.PAYSTACK_SECRET_KEY
+                    
                     headers = {
-                        "Authorization": "Bearer settings.PAYSTACK_SECRET_KEY",  # Replace with your actual secret key
+                        "Authorization": f"Bearer {PAYSTACK_SECRET_KEY}",  # Replace with your actual secret key
                         "Content-Type": "application/json",
                     }
                     
