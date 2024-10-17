@@ -167,8 +167,11 @@ django_heroku.settings(locals())
 
 
 
-PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
-PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_SECRET_KEY = 'sk_live_f9433197a98a7b4667db063baa64732de9b9be6d'
+PAYSTACK_PUBLIC_KEY = 'pk_live_279c99cb1ff517482f3e397e0bf027e850286550'
+
+# PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
+# PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
