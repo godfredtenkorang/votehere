@@ -115,12 +115,10 @@ def ussd_api(request):
                             "type": "ussd",
                             "bank": "057",
                         },
-                        
                          "metadata": {
                             "phone": msisdn,
                             "network": network_type,
                             "votes": session.votes
-                            
                         },
                         "reference": reference,
                         
@@ -141,6 +139,7 @@ def ussd_api(request):
 
                     else:
                         error_data = response.json()
+                        print(error_data)
                         return JsonResponse(send_response(f"Payment request failed: {error_data.get('message', 'Please try again.')}", False))
                 # elif level == 'payment':
                 #     amount = session.amount
@@ -229,4 +228,45 @@ def payment_callback(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+
+
+import json
+import hashlib
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import PaymentTransaction
+
+@csrf_exempt
+def paystack_webhook(request):
+    if request.method == 'POST':
+        try:
+            # Parse the JSON payload from Paystack
+            payload = json.loads(request.body.decode('utf-8'))
+            event = payload.get('event')  # The event type (e.g., charge.success)
+            data = payload.get('data')  # Payment data
+            
+            if event == 'charge.success':
+                transaction_id = data.get('reference')  # Paystack reference
+                amount_paid = data.get('amount') / 100  # Convert to original currency (in cedis)
+                customer_email = data.get('customer', {}).get('email', None)
+                status = data.get('status')  # Should be 'success'
+
+                # Update your PaymentTransaction model
+                PaymentTransaction.objects.filter(transaction_id=transaction_id).update(
+                    status=status,
+                    amount=amount_paid
+                )
+                
+                # You could perform additional actions like sending notifications
+
+                return JsonResponse({'status': 'success'}, status=200)
+            else:
+                # Handle other Paystack events like 'charge.failed', etc.
+                return JsonResponse({'status': 'ignored', 'message': 'Unhandled event'}, status=400)
+        
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
