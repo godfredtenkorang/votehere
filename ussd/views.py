@@ -7,6 +7,7 @@ import uuid
 import requests
 from decimal import Decimal
 import random
+from django.conf import settings
 
 # Sample nominees data
 nominees = {
@@ -94,50 +95,80 @@ def ussd_api(request):
                     return JsonResponse(send_response(message, True))
 
                 elif level == 'payment':
-                    amount = session.amount
-                    
+                    amount = session.amount * 100
                     telephone = msisdn
-                    network_type = network
-                    username = 'votfric_gen'
-                    password = 'bVdwy86yoWtdZcW'
-                    merchant_id = 'NPS_000288'
-                    key = str(2345)
-                    hashed_password = hashlib.md5(password.encode()).hexdigest()
-                    concat_keys = username + key + hashed_password
-                    secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-                    callback = 'https://voteafric.com/ussd/callback/'
-                    item_desc = 'Payment for vote'
-                    order_id = str(uuid.uuid4())
-
-                    # Payment payload
-                    payload = {
-                        'payby': network_type,
-                        'order_id': order_id,
-                        'customerNumber': telephone,
-                        'customerName': telephone,
-                        'isussd': 1,
-                        'amount': str(amount),
-                        'merchant_id': merchant_id,
-                        'secrete': str(secrete),
-                        'key': key,
-                        'callback': callback,
-                        'item_desc': item_desc
-                    }
-
-                    headers = {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    }
-
-                    # Sending payment request
-                    response = requests.post("https://api.nalosolutions.com/payplus/api/", json=payload, headers=headers)
+                    callback_url = 'https://voteafric.com/ussd/callback/'
                     
+                    payload = {
+                        'email': telephone,
+                        'amount': amount,
+                        'currency': 'GHS',  # Set appropriate currency
+                        'reference': str(uuid.uuid4()),
+                        'callback_url': callback_url,
+                        'payment_type': 'mobilemoneyghana',
+                    }
+                    
+                    headers = {
+                        "Authorization": "Bearer settings.PAYSTACK_SECRET_KEY",  # Replace with your actual secret key
+                        "Content-Type": "application/json",
+                    }
+                    
+                     # Sending payment request to Paystack
+                    response = requests.post("https://api.paystack.co/transaction/initialize", json=payload, headers=headers)
+
                     if response.status_code == 200:
                         data = response.json()
-                        message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
-                        return JsonResponse({"status": "success", "data": data}, status=200)
+                        # Redirect user to the Paystack payment page or provide the payment link
+                        payment_url = data['data']['authorization_url']
+                        message = f"You are about to pay GH¢{amount / 100:.2f}. Please approve the prompt to make payment."
+                        return JsonResponse({"status": "success", "data": {"payment_url": payment_url}}, status=200)
                     else:
                         return JsonResponse(send_response("Payment request failed. Please try again.", False))
+                # elif level == 'payment':
+                #     amount = session.amount
+                #     endpoint = "https://api.nalosolutions.com/payplus/api/"
+                #     telephone = msisdn
+                #     network_type = network
+                #     username = 'votfric_gen'
+                #     password = 'bVdwy86yoWtdZcW'
+                #     merchant_id = 'NPS_000288'
+                #     key = str(2345)
+                #     hashed_password = hashlib.md5(password.encode()).hexdigest()
+                #     concat_keys = username + key + hashed_password
+                #     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
+                #     callback = 'https://voteafric.com/ussd/callback/'
+                #     item_desc = 'Payment for vote'
+                #     order_id = str(uuid.uuid4())
+
+                #     # Payment payload
+                #     payload = {
+                #         'payby': network_type,
+                #         'order_id': order_id,
+                #         'customerNumber': telephone,
+                #         'customerName': telephone,
+                #         'isussd': 1,
+                #         'amount': str(amount),
+                #         'merchant_id': merchant_id,
+                #         'secrete': str(secrete),
+                #         'key': key,
+                #         'callback': callback,
+                #         'item_desc': item_desc
+                #     }
+
+                #     headers = {
+                #         "Content-Type": "application/json",
+                #         "Accept": "application/json"
+                #     }
+
+                #     # Sending payment request
+                #     response = requests.post(endpoint, json=payload, headers=headers)
+                    
+                #     if response.status_code == 200:
+                #         session.delete()
+                #         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
+                #         return JsonResponse(send_response(message, False))
+                #     else:
+                #         return JsonResponse(send_response("Payment request failed. Please try again.", False))
 
                 else:
                     return JsonResponse(send_response("Invalid session state.", False))
