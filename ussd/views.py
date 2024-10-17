@@ -117,10 +117,14 @@ def ussd_api(request):
                             "bank": "MTN"
                             
                         },
-                         "metadata": {
-                            "phone": telephone,
-                            "network": network_type,
-                            "votes": session.votes
+                         'metadata': {
+                            'custom_fields': [
+                                {
+                                    'display_name': 'Phone Number',
+                                    'variable_name': 'phone_number',
+                                    'value': telephone
+                                }
+                            ]
                         },
                         "reference": reference,
                         
