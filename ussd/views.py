@@ -135,7 +135,7 @@ def ussd_api(request):
 
                     if response.status_code == 200:
                         message = f"You are about to pay GH¢{amount:.2f}. Please follow the USSD code prompt sent to your phone to complete the payment."
-                        return JsonResponse(send_response(message, False))
+                        return JsonResponse(send_response(message, True))
 
                     else:
                         error_data = response.json()
