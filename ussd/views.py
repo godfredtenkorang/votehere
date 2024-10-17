@@ -92,7 +92,7 @@ def ussd_api(request):
                     session.amount = Decimal(votes) * Decimal(1.00)
                     session.save()
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
-                    return JsonResponse(send_response(message, False))
+                    return JsonResponse(send_response(message, True))
 
                 elif level == 'payment':
                     amount = session.amount * 100
