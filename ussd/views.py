@@ -97,7 +97,7 @@ def ussd_api(request):
                 elif level == 'payment':
                     amount = session.amount * 100
                     telephone = msisdn
-                    endpoint = "https://api.paystack.co/charge/submit_pin"
+                    endpoint = "https://api.paystack.co/charge"
                     email = f"{msisdn}@voteafric.com"
                     amount_in_kobo = int(Decimal(amount) * 100)  # Convert to kobo
                     
