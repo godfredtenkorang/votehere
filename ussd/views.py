@@ -105,11 +105,11 @@ def ussd_api(request):
                     # Create a unique transaction reference
                     reference = str(uuid.uuid4())
                     
-                    amount_in_kobo = int(Decimal(amount))  # Convert to kobo
+                    
                     
                     payload = {
                         'email': email,
-                        'amount': amount_in_kobo,
+                        'amount': amount,
                         'currency': 'GHS',  # Set appropriate currency
                         "ussd": {
                             "type": "ussd",
