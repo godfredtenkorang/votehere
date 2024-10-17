@@ -99,6 +99,7 @@ def ussd_api(request):
                     telephone = msisdn
                     endpoint = "https://api.paystack.co/charge"
                     email = f"{msisdn}@voteafric.com"
+                    
                     amount_in_kobo = int(Decimal(amount) * 100)  # Convert to kobo
                     
                     payload = {
@@ -111,7 +112,7 @@ def ussd_api(request):
                         },
                          "metadata": {
                             "phone": telephone,
-                            "reference": "5bwib5v6anhe9xa"
+                            "reference": telephone
                         }
                         
                     }
