@@ -113,7 +113,8 @@ def ussd_api(request):
                         'amount': amount_in_kobo,
                         'currency': 'GHS',  # Set appropriate currency
                         "ussd": {
-                            "type": "ussd",
+                            "type": "bank",
+                            "bank": "MTN"
                             
                         },
                          "metadata": {
