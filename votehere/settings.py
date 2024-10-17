@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['.voteafric-4083e14006b5.herokuapp.com','www.voteafric.com','voteafric.com','3.227.95.35', '34.199.138.158','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['.voteafric-4083e14006b5.herokuapp.com','www.voteafric.com','voteafric.com','3.227.95.35', '34.199.138.158', '54.90.131.91','localhost','127.0.0.1']
 
 
 # Application definition
