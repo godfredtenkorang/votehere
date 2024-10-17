@@ -95,7 +95,7 @@ def ussd_api(request):
                     return JsonResponse(send_response(message, True))
 
                 elif level == 'payment':
-                    amount = session.amount
+                    amount = session.amount * 1
                     telephone = msisdn
                     network_type = network
                     endpoint = "https://api.paystack.co/charge"
@@ -105,7 +105,8 @@ def ussd_api(request):
                     # Create a unique transaction reference
                     reference = str(uuid.uuid4())
                     
-                    
+                    # amount_in_kobo = int(Decimal(amount))  # Convert to kobo
+                    print(amount)
                     
                     payload = {
                         'email': email,
