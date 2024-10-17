@@ -117,7 +117,7 @@ def ussd_api(request):
                         },
                         
                          "metadata": {
-                            "phone": telephone,
+                            "phone": msisdn,
                             "network": network_type,
                             "votes": session.votes
                             
