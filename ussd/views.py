@@ -97,8 +97,13 @@ def ussd_api(request):
                 elif level == 'payment':
                     amount = session.amount * 100
                     telephone = msisdn
+                    network_type = network
                     endpoint = "https://api.paystack.co/charge"
+                    public_key = f"{settings.PAYSTACK_PUBLIC_KEY}"
+                    secret_key = f"{settings.PAYSTACK_SECRET_KEY}"
                     email = f"{msisdn}@voteafric.com"
+                    # Create a unique transaction reference
+                    reference = str(uuid.uuid4())
                     
                     amount_in_kobo = int(Decimal(amount) * 100)  # Convert to kobo
                     
@@ -108,18 +113,22 @@ def ussd_api(request):
                         'currency': 'GHS',  # Set appropriate currency
                         "ussd": {
                             "type": "ussd",
-                            
+                            "bank": "057",
                         },
+                        
                          "metadata": {
                             "phone": telephone,
-                            "reference": telephone
-                        }
+                            "network": network_type,
+                            "votes": session.votes
+                            
+                        },
+                        "reference": reference,
                         
                     }
                     
                     
                     headers = {
-                        "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",  # Replace with your actual secret key
+                        "Authorization": f"Bearer {secret_key}",  # Replace with your actual secret key
                         "Content-Type": "application/json",
                     }
                     
@@ -127,9 +136,7 @@ def ussd_api(request):
                     response = requests.post(endpoint, json=payload, headers=headers)
 
                     if response.status_code == 200:
-                        data = response.json()
-                        payment_instructions = data['data']['display_text']  # USSD instructions
-                        message = f"You are about to pay GH¢{amount:.2f}. Follow the instructions below to complete payment:\n{payment_instructions}"
+                        message = f"You are about to pay GH¢{amount:.2f}. Please follow the USSD code prompt sent to your phone to complete the payment."
                         return JsonResponse(send_response(message, False))
 
                     else:
