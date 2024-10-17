@@ -110,14 +110,14 @@ def ussd_api(request):
                     
                     payload = {
                         'email': email,
-                        'amount': 1,
+                        'amount': amount_in_kobo,
                         'currency': 'GHS',  # Set appropriate currency
                         "ussd": {
                             "type": "ussd",
-                            "bank": "057",
+                            "bank": "mobile_money",
                         },
                          "metadata": {
-                            "phone": msisdn,
+                            "phone": telephone,
                             "network": network_type,
                             "votes": session.votes
                         },
