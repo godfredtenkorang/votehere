@@ -95,7 +95,7 @@ def ussd_api(request):
                     return JsonResponse(send_response(message, True))
 
                 elif level == 'payment':
-                    amount = session.amount * 100
+                    amount = session.amount
                     telephone = msisdn
                     network_type = network
                     endpoint = "https://api.paystack.co/charge"
