@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
-import django_heroku
-import dj_database_url
+# import django_heroku
+# import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = ['.voteafric-4083e14006b5.herokuapp.com','www.voteafric.com','voteafric.com','3.227.95.35', '34.199.138.158', '54.90.131.91','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['.voteafric.com','167.71.20.123','localhost','127.0.0.1']
 
 
 # Application definition
@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 ]
 
-SITE_ID=2
+SITE_ID=1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,42 +89,42 @@ WSGI_APPLICATION = 'votehere.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'voteafricdb',
-#         'USER': 'voteafricuser',
-#         'PASSWORD': 'Gony@100',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DB_TABLE'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+    }
 }
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': 'debug.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
 
 
 # Password validation
@@ -162,13 +162,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-django_heroku.settings(locals())
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# django_heroku.settings(locals())
 
 
 
-PAYSTACK_SECRET_KEY = 'sk_live_f9433197a98a7b4667db063baa64732de9b9be6d'
-PAYSTACK_PUBLIC_KEY = 'pk_live_279c99cb1ff517482f3e397e0bf027e850286550'
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 
 # PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
 # PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
@@ -176,18 +177,18 @@ PAYSTACK_PUBLIC_KEY = 'pk_live_279c99cb1ff517482f3e397e0bf027e850286550'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-import requests
-import os
+# import requests
+# import os
 
-QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
+# QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
 
-proxies = {
-"http": QUOTAGUARDSTATIC_URL,
-"https": QUOTAGUARDSTATIC_URL
-}
+# proxies = {
+# "http": QUOTAGUARDSTATIC_URL,
+# "https": QUOTAGUARDSTATIC_URL
+# }
 
-res = requests.get("http://us-east-static-09.quotaguard.com", proxies=proxies)
-print(res.text)
+# res = requests.get("http://us-east-static-09.quotaguard.com", proxies=proxies)
+# print(res.text)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
