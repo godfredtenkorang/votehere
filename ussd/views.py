@@ -183,7 +183,7 @@ def ussd_api(request):
                     }
 
                     # Sending payment request
-                    response = requests.post(endpoint, json=payload, headers=headers)
+                    response = requests.post(endpoint, data=payload, headers=headers)
                     
                     if response.status_code == 200:
                         session.delete()
