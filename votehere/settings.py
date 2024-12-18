@@ -185,7 +185,7 @@ MEDIA_URL = '/media/'
 # proxies = {
 # "http": QUOTAGUARDSTATIC_URL,
 # "https": QUOTAGUARDSTATIC_URL
-# }
+# 
 
 # res = requests.get("http://us-east-static-09.quotaguard.com", proxies=proxies)
 # print(res.text)
