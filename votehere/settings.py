@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = ['.voteafric.com','167.71.20.123','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['.voteafric.com','161.35.13.185','localhost','127.0.0.1']
 
 
 # Application definition
