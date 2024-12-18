@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import handler404
 from django.conf import settings
 from django.conf.urls.static import static
 from vote.sitemaps import *
@@ -32,7 +33,7 @@ sitemaps = {
 urlpatterns = [
     path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt/', TemplateView.as_view(template_name="vote/robots.txt", content_type="text/plain")),
-    path('admin/', admin.site.urls),
+    path('voteafric_admin/', admin.site.urls),
     path('', include('vote.urls')),
     path('payment/', include('payment.urls')),
     path('register/', include('register.urls')),
@@ -41,3 +42,5 @@ urlpatterns = [
     path('ussd/', include('ussd.urls')),
     path('api/vote/', include('vote.api.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'vote.views.custom_404_view'

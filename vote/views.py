@@ -88,4 +88,5 @@ def category_search_view(request, category_slug=None):
     return render(request, "vote/search.html", context)
 
 
-
+def custom_404_view(request, exception):
+    return render(request, 'vote/404.html', status=404)
