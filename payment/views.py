@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from payment.models import Payment, Nominees
 from vote.models import SubCategory, Category
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseForbidden
 from django.contrib import messages
 from django.conf import settings
 from . import forms
 from django.utils import timezone
+from .models import PageExpiration
 
 # Create your views here.
 def make_payment(request):
@@ -42,6 +43,10 @@ def result(request, result_slug):
 
 def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
     nominee = get_object_or_404(Nominees, slug=nominee_slug)
+    
+    if nominee.is_due():
+        return render(request, 'payment/access_denied.html')
+    
     if request.method == 'POST':
         name = request.POST['name']
         email = request.POST['email']
@@ -53,6 +58,7 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
                         vote=vote, amount=amount, total_amount=total_amount)
         payment.save()
         return render(request, 'payment/make_payment.html', {'payment': payment, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
+
 
 
     context = {
@@ -104,3 +110,7 @@ def vote_failed(request):
         'title': 'Vote failed',
     }
     return render(request, 'payment/vote_failed.html', context)
+
+
+def access_denied(request):
+    return render(request, 'payment/access_denied.html')

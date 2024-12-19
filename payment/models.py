@@ -3,6 +3,7 @@ from django.urls import reverse
 from vote.models import SubCategory, Category
 import secrets
 from .paystack import PayStack
+from django.utils.timezone import now
 
 class Nominees(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
@@ -20,6 +21,9 @@ class Nominees(models.Model):
     class Meta:
         verbose_name_plural = "nominees"
         ordering = ('-total_vote',)
+        
+    def is_due(self):
+        return self.end_date < now()
 
     def __str__(self):
         return f"{self.category} - {self.sub_category} - {self.name}"
@@ -70,3 +74,14 @@ class Payment(models.Model):
     #     return reverse("nominee_detail", kwargs={
     #         "ref": self.ref,
     #     })
+
+
+class PageExpiration(models.Model):
+    page_name = models.CharField(max_length=225, unique=True)
+    expiration_date = models.DateTimeField()
+    
+    def is_expiry(self):
+        return now() >= self.expiration_date
+    
+    def __str__(self):
+        return self.page_name

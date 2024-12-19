@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Payment, Nominees
+from .models import Payment, Nominees, PageExpiration
 
 # admin.site.register(Payment)
 # admin.site.register(Nominees)
@@ -37,3 +37,7 @@ class VoteNomineeAdmin(admin.ModelAdmin):
   
   
 admin.site.register(Nominees, VoteNomineeAdmin)
+
+
+
+admin.site.register(PageExpiration)
