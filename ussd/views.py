@@ -8,6 +8,7 @@ import requests
 from decimal import Decimal
 import random
 from django.conf import settings
+from payment.models import Nominees
 
 # Sample nominees data
 nominees = {
@@ -56,17 +57,20 @@ def ussd_api(request):
             else:  # Follow-up request
                 level = session.level
                 if level == 'start':
-                    nominee_id = user_data
-                    if nominee_id in nominees:
-                        nominee = nominees[nominee_id]
-                        name = nominee['name']
-                        category = nominee['category']
-                        message = f"Confirm candidate\nName: {name}\nCategory: {category}\n1) Confirm\n2) Cancel"
-                        session.candidate_id = nominee_id
+                    try:
+                        nominee = Nominees.objects.get(code=user_data)
+                        message = (
+                            f"Confirm Candidate\n"
+                            f"Name: {nominee.name}"
+                            f"Category: {nominee.category}"
+                            f"1) Confirm\n 2) Cancel"
+                        )
+                        session.candidate_id = nominee.code
                         session.level = 'candidate'
                         session.save()
                         return JsonResponse(send_response(message, True))
-                    else:
+                    
+                    except Nominees.DoesNotExist:
                         return JsonResponse(send_response("Invalid nominee code. Please try again.", False))
 
                 elif level == 'candidate':
@@ -94,59 +98,6 @@ def ussd_api(request):
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
 
-                # elif level == 'payment':
-                #     amount = session.amount * 1
-                #     telephone = msisdn
-                #     network_type = network
-                #     endpoint = "https://api.paystack.co/charge"
-                #     public_key = f"{settings.PAYSTACK_PUBLIC_KEY}"
-                #     secret_key = f"{settings.PAYSTACK_SECRET_KEY}"
-                #     email = f"{msisdn}@voteafric.com"
-                #     # Create a unique transaction reference
-                #     reference = str(uuid.uuid4())
-                    
-                #     amount_in_kobo = int(Decimal(amount))  # Convert to kobo
-                #     print(amount_in_kobo)
-                    
-                #     payload = {
-                #         'email': email,
-                #         'amount': amount_in_kobo,
-                #         'currency': 'GHS',  # Set appropriate currency
-                #         "ussd": {
-                #             "type": "bank",
-                #             "bank": "MTN"
-                            
-                #         },
-                #          'metadata': {
-                #             'custom_fields': [
-                #                 {
-                #                     'display_name': 'Phone Number',
-                #                     'variable_name': 'phone_number',
-                #                     'value': telephone
-                #                 }
-                #             ]
-                #         },
-                #         "reference": reference,
-                        
-                #     }
-                    
-                    
-                #     headers = {
-                #         "Authorization": f"Bearer {secret_key}",  # Replace with your actual secret key
-                #         "Content-Type": "application/json",
-                #     }
-                    
-                #      # Sending payment request to Paystack
-                #     response = requests.post(endpoint, json=payload, headers=headers)
-
-                #     if response.status_code == 200:
-                #         message = f"You are about to pay GH¢{amount:.2f}. Please follow the USSD code prompt sent to your phone to complete the payment."
-                #         return JsonResponse(send_response(message, False))
-
-                #     else:
-                #         error_data = response.json()
-                #         print(error_data)
-                #         return JsonResponse(send_response(f"Payment request failed: {error_data.get('message', 'Please try again.')}", False))
                 elif level == 'payment':
                     amount = session.amount
                     endpoint = "https://api.nalosolutions.com/payplus/api/"
