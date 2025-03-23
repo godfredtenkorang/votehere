@@ -32,8 +32,6 @@ class Nominees(models.Model):
 class Payment(models.Model):
     nominee = models.ForeignKey(Nominees, on_delete=models.CASCADE, null=True)
     content = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
     phone = models.CharField(max_length=14, null=True)
     amount = models.PositiveBigIntegerField()
     total_amount = models.FloatField(null=True)
@@ -57,13 +55,13 @@ class Payment(models.Model):
         super().save(*args, **kwargs)
         
     def amount_value(self) -> int:
-        return self.amount * 1
+        return self.amount
     
     def verify_payment(self):
         paystack = PayStack()
         status, result = paystack.verify_payment(self.ref, self.amount)
         if status:
-            if result['amount'] / 1 == self.amount:
+            if result['amount'] == self.amount:
                 self.verified = True
             self.save()
         if self.verified:

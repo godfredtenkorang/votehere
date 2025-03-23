@@ -9,7 +9,7 @@
         <br>
         <p>{% if nominee %}{{ nominee.category }}{% else %}Award Name{% endif %}</p>
         <div class="button">
-            
+
         </div>
     </div>
 
@@ -36,93 +36,94 @@
 
 <!-- This is the form voters can use to vote.
 it is hidden so when voters click on the vote button, the it appears -->
-<section  class="paymentForm pay-form">
-   
-            <form class="form-for-voting" method="POST">
+<section class="paymentForm pay-form">
 
-                <!-- get the nominee image, name and the category -->
-                <div class="nominee-details">
-                    <img src="{{ nominee.image.url }}" alt="image" loading="lazy">
-                    <br>
-                    <h4>{{ nominee.name }}</h4>
-                </div>
+    <form class="form-for-voting" method="POST">
 
-                <div class="alert">
-                    <p><i class="fa-solid fa-info"></i> Note: Make sure you are voting for the right nominee, please. This purchase cannot be reversed.</p>
-                </div> 
-                {% csrf_token %}
-                <label for=""><i class="fa-solid fa-user"></i> Full Name</label> <br>
+        <!-- get the nominee image, name and the category -->
+        <div class="nominee-details">
+            <img src="{{ nominee.image.url }}" alt="image" loading="lazy">
+            <br>
+            <h4>{{ nominee.name }}</h4>
+        </div>
+
+        <div class="alert">
+            <p><i class="fa-solid fa-info"></i> Note: Make sure you are voting for the right nominee, please. This
+                purchase cannot be reversed.</p>
+        </div>
+        {% csrf_token %}
+        <!-- <label for=""><i class="fa-solid fa-user"></i> Full Name</label> <br>
                 <input type="text" name="name" id="user-name" placeholder="Your Full Name" required> <br>
             
                 <label for=""><i class="fa-solid fa-envelope"></i> Email Address</label> <br>
-                <input type="email" name="email" id="email" placeholder="Email Address" required> <br>
-            
-                <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label> <br>
-                <input type="number" name="phone" id="" placeholder="Phone Number" required> <br>
-            
-                <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote <span>(GHS 0.50 per vote)</span></label> <br>
-                <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
-            
-                <input type="" hidden  name="total_amount" id="amount-top-pay" placeholder="Amount to pay per vote" required>
-                <br>
-            
-                <input type="number"  hidden name="amount" id="total-amount-top-pay" placeholder="Amount to pay per vote"  required
-                    > 
-                    <div class="alert-amount-to-pay">
+                <input type="email" name="email" id="email" placeholder="Email Address" required> <br> -->
 
-                    </div>
-                <!-- pay button -->
-                <button type="submit">Pay Now</button>
-            
-            </form>
-            <div class="pay-img">
-                <img src="{% static 'vote/img/pay.jpg' %}" alt="image" loading="lazy">
-        
-            </div>
+        <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label> <br>
+        <input type="number" name="phone" id="" placeholder="Phone Number" required> <br>
+
+        <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote <span>(GHS 0.50 per vote)</span></label>
+        <br>
+        <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
+
+        <input type="" hidden name="total_amount" id="amount-top-pay" placeholder="Amount to pay per vote" required>
+        <br>
+
+        <input type="number" hidden name="amount" id="total-amount-top-pay" placeholder="Amount to pay per vote"
+            required>
+        <div class="alert-amount-to-pay">
+
+        </div>
+        <!-- pay button -->
+        <button type="submit">Pay Now</button>
+
+    </form>
+    <div class="pay-img">
+        <img src="{% static 'vote/img/pay.jpg' %}" alt="image" loading="lazy">
+
+    </div>
 </section>
 
 <script defer>
-    
+
     function voteForm() {
-    const numberOfVotesInput = document.getElementById("number-of-vote");
-    const amountToPayInput = document.getElementById("amount-top-pay");
-    const totalAmountToPayInput = document.getElementById("total-amount-top-pay");
-    const alertAmountToPay = document.querySelector('.alert-amount-to-pay');
-    const amountPerVote = 0.5;
-    const totalAmountTopPay = amountPerVote * 100;
+        const numberOfVotesInput = document.getElementById("number-of-vote");
+        const amountToPayInput = document.getElementById("amount-top-pay");
+        const totalAmountToPayInput = document.getElementById("total-amount-top-pay");
+        const alertAmountToPay = document.querySelector('.alert-amount-to-pay');
+        const amountPerVote = 0.5;
+        const totalAmountTopPay = amountPerVote * 100;
 
-    numberOfVotesInput.addEventListener("input", () => {
-        const numberOfVotes = parseFloat(numberOfVotesInput.value);
-        const userAmountToPay = parseFloat((numberOfVotes * amountPerVote).toFixed(2));
-        const totalAmountToPay = parseFloat((numberOfVotes * totalAmountTopPay).toFixed(2));
-        const VoterName = document.getElementById("user-name").value
+        numberOfVotesInput.addEventListener("input", () => {
+            const numberOfVotes = parseFloat(numberOfVotesInput.value);
+            const userAmountToPay = parseFloat((numberOfVotes * amountPerVote).toFixed(2));
+            const totalAmountToPay = parseFloat((numberOfVotes * totalAmountTopPay).toFixed(2));
 
-        amountToPayInput.value = userAmountToPay;
-        totalAmountToPayInput.value = totalAmountToPay;
+            amountToPayInput.value = userAmountToPay;
+            totalAmountToPayInput.value = totalAmountToPay;
 
-        if (isNaN(numberOfVotes) || numberOfVotes === 0) {
-            alertAmountToPay.style.display = "none"; // Hide the alert if the input is empty or not a number
-        } else {
-            // Displaying the calculated amount to be paid
-            alertAmountToPay.style.display = "block";
-            alertAmountToPay.textContent = `Dear ${VoterName}, You will pay GHS ${userAmountToPay} for ${numberOfVotes} votes.`;
-        }
+            if (isNaN(numberOfVotes) || numberOfVotes === 0) {
+                alertAmountToPay.style.display = "none"; // Hide the alert if the input is empty or not a number
+            } else {
+                // Displaying the calculated amount to be paid
+                alertAmountToPay.style.display = "block";
+                alertAmountToPay.textContent = `Hello, You will pay GHS ${userAmountToPay} for ${numberOfVotes} votes.`;
+            }
 
-        if (isNaN(amountToPayInput.value)) {
-            amountToPayInput.value = 0; 
-        }
-        if (isNaN(totalAmountToPayInput.value)) {
-            totalAmountToPayInput.value = 0; 
-        }
-    });
+            if (isNaN(amountToPayInput.value)) {
+                amountToPayInput.value = 0;
+            }
+            if (isNaN(totalAmountToPayInput.value)) {
+                totalAmountToPayInput.value = 0;
+            }
+        });
 
-    document.querySelector(".form-for-voting").addEventListener("submit", (event) => {
-        amountToPayInput.value = parseFloat(amountToPayInput.value);
-        // You may add more validation or processing before form submission
-    });
-}
+        document.querySelector(".form-for-voting").addEventListener("submit", (event) => {
+            amountToPayInput.value = parseFloat(amountToPayInput.value);
+            // You may add more validation or processing before form submission
+        });
+    }
 
-voteForm();
+    voteForm();
 
 </script>
 
