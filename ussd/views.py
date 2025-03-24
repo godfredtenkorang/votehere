@@ -10,12 +10,7 @@ import random
 from django.conf import settings
 from payment.models import Nominees
 
-# Sample nominees data
-# nominees = {
-#     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
-#     'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
-#     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
-# }
+
 
 from django.views import View
 
@@ -36,6 +31,12 @@ def ussd_api(request):
         # Extracting request data
         user_id = data.get('USERID')
         msisdn = data.get('MSISDN')
+         # Ensure MSISDN starts with 233
+        if msisdn.startswith("0"):  # If it starts with 0, replace it
+            msisdn = "233" + msisdn[1:]
+        elif not msisdn.startswith("233"):  # If it doesn’t start with 233, ensure proper format
+            msisdn = "233" + msisdn
+            
         user_data = data.get('USERDATA', '').strip().upper()
         msgtype = data.get('MSGTYPE')  # Determines if initial request (True) or follow-up (False)
         network = data.get('NETWORK')
@@ -122,14 +123,14 @@ def ussd_api(request):
 
                     # Payment payload
                     payload = {
-                        'payby': network_type,
+                        'payby': str(network_type),
                         'order_id': order_id,
                         'customerNumber': telephone,
-                        'customerName': telephone,
+                        'customerName': str(telephone),
                         'isussd': 1,
-                        'amount': str(amount),
+                        'amount': int(amount),
                         'merchant_id': merchant_id,
-                        'secrete': secrete,
+                        'secrete': str(secrete),
                         'key': key,
                         'callback': callback,
                         'item_desc': item_desc
