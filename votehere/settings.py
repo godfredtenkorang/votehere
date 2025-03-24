@@ -14,6 +14,7 @@ from pathlib import Path
 from decouple import config
 import django_heroku
 import dj_database_url
+import requests
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -181,14 +182,15 @@ MEDIA_URL = '/media/'
 # import os
 
 # QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
+QUOTAGUARDSTATIC_URL = config('QUOTAGUARDSTATIC_URL')
 
-# proxies = {
-# "http": QUOTAGUARDSTATIC_URL,
-# "https": QUOTAGUARDSTATIC_URL
-# 
+proxies = {
+    "http": QUOTAGUARDSTATIC_URL,
+    "https": QUOTAGUARDSTATIC_URL
+}
 
-# res = requests.get("http://us-east-static-09.quotaguard.com", proxies=proxies)
-# print(res.text)
+res = requests.get("http://ip.quotaguard.com/", proxies=proxies)
+print(res.text)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
