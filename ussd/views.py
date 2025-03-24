@@ -36,7 +36,7 @@ def ussd_api(request):
         # Extracting request data
         user_id = data.get('USERID')
         msisdn = data.get('MSISDN')
-        user_data = data.get('USERDATA')
+        user_data = data.get('USERDATA', '').strip().upper()
         msgtype = data.get('MSGTYPE')  # Determines if initial request (True) or follow-up (False)
         network = data.get('NETWORK')
 
@@ -64,7 +64,7 @@ def ussd_api(request):
                 level = session.level
                 if level == 'start':
                     try:
-                        nominee = Nominees.objects.get(code=user_data)
+                        nominee = Nominees.objects.get(code__iexact=user_data)
                         message = (
                             f"Confirm Candidate\n"
                             f"Name: {nominee.name}\n"
