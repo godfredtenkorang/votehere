@@ -129,7 +129,7 @@ def ussd_api(request):
                         'isussd': 1,
                         'amount': str(amount),
                         'merchant_id': merchant_id,
-                        'secrete': str(secrete),
+                        'secrete': secrete,
                         'key': key,
                         'callback': callback,
                         'item_desc': item_desc
