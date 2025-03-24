@@ -11,11 +11,11 @@ from django.conf import settings
 from payment.models import Nominees
 
 # Sample nominees data
-nominees = {
-    'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
-    'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
-    'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
-}
+# nominees = {
+#     'GT1': {'name': 'Godfred Tenkorang', 'category': 'Most Talented'},
+#     'OA2': {'name': 'Ohene Asare', 'category': 'Best Performer'},
+#     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
+# }
 
 # Helper function to generate random key
 def generate_random_key():
@@ -61,7 +61,7 @@ def ussd_api(request):
                         nominee = Nominees.objects.get(code=user_data)
                         message = (
                             f"Confirm Candidate\n"
-                            f"Name: {nominee.name}"
+                            f"Name: {nominee.name}\n"
                             f"Category: {nominee.category}\n"
                             f"1) Confirm\n 2) Cancel"
                         )
@@ -110,7 +110,7 @@ def ussd_api(request):
                     hashed_password = hashlib.md5(password.encode()).hexdigest()
                     concat_keys = username + key + hashed_password
                     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-                    callback = 'https://voteafric.com/ussd/callback/'
+                    callback = 'https://voteafric.com/ussd/aystack/webhook/'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
 
@@ -134,7 +134,7 @@ def ussd_api(request):
                     }
 
                     # Sending payment request
-                    response = requests.post(endpoint, data=payload, headers=headers)
+                    response = requests.post(endpoint, json=payload, headers=headers)
                     
                     if response.status_code == 200:
                         session.delete()
