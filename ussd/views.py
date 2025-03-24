@@ -17,6 +17,12 @@ from payment.models import Nominees
 #     'SA3': {'name': 'Seth Ansah', 'category': 'Outstanding Leadership'},
 # }
 
+from django.views import View
+
+class AystackWebhookView(View):
+    def post(self, request, *args, **kwargs):
+        return JsonResponse({"message": "Webhook received"}, status=200)
+
 # Helper function to generate random key
 def generate_random_key():
     return random.randint(1000, 9999)
@@ -110,7 +116,7 @@ def ussd_api(request):
                     hashed_password = hashlib.md5(password.encode()).hexdigest()
                     concat_keys = username + key + hashed_password
                     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
-                    callback = 'https://voteafric.com/ussd/aystack/webhook/'
+                    callback = 'https://voteafric.com/ussd/callback'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
 
