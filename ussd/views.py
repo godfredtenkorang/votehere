@@ -177,28 +177,77 @@ def payment_callback(request):
             status = data.get('status')
             amount = data.get('amount')
             customer_number = data.get('customerNumber')
+            order_id = data.get('order_id')  # Get the order_id from the callback
+            
+            
 
             # Update the PaymentTransaction record
-            PaymentTransaction.objects.filter(transaction_id=transaction_id).update(
-                status=status,
-                amount=amount
-            )
+            transaction = PaymentTransaction.objects.filter(transaction_id=transaction_id).first()
+            
+            if transaction:
+                transaction.status = status
+                transaction.amount = amount
+                transaction.save()
+            else:
+                # If transaction doesn't exist, create a new one (optional)
+                transaction = PaymentTransaction.objects.create(
+                    transaction_id=transaction_id,
+                    status=status,
+                    amount=amount,
+                    order_id=order_id,
+                    msisdn=customer_number
+                )
 
             # Handle session based on payment status
-            session = CustomSession.objects.filter(user_id=customer_number).first()
+            session = CustomSession.objects.filter(
+                user_id=customer_number,
+                level='payment'
+            ).first()
 
             if session:
-                if status == "success":
-                    # Payment succeeded, delete session
-                    session.delete()
-                    return JsonResponse({'status': 'success', 'message': 'Payment processed and session deleted.'}, status=200)
+                if status.lower() == "success":
+                    try:
+                        nominee = Nominees.objects.get(code=session.candidate_id)
+                        nominee.total_vote += session.votes # Add the votes from the session
+                        nominee.save()
+                        
+                        # Delete the session after successful processing
+                        session.delete()
+                    
+                        return JsonResponse({
+                            'status': 'success', 
+                            'message': 'Payment processed and votes added to nominee.'
+                        }, status=200)
+                    except Nominees.DoesNotExist:
+                        return JsonResponse({
+                            'status': 'error', 
+                            'message': 'Nominee not found.'
+                         }, status=404)
+                    except Exception as e:
+                        return JsonResponse({
+                            'status': 'error',
+                            'message': f'Error updating nominee votes {str(e)}'
+                        }, status=500)
                 else:
-                    return JsonResponse({'status': 'error', 'message': 'Payment failed, session retained.'}, status=400)
+                    # Payment failed, you might want to keep the session for retry
+                    return JsonResponse({
+                        'status': 'error', 
+                        'message': 'Payment failed, session retained.'
+                    }, status=400)
             else:
-                return JsonResponse({'status': 'error', 'message': 'Session not found.'}, status=404)
+                return JsonResponse({
+                    'status': 'error', 
+                    'message': 'Session not found.'
+                }, status=404)
 
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+            return JsonResponse({
+                'status': 'error', 
+                'message': str(e)
+            }, status=400)
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+    return JsonResponse({
+        'status': 'error', 
+        'message': 'Invalid request method'
+    }, status=405)
 
