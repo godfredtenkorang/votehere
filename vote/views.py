@@ -1,6 +1,12 @@
 from django.shortcuts import render, get_object_or_404
+
+from payment.models import Nominees
+from ussd.models import CustomSession, PaymentTransaction
 from .models import *
 from django.db.models import Q  # New
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 def index(request):
@@ -90,3 +96,90 @@ def category_search_view(request, category_slug=None):
 
 def custom_404_view(request, exception):
     return render(request, 'vote/404.html', status=404)
+
+
+@csrf_exempt
+def payment_callback(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+
+            # Extract data from the callback
+            transaction_id = data.get('transaction_id')
+            status = data.get('status')
+            amount = data.get('amount')
+            customer_number = data.get('customerNumber')
+            order_id = data.get('order_id')  # Get the order_id from the callback
+            
+            
+
+            # Update the PaymentTransaction record
+            transaction = PaymentTransaction.objects.filter(transaction_id=transaction_id).first()
+            
+            if transaction:
+                transaction.status = status
+                transaction.amount = amount
+                transaction.save()
+            else:
+                # If transaction doesn't exist, create a new one (optional)
+                transaction = PaymentTransaction.objects.create(
+                    transaction_id=transaction_id,
+                    status=status,
+                    amount=amount,
+                    order_id=order_id,
+                    msisdn=customer_number
+                )
+
+            # Handle session based on payment status
+            session = CustomSession.objects.filter(
+                user_id=customer_number,
+                level='payment'
+            ).first()
+
+            if session:
+                if status.lower() == "success":
+                    try:
+                        nominee = Nominees.objects.get(code=session.candidate_id)
+                        nominee.total_vote += session.votes # Add the votes from the session
+                        nominee.save()
+                        
+                        # Delete the session after successful processing
+                        session.delete()
+                    
+                        return JsonResponse({
+                            'status': 'success', 
+                            'message': 'Payment processed and votes added to nominee.'
+                        }, status=200)
+                    except Nominees.DoesNotExist:
+                        return JsonResponse({
+                            'status': 'error', 
+                            'message': 'Nominee not found.'
+                         }, status=404)
+                    except Exception as e:
+                        return JsonResponse({
+                            'status': 'error',
+                            'message': f'Error updating nominee votes {str(e)}'
+                        }, status=500)
+                else:
+                    # Payment failed, you might want to keep the session for retry
+                    return JsonResponse({
+                        'status': 'error', 
+                        'message': 'Payment failed, session retained.'
+                    }, status=400)
+            else:
+                return JsonResponse({
+                    'status': 'error', 
+                    'message': 'Session not found.'
+                }, status=404)
+
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error', 
+                'message': str(e)
+            }, status=400)
+
+    return JsonResponse({
+        'status': 'error', 
+        'message': 'Invalid request method'
+    }, status=405)
+
