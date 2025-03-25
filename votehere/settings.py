@@ -184,13 +184,15 @@ MEDIA_URL = '/media/'
 # QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
 QUOTAGUARDSTATIC_URL = config('QUOTAGUARDSTATIC_URL')
 
-proxies = {
-    "http": QUOTAGUARDSTATIC_URL,
-    "https": QUOTAGUARDSTATIC_URL
-}
+# Patch all requests to use QuotaGuard by default
+session = requests.Session()
+session.proxies = {"http": QUOTAGUARDSTATIC_URL, "https": QUOTAGUARDSTATIC_URL}
+requests.sessions.Session = lambda: session  # Override default session
 
-res = requests.get("http://us-east-static-09.quotaguard.com/", proxies=proxies)
-print(res.text)
+# Now ALL requests.get()/post() will use QuotaGuard, even without proxies=
+res = requests.get("http://ip.quotaguard.com/")
+print(res.text)  # Static IP (no proxies= needed!)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
