@@ -22,5 +22,5 @@ urlpatterns = [
     #      views.nominees_search_view, name='nom-search'),
     
 
-
+    path('callback/', views.payment_callback)
 ]
