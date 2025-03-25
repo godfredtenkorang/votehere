@@ -148,6 +148,7 @@ def ussd_api(request):
                     if response.status_code == 200:
                         session.delete()
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
+                        print(secrete_full)
                         print(secrete)
                         print(key)
                         return JsonResponse(send_response(message, False))
