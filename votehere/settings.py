@@ -189,9 +189,8 @@ proxies = {
     "https": QUOTAGUARDSTATIC_URL
 }
 
-res = requests.get("https://api.ipify.org?format=json", proxies=proxies)
-print("Your static IP:", res.json()["ip"])
-# print(res.text)
+res = requests.get("us-east-static-09.quotaguard.com", proxies=proxies)
+print(res.text)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
