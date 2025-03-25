@@ -111,7 +111,7 @@ def ussd_api(request):
                     telephone = msisdn
                     network_type = network
                     username = 'votfric_gen'
-                    password = 'bVdwy86yoWtdZcW'
+                    password = 'Js(IP9hT'
                     merchant_id = 'NPS_000288'
                     key = str(generate_random_key())
                     hashed_password = hashlib.md5(password.encode('utf-8')).hexdigest()
@@ -120,6 +120,7 @@ def ussd_api(request):
                     callback = 'https://voteafric.com/ussd/callback'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
+                
                     
                     secrete = f"{secrete[:4]} {secrete[4:]}"
 
