@@ -121,7 +121,7 @@ def ussd_api(request):
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
                     
-                    
+                    secrete = f"{secrete[:4]} {secrete[4:]}"
 
                     # Payment payload
                     payload = {
