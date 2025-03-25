@@ -84,7 +84,7 @@ def ussd_api(request):
                     if user_data == '1':
                         session.level = 'votes'
                         session.save()
-                        message = "Enter the number of votes. \n\n A vote is GH¢1.00."
+                        message = "Enter the number of votes. \n\n A vote is 0.50ps."
                         return JsonResponse(send_response(message, True))
                     elif user_data == '2':
                         session.delete()
@@ -100,7 +100,7 @@ def ussd_api(request):
                     
                     session.level = 'payment'
                     session.votes = votes
-                    session.amount = Decimal(votes) * Decimal(1.00)
+                    session.amount = Decimal(votes) * Decimal(0.50)
                     session.save()
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
