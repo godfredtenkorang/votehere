@@ -125,7 +125,7 @@ def ussd_api(request):
 
                     # Payment payload
                     payload = {
-                        'payby': network_type,
+                        'payby': str(network_type),
                         'order_id': order_id,
                         'customerNumber': str(telephone),
                         'customerName': str(telephone),
