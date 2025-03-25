@@ -112,7 +112,7 @@ def ussd_api(request):
                     network_type = network
                     username = 'votfric_gen'
                     # password = 'bVdwy86yoWtdZcW'
-                    password = 'Js(IP9hT'
+                    password = 'Nrkl)CYr'
                     merchant_id = 'NPS_000288'
                     key = str(9867)
                     hashed_password = md5(password.encode()).hexdigest()
@@ -122,6 +122,7 @@ def ussd_api(request):
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
                     
+                   
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
 
                     # Payment payload
