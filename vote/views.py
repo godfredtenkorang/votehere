@@ -98,88 +98,116 @@ def custom_404_view(request, exception):
     return render(request, 'vote/404.html', status=404)
 
 
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from .models import CustomSession, PaymentTransaction, Nominees
+
+
+
 @csrf_exempt
 def payment_callback(request):
-    if request.method == 'POST':
+    
+    try:
+        # Try to parse both form data and JSON data
         try:
             data = json.loads(request.body.decode('utf-8'))
+        except json.JSONDecodeError:
+            data = request.POST.dict()
 
-            # Extract data from the callback
-            transaction_id = data.get('transaction_id')
-            status = data.get('status')
-            amount = data.get('amount')
-            customer_number = data.get('customerNumber')
-            order_id = data.get('order_id')  # Get the order_id from the callback
+        
+
+        # Validate required fields
+        required_fields = ['transaction_id', 'status', 'amount', 'customerNumber']
+        missing_fields = [field for field in required_fields if field not in data]
+        if missing_fields:
+            error_msg = f'Missing required fields: {", ".join(missing_fields)}'
             
+            return JsonResponse({'status': 'error', 'message': error_msg}, status=400)
+
+        transaction_id = data['transaction_id']
+        status = data['status'].lower()
+        amount = data['amount']
+        customer_number = data['customerNumber']
+        order_id = data.get('order_id', '')
+        
+        # Ensure customer_number starts with 233 if it's a phone number
+        if customer_number.startswith("0"):
+            customer_number = "233" + customer_number[1:]
+        elif not customer_number.startswith("233"):
+            customer_number = "233" + customer_number
+
+        # Update or create payment transaction
+        transaction, created = PaymentTransaction.objects.update_or_create(
+            transaction_id=transaction_id,
+            defaults={
+                'status': status,
+                'amount': amount,
+                'order_id': order_id,
+                'msisdn': customer_number
+            }
+        )
+
+        # Find active session for this payment
+        session = CustomSession.objects.filter(
+            user_id=customer_number,
+            level='payment'
+        ).first()
+
+        if not session:
             
-
-            # Update the PaymentTransaction record
-            transaction = PaymentTransaction.objects.filter(transaction_id=transaction_id).first()
-            
-            if transaction:
-                transaction.status = status
-                transaction.amount = amount
-                transaction.save()
-            else:
-                # If transaction doesn't exist, create a new one (optional)
-                transaction = PaymentTransaction.objects.create(
-                    transaction_id=transaction_id,
-                    status=status,
-                    amount=amount,
-                    order_id=order_id,
-                    msisdn=customer_number
-                )
-
-            # Handle session based on payment status
-            session = CustomSession.objects.filter(
-                user_id=customer_number,
-                level='payment'
-            ).first()
-
-            if session:
-                if status.lower() == "success":
-                    try:
-                        nominee = Nominees.objects.get(code=session.candidate_id)
-                        nominee.total_vote += session.votes # Add the votes from the session
-                        nominee.save()
-                        
-                        # Delete the session after successful processing
-                        session.delete()
-                    
-                        return JsonResponse({
-                            'status': 'success', 
-                            'message': 'Payment processed and votes added to nominee.'
-                        }, status=200)
-                    except Nominees.DoesNotExist:
-                        return JsonResponse({
-                            'status': 'error', 
-                            'message': 'Nominee not found.'
-                         }, status=404)
-                    except Exception as e:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': f'Error updating nominee votes {str(e)}'
-                        }, status=500)
-                else:
-                    # Payment failed, you might want to keep the session for retry
-                    return JsonResponse({
-                        'status': 'error', 
-                        'message': 'Payment failed, session retained.'
-                    }, status=400)
-            else:
-                return JsonResponse({
-                    'status': 'error', 
-                    'message': 'Session not found.'
-                }, status=404)
-
-        except Exception as e:
             return JsonResponse({
-                'status': 'error', 
-                'message': str(e)
+                'status': 'error',
+                'message': 'No active voting session found'
+            }, status=404)
+
+        if status == 'success':
+            try:
+                nominee = Nominees.objects.get(code=session.candidate_id)
+                nominee.total_votes += session.votes
+                nominee.save()
+                
+                
+                
+                # Clean up session
+                session.delete()
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Payment processed and votes counted',
+                    'nominee': nominee.name,
+                    'votes_added': session.votes
+                })
+            
+            except Nominees.DoesNotExist:
+                error_msg = f'Nominee with code {session.candidate_id} not found'
+                
+                return JsonResponse({
+                    'status': 'error',
+                    'message': error_msg
+                }, status=404)
+            
+            except Exception as e:
+                error_msg = f'Error updating nominee votes: {str(e)}'
+                
+                return JsonResponse({
+                    'status': 'error',
+                    'message': error_msg
+                }, status=500)
+        
+        else:
+            # Payment failed - you might want to keep the session for retry
+           
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Payment failed with status: {status}'
             }, status=400)
 
-    return JsonResponse({
-        'status': 'error', 
-        'message': 'Invalid request method'
-    }, status=405)
-
+    except Exception as e:
+        error_msg = f'Unexpected error processing callback: {str(e)}'
+        
+        return JsonResponse({
+            'status': 'error',
+            'message': error_msg
+        }, status=500)
