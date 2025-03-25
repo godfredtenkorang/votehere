@@ -113,7 +113,7 @@ def ussd_api(request):
                     username = 'votfric_gen'
                     password = 'bVdwy86yoWtdZcW'
                     merchant_id = 'NPS_000288'
-                    key = str(generate_random_key())
+                    key = 9756
                     hashed_password = hashlib.md5(password.encode()).hexdigest()
                     concat_keys = username + key + hashed_password
                     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
@@ -125,13 +125,13 @@ def ussd_api(request):
                     payload = {
                         'payby': str(network_type),
                         'order_id': order_id,
-                        'customerNumber': telephone,
+                        'customerNumber': str(telephone),
                         'customerName': str(telephone),
                         'isussd': 1,
-                        'amount': int(amount),
+                        'amount': str(amount),
                         'merchant_id': merchant_id,
                         'secrete': str(secrete),
-                        'key': key,
+                        'key': str(key),
                         'callback': callback,
                         'item_desc': item_desc
                     }
@@ -146,6 +146,7 @@ def ussd_api(request):
                     if response.status_code == 200:
                         session.delete()
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
+                        print(secrete)
                         return JsonResponse(send_response(message, False))
                     else:
                         return JsonResponse(send_response("Payment request failed. Please try again.", False))
