@@ -122,7 +122,7 @@ def ussd_api(request):
                     order_id = str(uuid.uuid4())
                 
                     
-                    secrete = f"{secrete[:4]} {secrete[4:]}"
+                    # secrete = f"{secrete[:4]} {secrete[4:]}"
 
                     # Payment payload
                     payload = {
