@@ -113,7 +113,7 @@ def ussd_api(request):
                     username = 'votfric_gen'
                     password = 'bVdwy86yoWtdZcW'
                     merchant_id = 'NPS_000288'
-                    key = generate_random_key()
+                    key = str(generate_random_key())
                     hashed_password = hashlib.md5(password.encode()).hexdigest()
                     concat_keys = username + key + hashed_password
                     secrete_hash = hashlib.md5(concat_keys.encode()).hexdigest()
