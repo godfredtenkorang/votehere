@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import CustomSession, PaymentTransaction
 import json
-import hashlib
+from hashlib import md5
 import uuid
 import requests
 from decimal import Decimal
@@ -53,7 +53,7 @@ def ussd_api(request):
         # Check user ID
         if user_id == 'GODEY100':
             # Generate session key using hashed MSISDN
-            session_key = hashlib.md5(msisdn.encode('utf-8')).hexdigest()
+            session_key = md5(msisdn.encode('utf-8')).hexdigest()
             session, created = CustomSession.objects.get_or_create(session_key=session_key, defaults={'user_id': user_id})
             
             if msgtype:  # Initial request
@@ -115,9 +115,9 @@ def ussd_api(request):
                     password = 'Js(IP9hT'
                     merchant_id = 'NPS_000288'
                     key = str(9867)
-                    hashed_password = hashlib.md5(password.encode()).hexdigest()
+                    hashed_password = md5(password.encode()).hexdigest()
                     concat_keys = f"{username} {key} {hashed_password}"
-                    secrete = hashlib.md5(concat_keys.encode()).hexdigest()
+                    secrete = md5(concat_keys.encode()).hexdigest()
                     callback = 'https://voteafric.com/ussd/callback'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
