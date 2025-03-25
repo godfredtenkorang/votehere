@@ -116,14 +116,12 @@ def ussd_api(request):
                     key = str(generate_random_key())
                     hashed_password = hashlib.md5(password.encode()).hexdigest()
                     concat_keys = username + key + hashed_password
-                    secrete_hash = hashlib.md5(concat_keys.encode()).hexdigest()
+                    secrete_full = hashlib.md5(concat_keys.encode()).hexdigest()
                     callback = 'https://voteafric.com/ussd/callback'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
                     
-                    secrete_trimmed = secrete_hash[:28]
-                    
-                    secrete = f'{key} {secrete_trimmed}'
+                    secrete = f"{secrete_full[4:]} {secrete_full[:28]}"
 
                     # Payment payload
                     payload = {
@@ -151,6 +149,7 @@ def ussd_api(request):
                         session.delete()
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
                         print(secrete)
+                        print(key)
                         return JsonResponse(send_response(message, False))
                     else:
                         return JsonResponse(send_response("Payment request failed. Please try again.", False))
