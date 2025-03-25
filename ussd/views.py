@@ -113,7 +113,7 @@ def ussd_api(request):
                     username = 'votfric_gen'
                     password = 'bVdwy86yoWtdZcW'
                     merchant_id = 'NPS_000288'
-                    key = 9756
+                    key = generate_random_key()
                     hashed_password = hashlib.md5(password.encode()).hexdigest()
                     concat_keys = username + key + hashed_password
                     secrete = hashlib.md5(concat_keys.encode()).hexdigest()
@@ -123,7 +123,7 @@ def ussd_api(request):
 
                     # Payment payload
                     payload = {
-                        'payby': str(network_type),
+                        'payby': network_type,
                         'order_id': order_id,
                         'customerNumber': str(telephone),
                         'customerName': str(telephone),
@@ -131,7 +131,7 @@ def ussd_api(request):
                         'amount': str(amount),
                         'merchant_id': merchant_id,
                         'secrete': str(secrete),
-                        'key': str(key),
+                        'key': key,
                         'callback': callback,
                         'item_desc': item_desc
                     }
