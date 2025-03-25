@@ -112,10 +112,10 @@ def ussd_api(request):
                     network_type = network
                     username = 'votfric_gen'
                     # password = 'bVdwy86yoWtdZcW'
-                    password = 'Nrkl)CYr'
+                    api_key = 'Nrkl)CYr'
                     merchant_id = 'NPS_000288'
                     key = str(generate_random_key())
-                    hashed_password = md5(password.encode()).hexdigest()
+                    hashed_password = md5(api_key.encode()).hexdigest()
                     concat_keys = f"{username} {key} {hashed_password}"
                     secrete = md5(concat_keys.encode()).hexdigest()
                     callback = 'https://voteafric.com/ussd/callback'
