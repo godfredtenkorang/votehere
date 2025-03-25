@@ -170,90 +170,134 @@ def ussd_api(request):
 def payment_callback(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body.decode('utf-8'))
+            # First, log the raw request body for debugging
+            raw_body = request.body.decode('utf-8')
+            print(f"Raw callback received: {raw_body}")
+            
+            try:
+                data = json.loads(raw_body)
+            except json.JSONDecodeError as e:
+                print(f"JSON decode error: {str(e)}")
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Invalid JSON format'
+                }, status=400)
 
-            # Extract data from the callback
-            order_id = data.get('order_id')  # Get the order_id from the callback
+            # Log the parsed data
+            print(f"Parsed callback data: {data}")
+
+            # Validate required fields
+            required_fields = ['order_id', 'transaction_id', 'status', 'amount', 'customerNumber']
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if missing_fields:
+                print(f"Missing required fields: {missing_fields}")
+                return JsonResponse({
+                    'status': 'error',
+                    'message': f'Missing required fields: {", ".join(missing_fields)}'
+                }, status=400)
+
+            # Extract data with additional validation
+            order_id = data.get('order_id')
             transaction_id = data.get('transaction_id')
-            status = data.get('status')
+            status = data.get('status', '').lower()
             amount = data.get('amount')
             customer_number = data.get('customerNumber')
-            network = data.get('network')
-            
-            print(f'Received callback data {data}')
-            
-            
+            network = data.get('network', 'unknown')
 
-            # Update the PaymentTransaction record
-            transaction = PaymentTransaction.objects.filter(transaction_id=transaction_id).first()
-            
-            if transaction:
+            # Additional validation for numeric fields
+            try:
+                amount = Decimal(amount)
+            except (TypeError, ValueError) as e:
+                print(f"Invalid amount format: {amount}")
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Invalid amount format'
+                }, status=400)
+
+            # Find or create transaction record
+            transaction, created = PaymentTransaction.objects.get_or_create(
+                transaction_id=transaction_id,
+                defaults={
+                    'order_id': order_id,
+                    'status': status,
+                    'amount': amount,
+                    'customer_number': customer_number,
+                    'network': network,
+                    'raw_response': json.dumps(data)
+                }
+            )
+
+            if not created:
                 transaction.status = status
                 transaction.amount = amount
                 transaction.save()
-            else:
-                # If transaction doesn't exist, create a new one (optional)
-                # Update the PaymentTransaction record
-                transaction = PaymentTransaction.objects.create(
-                    order_id=order_id,
-                    transaction_id=transaction_id,
-                    status=status,
-                    amount=amount,
-                    customer_number=customer_number,
-                    network=network,
-                    raw_response=json.dumps(data)
-                )
 
-            # Handle session based on payment status
+            # Find session - note: customer_number might need formatting
+            # Ensure MSISDN format matches what you stored in session
+            if customer_number.startswith("0"):
+                formatted_number = "233" + customer_number[1:]
+            elif not customer_number.startswith("233"):
+                formatted_number = "233" + customer_number
+            else:
+                formatted_number = customer_number
+
             session = CustomSession.objects.filter(
-                user_id=customer_number,
+                session_key=md5(formatted_number.encode('utf-8')).hexdigest(),
                 level='payment'
             ).first()
 
-            if session:
-                if status.lower() == "success":
-                    try:
-                        nominee = Nominees.objects.get(code=session.candidate_id)
-                        nominee.total_vote += session.votes # Add the votes from the session
-                        nominee.save()
-                        
-                        # Delete the session after successful processing
-                        session.delete()
-                    
-                        return JsonResponse({
-                            'status': 'success', 
-                            'message': 'Payment processed and votes added to nominee.'
-                        }, status=200)
-                    except Nominees.DoesNotExist:
-                        return JsonResponse({
-                            'status': 'error', 
-                            'message': 'Nominee not found.'
-                         }, status=404)
-                    except Exception as e:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': f'Error updating nominee votes {str(e)}'
-                        }, status=500)
-                else:
-                    # Payment failed, you might want to keep the session for retry
-                    return JsonResponse({
-                        'status': 'error', 
-                        'message': 'Payment failed, session retained.'
-                    }, status=400)
-            else:
+            if not session:
+                print(f"No active session found for customer: {formatted_number}")
                 return JsonResponse({
-                    'status': 'error', 
-                    'message': 'Session not found.'
+                    'status': 'error',
+                    'message': 'No active voting session found'
                 }, status=404)
 
-        except Exception as e:
+            # Process successful payment
+            if status == "success":
+                try:
+                    nominee = Nominees.objects.get(code=session.candidate_id)
+                    nominee.total_vote += session.votes
+                    nominee.save()
+                    
+                    # Send confirmation (optional)
+                    print(f"Successfully added {session.votes} votes to {nominee.name}")
+                    
+                    session.delete()
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Payment processed and votes counted'
+                    }, status=200)
+                
+                except Nominees.DoesNotExist:
+                    print(f"Nominee not found with code: {session.candidate_id}")
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'Nominee not found'
+                    }, status=404)
+                
+                except Exception as e:
+                    print(f"Error updating nominee: {str(e)}")
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'Error processing votes'
+                    }, status=500)
+
+            # Handle failed payment
             return JsonResponse({
-                'status': 'error', 
-                'message': str(e)
-            }, status=400)
+                'status': 'success',  # Still return success to payment gateway
+                'message': 'Callback received (payment failed)'
+            }, status=200)
+
+        except Exception as e:
+            print(f"Unexpected error in callback: {str(e)}", exc_info=True)
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Internal server error'
+            }, status=500)
 
     return JsonResponse({
-        'status': 'error', 
-        'message': 'Invalid request method'
+        'status': 'error',
+        'message': 'Method not allowed'
     }, status=405)
-
