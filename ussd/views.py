@@ -114,7 +114,7 @@ def ussd_api(request):
                     # password = 'bVdwy86yoWtdZcW'
                     password = 'Nrkl)CYr'
                     merchant_id = 'NPS_000288'
-                    key = str(generate_random_key())
+                    key = str(5664)
                     hashed_password = md5(password.encode()).hexdigest()
                     concat_keys = f"{username} {key} {hashed_password}"
                     secrete = md5(concat_keys.encode()).hexdigest()
@@ -151,6 +151,8 @@ def ussd_api(request):
                         session.delete()
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
                         # print(secrete_full)
+                        print(hashed_password)
+                        print(concat_keys)
                         print(secrete)
                         print(key)
                         return JsonResponse(send_response(message, False))
