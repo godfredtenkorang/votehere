@@ -114,9 +114,9 @@ def ussd_api(request):
                     password = 'bVdwy86yoWtdZcW'
                     merchant_id = 'NPS_000288'
                     key = str(generate_random_key())
-                    hashed_password = hashlib.md5(password.encode()).hexdigest()
+                    hashed_password = hashlib.md5(password.encode('utf-8')).hexdigest()
                     concat_keys = username + key + hashed_password
-                    secrete_full = hashlib.md5(concat_keys.encode()).hexdigest()
+                    secrete_full = hashlib.md5(concat_keys.encode('utf-8')).hexdigest()
                     callback = 'https://voteafric.com/ussd/callback'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
