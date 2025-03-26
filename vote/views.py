@@ -123,24 +123,27 @@ def payment_callback(request):
                 transaction.amount = amount
                 transaction.save()
                 
+                return JsonResponse({'status': 'success', 'message': 'Transaction status updated.'}, status=200)
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Transaction not found.'}, status=404)
             
             # Handle session based on payment status
-            session = CustomSession.objects.filter(user_id=customer_number, level='payment').first()
+            # session = CustomSession.objects.filter(user_id=customer_number, level='payment').first()
 
-            if session:
-                if status.lower() == "success":
-                    nominee = Nominees.objects.filter(code=session.candidate_id).first()
-                    if nominee:
-                        nominee.total_vote += session.votes
-                        nominee.save()
-                        session.delete()
-                        return JsonResponse({'status': 'success', 'message': 'Payment processed and votes added.'}, status=200)
-                    else:
-                        return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
-                else:
-                    return JsonResponse({'status': 'error', 'message': 'Payment failed, session retained.'}, status=400)
+            # if session:
+            #     if status.lower() == "success":
+            #         nominee = Nominees.objects.filter(code=session.candidate_id).first()
+            #         if nominee:
+            #             nominee.total_vote += session.votes
+            #             nominee.save()
+            #             session.delete()
+            #             return JsonResponse({'status': 'success', 'message': 'Payment processed and votes added.'}, status=200)
+            #         else:
+            #             return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
+            #     else:
+            #         return JsonResponse({'status': 'error', 'message': 'Payment failed, session retained.'}, status=400)
 
-            return JsonResponse({'status': 'error', 'message': 'Session not found.'}, status=404)
+            # return JsonResponse({'status': 'error', 'message': 'Session not found.'}, status=404)
 
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
