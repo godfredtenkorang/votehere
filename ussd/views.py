@@ -133,6 +133,7 @@ def ussd_api(request):
 
                 elif level == 'payment':
                     amount = session.amount
+                    session.save()
                     endpoint = "https://api.nalosolutions.com/payplus/api/"
                     telephone = msisdn
                     network_type = network
@@ -175,7 +176,7 @@ def ussd_api(request):
                     response = requests.post(endpoint, json=payload, headers=headers)
                     
                     if response.status_code == 200:
-                        
+                        session.save()
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
                         # print(secrete_full)
                         print(hashed_password)
@@ -206,6 +207,7 @@ def webhook_callback(request):
             invoice_no = data.get('InvoiceNo')
             amount = data.get('amount')
             order_id = data.get('Order_id')
+            nominee_code = data.get('nominee_code')  # Retrieve nominee code from the callback data
             
             timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
             
@@ -220,7 +222,7 @@ def webhook_callback(request):
             
             if status == 'PAID':
                 
-                nominee_code = data.get('nominee_code')  # Retrieve nominee code from the callback data
+                
                 
                 try:
                     nominee = Nominees.objects.get(code=nominee_code)
