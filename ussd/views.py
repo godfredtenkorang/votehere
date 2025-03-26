@@ -203,19 +203,35 @@ def ussd_api(request):
 def webhook_callback(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body.decode('utf-8'))
+            raw_data = request.body.decode('utf-8')
             
-            print(f'Received callback data {data}')
+            print(f'Raw callback data: {raw_data}')
+            
+            # Parse JSON data
+            try:
+                data = json.loads(raw_data)
+            except json.JSONDecodeError:
+                return JsonResponse(
+                    {'status': 'error', 'message': 'Invalid JSON format'},
+                    status=400
+                )
+            
+            required_fields = ['Order_id', 'Timestamp', 'Status', 'InvoiceNo', 'amount', 'customerNumber']
+            
+            if not all(field in data for field in required_fields):
+                return JsonResponse(
+                    {'status': 'error', 'message': 'Missing required fields'},
+                    status=400
+                )
             
             timestamp_str = data.get('Timestamp')
             status = data.get('Status')  # Expecting 'success' or 'failed'
             invoice_no = data.get('InvoiceNo')
             amount = data.get('amount')
             order_id = data.get('Order_id')
-            msisdn = data.get('MSISDN')
+            customer_number = data.get('customerNumber')
             
-            user_id = data.get('USER_ID')
-            # session_key = data.get('session_key')
+           
             
             
             
@@ -231,7 +247,7 @@ def webhook_callback(request):
             transaction.save()
             
             # Find related session
-            session_key = md5(msisdn.encode('utf-8')).hexdigest()
+            session_key = md5(customer_number.encode('utf-8')).hexdigest()
             session = CustomSession.objects.filter(
                 session_key=session_key,
                 level='payment'
