@@ -99,7 +99,6 @@ def custom_404_view(request, exception):
 
 from django.views.decorators.http import require_POST
 
-
 @csrf_exempt
 def webhook_callback(request):
     if request.method == 'POST':
@@ -108,51 +107,21 @@ def webhook_callback(request):
             data = json.loads(request.body.decode('utf-8'))
             print(f'Received webhook data: {data}')
 
-            # Process the webhook data
-            event_type = data.get('event')  # Example: 'transaction.completed', 'transaction.failed', etc.
+            # Extract relevant fields
+            event_type = data.get('event')  # e.g., 'transaction.completed', 'transaction.failed'
             transaction_id = data.get('transaction_id')
             status = data.get('status')  # e.g., 'completed', 'failed'
             amount = data.get('amount')
-            nominee_code = data.get('nominee_code')  # Assuming the nominee code is provided
+            nominee_code = data.get('nominee_code')  # Assumed to be provided
 
             # Handle different event types
             if event_type == 'transaction.completed':
-                # Handle successful transaction
-                 # Find the transaction record
-                transaction, created = PaymentTransaction.objects.get_or_create(
-                    transaction_id=transaction_id,
-                    defaults={
-                        'order_id': data.get('order_id', ''),
-                        'status': status,
-                        'amount': amount,
-                        'customer_number': data.get('customer_number', '')
-                    }
-                )
+                return handle_transaction_completed(transaction_id, status, amount, nominee_code, data)
 
-                if not created:
-                    # If the transaction already exists, update its status
-                    transaction.status = status
-                    transaction.save()
-
-                if status == 'completed':
-                    # Handle successful transaction
-                    nominee = Nominees.objects.filter(code=nominee_code).first()
-                    if nominee:
-                        nominee.total_vote += 1  # Assuming each transaction represents one vote
-                        nominee.save()
-                        return JsonResponse({'status': 'success', 'message': 'Vote added to nominee.'}, status=200)
-                    else:
-                        return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
-
-                return JsonResponse({'status': 'error', 'message': 'Transaction not successful.'}, status=400)
-                # Update your database or perform actions as needed
             elif event_type == 'transaction.failed':
-                # Handle failed transaction
-                print(f'Transaction {transaction_id} failed.')
-                # Update your database or perform actions as needed
-            # Add more event handling as needed
+                return handle_transaction_failed(transaction_id)
 
-            return JsonResponse({'status': 'success'}, status=200)
+            return JsonResponse({'status': 'error', 'message': 'Unknown event type.'}, status=400)
 
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON format.'}, status=400)
@@ -161,3 +130,37 @@ def webhook_callback(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+
+def handle_transaction_completed(transaction_id, status, amount, nominee_code, data):
+    # Find or create the transaction record
+    transaction, created = PaymentTransaction.objects.get_or_create(
+        transaction_id=transaction_id,
+        defaults={
+            'order_id': data.get('order_id', ''),
+            'status': status,
+            'amount': amount,
+            'customer_number': data.get('customer_number', '')
+        }
+    )
+
+    if not created:
+        # If the transaction already exists, update its status
+        transaction.status = status
+        transaction.save()
+
+    if status == 'completed':
+        # Handle successful transaction
+        nominee = Nominees.objects.filter(code=nominee_code).first()
+        if nominee:
+            nominee.total_vote += 1  # Increment vote count
+            nominee.save()
+            return JsonResponse({'status': 'success', 'message': 'Vote added to nominee.'}, status=200)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
+
+    return JsonResponse({'status': 'error', 'message': 'Transaction not successful.'}, status=400)
+
+def handle_transaction_failed(transaction_id):
+    # Handle failed transaction logic here
+    print(f'Transaction {transaction_id} failed.')
+    return JsonResponse({'status': 'error', 'message': 'Transaction failed.'}, status=400)
