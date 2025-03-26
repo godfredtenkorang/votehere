@@ -148,6 +148,7 @@ def ussd_api(request):
                     callback = 'https://voteafric.com/ussd/webhooks/callback/'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
+                    nominee_code = session.candidate_id
                     
                    
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
@@ -165,7 +166,7 @@ def ussd_api(request):
                         'key': key,
                         'callback': callback,
                         'item_desc': item_desc,
-                        'nominee_code': session.candidate_id,  # Include nominee code in the payload
+                        'nominee_code': nominee_code  # Include nominee code in the payload
                     }
 
                     headers = {
