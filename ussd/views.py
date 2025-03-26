@@ -216,7 +216,7 @@ def webhook_callback(request):
             # session_key = data.get('session_key')
             
             session_key = request.session
-            user_id = request.user_id
+            
             
             
             timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
@@ -235,7 +235,7 @@ def webhook_callback(request):
                 
                 
                 try:
-                    session = CustomSession.objects.get(session_key=session_key, user_id=user_id)
+                    session = CustomSession.objects.get(session_key=session_key)
                     nominee_code = session.candidate_id
                     
                     nominee = Nominees.objects.get(code=nominee_code)
@@ -243,7 +243,7 @@ def webhook_callback(request):
                     nominee.total_vote += votes
                     nominee.save()
                 except CustomSession.DoesNotExist:
-                    print(f'Session with key {session_key} and user ID {user_id} does not exist.')
+                    print(f'Session with key {session_key} does not exist.')
                 except Nominees.DoesNotExist:
                     print(f'Nominee with code {nominee_code} does not exist.')
             
