@@ -97,8 +97,10 @@ def category_search_view(request, category_slug=None):
 def custom_404_view(request, exception):
     return render(request, 'vote/404.html', status=404)
 
+from django.views.decorators.http import require_POST
 
 @csrf_exempt
+@require_POST  # Only allow POST requests
 def payment_callback(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
@@ -109,7 +111,7 @@ def payment_callback(request):
         except json.JSONDecodeError as e:
             return JsonResponse({'status': 'error', 'message': f'Invalid JSON data: {str(e)}'}, status=400)
 
-        required_fields = ['order_id', 'transaction_id', 'status', 'amount', 'customerNumber', 'network']
+        required_fields = ['order_id', 'transaction_id', 'status', 'amount', 'msisdn', 'network']
         missing_fields = [field for field in required_fields if field not in data]
 
         if missing_fields:
@@ -119,7 +121,7 @@ def payment_callback(request):
         transaction_id = data.get('transaction_id')
         status = data.get('status', '').lower() if isinstance(data.get('status'), str) else ''
         amount = data.get('amount')
-        customer_number = data.get('customerNumber')
+        customer_number = data.get('msisdn')
         network = data.get('network')
 
         print(f'Received callback data {data}')
