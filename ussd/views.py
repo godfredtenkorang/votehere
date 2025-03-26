@@ -14,10 +14,34 @@ from payment.models import Nominees
 
 from django.views import View
 
-class AystackWebhookView(View):
-    def post(self, request, *args, **kwargs):
-        return JsonResponse({"message": "Webhook received"}, status=200)
+@csrf_exempt
+def heroku_webhook(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            print(f'Received webhook data: {data}')
 
+            # Process the webhook data
+            event_type = data.get('event')  # Example: 'app.update', 'app.create', etc.
+
+            # Handle different event types
+            if event_type == 'app.update':
+                # Handle app update
+                print("App has been updated.")
+            elif event_type == 'app.create':
+                # Handle app creation
+                print("A new app has been created.")
+            # Add additional event handling as needed
+
+            return JsonResponse({'status': 'success'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+        except Exception as e:
+            print(f'Error: {str(e)}')
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 # Helper function to generate random key
 def generate_random_key():
     return random.randint(1000, 9999)

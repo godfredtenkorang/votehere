@@ -4,6 +4,6 @@ from .views import AystackWebhookView
 
 urlpatterns = [
     path('ussd/', views.ussd_api, name='ussd'),
-    path('aystack/webhook/', AystackWebhookView.as_view(), name='aystack-webhook'),
+    path('webhooks/heroku/', views.heroku_webhook, name='heroku_webhook'),
     
 ]
