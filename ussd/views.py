@@ -192,7 +192,7 @@ def ussd_api(request):
 
 
 @csrf_exempt
-def payment_callback(request):
+def webhook_callback(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))

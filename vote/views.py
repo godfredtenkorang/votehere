@@ -99,80 +99,80 @@ def custom_404_view(request, exception):
 
 from django.views.decorators.http import require_POST
 
-@csrf_exempt
-def webhook_callback(request):
-    if request.method == 'POST':
-        try:
-            # Parse the incoming JSON data
-            data = json.loads(request.body.decode('utf-8'))
-            print(f'Received webhook data: {data}')
+# @csrf_exempt
+# def webhook_callback(request):
+#     if request.method == 'POST':
+#         try:
+#             # Parse the incoming JSON data
+#             data = json.loads(request.body.decode('utf-8'))
+#             print(f'Received webhook data: {data}')
 
-            # Extract relevant fields
-            event_type = data.get('event')  # e.g., 'transaction.completed', 'transaction.failed'
-            transaction_id = data.get('transaction_id')
-            status = data.get('status')  # e.g., 'completed', 'failed'
-            amount = data.get('amount')
-            customer_number = data.get('customer_number')
-            nominee_code = data.get('nominee_code')  # Assumed to be provided
-            network = data.get('network')  # Network used for the transaction
-            raw_response = json.dumps(data)  # Store the entire response as a string
+#             # Extract relevant fields
+#             event_type = data.get('event')  # e.g., 'transaction.completed', 'transaction.failed'
+#             transaction_id = data.get('transaction_id')
+#             status = data.get('status')  # e.g., 'completed', 'failed'
+#             amount = data.get('amount')
+#             customer_number = data.get('customer_number')
+#             nominee_code = data.get('nominee_code')  # Assumed to be provided
+#             network = data.get('network')  # Network used for the transaction
+#             raw_response = json.dumps(data)  # Store the entire response as a string
 
-            # Handle different event types
-            if event_type == 'transaction.completed':
-                return handle_transaction_completed(transaction_id, status, amount, customer_number, nominee_code, network, raw_response)
+#             # Handle different event types
+#             if event_type == 'transaction.completed':
+#                 return handle_transaction_completed(transaction_id, status, amount, customer_number, nominee_code, network, raw_response)
 
-            elif event_type == 'transaction.failed':
-                return handle_transaction_failed(transaction_id)
+#             elif event_type == 'transaction.failed':
+#                 return handle_transaction_failed(transaction_id)
 
-            return JsonResponse({'status': 'error', 'message': 'Unknown event type.'}, status=400)
+#             return JsonResponse({'status': 'error', 'message': 'Unknown event type.'}, status=400)
 
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON format.'}, status=400)
-        except Exception as e:
-            print(f'Error: {str(e)}')
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'status': 'error', 'message': 'Invalid JSON format.'}, status=400)
+#         except Exception as e:
+#             print(f'Error: {str(e)}')
+#             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+#     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 
 
-def handle_transaction_completed(request, transaction_id, status, amount, customer_number, nominee_code, network, raw_response):
-    # Find or create the transaction record
-    data = json.loads(request.body.decode('utf-8'))
-    transaction, created = PaymentTransaction.objects.get_or_create(
-        transaction_id=transaction_id,
+# def handle_transaction_completed(request, transaction_id, status, amount, customer_number, nominee_code, network, raw_response):
+#     # Find or create the transaction record
+#     data = json.loads(request.body.decode('utf-8'))
+#     transaction, created = PaymentTransaction.objects.get_or_create(
+#         transaction_id=transaction_id,
         
-        defaults={
-            'order_id': data.get('order_id', ''),
-            'status': status,
-            'amount': amount,
-            'customer_number': customer_number,
-            'network': network,
-            'raw_response': raw_response
-        }
-    )
+#         defaults={
+#             'order_id': data.get('order_id', ''),
+#             'status': status,
+#             'amount': amount,
+#             'customer_number': customer_number,
+#             'network': network,
+#             'raw_response': raw_response
+#         }
+#     )
 
-    if not created:
-        # If the transaction already exists, update its status
-        transaction.status = status
-        transaction.amount = amount
-        transaction.customer_number = customer_number
-        transaction.network = network
-        transaction.raw_response = raw_response
-        transaction.save()
+#     if not created:
+#         # If the transaction already exists, update its status
+#         transaction.status = status
+#         transaction.amount = amount
+#         transaction.customer_number = customer_number
+#         transaction.network = network
+#         transaction.raw_response = raw_response
+#         transaction.save()
 
-    if status == 'completed':
-        # Handle successful transaction
-        nominee = Nominees.objects.filter(code=nominee_code).first()
-        if nominee:
-            nominee.total_vote += 1  # Increment vote count
-            nominee.save()
-            return JsonResponse({'status': 'success', 'message': 'Vote added to nominee.'}, status=200)
-        else:
-            return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
+#     if status == 'completed':
+#         # Handle successful transaction
+#         nominee = Nominees.objects.filter(code=nominee_code).first()
+#         if nominee:
+#             nominee.total_vote += 1  # Increment vote count
+#             nominee.save()
+#             return JsonResponse({'status': 'success', 'message': 'Vote added to nominee.'}, status=200)
+#         else:
+#             return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
 
-    return JsonResponse({'status': 'error', 'message': 'Transaction not successful.'}, status=400)
+#     return JsonResponse({'status': 'error', 'message': 'Transaction not successful.'}, status=400)
 
-def handle_transaction_failed(transaction_id):
-    # Handle failed transaction logic here
-    print(f'Transaction {transaction_id} failed.')
-    return JsonResponse({'status': 'error', 'message': 'Transaction failed.'}, status=400)
+# def handle_transaction_failed(transaction_id):
+#     # Handle failed transaction logic here
+#     print(f'Transaction {transaction_id} failed.')
+#     return JsonResponse({'status': 'error', 'message': 'Transaction failed.'}, status=400)
