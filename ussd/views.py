@@ -9,6 +9,7 @@ from decimal import Decimal
 import random
 from django.conf import settings
 from payment.models import Nominees
+from datetime import datetime
 
 
 
@@ -198,18 +199,20 @@ def webhook_callback(request):
             data = json.loads(request.body.decode('utf-8'))
             print(f'Received callback data {data}')
             
-            order_id = data.get('order_id')
-            user_id = data.get('user_id')
-            msisdn = data.get('msisdn')
+            timestamp_str = data.get('Timestamp')
+            status = data.get('Status')  # Expecting 'success' or 'failed'
+            invoice_no = data.get('InvoiceNo')
             amount = data.get('amount')
-            status = data.get('status')  # Expecting 'success' or 'failed'
+            order_id = data.get('Order_id')
+            
+            timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
             
             transaction = PaymentTransaction(
                 order_id=order_id,
-                user_id=user_id,
-                msisdn=msisdn,
+                invoice_no=invoice_no,
                 amount=amount,
-                status=status
+                status=status,
+                timestamp=timestamp,
             )
             transaction.save()
             return JsonResponse({'status': 'success'}, status=200)
