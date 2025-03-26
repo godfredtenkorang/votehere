@@ -100,68 +100,59 @@ def custom_404_view(request, exception):
 from django.views.decorators.http import require_POST
 
 @csrf_exempt
-@require_POST  # Only allow POST requests
 def payment_callback(request):
-    if request.method != 'POST':
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
-
-    try:
+    if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-        except json.JSONDecodeError as e:
-            return JsonResponse({'status': 'error', 'message': f'Invalid JSON data: {str(e)}'}, status=400)
+            print(f'Received callback data: {data}')
 
-        required_fields = ['order_id', 'transaction_id', 'status', 'amount', 'msisdn', 'network']
-        missing_fields = [field for field in required_fields if field not in data]
+            # Extract necessary information
+            order_id = data.get('order_id')
+            transaction_id = data.get('transaction_id')
+            status = data.get('status')
+            amount = data.get('amount')
+            customer_number = data.get('customerNumber')
 
-        if missing_fields:
-            return JsonResponse({'status': 'error', 'message': f'Missing required fields: {", ".join(missing_fields)}'}, status=400)
-
-        order_id = data.get('order_id')
-        transaction_id = data.get('transaction_id')
-        status = data.get('status', '').lower() if isinstance(data.get('status'), str) else ''
-        amount = data.get('amount')
-        customer_number = data.get('msisdn')
-        network = data.get('network')
-
-        print(f'Received callback data {data}')
-
-        transaction = PaymentTransaction.objects.filter(transaction_id=transaction_id).first()
-        if transaction:
-            transaction.status = status
-            transaction.amount = amount
-            transaction.save()
-        else:
-            transaction = PaymentTransaction.objects.create(
-                order_id=order_id,
+            # Update PaymentTransaction record
+            transaction, created = PaymentTransaction.objects.get_or_create(
                 transaction_id=transaction_id,
-                status=status,
-                amount=amount,
-                customer_number=customer_number,
-                network=network,
-                raw_response=json.dumps(data)
+                defaults={
+                    'order_id': order_id,
+                    'amount': amount,
+                    'status': status,
+                    'customer_number': customer_number,
+                    'raw_response': json.dumps(data)
+                }
             )
 
-        session = CustomSession.objects.filter(user_id=customer_number, level='payment').first()
-        if not session:
-            print(f"Session not found for user_id: {customer_number} at level 'payment'")
+            if not created:
+                # Update existing transaction
+                transaction.status = status
+                transaction.amount = amount
+                transaction.save()
+
+            # Handle session based on payment status
+            session = CustomSession.objects.filter(user_id=customer_number, level='payment').first()
+
+            if session:
+                if status.lower() == "success":
+                    nominee = Nominees.objects.filter(code=session.candidate_id).first()
+                    if nominee:
+                        nominee.total_vote += session.votes
+                        nominee.save()
+                        session.delete()
+                        return JsonResponse({'status': 'success', 'message': 'Payment processed and votes added.'}, status=200)
+                    else:
+                        return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'Payment failed, session retained.'}, status=400)
+
             return JsonResponse({'status': 'error', 'message': 'Session not found.'}, status=404)
 
-        if status == "success":
-            try:
-                nominee = Nominees.objects.get(code=session.candidate_id)
-                nominee.total_vote += session.votes
-                nominee.save()
-                
-                session.delete()
-                
-                return JsonResponse({'status': 'success', 'message': 'Payment processed and votes added to nominee.'}, status=200)
-            except Nominees.DoesNotExist:
-                return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
-            except Exception as e:
-                return JsonResponse({'status': 'error', 'message': f'Error updating nominee votes {str(e)}'}, status=500)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+        except Exception as e:
+            print(f'Error: {str(e)}')
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
-        return JsonResponse({'status': 'error', 'message': 'Payment failed, session retained.'}, status=400)
-
-    except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
