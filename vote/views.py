@@ -107,42 +107,52 @@ def webhook_callback(request):
             # Parse the incoming JSON data
             data = json.loads(request.body.decode('utf-8'))
             print(f'Received webhook data: {data}')
-            
-            # Extract relevant information
+
+            # Process the webhook data
+            event_type = data.get('event')  # Example: 'transaction.completed', 'transaction.failed', etc.
             transaction_id = data.get('transaction_id')
             status = data.get('status')  # e.g., 'completed', 'failed'
             amount = data.get('amount')
             nominee_code = data.get('nominee_code')  # Assuming the nominee code is provided
 
-            # Find the transaction record
-            transaction, created = PaymentTransaction.objects.get_or_create(
-                transaction_id=transaction_id,
-                defaults={
-                    'order_id': data.get('order_id', ''),
-                    'status': status,
-                    'amount': amount,
-                    'customer_number': data.get('customer_number', '')
-                }
-            )
-
-            if not created:
-                # If the transaction already exists, update its status
-                transaction.status = status
-                transaction.save()
-
-            if status == 'completed':
+            # Handle different event types
+            if event_type == 'transaction.completed':
                 # Handle successful transaction
-                nominee = Nominees.objects.filter(code=nominee_code).first()
-                if nominee:
-                    nominee.total_vote += 1  # Assuming each transaction represents one vote
-                    nominee.save()
-                    return JsonResponse({'status': 'success', 'message': 'Vote added to nominee.'}, status=200)
-                else:
-                    return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
+                 # Find the transaction record
+                transaction, created = PaymentTransaction.objects.get_or_create(
+                    transaction_id=transaction_id,
+                    defaults={
+                        'order_id': data.get('order_id', ''),
+                        'status': status,
+                        'amount': amount,
+                        'customer_number': data.get('customer_number', '')
+                    }
+                )
 
-            return JsonResponse({'status': 'error', 'message': 'Transaction not successful.'}, status=400)
+                if not created:
+                    # If the transaction already exists, update its status
+                    transaction.status = status
+                    transaction.save()
 
-            
+                if status == 'completed':
+                    # Handle successful transaction
+                    nominee = Nominees.objects.filter(code=nominee_code).first()
+                    if nominee:
+                        nominee.total_vote += 1  # Assuming each transaction represents one vote
+                        nominee.save()
+                        return JsonResponse({'status': 'success', 'message': 'Vote added to nominee.'}, status=200)
+                    else:
+                        return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
+
+                return JsonResponse({'status': 'error', 'message': 'Transaction not successful.'}, status=400)
+                # Update your database or perform actions as needed
+            elif event_type == 'transaction.failed':
+                # Handle failed transaction
+                print(f'Transaction {transaction_id} failed.')
+                # Update your database or perform actions as needed
+            # Add more event handling as needed
+
+            return JsonResponse({'status': 'success'}, status=200)
 
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON format.'}, status=400)
