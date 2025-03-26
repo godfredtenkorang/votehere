@@ -199,22 +199,24 @@ def ussd_api(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
+def update_nominee_votes(nominee_code, votes):
+    try:
+        nominee = Nominees.objects.get(code__iexact=nominee_code)
+        nominee.total_votes += votes
+        nominee.save()
+        return True
+    except Nominees.DoesNotExist:
+        return False
+
 @csrf_exempt
 def webhook_callback(request):
     if request.method == 'POST':
         try:
-            raw_data = request.body.decode('utf-8')
+            data = json.loads(request.body.decode('utf-8'))
             
-            print(f'Raw callback data: {raw_data}')
+            print(f'Raw callback data: {data}')
             
-            # Parse JSON data
-            try:
-                data = json.loads(raw_data)
-            except json.JSONDecodeError:
-                return JsonResponse(
-                    {'status': 'error', 'message': 'Invalid JSON format'},
-                    status=400
-                )
+            
             
             
             timestamp_str = data.get('Timestamp')
@@ -222,48 +224,47 @@ def webhook_callback(request):
             invoice_no = data.get('InvoiceNo')
             amount = data.get('amount')
             order_id = data.get('Order_id')
-            customer_number = data.get('customerNumber')
             
             
-            timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+            session = CustomSession.objects.filter(amount=amount).first()
+            
+            if not session:
+                return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
+            
+            
             
             transaction = PaymentTransaction(
                 order_id=order_id,
                 invoice_no=invoice_no,
                 amount=amount,
                 status=status,
-                timestamp=timestamp,
+                timestamp=timestamp_str,
             )
             transaction.save()
             
-            # Find related session
-            session_key = md5(customer_number.encode('utf-8')).hexdigest()
-            session = CustomSession.objects.filter(
-                session_key=session_key,
-                level='payment'
-            ).first()
             
-            if not session:
-                raise Exception("No active session found for this payment")
             
-            if status == 'PAID':
+            if status.lower() == 'succuss':
                 
+                nominee_code = session.candidate_id
+                votes = session.votes
                 
-                
-                try:
-                    
-                    
-                    nominee = Nominees.objects.get(code=session.candidate_id)
-                    
-                    nominee.total_vote += session.votes
-                    nominee.save()
+                if update_nominee_votes(nominee_code, votes):
+                    PaymentTransaction.objects.create(
+                        nominee_code=nominee_code,
+                        votes=votes,
+                        amount=amount,
+                        order_id=order_id,
+                        invoice_no=invoice_no,
+                        status=status,
+                        timezone=timezone.now()
+                    )
                     session.delete()
-                except CustomSession.DoesNotExist:
-                    print(f'Session with key {session_key} does not exist.')
-                except Nominees.DoesNotExist:
-                    print(f'Nominee not found.')
-            
-            return JsonResponse({'status': 'success'}, status=200)
+                    return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'Nominee not found'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Payment failed'})
         
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
