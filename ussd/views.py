@@ -142,7 +142,7 @@ def ussd_api(request):
                     hashed_password = md5(password.encode()).hexdigest()
                     concat_keys = f"{username}{key}{hashed_password}"
                     secrete = md5(concat_keys.encode()).hexdigest()
-                    callback = 'https://voteafric.com/webhooks/callback/'
+                    callback = 'https://voteafric.com/ussd/webhooks/callback/'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
                     
@@ -205,10 +205,18 @@ def payment_callback(request):
             status = data.get('status')  # Expecting 'success' or 'failed'
             
             transaction = PaymentTransaction(
-                
+                order_id=order_id,
+                user_id=user_id,
+                msisdn=msisdn,
+                amount=amount,
+                status=status
             )
+            transaction.save()
+            return JsonResponse({'status': 'success'}, status=200)
+        
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+        
         except Exception as e:
             print(f'Error: {str(e)}')
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
