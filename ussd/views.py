@@ -224,7 +224,7 @@ def webhook_callback(request):
             order_id = data.get('Order_id')
             
             
-            session = CustomSession.objects.filter(order_id=order_id).first()
+            session = CustomSession.objects.filter(created_at=timestamp_str).first()
             
             if not session:
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
@@ -249,13 +249,13 @@ def webhook_callback(request):
                 
                 if update_nominee_votes(nominee_code, votes):
                     PaymentTransaction.objects.create(
-                        nominee_code=nominee_code,
-                        votes=votes,
-                        amount=amount,
                         order_id=order_id,
                         invoice_no=invoice_no,
+                        amount=amount,
                         status=status,
-                        timezone=timezone.now()
+                        nominee_code=nominee_code,
+                        votes=votes,
+                        timestamp=timezone.now()
                     )
                     session.delete()
                     return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
