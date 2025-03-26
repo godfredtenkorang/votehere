@@ -224,7 +224,7 @@ def webhook_callback(request):
             order_id = data.get('Order_id')
             
             
-            session = CustomSession.objects.filter(created_at=timestamp_str).first()
+            session = CustomSession.objects.filter(amount=amount).first()
             
             if not session:
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
@@ -242,7 +242,7 @@ def webhook_callback(request):
             
             
             
-            if status.lower() == 'succuss':
+            if status == 'PAID':
                 
                 nominee_code = session.candidate_id
                 votes = session.votes
