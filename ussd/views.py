@@ -148,9 +148,7 @@ def ussd_api(request):
                     callback = 'https://voteafric.com/ussd/webhooks/callback/'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
-                    
-                    session_key = session.session_key
-                    user_id = session.user_id
+                    session.save()
                     
                    
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
@@ -168,8 +166,8 @@ def ussd_api(request):
                         'key': key,
                         'callback': callback,
                         'item_desc': item_desc,
-                        'user_id': user_id,
-                        'session_key': session_key
+
+            
                     }
 
                     headers = {
@@ -202,7 +200,7 @@ def ussd_api(request):
 def update_nominee_votes(nominee_code, votes):
     try:
         nominee = Nominees.objects.get(code__iexact=nominee_code)
-        nominee.total_votes += votes
+        nominee.total_vote += votes
         nominee.save()
         return True
     except Nominees.DoesNotExist:
@@ -226,7 +224,7 @@ def webhook_callback(request):
             order_id = data.get('Order_id')
             
             
-            session = CustomSession.objects.filter(amount=amount).first()
+            session = CustomSession.objects.filter(order_id=order_id).first()
             
             if not session:
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
