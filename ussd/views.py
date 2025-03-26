@@ -203,7 +203,16 @@ def ussd_api(request):
 def webhook_callback(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body.decode('utf-8'))
+            
+            data = {
+                'Timestamp': 'Timestamp',
+                'Status': 'Status',
+                'InvoiceNo': 'InvoiceNo',
+                'amount': 'amount',
+                'Order_id': 'Order_id',
+                'user_id': 'user_id',
+                'session_key': 'session_key',
+            }
             print(f'Received callback data {data}')
             
             timestamp_str = data.get('Timestamp')
