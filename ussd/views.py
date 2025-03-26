@@ -175,7 +175,7 @@ def ussd_api(request):
                     response = requests.post(endpoint, json=payload, headers=headers)
                     
                     if response.status_code == 200:
-                        session.delete()
+                        
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
                         # print(secrete_full)
                         print(hashed_password)
