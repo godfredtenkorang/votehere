@@ -148,7 +148,9 @@ def ussd_api(request):
                     callback = 'https://voteafric.com/ussd/webhooks/callback/'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
-                    nominee_code = session.candidate_id
+                    
+                    session_key = session.session_key
+                    user_id = session.user_id
                     
                    
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
@@ -166,7 +168,8 @@ def ussd_api(request):
                         'key': key,
                         'callback': callback,
                         'item_desc': item_desc,
-                        'nominee_code': nominee_code  # Include nominee code in the payload
+                        'user_id': user_id,
+                        'session_key': session_key
                     }
 
                     headers = {
@@ -208,7 +211,8 @@ def webhook_callback(request):
             invoice_no = data.get('InvoiceNo')
             amount = data.get('amount')
             order_id = data.get('Order_id')
-            nominee_code = data.get('nominee_code')  # Retrieve nominee code from the callback data
+            user_id = data.get('user_id')
+            session_key = data.get('session_key')
             
             timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
             
@@ -226,10 +230,15 @@ def webhook_callback(request):
                 
                 
                 try:
+                    session = CustomSession.objects.get(session_key=session_key, user_id=user_id)
+                    nominee_code = session.candidate_id
+                    
                     nominee = Nominees.objects.get(code=nominee_code)
                     votes = int(float(amount) / 0.50)
                     nominee.total_vote += votes
                     nominee.save()
+                except CustomSession.DoesNotExist:
+                    print(f'Session with key {session_key} and user ID {user_id} does not exist.')
                 except Nominees.DoesNotExist:
                     print(f'Nominee with code {nominee_code} does not exist.')
             
