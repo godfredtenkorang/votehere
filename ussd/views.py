@@ -142,7 +142,7 @@ def ussd_api(request):
                     hashed_password = md5(password.encode()).hexdigest()
                     concat_keys = f"{username}{key}{hashed_password}"
                     secrete = md5(concat_keys.encode()).hexdigest()
-                    callback = 'https://voteafric.com/callback/'
+                    callback = 'https://voteafric.com/webhooks/transaction/'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
                     

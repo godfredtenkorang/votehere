@@ -112,25 +112,18 @@ def payment_callback(request):
             status = data.get('status')
             amount = data.get('amount')
             customer_number = data.get('customerNumber')
+            
+            transaction = PaymentTransaction.objects.filter(transaction_id=transaction_id).filter()
 
-            # Update PaymentTransaction record
-            transaction, created = PaymentTransaction.objects.get_or_create(
-                transaction_id=transaction_id,
-                defaults={
-                    'order_id': order_id,
-                    'amount': amount,
-                    'status': status,
-                    'customer_number': customer_number,
-                    'raw_response': json.dumps(data)
-                }
-            )
+            
 
-            if not created:
+            if transaction:
                 # Update existing transaction
                 transaction.status = status
                 transaction.amount = amount
                 transaction.save()
-
+                
+            
             # Handle session based on payment status
             session = CustomSession.objects.filter(user_id=customer_number, level='payment').first()
 
