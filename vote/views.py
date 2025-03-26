@@ -112,11 +112,14 @@ def webhook_callback(request):
             transaction_id = data.get('transaction_id')
             status = data.get('status')  # e.g., 'completed', 'failed'
             amount = data.get('amount')
+            customer_number = data.get('customer_number')
             nominee_code = data.get('nominee_code')  # Assumed to be provided
+            network = data.get('network')  # Network used for the transaction
+            raw_response = json.dumps(data)  # Store the entire response as a string
 
             # Handle different event types
             if event_type == 'transaction.completed':
-                return handle_transaction_completed(transaction_id, status, amount, nominee_code, data)
+                return handle_transaction_completed(transaction_id, status, amount, customer_number, nominee_code, network, raw_response)
 
             elif event_type == 'transaction.failed':
                 return handle_transaction_failed(transaction_id)
@@ -131,21 +134,30 @@ def webhook_callback(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 
-def handle_transaction_completed(transaction_id, status, amount, nominee_code, data):
+
+def handle_transaction_completed(request, transaction_id, status, amount, customer_number, nominee_code, network, raw_response):
     # Find or create the transaction record
+    data = json.loads(request.body.decode('utf-8'))
     transaction, created = PaymentTransaction.objects.get_or_create(
         transaction_id=transaction_id,
+        
         defaults={
             'order_id': data.get('order_id', ''),
             'status': status,
             'amount': amount,
-            'customer_number': data.get('customer_number', '')
+            'customer_number': customer_number,
+            'network': network,
+            'raw_response': raw_response
         }
     )
 
     if not created:
         # If the transaction already exists, update its status
         transaction.status = status
+        transaction.amount = amount
+        transaction.customer_number = customer_number
+        transaction.network = network
+        transaction.raw_response = raw_response
         transaction.save()
 
     if status == 'completed':
