@@ -10,6 +10,7 @@ import random
 from django.conf import settings
 from payment.models import Nominees
 from datetime import datetime
+from django.utils import timezone
 
 
 
@@ -162,7 +163,8 @@ def ussd_api(request):
                         'secrete': secrete,
                         'key': key,
                         'callback': callback,
-                        'item_desc': item_desc
+                        'item_desc': item_desc,
+                        'nominee_code': session.candidate_id,  # Include nominee code in the payload
                     }
 
                     headers = {
@@ -215,6 +217,19 @@ def webhook_callback(request):
                 timestamp=timestamp,
             )
             transaction.save()
+            
+            if status == 'PAID':
+                
+                nominee_code = data.get('nominee_code')  # Retrieve nominee code from the callback data
+                
+                try:
+                    nominee = Nominees.objects.get(code=nominee_code)
+                    votes = int(float(amount) / 0.50)
+                    nominee.total_vote += votes
+                    nominee.save()
+                except Nominees.DoesNotExist:
+                    print(f'Nominee with code {nominee_code} does not exist.')
+            
             return JsonResponse({'status': 'success'}, status=200)
         
         except json.JSONDecodeError:
