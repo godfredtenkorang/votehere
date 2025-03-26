@@ -191,3 +191,26 @@ def ussd_api(request):
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
+@csrf_exempt
+def payment_callback(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            print(f'Received callback data {data}')
+            
+            order_id = data.get('order_id')
+            user_id = data.get('user_id')
+            msisdn = data.get('msisdn')
+            amount = data.get('amount')
+            status = data.get('status')  # Expecting 'success' or 'failed'
+            
+            transaction = PaymentTransaction(
+                
+            )
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+        except Exception as e:
+            print(f'Error: {str(e)}')
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)

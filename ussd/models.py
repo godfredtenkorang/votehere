@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 class CustomSession(models.Model):
     session_key = models.CharField(max_length=32, primary_key=True)
@@ -14,15 +15,13 @@ class CustomSession(models.Model):
     
 
 class PaymentTransaction(models.Model):
-    order_id = models.CharField(max_length=100, null=True, blank=True)
-    transaction_id = models.CharField(max_length=100, unique=True)
-    status = models.CharField(max_length=50)
+    order_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.CharField(max_length=100, null=True, blank=True)
+    msisdn = models.CharField(max_length=20, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    customer_number = models.CharField(max_length=20, null=True, blank=True)
-    network = models.CharField(max_length=50, null=True, blank=True)
+    status = models.CharField(max_length=50) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    raw_response = models.TextField(null=True, blank=True)
     
     def __str__(self):
-        return self.transaction_id
+        return f"Transaction {self.order_id} - {self.status}"
