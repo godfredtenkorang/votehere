@@ -213,10 +213,7 @@ def webhook_callback(request):
             data = json.loads(request.body.decode('utf-8'))
             
             print(f'Raw callback data: {data}')
-            
-            
-            
-            
+ 
             timestamp_str = data.get('Timestamp')
             status = data.get('Status')  # Expecting 'success' or 'failed'
             invoice_no = data.get('InvoiceNo')
