@@ -133,7 +133,6 @@ def ussd_api(request):
 
                 elif level == 'payment':
                     amount = session.amount
-                    session.save()
                     endpoint = "https://api.nalosolutions.com/payplus/api/"
                     telephone = msisdn
                     network_type = network
@@ -148,9 +147,10 @@ def ussd_api(request):
                     callback = 'https://voteafric.com/ussd/webhooks/callback/'
                     item_desc = 'Payment for vote'
                     order_id = str(uuid.uuid4())
-                   
+                    session.order_id = order_id
+                    session.save()
                     
-                   
+               
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
 
                     # Payment payload
@@ -176,7 +176,7 @@ def ussd_api(request):
 
                     # Sending payment request
                     response = requests.post(endpoint, json=payload, headers=headers)
-                    
+                    print(response)
                     if response.status_code == 200:
                         session.save()
                         message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
@@ -225,6 +225,7 @@ def webhook_callback(request):
             
             
             session = CustomSession.objects.filter(order_id=order_id).first()
+            
             
             if not session:
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
