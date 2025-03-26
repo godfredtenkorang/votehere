@@ -216,13 +216,6 @@ def webhook_callback(request):
                     status=400
                 )
             
-            required_fields = ['Order_id', 'Timestamp', 'Status', 'InvoiceNo', 'amount', 'customerNumber']
-            
-            if not all(field in data for field in required_fields):
-                return JsonResponse(
-                    {'status': 'error', 'message': 'Missing required fields'},
-                    status=400
-                )
             
             timestamp_str = data.get('Timestamp')
             status = data.get('Status')  # Expecting 'success' or 'failed'
@@ -230,9 +223,6 @@ def webhook_callback(request):
             amount = data.get('amount')
             order_id = data.get('Order_id')
             customer_number = data.get('customerNumber')
-            
-           
-            
             
             
             timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
