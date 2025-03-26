@@ -22,5 +22,5 @@ urlpatterns = [
     #      views.nominees_search_view, name='nom-search'),
     
 
-    path('webhooks/transaction/', views.payment_callback, name='transaction_callback')
+    path('webhooks/callback/', views.webhook_callback, name='transaction_callback')
 ]

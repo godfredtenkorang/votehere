@@ -99,54 +99,34 @@ def custom_404_view(request, exception):
 
 from django.views.decorators.http import require_POST
 
+
 @csrf_exempt
-def payment_callback(request):
+def webhook_callback(request):
     if request.method == 'POST':
         try:
+            # Parse the incoming JSON data
             data = json.loads(request.body.decode('utf-8'))
-            print(f'Received callback data: {data}')
+            print(f'Received webhook data: {data}')
 
-            # Extract necessary information
-            order_id = data.get('order_id')
+            # Process the webhook data
+            event_type = data.get('event')  # Example: 'transaction.completed', 'transaction.failed', etc.
             transaction_id = data.get('transaction_id')
-            status = data.get('status')
-            amount = data.get('amount')
-            customer_number = data.get('customerNumber')
-            
-            transaction = PaymentTransaction.objects.filter(transaction_id=transaction_id).filter()
 
-            
+            # Handle different event types
+            if event_type == 'transaction.completed':
+                # Handle successful transaction
+                print(f'Transaction {transaction_id} completed successfully.')
+                # Update your database or perform actions as needed
+            elif event_type == 'transaction.failed':
+                # Handle failed transaction
+                print(f'Transaction {transaction_id} failed.')
+                # Update your database or perform actions as needed
+            # Add more event handling as needed
 
-            if transaction:
-                # Update existing transaction
-                transaction.status = status
-                transaction.amount = amount
-                transaction.save()
-                
-                return JsonResponse({'status': 'success', 'message': 'Transaction status updated.'}, status=200)
-            else:
-                return JsonResponse({'status': 'error', 'message': 'Transaction not found.'}, status=404)
-            
-            # Handle session based on payment status
-            # session = CustomSession.objects.filter(user_id=customer_number, level='payment').first()
-
-            # if session:
-            #     if status.lower() == "success":
-            #         nominee = Nominees.objects.filter(code=session.candidate_id).first()
-            #         if nominee:
-            #             nominee.total_vote += session.votes
-            #             nominee.save()
-            #             session.delete()
-            #             return JsonResponse({'status': 'success', 'message': 'Payment processed and votes added.'}, status=200)
-            #         else:
-            #             return JsonResponse({'status': 'error', 'message': 'Nominee not found.'}, status=404)
-            #     else:
-            #         return JsonResponse({'status': 'error', 'message': 'Payment failed, session retained.'}, status=400)
-
-            # return JsonResponse({'status': 'error', 'message': 'Session not found.'}, status=404)
+            return JsonResponse({'status': 'success'}, status=200)
 
         except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON format.'}, status=400)
         except Exception as e:
             print(f'Error: {str(e)}')
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
