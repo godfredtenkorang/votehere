@@ -203,25 +203,25 @@ def ussd_api(request):
 def webhook_callback(request):
     if request.method == 'POST':
         try:
-            
-            data = {
-                'Timestamp': 'Timestamp',
-                'Status': 'Status',
-                'InvoiceNo': 'InvoiceNo',
-                'amount': 'amount',
-                'Order_id': 'Order_id',
-                'user_id': 'user_id',
-                'session_key': 'session_key',
+            data = json.loads(request.body.decode('utf-8'))
+            custome_data = {
+                'Timestamp': data['Timestamp'],
+                'Status': data['Status'],
+                'InvoiceNo': data['InvoiceNo'],
+                'amount': data['amount'],
+                'Order_id': data['Order_id'],
+                'user_id': data['user_id'],
+                'session_key': data['session_key'],
             }
-            print(f'Received callback data {data}')
+            print(f'Received callback data {custome_data}')
             
-            timestamp_str = data.get('Timestamp')
-            status = data.get('Status')  # Expecting 'success' or 'failed'
-            invoice_no = data.get('InvoiceNo')
-            amount = data.get('amount')
-            order_id = data.get('Order_id')
-            user_id = data.get('user_id')
-            session_key = data.get('session_key')
+            timestamp_str = custome_data.get('Timestamp')
+            status = custome_data.get('Status')  # Expecting 'success' or 'failed'
+            invoice_no = custome_data.get('InvoiceNo')
+            amount = custome_data.get('amount')
+            order_id = custome_data.get('Order_id')
+            user_id = custome_data.get('user_id')
+            session_key = custome_data.get('session_key')
             
             timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
             
