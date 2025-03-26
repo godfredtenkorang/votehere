@@ -212,10 +212,10 @@ def webhook_callback(request):
             invoice_no = data.get('InvoiceNo')
             amount = data.get('amount')
             order_id = data.get('Order_id')
-            # user_id = data.get('user_id')
-            # session_key = data.get('session_key')
+            msisdn = data.get('MSISDN')
             
-            session_key = request.session
+            user_id = data.get('USER_ID')
+            # session_key = data.get('session_key')
             
             
             
@@ -230,22 +230,32 @@ def webhook_callback(request):
             )
             transaction.save()
             
+            # Find related session
+            session_key = md5(msisdn.encode('utf-8')).hexdigest()
+            session = CustomSession.objects.filter(
+                session_key=session_key,
+                level='payment'
+            ).first()
+            
+            if not session:
+                raise Exception("No active session found for this payment")
+            
             if status == 'PAID':
                 
                 
                 
                 try:
-                    session = CustomSession.objects.get(session_key=session_key)
-                    nominee_code = session.candidate_id
                     
-                    nominee = Nominees.objects.get(code=nominee_code)
-                    votes = int(float(amount) / 0.50)
-                    nominee.total_vote += votes
+                    
+                    nominee = Nominees.objects.get(code=session.candidate_id)
+                    
+                    nominee.total_vote += session.votes
                     nominee.save()
+                    session.delete()
                 except CustomSession.DoesNotExist:
                     print(f'Session with key {session_key} does not exist.')
                 except Nominees.DoesNotExist:
-                    print(f'Nominee with code {nominee_code} does not exist.')
+                    print(f'Nominee not found.')
             
             return JsonResponse({'status': 'success'}, status=200)
         
