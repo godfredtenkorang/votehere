@@ -92,6 +92,11 @@ def ussd_api(request):
                 if level == 'start':
                     try:
                         nominee = Nominees.objects.get(code__iexact=user_data)
+                        
+                        # check if voting has ended for this nominee
+                        if nominee.end_date:
+                            session.delete()
+                            return JsonResponse(send_response("Voting has ended.", False))
                         message = (
                             f"Confirm Candidate\n"
                             f"Name: {nominee.name}\n"

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from vote.models import Category, SubCategory
 from payment.models import Nominees, Payment
 from register.models import Register
@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.views.generic import View
 from .utils import render_to_pdf
+from payment.forms import NomineeForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -164,12 +166,20 @@ def transaction_category(request, transaction_slug):
     payments = Payment.objects.all()
     if transaction_slug:
         nominee = get_object_or_404(Nominees, slug=transaction_slug)
-        payments = payments.filter(nominee=nominee)
-        total_amount = payments.aggregate(Total=Sum('total_amount'))
+        all_payments = payments.filter(nominee=nominee)
+        verified_payments = payments.filter(nominee=nominee, verified=True)
+        not_verified_payments = payments.filter(nominee=nominee, verified=False)
+        total_amount_verified = verified_payments.aggregate(Total=Sum('total_amount'))
+        total_amount_not_verified = not_verified_payments.aggregate(Total=Sum('total_amount'))
+        total_amount = all_payments.aggregate(Total=Sum('total_amount'))
 
     context = {
         'nominee': nominee,
-        'payments': payments,
+        'all_payments': all_payments,
+        'verified_payments': verified_payments,
+        'not_verified_payments': not_verified_payments,
+        'total_amount_verified': total_amount_verified,
+        'total_amount_not_verified': total_amount_not_verified,
         'total_amount': total_amount,
         'title': 'adminPage'
     }
@@ -182,10 +192,11 @@ class GeneratePdf(View):
         forms = Payment.objects.all()
         if form:
             nominee = get_object_or_404(Nominees, pk=form)
-            forms = forms.filter(nominee=nominee)
+            forms = forms.filter(nominee=nominee, verified=True)
 
         context = {
-            'forms':forms
+            'forms':forms,
+            'nominee': nominee
         }
         pdf = render_to_pdf('dashboard/generate.html', context)
         return HttpResponse(pdf, content_type='application/pdf')
@@ -207,3 +218,20 @@ def generate(request, pdf):
     }
 
     return render(request, 'dashboard/generate.html', context)
+
+@login_required
+def add_nominee(request):
+    if request.method == 'POST':
+        form = NomineeForm(request.POST, request.FILES)
+        if form.is_valid():
+            nominee = form.save(commit=False)
+            nominee.save()
+            messages.success(request, f'Nominee {nominee.name} added successfully.')
+            return redirect('add_nominee')
+    else:
+        form = NomineeForm(request.FILES)
+    context = {
+        'form': form,
+        'title': 'Add Nominee'
+    }
+    return render(request, 'dashboard/nominee/add_nominee.html', context)

@@ -6,8 +6,10 @@
                 <div class="heading">
                     {% if nominee %}
                     <h1>Total Revenue for <span>{{ nominee.name }} </span> as <span> {{ nominee.sub_category }}</span></h1>
-                    <p>Total Revenue made for each category</p>
-                    <p>GH¢({{ total_amount }})</p>
+                    <h3>Total Revenue made for each category</h3>
+                    <h4>Total Amount: GH¢({{ total_amount }})</h4>
+                    <h4>Total Verified Amount: GH¢({{ total_amount_verified }})</h4>
+                    <h4>Total Not Verified Amount: GH¢({{ total_amount_not_verified }})</h4>
                     {% endif %}
                 </div>
 
@@ -21,7 +23,7 @@
                             <th>Date & Time</th>
                         </tr>
                     </thead>
-                    {% for p in payments %}
+                    {% for p in all_payments %}
                     <tbody>
                         <tr>
                             <td>{{ p.content }}</td>

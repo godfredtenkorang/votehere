@@ -50,6 +50,7 @@
             <div class="nominees-detail">
                 <h2>{{ n.sub_category.content }}</h2>
                 <h3>{{ n.name }}</h3>
+                <p>Nominee Code: {{ n.code }}</p>
 
                 <div class="vote-button">
                     {% if current_time < n.end_date %}

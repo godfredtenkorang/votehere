@@ -30,4 +30,7 @@ urlpatterns = [
     # PDF
     path('generate/<pdf>/', views.generate, name='generate'),
     path('pdf/<form>/', GeneratePdf.as_view(), name='pdf'),
+    
+    
+    path('add_nominee/', views.add_nominee, name='add_nominee')
 ]
