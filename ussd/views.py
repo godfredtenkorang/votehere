@@ -94,7 +94,7 @@ def ussd_api(request):
                         nominee = Nominees.objects.get(code__iexact=user_data)
                         
                         # check if voting has ended for this nominee
-                        if nominee.end_date:
+                        if timezone.now() > nominee.end_date:
                             session.delete()
                             return JsonResponse(send_response("Voting has ended.", False))
                         message = (
