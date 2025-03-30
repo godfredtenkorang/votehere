@@ -48,11 +48,12 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
         return render(request, 'payment/access_denied.html')
     
     if request.method == 'POST':
+        category = nominee.category
         phone = request.POST['phone']
         vote = request.POST['vote']
         amount = request.POST['amount']
         total_amount = request.POST['total_amount']
-        payment = Payment(nominee=nominee, content=nominee.sub_category, phone=phone, vote=vote, amount=amount, total_amount=total_amount)
+        payment = Payment(category=category, nominee=nominee, content=nominee.sub_category, phone=phone, vote=vote, amount=amount, total_amount=total_amount)
         payment.save()
         return render(request, 'payment/make_payment.html', {'payment': payment, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
 

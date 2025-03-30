@@ -30,6 +30,7 @@ class Nominees(models.Model):
 
 
 class Payment(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     nominee = models.ForeignKey(Nominees, on_delete=models.CASCADE, null=True)
     content = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True)
     phone = models.CharField(max_length=14, null=True)
