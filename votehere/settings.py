@@ -16,6 +16,10 @@ import django_heroku
 import dj_database_url
 import requests
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -177,6 +181,15 @@ PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+cloudinary.config(
+    cloud_name="dsmibnx4z",
+    api_key="811177473545642",
+    api_secret="2C-6I_AiuZSosfJFkqBHQ77MWY0"
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # import requests
 # import os

@@ -41,6 +41,10 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('ussd/', include('ussd.urls')),
     path('api/vote/', include('vote.api.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'vote.views.custom_404_view'
