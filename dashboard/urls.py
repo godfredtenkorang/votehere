@@ -25,6 +25,7 @@ urlpatterns = [
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
     path('adminHome/', views.adminHome, name='adminHome'),
     path('TransactionMain/', views.TransactionMain, name='TransactionMain'),
+    path('ussd_transactions/<int:category_id>/', views.ussd_transactions, name='ussd_transactions'),
     path('TransactionCat/<slug:category_slug>/', views.TransactionCat, name='TransactionCat'),
 
     # PDF
@@ -32,5 +33,6 @@ urlpatterns = [
     path('pdf/<form>/', GeneratePdf.as_view(), name='pdf'),
     
     
-    path('add_nominee/', views.add_nominee, name='add_nominee')
+    path('add_nominee/', views.add_nominee, name='add_nominee'),
+    path('sms/', views.send_sms, name='send_sms'),
 ]

@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from vote.models import Category
 
 class CustomSession(models.Model):
     session_key = models.CharField(max_length=32, primary_key=True)
@@ -23,6 +24,7 @@ class PaymentTransaction(models.Model):
     status = models.CharField(max_length=50) 
     nominee_code = models.CharField(max_length=10, null=True, blank=True)
     votes = models.IntegerField(null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
     timestamp = models.DateTimeField(null=True, blank=True)  # To store the timestamp of the transaction
     created_at = models.DateTimeField(auto_now_add=True)
     

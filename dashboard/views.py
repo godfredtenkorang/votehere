@@ -8,9 +8,11 @@ from django.utils import timezone
 
 from django.http import HttpResponse
 from django.views.generic import View
-from .utils import render_to_pdf
+from .utils import render_to_pdf, send_sms_to_new_nominee
 from payment.forms import NomineeForm
 from django.contrib import messages
+from .forms import SendSmsForm
+from ussd.models import PaymentTransaction
 
 # Create your views here.
 
@@ -44,6 +46,7 @@ def activity_nominee(request, nominee_slug):
         sub_category = get_object_or_404(SubCategory, slug=nominee_slug)
         nominees = nominees.filter(sub_category=sub_category)
         total_votes = nominees.aggregate(total=Sum('total_vote'))
+        total_votes = total_votes['total']
 
         
 
@@ -147,13 +150,26 @@ def TransactionMain(request):
 def TransactionCat(request, category_slug):
     category = None
     award = SubCategory.objects.all()
+    online_payments = Payment.objects.all()
+    ussd_payments = PaymentTransaction.objects.all()
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         award = award.filter(category=category)
+        online_payments = online_payments.filter(verified=True)
+        ussd_payments = ussd_payments.filter(status='PAID')
+        total_online_payments = online_payments.aggregate(Total=Sum('total_amount'))
+        total_online_payments = total_online_payments['Total']
+        
+        
+        total_ussd_payments = ussd_payments.aggregate(Total=Sum('amount'))
+        total_ussd_value = total_ussd_payments['Total']
+        total_ussd_payments = total_ussd_value.quantize(Decimal('1'))
 
     context = {
         'category': category,
         'award': award,
+        'total_online_payments': total_online_payments,
+        'total_ussd_payments': total_ussd_payments,
         'title': 'TransactionCat'
     }
 
@@ -172,6 +188,9 @@ def transaction_category(request, transaction_slug):
         total_amount_verified = verified_payments.aggregate(Total=Sum('total_amount'))
         total_amount_not_verified = not_verified_payments.aggregate(Total=Sum('total_amount'))
         total_amount = all_payments.aggregate(Total=Sum('total_amount'))
+        total_amount_verified = total_amount_verified['Total']
+        total_amount_not_verified = total_amount_not_verified['Total']
+        total_amount = total_amount['Total']
 
     context = {
         'nominee': nominee,
@@ -184,6 +203,24 @@ def transaction_category(request, transaction_slug):
         'title': 'adminPage'
     }
     return render(request, 'dashboard/transaction-category.html', context)
+from decimal import Decimal
+def ussd_transactions(request, category_id):
+    category = None
+    payments = PaymentTransaction.objects.all()
+    if category_id:
+        category = get_object_or_404(Category, id=category_id)
+        payments = payments.filter(category=category, status='PAID')
+        total_amount = payments.aggregate(Total=Sum('amount'))
+        total_amount = total_amount['Total']
+    
+    
+    context = {
+        'payments': payments,
+        'category': category,
+        'total_amount': total_amount,
+        'title': 'USSD transactions'
+    }
+    return render(request, 'dashboard/ussd_transactions.html', context)
 
 
 class GeneratePdf(View):
@@ -235,3 +272,21 @@ def add_nominee(request):
         'title': 'Add Nominee'
     }
     return render(request, 'dashboard/nominee/add_nominee.html', context)
+
+
+def send_sms(request):
+    if request.method == 'POST':
+        form = SendSmsForm(request.POST)
+        if form.is_valid():
+            send_sms = form.save()
+            send_sms_to_new_nominee(send_sms.name, send_sms.phone_number, send_sms.category)
+            return redirect('send_sms')
+        
+    else:
+        form = SendSmsForm()
+    context = {
+        'form': form,
+        'title': 'SMS'
+    }
+    
+    return render(request, 'dashboard/nominee/send_sms.html', context)

@@ -8,6 +8,10 @@
                     <p> When clicking on a specific Category, you will be able to view transactions for each
                         nominee associated with that award. </p>
                 </div>
+                <h1 style="font-family: 'Times New Roman', Times, serif;">Total Online Payments: GH¢{{ total_online_payments }}</h1>
+                <h1 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payments: GH¢{{ total_ussd_payments }}</h1>
+                <br>
+                <h4><a href="{% url 'ussd_transactions' category.id  %}">CLICK HERE</a> TO GET ALL USSD TRANSACTIONS</h4>
                 <div class="transaction-for-awards">
                     {% for n in award %}
                     <a href="{% url 'transaction' n.slug %}">
