@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'ussd',
     'rest_framework',
     'rest_framework.authtoken',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 SITE_ID=2
@@ -186,11 +188,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-cloudinary.config(
-    cloud_name="dsmibnx4z",
-    api_key="811177473545642",
-    api_secret="2C-6I_AiuZSosfJFkqBHQ77MWY0"
-)
+# cloudinary.config(
+#     cloud_name="dsmibnx4z",
+#     api_key="811177473545642",
+#     api_secret="2C-6I_AiuZSosfJFkqBHQ77MWY0"
+# )
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dsmibnx4z',
+    'API_KEY': '811177473545642',
+    'API_SECRET': '2C-6I_AiuZSosfJFkqBHQ77MWY0',
+}
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
