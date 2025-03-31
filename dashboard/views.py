@@ -164,8 +164,8 @@ def TransactionCat(request, category_slug):
         
         
         total_ussd_payments = ussd_payments.aggregate(Total=Sum('amount'))
-        total_ussd_value = total_ussd_payments['Total']
-        total_ussd_payments = total_ussd_value.quantize(Decimal('1'))
+        total_ussd_payments = total_ussd_payments['Total']
+        # total_ussd_payments = total_ussd_value.quantize(Decimal('1'))
 
     context = {
         'category': category,
