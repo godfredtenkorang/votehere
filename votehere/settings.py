@@ -28,10 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = config('SECRET_KEY')
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['.voteafric.com', 'localhost', '127.0.0.1']
 
@@ -175,11 +177,11 @@ django_heroku.settings(locals())
 
 
 
-PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
-PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+# PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+# PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 
-# PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
-# PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -203,7 +205,8 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # import os
 
 # QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
-QUOTAGUARDSTATIC_URL = config('QUOTAGUARDSTATIC_URL')
+# QUOTAGUARDSTATIC_URL = config('QUOTAGUARDSTATIC_URL')
+QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
 
 # Patch all requests to use QuotaGuard by default
 session = requests.Session()
@@ -220,4 +223,5 @@ print(res.text)  # Static IP (no proxies= needed!)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MNOTIFY_API_KEY= config("MNOTIFY_API_KEY")
+# MNOTIFY_API_KEY= config("MNOTIFY_API_KEY")
+MNOTIFY_API_KEY= os.environ.get('MNOTIFY_API_KEY')
