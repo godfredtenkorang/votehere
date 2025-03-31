@@ -1,1 +1,1 @@
-web gunicorn votehere.wsgi:application --log-file -
+web: gunicorn votehere.wsgi
