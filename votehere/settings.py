@@ -199,24 +199,24 @@ else:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-cloudinary.config(
-    cloud_name="dsmibnx4z",
-    api_key="811177473545642",
-    api_secret="2C-6I_AiuZSosfJFkqBHQ77MWY0",
-    secured=True
-)
+# cloudinary.config(
+#     cloud_name="dsmibnx4z",
+#     api_key="811177473545642",
+#     api_secret="2C-6I_AiuZSosfJFkqBHQ77MWY0",
+#     secured=True
+# )
 
-MEDIA_URL = 'https://res.cloudinary.com/dsmibnx4z/'
+# MEDIA_URL = 'https://res.cloudinary.com/dsmibnx4z/'
 
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
-#     'API_KEY': os.environ.get('API_KEY'),
-#     'API_SECRET': os.environ.get('API_SECRET'),
-# }
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME', 'dsmibnx4z'),
+    'API_KEY': os.environ.get('API_KEY', '811177473545642'),
+    'API_SECRET': os.environ.get('API_SECRET', '2C-6I_AiuZSosfJFkqBHQ77MWY0'),
+}
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-
+MEDIA_URL = f'https://res.cloudinary.com/{os.environ.get("CLOUD_NAME", "dsmibnx4z")}/'
 # import requests
 # import os
 
