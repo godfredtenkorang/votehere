@@ -12,13 +12,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
-import django_heroku
-import dj_database_url
+# import django_heroku
+# import dj_database_url
 import requests
 
-import cloudinary
-import cloudinary.uploader
-from cloudinary.utils import cloudinary_url
+# import cloudinary
+# import cloudinary.uploader
+# from cloudinary.utils import cloudinary_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -59,9 +59,9 @@ INSTALLED_APPS = [
     'ussd',
     'rest_framework',
     'rest_framework.authtoken',
-    'storages',
-    'cloudinary',
-    'cloudinary_storage',
+    # 'storages',
+    # 'cloudinary',
+    # 'cloudinary_storage',
 ]
 
 SITE_ID=2
