@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'ussd',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
     'cloudinary',
     'cloudinary_storage',
 ]
@@ -193,12 +194,6 @@ PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# if DEBUG:
-#     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# else:
-#     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-#     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 
 # cloudinary.config(
 #     cloud_name="dsmibnx4z",
@@ -210,14 +205,14 @@ MEDIA_URL = '/media/'
 # MEDIA_URL = 'https://res.cloudinary.com/dsmibnx4z/'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUD_NAME', 'dsmibnx4z'),
-    'API_KEY': os.environ.get('API_KEY', '811177473545642'),
-    'API_SECRET': os.environ.get('API_SECRET', '2C-6I_AiuZSosfJFkqBHQ77MWY0'),
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+    'API_KEY': os.environ.get('API_KEY'),
+    'API_SECRET': os.environ.get('API_SECRET'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-MEDIA_URL = f'https://res.cloudinary.com/{os.environ.get("CLOUD_NAME")}/'
+# MEDIA_URL = f'https://res.cloudinary.com/{os.environ.get("CLOUD_NAME")}/'
 # import requests
 # import os
 
