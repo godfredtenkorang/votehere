@@ -18,7 +18,7 @@ import requests
 
 import cloudinary
 import cloudinary.uploader
-import cloudinary.api
+from cloudinary.utils import cloudinary_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -199,17 +199,20 @@ else:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-# cloudinary.config(
-#     cloud_name="dsmibnx4z",
-#     api_key="811177473545642",
-#     api_secret="2C-6I_AiuZSosfJFkqBHQ77MWY0"
-# )
+cloudinary.config(
+    cloud_name="dsmibnx4z",
+    api_key="811177473545642",
+    api_secret="2C-6I_AiuZSosfJFkqBHQ77MWY0",
+    secured=True
+)
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
-    'API_KEY': os.environ.get('API_KEY'),
-    'API_SECRET': os.environ.get('API_SECRET'),
-}
+MEDIA_URL = 'https://res.cloudinary.com/dsmibnx4z/'
+
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+#     'API_KEY': os.environ.get('API_KEY'),
+#     'API_SECRET': os.environ.get('API_SECRET'),
+# }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
