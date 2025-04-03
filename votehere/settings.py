@@ -205,9 +205,9 @@ MEDIA_URL = '/media/'
 # MEDIA_URL = 'https://res.cloudinary.com/dsmibnx4z/'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
-    'API_KEY': os.environ.get('API_KEY'),
-    'API_SECRET': os.environ.get('API_SECRET'),
+    'CLOUD_NAME': 'dsmibnx4z',
+    'API_KEY': '811177473545642',
+    'API_SECRET': '2C-6I_AiuZSosfJFkqBHQ77MWY0',
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
