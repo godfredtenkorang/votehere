@@ -206,7 +206,7 @@ def transaction_category(request, transaction_slug):
     }
     return render(request, 'dashboard/transaction-category.html', context)
 
-from decimal import Decimal
+
 def ussd_transactions(request, category_id):
     category = None
     payments = PaymentTransaction.objects.all()
