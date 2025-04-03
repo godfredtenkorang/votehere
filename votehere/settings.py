@@ -30,12 +30,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = config('SECRET_KEY')
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+# DEBUG = os.environ.get('DEBUG')
+DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['.voteafric.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.voteafric.com', '157.245.255.58', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -66,7 +68,7 @@ SITE_ID=2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -107,14 +109,25 @@ WSGI_APPLICATION = 'votehere.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get('DB_TABLE'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+#         'HOST': os.environ.get('DB_HOST'),
+#         'PORT': os.environ.get('DB_PORT'),
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_TABLE'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+        'NAME': config('DB_TABLE'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
 
@@ -173,9 +186,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 # if DEBUG:
 #     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -185,14 +199,14 @@ django_heroku.settings(locals())
 
 
 
-# PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
-# PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 
-PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
-PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
+# PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
+# PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # cloudinary.config(
@@ -204,13 +218,13 @@ MEDIA_URL = '/media/'
 
 # MEDIA_URL = 'https://res.cloudinary.com/dsmibnx4z/'
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
-}
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+#     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+#     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+# }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # MEDIA_URL = f'https://res.cloudinary.com/{os.environ.get("CLOUD_NAME")}/'
 # import requests
@@ -218,16 +232,16 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
 # QUOTAGUARDSTATIC_URL = config('QUOTAGUARDSTATIC_URL')
-QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
+# QUOTAGUARDSTATIC_URL = os.environ.get('QUOTAGUARDSTATIC_URL')
 
 # Patch all requests to use QuotaGuard by default
-session = requests.Session()
-session.proxies = {"http": QUOTAGUARDSTATIC_URL, "https": QUOTAGUARDSTATIC_URL}
-requests.sessions.Session = lambda: session  # Override default session
+# session = requests.Session()
+# session.proxies = {"http": QUOTAGUARDSTATIC_URL, "https": QUOTAGUARDSTATIC_URL}
+# requests.sessions.Session = lambda: session  # Override default session
 
-# Now ALL requests.get()/post() will use QuotaGuard, even without proxies=
-res = requests.get("http://ip.quotaguard.com/")
-print(res.text)  # Static IP (no proxies= needed!)
+# # Now ALL requests.get()/post() will use QuotaGuard, even without proxies=
+# res = requests.get("http://ip.quotaguard.com/")
+# print(res.text)  # Static IP (no proxies= needed!)
 
 
 # Default primary key field type
@@ -235,5 +249,5 @@ print(res.text)  # Static IP (no proxies= needed!)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# MNOTIFY_API_KEY= config("MNOTIFY_API_KEY")
-MNOTIFY_API_KEY= os.environ.get('MNOTIFY_API_KEY')
+MNOTIFY_API_KEY= config("MNOTIFY_API_KEY")
+# MNOTIFY_API_KEY= os.environ.get('MNOTIFY_API_KEY')
