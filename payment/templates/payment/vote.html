@@ -18,7 +18,10 @@
 
 <div style="justify-content: center; text-align:center; padding: 5px;">
     {% if nominee %}
-
+    <div class="spinner">
+        <div class="skeleton-spinner"></div>
+        <p>Please wait! We are putting everything togethere for you</p>
+    </div>
     {% else %}
     <h1>Not Casting Vote At The Moment.</h1>
     {% endif %}
@@ -26,13 +29,6 @@
 
 
 <!-- end of banner section -->
-<div class="spinner">
-    <div class="skeleton-spinner"></div>
-    <p>Please wait! We are putting everything togethere for you</p>
-</div>
-
-
-
 
 <!-- This is the form voters can use to vote.
 it is hidden so when voters click on the vote button, the it appears -->
