@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'dashboard',
     'user',
     'ussd',
+    'ticket',
     'rest_framework',
     'rest_framework.authtoken',
     # 'storages',

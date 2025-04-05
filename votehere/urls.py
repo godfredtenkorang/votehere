@@ -40,6 +40,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('user/', include('user.urls')),
     path('ussd/', include('ussd.urls')),
+    path('/', include('ticket.urls')),
     path('api/vote/', include('vote.api.urls')),
 ]
 
