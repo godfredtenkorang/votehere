@@ -390,7 +390,7 @@ nav {
 
 .about-image img {
     width: 100%;
-    min-height: 70vh;
+    height: 50vh;
     object-fit: cover;
 }
 

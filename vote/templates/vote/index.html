@@ -40,16 +40,126 @@
   </div>
 </section>
 <!-- search bar -->
-<div class="search-bar-section">
+<!-- <div class="search-bar-section">
   <form action="{% url 'index' %}">
     <input type="search" name="search" id="search" placeholder="Search Award....">
   </form>
-</div>
+</div> -->
 <!-- end of banner section -->
 <div class="spinner">
   <div class="skeleton-spinner"></div>
   <p>Please wait! We are putting everything togethere for you</p>
 </div>
+
+
+
+
+    <!-- About us section -->
+    <section class="about-us-container ">
+      <div class="about-image">
+        <img src="{% static 'vote/img/study-group-african-people.jpg' %}" loading="lazy" alt="">
+      
+        <!-- Overlay: Play Button & Transcription -->
+        <div class="play-overlay">
+          <button id="playBtn">
+            <i class="fas fa-play"></i>
+          </button>
+          <div id="transcription" class="hidden"></div>
+        </div>
+      
+        <!-- Audio -->
+        <audio id="audio" src="{% static 'vote/audio/ElevenLabs_2025-04-06T22_43_40_John Doe Gentle_pvc_sp100_s43_sb52_se0_b_m2.mp3' %}" controls class="hidden audio-controls"></audio>
+      </div>
+      
+      
+      
+      <div class="about-us-content">
+        <div class="col">
+          <h2>Empowering Voices Through Fair and Inclusive Award Voting</h2>
+          <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency, using technology and community engagement to serve both voters and organizers. Our mission is to ensure every vote counts, recognizing excellence across various industries through democratic and credible elections.</p>
+          <div class="readmore">
+           <a href="">
+            <button>Read more</button>
+           </a>
+          </div>
+        </div>
+        
+      </div>
+  </section>
+
+
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <p>Simply choose your award scheme, select a category, and vote for your favorite nominee. We ensure a smooth, hassle-free voting experience from start to finish.</p>
+  
+    <div class="how-steps">
+      <div class="step">
+        <i class="fas fa-trophy fa-2x" style="color:#ff9900; margin-bottom:10px;"></i>
+        <h3>Choose Award Scheme</h3>
+        <p>Select from our available award schemes to start voting.</p>
+      </div>
+  
+      <div class="arrow"></div>
+  
+      <div class="step">
+        <i class="fas fa-list-alt fa-2x" style="color:#007bff; margin-bottom:10px;"></i>
+        <h3>Select Category</h3>
+        <p>Browse and choose from various award categories.</p>
+      </div>
+  
+      <div class="arrow"></div>
+  
+      <div class="step">
+        <i class="fas fa-user-check fa-2x" style="color:#28a745; margin-bottom:10px;"></i>
+        <h3>Pick Nominee</h3>
+        <p>Vote for your preferred nominee in the selected category.</p>
+      </div>
+  
+      <div class="arrow"></div>
+  
+      <div class="step">
+        <i class="fas fa-party-horn fa-2x" style="color:#e83e8c; margin-bottom:10px;"></i> 
+        <h3>Enjoy</h3>
+        <p>Watch your favorite nominees compete and celebrate winners.</p>
+      </div>
+    </div>
+  </section>
+  
+
+
+
+
+
+    <!-- About us section -->
+    <section class="about-us-container ">
+      <div class="about-image">
+        <img src="{% static 'vote/img/customer-experience-creative-collage_23-2149346505.jpg' %}" loading="lazy" alt="">
+      
+       
+      </div>
+      
+      
+      
+      <div class="about-us-content">
+        <div class="col">
+          <h2>Empowering Voices Through Fair and Inclusive Award Voting</h2>
+          <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency, using technology and community engagement to serve both voters and organizers. Our mission is to ensure every vote counts, recognizing excellence across various industries through democratic and credible elections.</p>
+          <div class="readmore">
+           <a href="">
+            <button>Read more</button>
+           </a>
+          </div>
+        </div>
+        
+      </div>
+  </section>
+
+
+
+
+
+
+
 
 <!-- ongoing award -->
 <div class="award-main-container content">
@@ -79,6 +189,43 @@
     {% endfor %}
   </div>
 </div>
+<script>
+  const playBtn = document.getElementById('playBtn');
+  const audio = document.getElementById('audio');
+  const transcription = document.getElementById('transcription');
+
+  // When play is clicked
+  playBtn.addEventListener('click', () => {
+    audio.play();
+    playBtn.style.display = 'none';
+    audio.classList.remove('hidden');
+    transcription.classList.remove('hidden');
+
+    // Start browser speech recognition
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let text = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          text += event.results[i][0].transcript + ' ';
+        }
+        transcription.textContent = text.trim();
+      };
+
+      recognition.onerror = (e) => {
+        transcription.textContent = "Transcription error.";
+      };
+
+      recognition.start();
+    } else {
+      transcription.textContent = "Live transcription not supported in this browser.";
+    }
+  });
+</script>
 
 <script>
   const textSlide = document.querySelector(".text-slide")
