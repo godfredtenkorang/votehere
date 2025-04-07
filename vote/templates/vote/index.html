@@ -62,9 +62,10 @@
     <!-- About us section -->
     <section class="about-us-container ">
       <div class="about-image">
-        <img src="{% static 'vote/img/study-group-african-people.jpg' %}" loading="lazy" alt="">
+        <iframe  src="https://www.youtube.com/embed/8myzflWoe34?si=mWfRu-G09feE031y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <!-- <img src="{% static 'vote/img/study-group-african-people.jpg' %}"  alt="">
       
-        <!-- Overlay: Play Button & Transcription -->
+
         <div class="play-overlay">
           <button id="playBtn">
             <i class="fas fa-play"></i>
@@ -72,8 +73,8 @@
           <div id="transcription" class="hidden"></div>
         </div>
       
-        <!-- Audio -->
-        <audio id="audio" src="{% static 'vote/audio/ElevenLabs_2025-04-06T22_43_40_John Doe Gentle_pvc_sp100_s43_sb52_se0_b_m2.mp3' %}" controls class="hidden audio-controls"></audio>
+    
+        <audio id="audio" src="{% static 'vote/audio/ElevenLabs_2025-04-06T22_43_40_John Doe Gentle_pvc_sp100_s43_sb52_se0_b_m2.mp3' %}" controls class="hidden audio-controls"></audio> -->
       </div>
       
       
@@ -83,7 +84,7 @@
           <h2>Empowering Voices Through Fair and Inclusive Award Voting</h2>
           <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency, using technology and community engagement to serve both voters and organizers. Our mission is to ensure every vote counts, recognizing excellence across various industries through democratic and credible elections.</p>
           <div class="readmore">
-           <a href="">
+           <a href="{% url 'about' %}">
             <button>Read more</button>
            </a>
           </div>
@@ -123,7 +124,7 @@
       <div class="arrow"></div>
   
       <div class="step">
-        <i class="fas fa-party-horn fa-2x" style="color:#e83e8c; margin-bottom:10px;"></i> 
+        <i class="fas fa-trophy fa-2x"  style="color:#e83e8c; margin-bottom:10px;"></i> 
         <h3>Enjoy</h3>
         <p>Watch your favorite nominees compete and celebrate winners.</p>
       </div>
@@ -131,32 +132,88 @@
 
   </section>
   
-
-
-
-
-<!-- About us section -->
-<!-- <section class="about-us-container">
-  <div class="about-image">
-    <img src="{% static 'vote/img/customer-experience-creative-collage_23-2149346505.jpg' %}" loading="lazy" alt="">
-  </div>
-
-  <div class="about-us-content">
-    <div class="col">
-      <h2>Every Time Seamless And Instant Voting</h2>
-      <p>Experience seamless and instant voting every time, ensuring your voice is heard quickly and securely.</p>
-      
-    
-      <div class="flex-container">
-        <div class="flex-item">Online Voting</div>
-        <div class="flex-item">24/7 Support</div>
-        <div class="flex-item">Contact Us</div>
+  <section class="hero-section">
+    <div class="hero-left">
+      <div class="image-wrapper">
+        <img src="{% static 'vote/img/man.png' %}"  alt="">
       </div>
-      
-     
+      <div class="rotating-circle">
+        
+      </div>
+    </div>
+    <div class="hero-right">
+      <h5>JustVote & Ticket</h5>
+      <h1>
+        Join our <span class="highlight">platform</span> as an organiser <br />
+        and create your events for <span class="highlight">voting</span> and
+        <span class="highlight">ticketing</span>
+      </h1>
+      <p>
+        All you need to do is to create an account and verify your email.
+        That’s it. Your account is ready to be used.
+      </p>
+      <div class="buttons">
+      <a href="https://wa.link/9g6bco">
+        <button class="primary-btn">Join Now!!</button>
+      </a>
+       <a href="https://wa.link/9g6bco">
+        <button class="secondary-btn">Send a message</button>
+       </a>
+      </div>
+    </div>
+</section>
+
+
+<!-- 
+<div class="some-hosted-award">
+  <h1>Some Hosted Events
+  </h1>
+  <div class="hosted-award-grid">
+    <div class="hosted">
+      <img src="{% static 'vote/img/study-group-african-people.jpg' %}"  alt="">
+        <div class="ho-text">
+          <p>Award</p>
+          <p>SRC Excellent Award</p>
+          <a href="" class="view">
+            <button>View</button>
+          </a>
+        </div>
+    </div>
+    <div class="hosted">
+      <img src="{% static 'vote/img/study-group-african-people.jpg' %}"  alt="">
+        <div class="ho-text">
+          <p>Award</p>
+          <p>SRC Excellent Award</p>
+          <a href="" class="view">
+            <button>View</button>
+          </a>
+        </div>
+    </div>
+    <div class="hosted">
+      <img src="{% static 'vote/img/study-group-african-people.jpg' %}"  alt="">
+        <div class="ho-text">
+          <p>Award</p>
+          <p>SRC Excellent Award</p>
+          <a href="" class="view">
+            <button>View</button>
+          </a>
+        </div>
+    </div>
+    <div class="hosted">
+      <img src="{% static 'vote/img/study-group-african-people.jpg' %}"  alt="">
+        <div class="ho-text">
+          <p>Award</p>
+          <p>SRC Excellent Award</p>
+          <a href="" class="view">
+            <button>View</button>
+          </a>
+        </div>
     </div>
   </div>
-</section> -->
+  <a href="">
+    <button>Browse all Event</button>
+  </a>
+</div> -->
 
 
 

@@ -13,6 +13,8 @@
     --voiletColor: #522a83;
     --orangeColor: #fb812b;
     --whiteColor: #fff;
+    --violetColor: #522a83;
+    --lightViolet: #f3e9fb;
 }
 
 /* Header styling */
@@ -251,7 +253,7 @@ nav {
 
 /* Styling for the container of awards */
 .award-container {
-    padding: 2% 3%;
+    padding: 5% 3%;
     margin-bottom: 5%;
     gap: 1rem;
     display: flex;
@@ -273,10 +275,10 @@ nav {
 }
 
 /* Cool animation when a user hovers on the award */
-.award:hover {
+/* .award:hover {
     transform: translateY(-5px);
-    /* Move the award up by 10px when hovered */
-}
+    
+} */
 
 
 
@@ -346,33 +348,31 @@ nav {
 /* this is banner on the other pages */
 .banners {
     position: relative;
+   
+    padding: 2% 5%;
 }
 
-.banners img {
-    width: 100%;
-    height: 50vh;
-    object-fit: cover;
-}
+
+
 
 .banners-content {
-    position: absolute;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--voiletColor);
+    width: 100%;
+    height: 30vh;
+    border-radius: 20px;
+    text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 50vh;
+    justify-content: center;
     color: var(--whiteColor);
-    text-align: center;
-    padding: 0 10px;
+    
 }
 
-.banners-content p {
-    font-size: 1.2rem;
+.about-image iframe{
+    width: 100%;
+    height: 60vh;
 }
-
 
 
 /* about us page styles */
@@ -395,6 +395,9 @@ nav {
 .about-us-content h2{
     font-size: 3rem;
 }
+.about-page h2{
+    font-size: 1.5rem;
+}
 .about-image {
     width: 100%;
     max-width: 800px;
@@ -409,7 +412,7 @@ nav {
 
 .readmore{
     margin: 5% 0;
-    text-align: center;
+   
 }
 .readmore button{
     background-color: var(--voiletColor);
@@ -471,7 +474,7 @@ nav {
     animation: blink 1.5s infinite;
     cursor: pointer;
     pointer-events: auto;
-    z-index: 2;
+   
   }
 
 
@@ -507,13 +510,192 @@ nav {
   }
   
 
-
-
-
-
-
-
-
+  .hero-section {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    margin: 5%;
+  }
+  
+  .hero-left {
+    flex: 1;
+    background-color: var(--violetColor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .image-wrapper {
+    position: relative;
+    width: 700px;
+    min-height: 700px;
+    z-index: 2;
+  }
+  
+  .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    position: relative;
+    z-index: 3;
+  }
+  
+  .rotating-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 700px;
+    height: 700px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotateCircle 8s linear infinite;
+  }
+  
+  .dot {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .dot.blue {
+    background-color: blue;
+    animation: rotateDot 8s linear infinite;
+  }
+  
+  .dot.pink {
+    background-color: pink;
+    animation: rotateDot 8s linear infinite;
+    animation-delay: 4s; /* Delays second dot's animation */
+  }
+  
+  @keyframes rotateCircle {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  
+  @keyframes rotateDot {
+    0% {
+      transform: rotate(0deg) translateX(250px) rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX(250px) rotate(-360deg);
+    }
+  }
+  
+  .hero-right {
+    flex: 1;
+    background-color: var(--lightViolet);
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .hero-right h5 {
+    color: var(--violetColor);
+    margin-bottom: 10px;
+  }
+  
+  .hero-right h1 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1.4;
+  }
+  
+  .hero-right .highlight {
+    color: var(--violetColor);
+  }
+  
+  .hero-right p {
+    font-size: 16px;
+    margin: 20px 0;
+    color: #333;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .primary-btn {
+    background-color: var(--violetColor);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .secondary-btn {
+    background-color: #e6d8f4;
+    color: var(--violetColor);
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  @media screen and (max-width: 968px) {
+    .hero-section {
+      flex-direction: column;
+      height: auto;
+      margin: 20px 5%;
+    }
+  
+    .hero-left,
+    .hero-right {
+      flex: unset;
+      width: 100%;
+      height: auto;
+    }
+  
+    .rotating-circle {
+      width: 380px;
+      height: 380px;
+    }
+  
+    .image-wrapper {
+      width: 100%;
+      height: auto;
+    }
+  
+    .dot {
+      width: 12px;
+      height: 12px;
+    }
+  
+    .hero-right h1 {
+      font-size: 28px;
+    }
+  
+    .hero-right p {
+      font-size: 14px;
+      margin: 15px 0;
+    }
+  
+    .buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      padding: 10px 20px;
+    }
+  }
+  
 
 
 
@@ -659,15 +841,63 @@ nav {
   
 
 
+.some-hosted-award{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5%;
+}
 
 
 
 
+/* .hosted-award-grid{
+    padding: 5% 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2rem;
+}
+.hosted{
+    width: 100%;
+    max-width: 100%;
+    background-color: var(--lightViolet);
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+    min-height: 40vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
+}
+.hosted img{
 
-
-
-
+    width: 100%;
+    max-width: 300px;
+    height: 30vh;
+    object-fit: cover;
+}
+.ho-text{
+    text-align: center;
+    padding: 2% 0;
+    font-size: 1.5rem;
+}
+.ho-text p:first-child{
+    color: var(--orangeColor);
+    padding: 10px 0;
+}
+.ho-text p:nth-child(2)  {
+    color: var(--violetColor);
+    padding: 10px 0;
+}
+.view button{
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    background-color: var(--violetColor);
+    color: var(--whiteColor);
+    min-height: 4vh;
+} */
 
 
 
@@ -1504,6 +1734,12 @@ footer p {
     .about-image img{
         height: auto;
     }
+    .banners{
+        padding: 0;
+    }
+    .banners-content{
+        border-radius: 0;
+    }
 
 
 }
@@ -1522,7 +1758,7 @@ footer p {
         background-image: linear-gradient(to right, #a517ba, #522a83);
         width: 100%;
         height: 100vh;
-        z-index: 1;
+        z-index: 100;
         animation: slideIn 0.4s;
     }
 

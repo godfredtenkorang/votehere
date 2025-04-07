@@ -292,7 +292,7 @@ header {
     min-height: 40vh;
     background-color: var(--white);  
 }
-.ongoin-awards-container a:hover,
+/* .ongoin-awards-container a:hover,
 .categories-container a:hover,
 .registered-category a:hover {
     padding: 5px;
@@ -302,8 +302,8 @@ header {
     cursor: pointer;
     min-height: 40vh;
     background-color: var(--white);
-    animation: zoomin 0.2s forwards;
-}
+   
+} */
 
 
 
