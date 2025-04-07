@@ -176,3 +176,10 @@ from django.views.decorators.http import require_POST
 #     # Handle failed transaction logic here
 #     print(f'Transaction {transaction_id} failed.')
 #     return JsonResponse({'status': 'error', 'message': 'Transaction failed.'}, status=400)
+
+
+
+# Create your views here.
+
+def award_page(request):
+    return render(request, 'vote/awardPage.html')

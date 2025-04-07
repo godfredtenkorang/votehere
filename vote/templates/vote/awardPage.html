@@ -1,0 +1,120 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block og-caption %}{{ c.award }}{% endblock %}
+{% block og-description %}posted by {{ c.author }} - @{{ c.award }}{% endblock %}
+{% block og-image %}{{ c.image }}{% endblock %}
+{% block tw-image %}{{ c.image }}{% endblock %}
+{% block content %}
+
+
+<!-- search bar -->
+<!-- <div class="search-bar-section">
+  <form action="{% url 'index' %}">
+    <input type="search" name="search" id="search" placeholder="Search Award....">
+  </form>
+</div> -->
+<!-- end of banner section -->
+<div class="spinner">
+  <div class="skeleton-spinner"></div>
+  <p>Please wait! We are putting everything togethere for you</p>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ongoing award -->
+<div class="award-main-container content">
+  <div class="ongoin-event">
+    {% if all_categories %}
+    <h2>Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
+    {% else %}
+    <h2>No Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
+    {% endif %}
+  </div>
+
+  <!-- awards -->
+  <div class="award-container">
+    <!-- Individual award items -->
+    {% for c in all_categories %}
+    <div class="award">
+      <a href="{% url 'award_by_category' c.slug %}">
+        <img src="{{ c.image.url }}" alt="image" height="250px" loading="lazy">
+        <div class="award-text">
+          <h4>{{ c.title }}</h4>
+          <h5>{{ c.award }}</h5>
+        </div>
+      </a>
+    </div>
+
+
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+  const playBtn = document.getElementById('playBtn');
+  const audio = document.getElementById('audio');
+  const transcription = document.getElementById('transcription');
+
+  // When play is clicked
+  playBtn.addEventListener('click', () => {
+    audio.play();
+    playBtn.style.display = 'none';
+    audio.classList.remove('hidden');
+    transcription.classList.remove('hidden');
+
+    // Start browser speech recognition
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let text = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          text += event.results[i][0].transcript + ' ';
+        }
+        transcription.textContent = text.trim();
+      };
+
+      recognition.onerror = (e) => {
+        transcription.textContent = "Transcription error.";
+      };
+
+      recognition.start();
+    } else {
+      transcription.textContent = "Live transcription not supported in this browser.";
+    }
+  });
+</script>
+
+<script>
+  const textSlide = document.querySelector(".text-slide")
+  const textElement = document.querySelectorAll(".text")
+  let = currentSlide = 0
+  function showslideText (){
+    textElement.forEach((element)=>{
+      element.style.display="none"
+    })
+
+    textElement[currentSlide].style.display ='block'
+    currentSlide=(currentSlide + 1) % textElement.length
+    setTimeout(showslideText, 5000)
+  }
+
+  showslideText()
+</script>
+{% endblock content %}

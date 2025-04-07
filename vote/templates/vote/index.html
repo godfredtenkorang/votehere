@@ -28,7 +28,12 @@
         
         </div>
        </div>
-        
+       <div class="vote">
+      <a href="{% url 'award_page' %}">
+    <button>Start Voting</button>
+</a>
+
+      </div> 
       </div>
 
       <div class="banner-img">
@@ -123,72 +128,45 @@
         <p>Watch your favorite nominees compete and celebrate winners.</p>
       </div>
     </div>
+
   </section>
   
 
 
 
 
-
-    <!-- About us section -->
-    <section class="about-us-container ">
-      <div class="about-image">
-        <img src="{% static 'vote/img/customer-experience-creative-collage_23-2149346505.jpg' %}" loading="lazy" alt="">
-      
-       
-      </div>
-      
-      
-      
-      <div class="about-us-content">
-        <div class="col">
-          <h2>Empowering Voices Through Fair and Inclusive Award Voting</h2>
-          <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency, using technology and community engagement to serve both voters and organizers. Our mission is to ensure every vote counts, recognizing excellence across various industries through democratic and credible elections.</p>
-          <div class="readmore">
-           <a href="">
-            <button>Read more</button>
-           </a>
-          </div>
-        </div>
-        
-      </div>
-  </section>
-
-
-
-
-
-
-
-
-<!-- ongoing award -->
-<div class="award-main-container content">
-  <div class="ongoin-event">
-    {% if all_categories %}
-    <h2>Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
-    {% else %}
-    <h2>No Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
-    {% endif %}
+<!-- About us section -->
+<!-- <section class="about-us-container">
+  <div class="about-image">
+    <img src="{% static 'vote/img/customer-experience-creative-collage_23-2149346505.jpg' %}" loading="lazy" alt="">
   </div>
 
-  <!-- awards -->
-  <div class="award-container">
-    <!-- Individual award items -->
-    {% for c in all_categories %}
-    <div class="award">
-      <a href="{% url 'award_by_category' c.slug %}">
-        <img src="{{ c.image.url }}" alt="image" height="250px" loading="lazy">
-        <div class="award-text">
-          <h4>{{ c.title }}</h4>
-          <h5>{{ c.award }}</h5>
-        </div>
-      </a>
+  <div class="about-us-content">
+    <div class="col">
+      <h2>Every Time Seamless And Instant Voting</h2>
+      <p>Experience seamless and instant voting every time, ensuring your voice is heard quickly and securely.</p>
+      
+    
+      <div class="flex-container">
+        <div class="flex-item">Online Voting</div>
+        <div class="flex-item">24/7 Support</div>
+        <div class="flex-item">Contact Us</div>
+      </div>
+      
+     
     </div>
-
-
-    {% endfor %}
   </div>
-</div>
+</section> -->
+
+
+
+
+
+
+
+
+
+
 <script>
   const playBtn = document.getElementById('playBtn');
   const audio = document.getElementById('audio');

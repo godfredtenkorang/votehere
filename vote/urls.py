@@ -11,6 +11,9 @@ urlpatterns = [
     path('termsCondition/', views.termsCondition, name='termsCondition'),
     path('contact/', views.contact, name='contact'),
 
+ path('award_page/', views.award_page, name='award_page'),
+
+
     path('<slug:category_slug>/', views.category, name='award_by_category'),
 
 
@@ -22,5 +25,7 @@ urlpatterns = [
     #      views.nominees_search_view, name='nom-search'),
     
 
-    
-]
+  
+   
+] 
+
