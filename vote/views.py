@@ -182,4 +182,14 @@ from django.views.decorators.http import require_POST
 # Create your views here.
 
 def award_page(request):
-    return render(request, 'vote/awardPage.html')
+    search_item = request.GET.get('search')
+    
+    if search_item:
+        all_categories = Category.objects.filter(Q(award__icontains=search_item))
+    else:
+        all_categories = Category.objects.all()
+
+    context = {
+        'all_categories': all_categories,
+    }
+    return render(request, 'vote/awardPage.html', context)

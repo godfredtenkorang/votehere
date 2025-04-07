@@ -185,7 +185,7 @@ header {
     overflow-y: scroll;
     overflow-x: hidden;
     transition: all 0.5s ease-in-out;
-    z-index: 600;
+    z-index: 900;
 }
 
 .navcontainer::-webkit-scrollbar {
