@@ -16,35 +16,36 @@ from django.utils import timezone
 
 from django.views import View
 
-@csrf_exempt
-def heroku_webhook(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            print(f'Received webhook data: {data}')
+# @csrf_exempt
+# def heroku_webhook(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body.decode('utf-8'))
+#             print(f'Received webhook data: {data}')
 
-            # Process the webhook data
-            event_type = data.get('event')  # Example: 'app.update', 'app.create', etc.
+#             # Process the webhook data
+#             event_type = data.get('event')  # Example: 'app.update', 'app.create', etc.
 
-            # Handle different event types
-            if event_type == 'app.update':
-                # Handle app update
-                print("App has been updated.")
-            elif event_type == 'app.create':
-                # Handle app creation
-                print("A new app has been created.")
-            # Add additional event handling as needed
+#             # Handle different event types
+#             if event_type == 'app.update':
+#                 # Handle app update
+#                 print("App has been updated.")
+#             elif event_type == 'app.create':
+#                 # Handle app creation
+#                 print("A new app has been created.")
+#             # Add additional event handling as needed
 
-            return JsonResponse({'status': 'success'}, status=200)
+#             return JsonResponse({'status': 'success'}, status=200)
 
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
-        except Exception as e:
-            print(f'Error: {str(e)}')
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+#         except Exception as e:
+#             print(f'Error: {str(e)}')
+#             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+#     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 # Helper function to generate random key
+
 def generate_random_key():
     return random.randint(1000, 9999)
 
@@ -113,9 +114,11 @@ def ussd_api(request):
 
                 elif level == 'candidate':
                     if user_data == '1':
+                        nominee = Nominees.objects.get(code__iexact=session.candidate_id)
+                        price_per_vote = nominee.price_per_vote
                         session.level = 'votes'
                         session.save()
-                        message = "Enter the number of votes. \n\n A vote is 0.50ps."
+                        message = f"Enter the number of votes. \n\n A vote is GH¢{price_per_vote}."
                         return JsonResponse(send_response(message, True))
                     elif user_data == '2':
                         session.delete()
@@ -126,12 +129,16 @@ def ussd_api(request):
                 elif level == 'votes':
                     try:
                         votes = int(user_data)
+                        nominee = Nominees.objects.get(code__iexact=session.candidate_id)
+                        price_per_vote = nominee.price_per_vote
                     except ValueError:
                         return JsonResponse(send_response("Invalid number of votes entered. Please try again.", False))
+                    except Nominees.DoesNotExist:
+                        return JsonResponse(send_response("Nominee not found.", False))
                     
                     session.level = 'payment'
                     session.votes = votes
-                    session.amount = Decimal(votes) * Decimal(0.50)
+                    session.amount = Decimal(votes) * Decimal(price_per_vote)
                     session.save()
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))

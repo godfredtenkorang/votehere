@@ -12,6 +12,7 @@ class Nominees(models.Model):
     image = models.ImageField(upload_to="nominees")
     slug = models.SlugField(unique=True, null=True)
     total_vote = models.IntegerField(default=0, null=True)
+    price_per_vote = models.DecimalField(max_digits=5, decimal_places=2, default=0.50, null=True, blank=True)
     can_vote = models.BooleanField(default=True)
     can_see_result = models.BooleanField(default=True)
     code = models.CharField(max_length=4, unique=True, null=True)
