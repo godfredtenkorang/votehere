@@ -1,0 +1,134 @@
+{% extends 'vote/base.html' %} {% load static %} primary: #ffb535; text-color:
+#363738;
+<style></style>
+
+{% block content %}
+
+<!-- banner -->
+<div class="banners">
+  <div class="banners-content">
+    <p>VoteAfric E-ticket</p>
+    <h1>E-ticketing company in Ghana</h1>
+  </div>
+</div>
+<div id="validation-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="modal-message"></p>
+    </div>
+  </div>
+<div class="ticket-main ticket-forms">
+    <h3 class="t-name">GROOVE - WAVE (The beach party ) </h3>
+ 
+
+<div class="ticket-form">
+    <p>Select to proceed </p>
+    <form action="" class="t-form" id="vote-form">
+      <div class="t-input">
+        <label for="event-date">Event Date</label><br>
+        <select id="event-date">
+          <option value="" selected disabled>Select event date</option>
+          <option value="july10">July 10, 2025</option>
+          <option value="july17">July 17, 2025</option>
+          <option value="july24">July 24, 2025</option>
+          <option value="august1">August 1, 2025</option>
+        </select>
+      </div>
+  
+      <div class="t-input">
+        <label for="ticket-type">Ticket Type</label><br>
+        <select id="ticket-type">
+          <option value="" selected disabled>Select ticket type</option>
+          <option value="regular">Regular</option>
+          <option value="vip">VIP</option>
+          <option value="vvip">VVIP</option>
+        </select>
+      </div>
+  
+      <div class="t-input">
+        <label for="vote-count">Number of vote</label><br>
+        <input type="number" id="vote-count" placeholder="Enter number of votes">
+      </div>
+  
+      <div class="t-input">
+        <label for="payment-method">Payment Method</label><br>
+        <select id="payment-method">
+          <option value="" selected disabled>Select payment method</option>
+          <option value="momo">Mobile Money</option>
+          <option value="card">Debit/Credit Card</option>
+          <option value="paypal">PayPal</option>
+          <option value="bank">Bank Transfer</option>
+        </select>
+      </div>
+  
+      <div class="t-input">
+        <label for="email">Email</label><br>
+        <input type="email" id="email" placeholder="Enter your email">
+      </div>
+  
+      <div class="t-input">
+        <label for="total-amount">Total Amount</label><br>
+        <input type="number" id="total-amount" placeholder="Total amount" readonly>
+      </div>
+  
+      <button type="submit">Proceed</button>
+    </form>
+  </div>
+
+
+
+
+
+
+</div>
+<script>
+    document.getElementById('vote-form').addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent by default until we check validation
+      
+      const form = this;
+      const fields = [
+        { id: 'event-date', message: 'Please select an event date.' },
+        { id: 'ticket-type', message: 'Please select a ticket type.' },
+        { id: 'vote-count', message: 'Please enter number of votes.' },
+        { id: 'payment-method', message: 'Please select a payment method.' },
+        { id: 'email', message: 'Please enter a valid email address.' },
+      ];
+  
+      for (let field of fields) {
+        const input = document.getElementById(field.id);
+  
+        if (!input.value || input.value.trim() === "") {
+          showModal(field.message, input);
+          return;
+        }
+      }
+  
+      // All fields are valid — allow actual form submission
+      form.submit();
+    });
+  
+    function showModal(message, element) {
+      const modal = document.getElementById('validation-modal');
+      const modalMessage = document.getElementById('modal-message');
+      const closeBtn = document.querySelector('.close');
+  
+      modalMessage.textContent = message;
+      modal.style.display = 'block';
+  
+      closeBtn.onclick = () => {
+        modal.style.display = 'none';
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.focus();
+      };
+  
+      window.onclick = (event) => {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.focus();
+        }
+      };
+    }
+  </script>
+  
+{% endblock content %}

@@ -1,36 +1,76 @@
-{% extends 'vote/base.html' %}
-{% load static %}
-primary: #ffb535;
-text-color: #363738;
-<style>
-
-
-</style>
+{% extends 'vote/base.html' %} {% load static %} primary: #ffb535; text-color:
+#363738;
+<style></style>
 
 {% block content %}
 
 <!-- banner -->
 <div class="banners">
-   
-    <div class="banners-content">
-        <h1>Tickets</h1>
-    </div>
-
+  <div class="banners-content">
+    <p>VoteAfric E-ticket</p>
+    <h1>E-ticketing company in Ghana</h1>
+  </div>
 </div>
-<br><br>
-<!-- About us section -->
-<section class="about-us-container">
-    <div class="about-image">
-        <img src="{% static 'vote/img/ticket.jpg' %}" loading="lazy" alt="">
 
-    </div>
-    <div class="about-us-content">
-        
-        
-        <div class="col" style="text-align:center;">
-            <h2 style="font-size: 50px;">E-Ticketing</h2>
-            <p style="font-size: 35px;">Coming Soon!!! </p>
-        </div>
-    </div>
-</section>
+<div class="ticket-main">
+  <div class="t-head">
+    <h2>Ticket Events</h2>
+    <p>Please select an event.</p>
+  </div>
+  <div class="ticket-container">
+  <a href="{% url 'ticketForm' %}" class="ticket">
+
+      <img
+        src="{% static 'vote/img/award-banner.jpg' %}"
+        alt=""
+        class="mask blog-img"
+      />
+
+      <div class="ticket-text">
+        <h3>GROOVE - WAVE (The beach party )</h3>
+        <p>XTACY EVENTS</p>
+      </div>
+    </a>
+  <a href="{% url 'ticketForm' %}" class="ticket">
+
+      <img
+        src="{% static 'vote/img/award-banner.jpg' %}"
+        alt=""
+        class="mask blog-img"
+      />
+
+      <div class="ticket-text">
+        <h3>GROOVE - WAVE (The beach party )</h3>
+        <p>XTACY EVENTS</p>
+      </div>
+    </a>
+  <a href="{% url 'ticketForm' %}" class="ticket">
+
+      <img
+        src="{% static 'vote/img/award-banner.jpg' %}"
+        alt=""
+        class="mask blog-img"
+      />
+
+      <div class="ticket-text">
+        <h3>GROOVE - WAVE (The beach party )</h3>
+        <p>XTACY EVENTS</p>
+      </div>
+    </a>
+  <a href="{% url 'ticketForm' %}" class="ticket">
+
+      <img
+        src="{% static 'vote/img/award-banner.jpg' %}"
+        alt=""
+        class="mask blog-img"
+      />
+
+      <div class="ticket-text">
+        <h3>GROOVE - WAVE (The beach party )</h3>
+        <p>XTACY EVENTS</p>
+      </div>
+    </a>
+  </div>
+</div>
+
 {% endblock content %}
