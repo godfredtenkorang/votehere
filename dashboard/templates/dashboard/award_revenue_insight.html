@@ -1,0 +1,168 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+
+<div class="main">
+    
+    <div class="banners">
+        <div class="banners-content">
+            <h3>See which category is getting the most votes</h3>
+
+        </div>
+    </div>
+    
+    <div class="revenue-container">
+        <div class="table-container">
+            <table id="nominees-table">
+                <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Total Votes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Best New Artist</td>
+                        <td>5200</td>
+                    </tr>
+                    <tr>
+                        <td>Artist of the Year</td>
+                        <td>10450</td>
+                    </tr>
+                    <tr>
+                        <td>Song of the Year</td>
+                        <td>7890</td>
+                    </tr>
+                    <tr>
+                        <td>Best Collaboration</td>
+                        <td>3760</td>
+                    </tr>
+                    <tr>
+                        <td>Best Male Vocalist</td>
+                        <td>4600</td>
+                    </tr>
+                    <tr>
+                        <td>Best Female Vocalist</td>
+                        <td>4900</td>
+                    </tr>
+                    <tr>
+                        <td>Best Rap Performance</td>
+                        <td>6300</td>
+                    </tr>
+                    <tr>
+                        <td>Album of the Year</td>
+                        <td>9200</td>
+                    </tr>
+                    <tr>
+                        <td>Lifetime Achievement Award</td>
+                        <td>2850</td>
+                    </tr>
+                    <tr>
+                        <td>Producer of the Year</td>
+                        <td>5730</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+    
+    <div class="chart"> <h3>See which category is getting the most votes</h3>
+
+        
+        <canvas id="revenue-chart" height="150"></canvas>
+    </div>
+    
+</div>
+
+
+
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Chart Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const categories = [];
+        const votes = [];
+
+        const rows = document.querySelectorAll('#nominees-table tbody tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const category = cells[0].innerText;
+            const voteText = cells[1].innerText.replace(/,/g, '').trim();
+            const voteValue = parseInt(voteText);
+
+            categories.push(category);
+            votes.push(voteValue);
+        });
+
+        // Define alternating bar colors
+        const barColors = votes.map((_, index) =>
+            index % 2 === 0 ? '#522a83' : '#fb812b'
+        );
+
+        const ctx = document.getElementById('revenue-chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: categories,
+                datasets: [{
+                    label: 'Total Votes',
+                    data: votes,
+                    backgroundColor: barColors,
+                    borderRadius: 5,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1000,
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y.toLocaleString() + ' votes';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+    
+</script>
+
+<script>
+   	// menu 
+let menuicn = document.querySelector(".menuicn");
+		let nav = document.querySelector(".navcontainer");
+
+		menuicn.addEventListener("click", () => {
+			nav.classList.toggle("navclose");
+		})
+
+</script>
+
+
+
+
+
+{% endblock %}

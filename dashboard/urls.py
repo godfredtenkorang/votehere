@@ -35,4 +35,5 @@ urlpatterns = [
     
     path('add_nominee/', views.add_nominee, name='add_nominee'),
     path('sms/', views.send_sms, name='send_sms'),
+    path('award_revenue_insight/', views.award_revenue_insight, name='award_revenue_insight'),
 ]
