@@ -10,8 +10,8 @@
     
     <div class="banners">
         <div class="banners-content">
-         
-            <h1>See which category is generating the most revenue</h1>
+            <h3>See which category is getting the most votes</h3>
+
         </div>
     </div>
     
@@ -21,59 +21,60 @@
                 <thead>
                     <tr>
                         <th>Category Name</th>
-                        <th>Total Revenue (GHS)</th>
+                        <th>Total Votes</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Best New Artist</td>
-                        <td>GHS 5,200</td>
+                        <td>5200</td>
                     </tr>
                     <tr>
                         <td>Artist of the Year</td>
-                        <td>GHS 10,450</td>
+                        <td>10450</td>
                     </tr>
                     <tr>
                         <td>Song of the Year</td>
-                        <td>GHS 7,890</td>
+                        <td>7890</td>
                     </tr>
                     <tr>
                         <td>Best Collaboration</td>
-                        <td>GHS 3,760</td>
+                        <td>3760</td>
                     </tr>
                     <tr>
                         <td>Best Male Vocalist</td>
-                        <td>GHS 4,600</td>
+                        <td>4600</td>
                     </tr>
                     <tr>
                         <td>Best Female Vocalist</td>
-                        <td>GHS 4,900</td>
+                        <td>4900</td>
                     </tr>
                     <tr>
                         <td>Best Rap Performance</td>
-                        <td>GHS 6,300</td>
+                        <td>6300</td>
                     </tr>
                     <tr>
                         <td>Album of the Year</td>
-                        <td>GHS 9,200</td>
+                        <td>9200</td>
                     </tr>
                     <tr>
                         <td>Lifetime Achievement Award</td>
-                        <td>GHS 2,850</td>
+                        <td>2850</td>
                     </tr>
                     <tr>
                         <td>Producer of the Year</td>
-                        <td>GHS 5,730</td>
+                        <td>5730</td>
                     </tr>
                 </tbody>
-                
             </table>
+            
         </div>
     </div>
     
     
-    <div class="chart"> 
-        <h3>See which catgory is generating more revenue</h3>
+    <div class="chart"> <h3>See which category is getting the most votes</h3>
+
+        
         <canvas id="revenue-chart" height="150"></canvas>
     </div>
     
@@ -84,26 +85,25 @@
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <!-- Chart Script -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const categories = [];
-        const revenues = [];
+        const votes = [];
 
         const rows = document.querySelectorAll('#nominees-table tbody tr');
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
             const category = cells[0].innerText;
-            const revenueText = cells[1].innerText.replace('GHS', '').replace(/,/g, '').trim();
-            const revenueValue = parseFloat(revenueText);
+            const voteText = cells[1].innerText.replace(/,/g, '').trim();
+            const voteValue = parseInt(voteText);
 
             categories.push(category);
-            revenues.push(revenueValue);
+            votes.push(voteValue);
         });
 
         // Define alternating bar colors
-        const barColors = revenues.map((_, index) =>
+        const barColors = votes.map((_, index) =>
             index % 2 === 0 ? '#522a83' : '#fb812b'
         );
 
@@ -113,8 +113,8 @@
             data: {
                 labels: categories,
                 datasets: [{
-                    label: 'Total Revenue (GHS)',
-                    data: revenues,
+                    label: 'Total Votes',
+                    data: votes,
                     backgroundColor: barColors,
                     borderRadius: 5,
                     borderWidth: 1
@@ -125,8 +125,9 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
+                            stepSize: 1000,
                             callback: function(value) {
-                                return 'GHS ' + value.toLocaleString();
+                                return value.toLocaleString();
                             }
                         }
                     }
@@ -138,7 +139,7 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return 'GHS ' + context.parsed.y.toLocaleString();
+                                return context.parsed.y.toLocaleString() + ' votes';
                             }
                         }
                     }
