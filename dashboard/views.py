@@ -293,3 +293,7 @@ def send_sms(request):
     }
     
     return render(request, 'dashboard/nominee/send_sms.html', context)
+
+
+def award_revenue_insight(request):
+    return render(request, 'dashboard/award_revenue_insight.html')
