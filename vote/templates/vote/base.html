@@ -21,7 +21,7 @@
     {% endif %}
     <meta name="description" content="Online voting platform and hosting events">
     <meta name="keywords" content="voting, image, category, social platform, award">
-    <meta name="author" content="Godfred Tenkorang">
+    <meta name="author" content="Godey Tech">
 
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}{{ request.path }}">
     <meta property="og:type" content="website" />
@@ -61,7 +61,7 @@
                 <ul class="navLinks">
                     <li><a  href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'about' %}">About Us</a></li>
-                    <li><a href="">Tickets</a></li>
+                    <li><a href="{% url 'ticketing' %}">Tickets</a></li>
                     <!-- <li><a href="{% url 'blog' %}">Blog</a></li> -->
                     <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
                     <li><a href="{% url 'termsCondition' %}">Term & Condition </a></li>

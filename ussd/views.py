@@ -9,6 +9,7 @@ from decimal import Decimal
 import random
 from django.conf import settings
 from payment.models import Nominees
+from ticket.models import Event
 from datetime import datetime
 from django.utils import timezone
 
@@ -86,11 +87,27 @@ def ussd_api(request):
             if msgtype:  # Initial request
                 session.level = 'start'
                 session.save()
-                message = "Welcome to VoteAfric.\nContact: 0553912334\nor: 0558156844\nEnter Nominee's code"
+                message = "Welcome to VoteAfric.\n1. Voting\n. Ticketing\nContact: 0553912334\nor: 0558156844"
                 return JsonResponse(send_response(message, True))
             else:  # Follow-up request
                 level = session.level
                 if level == 'start':
+                    if user_data == '1': # Voting
+                        session.payment_type = 'VOTE'
+                        session.level = 'vote_start'
+                        session.save()
+                        message = "Enter Nominee's code"
+                        return JsonResponse(send_response(message, True))
+                    elif user_data == '2':
+                        session.payment_type = 'TICKET'
+                        session.level = 'ticket_start'
+                        session.save()
+                        return JsonResponse(send_response(message, True))
+                    else:
+                        return JsonResponse(send_response("Invalid option. Please try again.", False))
+                    
+                # Voting flow
+                elif level == 'voting_start':
                     try:
                         nominee = Nominees.objects.get(code__iexact=user_data)
                         
@@ -102,7 +119,7 @@ def ussd_api(request):
                             f"Confirm Candidate\n"
                             f"Name: {nominee.name}\n"
                             f"Category: {nominee.category}\n"
-                            f"1) Confirm\n 2) Cancel"
+                            f"1) Confirm\n2) Cancel"
                         )
                         session.candidate_id = nominee.code
                         session.level = 'candidate'
@@ -136,70 +153,176 @@ def ussd_api(request):
                     except Nominees.DoesNotExist:
                         return JsonResponse(send_response("Nominee not found.", False))
                     
-                    session.level = 'payment'
+                    session.level = 'vote_payment'
                     session.votes = votes
                     session.amount = Decimal(votes) * Decimal(price_per_vote)
                     session.save()
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
-
-                elif level == 'payment':
-                    amount = session.amount
-                    endpoint = "https://api.nalosolutions.com/payplus/api/"
-                    telephone = msisdn
-                    network_type = network
-                    username = 'votfric_gen'
-                    # password = 'bVdwy86yoWtdZcW'
-                    password = 'Nrkl)CYr'
-                    merchant_id = 'NPS_000288'
-                    key = str(generate_random_key())
-                    hashed_password = md5(password.encode()).hexdigest()
-                    concat_keys = f"{username}{key}{hashed_password}"
-                    secrete = md5(concat_keys.encode()).hexdigest()
-                    callback = 'https://voteafric.com/ussd/webhooks/callback/'
-                    item_desc = 'Payment for vote'
-                    order_id = str(uuid.uuid4())
-                    session.order_id = order_id
-                    session.save()
+                
+                elif level == 'ticket_start':
+                    try:
+                        event = Event.objects.get(code__iexact=user_data)
+                        if timezone.now() > event.end_date:
+                            session.delete()
+                            return JsonResponse(send_response("Event has ended.", False))
+                        if event.available_tickets <= 0:
+                            session.delete()
+                            return JsonResponse(send_response("Tickets are sold out.", False))
+                        
+                        message = (
+                            f"Confirm Event\n"
+                            f"Name: {event.name}\n"
+                            f"Price per ticket: GH¢{event.price:.2f}\n"
+                            f"Available tickets: {event.available_tickets}\n"
+                            f"1) Confirm\n2) Cancel"
+                        )
+                        session.event_id = event.code
+                        session.level = 'ticket_confirm'
+                        session.save()
+                        return JsonResponse(send_response(message, True))
                     
-               
-                    # secrete = f"{secrete[:4]} {secrete[4:]}"
+                    except Event.DoesNotExist:
+                        return JsonResponse(send_response('Invalid event code. Please try again.', False))
+                
+                elif level == 'ticket_confirm':
+                    if user_data == '1':
+                        session.level = 'ticket_quantity'
+                        session.save()
+                        message = f"Enter number of tickets (Max {session.event.available_tickets})"
+                        return JsonResponse(send_response(message, True))
+                    
+                    elif user_data == '2':
+                        session.delete()
+                        return JsonResponse(send_response("You have cancelled the process.", False))
+                
+                elif level == 'ticket_quantity':
+                    try:
+                        tickets = int(user_data)
+                        event = Event.objects.get(code=session.event_id)
+                        
+                        if tickets <= 0:
+                            return JsonResponse(send_response("Invalid number of tickets. Please try again.", False))
+                        if tickets > event.available_tickets:
+                            return JsonResponse(send_response(f"Only {event.available_tickets} tickets available. Please enter a lower number.", False))
+                    except ValueError:
+                        return JsonResponse(send_response("Invalid number of tickets entered. Please try again.", False))
+                    
+                    session.level = 'ticket_payment'
+                    session.tickets = tickets
+                    session.amount = Decimal(tickets) * event.price
+                    session.save()
+                    message = f"You have entered {tickets} tickets \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
+                    return JsonResponse(send_response(message, True))
+                
+                elif level.endswith('_payment'):
+                    if user_data != '1':
+                        session.delete()
+                        return JsonResponse(send_response('Transaction cancelled.', False))
+                    
+                    amount = session.amount
 
-                    # Payment payload
-                    payload = {
-                        'payby': str(network_type),
-                        'order_id': order_id,
-                        'customerNumber': str(telephone),
-                        'customerName': str(telephone),
-                        'isussd': 1,
-                        'amount': str(amount),
-                        'merchant_id': merchant_id,
-                        'secrete': secrete,
-                        'key': key,
-                        'callback': callback,
-                        'item_desc': item_desc,
+                    if session.payment_type == 'VOTE':
+                        amount = session.amount
+                        endpoint = "https://api.nalosolutions.com/payplus/api/"
+                        telephone = msisdn
+                        network_type = network
+                        username = 'votfric_gen'
+                        # password = 'bVdwy86yoWtdZcW'
+                        password = 'Nrkl)CYr'
+                        merchant_id = 'NPS_000288'
+                        key = str(generate_random_key())
+                        hashed_password = md5(password.encode()).hexdigest()
+                        concat_keys = f"{username}{key}{hashed_password}"
+                        secrete = md5(concat_keys.encode()).hexdigest()
+                        callback = 'https://voteafric.com/ussd/webhooks/callback/'
+                        item_desc = 'Payment for vote'
+                        order_id = str(uuid.uuid4())
+                        session.order_id = order_id
+                        session.save()
+                        
+                
+                        # secrete = f"{secrete[:4]} {secrete[4:]}"
 
-            
-                    }
+                        # Payment payload
+                        payload = {
+                            'payby': str(network_type),
+                            'order_id': order_id,
+                            'customerNumber': str(telephone),
+                            'customerName': str(telephone),
+                            'isussd': 1,
+                            'amount': str(amount),
+                            'merchant_id': merchant_id,
+                            'secrete': secrete,
+                            'key': key,
+                            'callback': callback,
+                            'item_desc': item_desc,
 
-                    headers = {
-                        "Content-Type": "application/json",
-                    }
+                
+                        }
 
-                    # Sending payment request
-                    response = requests.post(endpoint, json=payload, headers=headers)
-                    print(response)
+                        headers = {
+                            "Content-Type": "application/json",
+                        }
+
+                        # Sending payment request
+                        response = requests.post(endpoint, json=payload, headers=headers)
+                        print(response)
+                    else: # TICKET - use Paystack
+                        paystack_secret_key = settings.PAYSTACK_SECRET_KEY
+                        order_id = str(uuid.uuid4())
+                        session.order_id = order_id
+                        session.save()
+                        
+                        if session.payment_type == 'TICKET':
+                            item_desc = f"Ticket purchase for {session.event_id}"
+                        
+                        # Initialize Paystack payment
+                        paystack_url = "https://api.paystack.co/transaction/initialize"
+                        
+                        headers = {
+                            "Authorization": f"Bearer {paystack_secret_key}",
+                            "Content-Type": "application/json",
+                        }
+                        
+                        payload = {
+                            "email": f"{msisdn}@voteafric.com",  # Using phone number as email
+                            "amount": int(amount * 100),  # Paystack uses amount in kobo
+                            "reference": order_id,
+                            "callback_url": 'https://voteafric.com/ussd/webhooks/paystack_callback/',
+                            "metadata": {
+                                "custom_fields": [
+                                    {
+                                        "display_name": "Payment Type",
+                                        "variable_name": "payment_type",
+                                        "value": session.payment_type
+                                    },
+                                    {
+                                        "display_name": "Phone Number",
+                                        "variable_name": "phone",
+                                        "value": msisdn
+                                    }
+                                ]
+                            }
+                        }
+                        
+                        response = requests.post(paystack_url, json=payload, headers=headers)
+                        
                     if response.status_code == 200:
                         session.save()
-                        message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
+                        if session.payment_type == 'VOTE':
+                            message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
                         # print(secrete_full)
-                        print(hashed_password)
-                        print(concat_keys)
-                        print(secrete)
-                        print(key)
+                            print(hashed_password)
+                            print(concat_keys)
+                            print(secrete)
+                            print(key)
+                        else:
+                            message = f"Please check your SMS for payment link to complete your {session.payment_type.lower()} of GH¢{amount:.2f}."
                         return JsonResponse(send_response(message, False))
                     else:
-                        return JsonResponse(send_response("Payment request failed. Please try again.", False))
+                        error_msg = response.json().get('message', 'Payment request failed')
+                        return JsonResponse(send_response(f"Payment failed: {error_msg}. Please try again.", False))
 
                 else:
                     return JsonResponse(send_response("Invalid session state.", False))
@@ -260,6 +383,61 @@ def webhook_callback(request):
                     return JsonResponse({'status': 'error', 'message': 'Nominee not found'})
             else:
                 return JsonResponse({'status': 'error', 'message': 'Payment failed'})
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
+        
+        except Exception as e:
+            print(f'Error: {str(e)}')
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+
+
+@csrf_exempt
+def paystack_webhook(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            event = data.get('event')
+            
+            if event == 'charge.success':
+                transaction_data = data.get('data')
+                reference = transaction_data.get('reference')
+                amount = Decimal(transaction_data.get('amount')) / 100  # Convert from kobo to GH¢
+                status = transaction_data.get('status')
+                
+                session = CustomSession.objects.filter(order_id=reference).first()
+                if not session:
+                    return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
+                
+                if status == 'success':
+                    if session.payment_type == 'TICKET':
+                        event_code = session.event_id
+                        tickets = session.tickets
+                        
+                        try:
+                            event = Event.objects.get(code=event_code)
+                            event.available_tickets -= tickets
+                            event.save()
+                            
+                            PaymentTransaction.objects.create(
+                                order_id=reference,
+                                amount=amount,
+                                status='PAID',
+                                payment_type='TICKET',
+                                event_code=event_code,
+                                tickets=tickets,
+                                timestamp=timezone.now().isoformat()
+                            )
+                            session.delete()
+                            return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
+                        
+                        except Event.DoesNotExist:
+                            return JsonResponse({'status': 'error', 'message': 'Event not found'})
+                    
+                    
+            return JsonResponse({'status': 'error', 'message': 'Unhandled event'}, status=400)
         
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)

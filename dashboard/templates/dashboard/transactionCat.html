@@ -12,6 +12,7 @@
                 <h1 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payments: GH¢{{ total_ussd_payments }}</h1>
                 <br>
                 <h4><a href="{% url 'ussd_transactions' category.id  %}">CLICK HERE</a> TO GET ALL USSD TRANSACTIONS</h4>
+                <h4><a href="{% url 'online_transactions' category.id  %}">CLICK HERE</a> TO GET ALL ONLINE TRANSACTIONS</h4>
                 <div class="transaction-for-awards">
                     {% for n in award %}
                     <a href="{% url 'transaction' n.slug %}">

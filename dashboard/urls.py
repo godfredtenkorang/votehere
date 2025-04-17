@@ -26,6 +26,7 @@ urlpatterns = [
     path('adminHome/', views.adminHome, name='adminHome'),
     path('TransactionMain/', views.TransactionMain, name='TransactionMain'),
     path('ussd_transactions/<int:category_id>/', views.ussd_transactions, name='ussd_transactions'),
+    path('online_transactions/<int:category_id>/', views.online_transactions, name='online_transactions'),
     path('TransactionCat/<slug:category_slug>/', views.TransactionCat, name='TransactionCat'),
 
     # PDF
@@ -35,5 +36,5 @@ urlpatterns = [
     
     path('add_nominee/', views.add_nominee, name='add_nominee'),
     path('sms/', views.send_sms, name='send_sms'),
-    path('award_revenue_insight/', views.award_revenue_insight, name='award_revenue_insight'),
+    path('award_revenue_insight/<int:subcategory_id>/', views.award_revenue_insight, name='award_revenue_insight'),
 ]

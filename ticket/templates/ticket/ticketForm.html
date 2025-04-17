@@ -7,8 +7,8 @@
 <!-- banner -->
 <div class="banners">
   <div class="banners-content">
-    <p>VoteAfric E-ticket</p>
-    <h1>E-ticketing company in Ghana</h1>
+    <h1>VoteAfric E-ticket</h1>
+    <!-- <h1>E-ticketing company in Ghana</h1> -->
   </div>
 </div>
 <div id="validation-modal" class="modal">
@@ -18,13 +18,14 @@
     </div>
   </div>
 <div class="ticket-main ticket-forms">
-    <h3 class="t-name">GROOVE - WAVE (The beach party ) </h3>
+    <h3 class="t-name">{{event.name}} </h3>
  
 
 <div class="ticket-form">
     <p>Select to proceed </p>
-    <form action="" class="t-form" id="vote-form">
-      <div class="t-input">
+    <form action="{% url 'ticketForm' event.slug %}" class="t-form" id="vote-form" method="POST">
+      {% csrf_token %}
+      <!-- <div class="t-input">
         <label for="event-date">Event Date</label><br>
         <select id="event-date">
           <option value="" selected disabled>Select event date</option>
@@ -33,9 +34,9 @@
           <option value="july24">July 24, 2025</option>
           <option value="august1">August 1, 2025</option>
         </select>
-      </div>
+      </div> -->
   
-      <div class="t-input">
+      <!-- <div class="t-input">
         <label for="ticket-type">Ticket Type</label><br>
         <select id="ticket-type">
           <option value="" selected disabled>Select ticket type</option>
@@ -43,14 +44,14 @@
           <option value="vip">VIP</option>
           <option value="vvip">VVIP</option>
         </select>
-      </div>
+      </div> -->
   
-      <div class="t-input">
+      <!-- <div class="t-input">
         <label for="vote-count">Number of vote</label><br>
         <input type="number" id="vote-count" placeholder="Enter number of votes">
-      </div>
+      </div> -->
   
-      <div class="t-input">
+      <!-- <div class="t-input">
         <label for="payment-method">Payment Method</label><br>
         <select id="payment-method">
           <option value="" selected disabled>Select payment method</option>
@@ -59,19 +60,29 @@
           <option value="paypal">PayPal</option>
           <option value="bank">Bank Transfer</option>
         </select>
-      </div>
+      </div> -->
   
+      <div class="t-input">
+        <label for="phone">Phone Number</label><br>
+        <input type="phone" id="phone" name="phone" placeholder="Enter your phone number" required>
+      </div>
       <div class="t-input">
         <label for="email">Email</label><br>
-        <input type="email" id="email" placeholder="Enter your email">
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
       </div>
-  
       <div class="t-input">
-        <label for="total-amount">Total Amount</label><br>
-        <input type="number" id="total-amount" placeholder="Total amount" readonly>
+        <label for="quantity">Quantity</label><br>
+        <input type="number" id="quantity" name="quantity" min="1" max="{{ event.available_tickets }}" value="1" placeholder="Enter your quantity">
       </div>
+      <!-- <div class="t-input">
+        <label for="quantity">Amount</label><br>
+        <input type="number" id="total" name="amount">
+      </div> -->
+      
   
-      <button type="submit">Proceed</button>
+      <p>Total: GH¢<span id="total">0</span></p>
+  
+      <button type="submit" onclick="payWithPayStack()" id="django-paystack-button">Proceed</button>
     </form>
   </div>
 
@@ -81,54 +92,15 @@
 
 
 </div>
+
 <script>
-    document.getElementById('vote-form').addEventListener('submit', function(e) {
-      e.preventDefault(); // Prevent by default until we check validation
-      
-      const form = this;
-      const fields = [
-        { id: 'event-date', message: 'Please select an event date.' },
-        { id: 'ticket-type', message: 'Please select a ticket type.' },
-        { id: 'vote-count', message: 'Please enter number of votes.' },
-        { id: 'payment-method', message: 'Please select a payment method.' },
-        { id: 'email', message: 'Please enter a valid email address.' },
-      ];
-  
-      for (let field of fields) {
-        const input = document.getElementById(field.id);
-  
-        if (!input.value || input.value.trim() === "") {
-          showModal(field.message, input);
-          return;
-        }
-      }
-  
-      // All fields are valid — allow actual form submission
-      form.submit();
-    });
-  
-    function showModal(message, element) {
-      const modal = document.getElementById('validation-modal');
-      const modalMessage = document.getElementById('modal-message');
-      const closeBtn = document.querySelector('.close');
-  
-      modalMessage.textContent = message;
-      modal.style.display = 'block';
-  
-      closeBtn.onclick = () => {
-        modal.style.display = 'none';
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        element.focus();
-      };
-  
-      window.onclick = (event) => {
-        if (event.target == modal) {
-          modal.style.display = 'none';
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          element.focus();
-        }
-      };
-    }
-  </script>
-  
+  document.getElementById('quantity').addEventListener('change', function () {
+    const quantity = parseInt(this.value);
+    const price = parseFloat('{{ event.price }}');
+    document.getElementById('total').textContent = (quantity * price).toFixed(2);
+  });
+  // Trigger change event on load
+  document.getElementById('quantity').dispatchEvent(new Event('change'));
+</script>
+
 {% endblock content %}

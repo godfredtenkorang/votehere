@@ -57,7 +57,7 @@ it is hidden so when voters click on the vote button, the it appears -->
         <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label> <br>
         <input type="number" name="phone" id="" placeholder="Phone Number" required> <br>
 
-        <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote <span>(GHS 0.50 per vote)</span></label>
+        <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote <span>(GHS {{nominee.price_per_vote}} per vote)</span></label>
         <br>
         <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
 
@@ -81,12 +81,14 @@ it is hidden so when voters click on the vote button, the it appears -->
 
 <script defer>
 
+    price_per_vote = "{{nominee.price_per_vote}}"
+
     function voteForm() {
         const numberOfVotesInput = document.getElementById("number-of-vote");
         const amountToPayInput = document.getElementById("amount-top-pay");
         const totalAmountToPayInput = document.getElementById("total-amount-top-pay");
         const alertAmountToPay = document.querySelector('.alert-amount-to-pay');
-        const amountPerVote = 0.5;
+        const amountPerVote = price_per_vote;
         const totalAmountTopPay = amountPerVote * 100;
 
         numberOfVotesInput.addEventListener("input", () => {

@@ -225,6 +225,24 @@ def ussd_transactions(request, category_id):
     }
     return render(request, 'dashboard/ussd_transactions.html', context)
 
+def online_transactions(request, category_id):
+    category = None
+    payments = Payment.objects.all()
+    if category_id:
+        category = get_object_or_404(Category, id=category_id)
+        payments = payments.filter(category=category, verified=True)
+        total_amount = payments.aggregate(Total=Sum('amount'))
+        total_amount = total_amount['Total']
+    
+    
+    context = {
+        'payments': payments,
+        'category': category,
+        'total_amount': total_amount,
+        'title': 'Online transactions'
+    }
+    return render(request, 'dashboard/online_transactions.html', context)
+
 
 class GeneratePdf(View):
     def get(self, request, form, *args, **kwargs):
@@ -295,5 +313,18 @@ def send_sms(request):
     return render(request, 'dashboard/nominee/send_sms.html', context)
 
 
-def award_revenue_insight(request):
-    return render(request, 'dashboard/award_revenue_insight.html')
+def get_subcategory_votes(subcategory_id):
+    try:
+        subcategory = SubCategory.objects.get(id=subcategory_id)
+        total_votes = Nominees.objects.filter(sub_category=subcategory).aggregate(total=Sum('total_vote'))['total'] or 0
+        return subcategory, total_votes
+    except SubCategory.DoesNotExist:
+        return None, 0
+
+def award_revenue_insight(request, subcategory_id):
+    subcategory, total_votes = get_subcategory_votes(subcategory_id)
+    context = {
+        'subcategory': subcategory,
+        'total_votes': total_votes
+    }
+    return render(request, 'dashboard/award_revenue_insight.html', context)

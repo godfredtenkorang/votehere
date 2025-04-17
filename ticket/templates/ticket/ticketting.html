@@ -7,8 +7,8 @@
 <!-- banner -->
 <div class="banners">
   <div class="banners-content">
-    <p>VoteAfric E-ticket</p>
-    <h1>E-ticketing company in Ghana</h1>
+    <h1>VoteAfric E-ticket</h1>
+    <!-- <h1>E-ticketing company in Ghana</h1> -->
   </div>
 </div>
 
@@ -18,59 +18,20 @@
     <p>Please select an event.</p>
   </div>
   <div class="ticket-container">
-  <a href="{% url 'ticketForm' %}" class="ticket">
+    {% for event in events %}
+    <a href="{% url 'ticketForm' event.slug %}" class="ticket">
 
-      <img
-        src="{% static 'vote/img/award-banner.jpg' %}"
-        alt=""
-        class="mask blog-img"
-      />
+      <img src="{{ event.ticket_image.url }}" alt="" class="mask blog-img" />
 
       <div class="ticket-text">
-        <h3>GROOVE - WAVE (The beach party )</h3>
-        <p>XTACY EVENTS</p>
+        <h3>{{ event.name }}</h3>
+        <p>{{ event.description }}</p>
       </div>
     </a>
-  <a href="{% url 'ticketForm' %}" class="ticket">
+    {% endfor %}
 
-      <img
-        src="{% static 'vote/img/award-banner.jpg' %}"
-        alt=""
-        class="mask blog-img"
-      />
-
-      <div class="ticket-text">
-        <h3>GROOVE - WAVE (The beach party )</h3>
-        <p>XTACY EVENTS</p>
-      </div>
-    </a>
-  <a href="{% url 'ticketForm' %}" class="ticket">
-
-      <img
-        src="{% static 'vote/img/award-banner.jpg' %}"
-        alt=""
-        class="mask blog-img"
-      />
-
-      <div class="ticket-text">
-        <h3>GROOVE - WAVE (The beach party )</h3>
-        <p>XTACY EVENTS</p>
-      </div>
-    </a>
-  <a href="{% url 'ticketForm' %}" class="ticket">
-
-      <img
-        src="{% static 'vote/img/award-banner.jpg' %}"
-        alt=""
-        class="mask blog-img"
-      />
-
-      <div class="ticket-text">
-        <h3>GROOVE - WAVE (The beach party )</h3>
-        <p>XTACY EVENTS</p>
-      </div>
-    </a>
   </div>
 </div>
+
 
 {% endblock content %}
