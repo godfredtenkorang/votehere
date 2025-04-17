@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import CustomSession, PaymentTransaction
@@ -279,9 +281,26 @@ def ussd_api(request):
                         print(response)
                     else: # TICKET - use Paystack
                         paystack_secret_key = settings.PAYSTACK_SECRET_KEY
+                        if not paystack_secret_key:
+                            return JsonResponse(send_response("Payment service unavailable. Please try again later.", False))
                         order_id = str(uuid.uuid4())
                         session.order_id = order_id
                         session.save()
+                        # Convert amount to kobo (Paystack uses smallest currency unit)
+                        amount_kobo = int(amount * 100)
+                        
+                        # Prepare metadata
+                        metadata = {
+                            "payment_type": session.payment_type,
+                            "phone": msisdn,
+                            "custom_fields": [
+                                {
+                                    "display_name": "Item Code",
+                                    "variable_name": "item_code",
+                                    "value": session.event_id if session.payment_type == 'TICKET' else session.donation_id
+                                }
+                            ]
+                        }
                         
                         if session.payment_type == 'TICKET':
                             item_desc = f"Ticket purchase for {session.event_id}"
@@ -296,43 +315,38 @@ def ussd_api(request):
                         
                         payload = {
                             "email": f"{msisdn}@voteafric.com",  # Using phone number as email
-                            "amount": int(amount * 100),  # Paystack uses amount in kobo
+                            "amount": amount_kobo,  # Paystack uses amount in kobo
                             "reference": order_id,
                             "callback_url": 'https://voteafric.com/ussd/webhooks/paystack_callback/',
-                            "metadata": {
-                                "custom_fields": [
-                                    {
-                                        "display_name": "Payment Type",
-                                        "variable_name": "payment_type",
-                                        "value": session.payment_type
-                                    },
-                                    {
-                                        "display_name": "Phone Number",
-                                        "variable_name": "phone",
-                                        "value": msisdn
-                                    }
-                                ]
-                            }
+                            "metadata": metadata,
+                            "channels": ["ussd"]
                         }
                         
-                        response = requests.post(paystack_url, json=payload, headers=headers)
+                        try:
+                            response = requests.post(paystack_url, json=payload, headers=headers, timeout=30)
+                            response_data = response.json()
+                            
                         
-                    if response.status_code == 200:
-                        session.save()
-                        if session.payment_type == 'VOTE':
-                            message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
-                        # print(secrete_full)
-                            print(hashed_password)
-                            print(concat_keys)
-                            print(secrete)
-                            print(key)
-                        else:
-                            message = f"Please check your SMS for payment link to complete your {session.payment_type.lower()} of GH¢{amount:.2f}."
-                        return JsonResponse(send_response(message, False))
-                    else:
-                        error_msg = response.json().get('message', 'Payment request failed')
-                        return JsonResponse(send_response(f"Payment failed: {error_msg}. Please try again.", False))
-
+                        
+                        
+                            if response.status_code == 200 and response_data.get('status'):
+                                payment_url = response_data.get('data', {}).get('authorization_url')
+                                session.save()
+                                if session.payment_type == 'VOTE':
+                                    message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
+                                # print(secrete_full)
+                                    print(hashed_password)
+                                    print(concat_keys)
+                                    print(secrete)
+                                    print(key)
+                                else:
+                                    message = f"Please check your SMS for payment link to complete your {session.payment_type.lower()} of GH¢{amount:.2f}."
+                                return JsonResponse(send_response(message, False))
+                            else:
+                                error_msg = response.json().get('message', 'Payment request failed')
+                                return JsonResponse(send_response(f"Payment failed: {error_msg}. Please try again.", False))
+                        except requests.exceptions.RequestException as e:
+                            return JsonResponse(send_response("Network error processing payment. Please try again.", False))
                 else:
                     return JsonResponse(send_response("Invalid session state.", False))
         else:
@@ -409,6 +423,10 @@ def webhook_callback(request):
 def paystack_webhook(request):
     if request.method == 'POST':
         try:
+            # Verify the request is from Paystack
+            paystack_signature = request.headers.get('x-paystack-signature')
+            if not verify_paystack_webhook(request.body, paystack_signature):
+                return JsonResponse({'status': 'error', 'message': 'Invalid signature'}, status=403)
             data = json.loads(request.body.decode('utf-8'))
             event = data.get('event')
             
@@ -417,6 +435,8 @@ def paystack_webhook(request):
                 reference = transaction_data.get('reference')
                 amount = Decimal(transaction_data.get('amount')) / 100  # Convert from kobo to GH¢
                 status = transaction_data.get('status')
+                metadata = transaction_data.get('metadata', {})
+                payment_type = metadata.get('payment_type')
                 
                 session = CustomSession.objects.filter(order_id=reference).first()
                 if not session:
@@ -458,3 +478,14 @@ def paystack_webhook(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+
+
+def verify_paystack_webhook(payload, signature):
+    """Verify the webhook signature"""
+    paystack_secret = settings.PAYSTACK_SECRET_KEY
+    computed_signature = hmac.new(
+        paystack_secret.encode('utf-8'),
+        payload,
+        hashlib.sha512
+    ).hexdigest()
+    return hmac.compare_digest(computed_signature, signature)
