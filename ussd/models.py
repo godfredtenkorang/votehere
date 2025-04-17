@@ -44,4 +44,4 @@ class PaymentTransaction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"Transaction {self.order_id} - {self.status}"
+        return f"Transaction {self.order_id} {self.payment_type} - {self.status}"
