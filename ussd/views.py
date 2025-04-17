@@ -98,7 +98,7 @@ def ussd_api(request):
                         session.save()
                         message = "Enter Nominee's code"
                         return JsonResponse(send_response(message, True))
-                    elif user_data == '2':
+                    elif user_data == '2': # Ticketing
                         session.payment_type = 'TICKET'
                         session.level = 'ticket_start'
                         session.save()
@@ -161,6 +161,7 @@ def ussd_api(request):
                     message = f"You have entered {votes} votes \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
                 
+                # Ticketing flow
                 elif level == 'ticket_start':
                     try:
                         event = Event.objects.get(code__iexact=user_data)
@@ -176,7 +177,8 @@ def ussd_api(request):
                             f"Name: {event.name}\n"
                             f"Price per ticket: GH¢{event.price:.2f}\n"
                             f"Available tickets: {event.available_tickets}\n"
-                            f"1) Confirm\n2) Cancel"
+                            f"1) Confirm\n"
+                            f"2) Cancel"
                         )
                         session.event_id = event.code
                         session.level = 'ticket_confirm'
@@ -185,17 +187,23 @@ def ussd_api(request):
                     
                     except Event.DoesNotExist:
                         return JsonResponse(send_response('Invalid event code. Please try again.', False))
+                    except Exception as e:
+                        print(f"Error processing event code: {str(e)}")  # For debugging
+                        return JsonResponse(send_response("System error. Please try again later.", False))
                 
                 elif level == 'ticket_confirm':
                     if user_data == '1':
                         session.level = 'ticket_quantity'
                         session.save()
-                        message = f"Enter number of tickets (Max {session.event.available_tickets})"
+                        event = Event.objects.get(code=session.event_id)
+                        message = f"Enter number of tickets (1-{event.available_tickets})"
                         return JsonResponse(send_response(message, True))
                     
                     elif user_data == '2':
                         session.delete()
                         return JsonResponse(send_response("You have cancelled the process.", False))
+                    else:
+                        return JsonResponse(send_response("Invalid option. Enter 1 to confirm or 2 to cancel.", False))
                 
                 elif level == 'ticket_quantity':
                     try:
@@ -209,9 +217,9 @@ def ussd_api(request):
                     except ValueError:
                         return JsonResponse(send_response("Invalid number of tickets entered. Please try again.", False))
                     
-                    session.level = 'ticket_payment'
                     session.tickets = tickets
                     session.amount = Decimal(tickets) * event.price
+                    session.level = 'ticket_payment'
                     session.save()
                     message = f"You have entered {tickets} tickets \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
