@@ -87,7 +87,7 @@ def ussd_api(request):
             if msgtype:  # Initial request
                 session.level = 'start'
                 session.save()
-                message = "Welcome to VoteAfric.\n1. Voting\n. Ticketing\nContact: 0553912334\nor: 0558156844"
+                message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\nContact: 0553912334\nor: 0558156844"
                 return JsonResponse(send_response(message, True))
             else:  # Follow-up request
                 level = session.level
@@ -122,14 +122,14 @@ def ussd_api(request):
                             f"1) Confirm\n2) Cancel"
                         )
                         session.candidate_id = nominee.code
-                        session.level = 'candidate'
+                        session.level = 'voting_confirm'
                         session.save()
                         return JsonResponse(send_response(message, True))
                     
                     except Nominees.DoesNotExist:
                         return JsonResponse(send_response("Invalid nominee code. Please try again.", False))
 
-                elif level == 'candidate':
+                elif level == 'voting_confirm':
                     if user_data == '1':
                         nominee = Nominees.objects.get(code__iexact=session.candidate_id)
                         price_per_vote = nominee.price_per_vote
@@ -330,6 +330,7 @@ def ussd_api(request):
             return JsonResponse(send_response("Unknown or invalid account", False))
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
 
 
 def update_nominee_votes(nominee_code, votes):
