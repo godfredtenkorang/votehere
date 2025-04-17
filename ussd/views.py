@@ -19,34 +19,6 @@ from django.utils import timezone
 
 from django.views import View
 
-@csrf_exempt
-def heroku_webhook(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            print(f'Received webhook data: {data}')
-
-            # Process the webhook data
-            event_type = data.get('event')  # Example: 'app.update', 'app.create', etc.
-
-            # Handle different event types
-            if event_type == 'app.update':
-                # Handle app update
-                print("App has been updated.")
-            elif event_type == 'app.create':
-                # Handle app creation
-                print("A new app has been created.")
-            # Add additional event handling as needed
-
-            return JsonResponse({'status': 'success'}, status=200)
-
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
-        except Exception as e:
-            print(f'Error: {str(e)}')
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
 
 
 def generate_random_key():
@@ -289,17 +261,17 @@ def ussd_api(request):
                     
                         if response.status_code == 200:
                             session.save()
-                            if response.get('status') == 'success':
-                                message = (
-                                    f"You are about to pay GH¢{amount:.2f}. "
-                                    f"Please approve the payment prompt on your phone."
-                                )
-                                return JsonResponse(send_response(message, False))
                             # print(secrete_full)
                             print(hashed_password)
                             print(concat_keys)
                             print(secrete)
                             print(key)
+                            message = (
+                                f"You are about to pay GH¢{amount:.2f}. "
+                                f"Please approve the payment prompt on your phone."
+                            )
+                            return JsonResponse(send_response(message, False))
+                            
                             
                         else:
                             error_msg = response.json().get('message', 'Payment request failed')
@@ -400,75 +372,3 @@ def webhook_callback(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
-
-
-@csrf_exempt
-def paystack_webhook(request):
-    if request.method == 'POST':
-        try:
-            # Verify the request is from Paystack
-            paystack_signature = request.headers.get('x-paystack-signature')
-            if not verify_paystack_webhook(request.body, paystack_signature):
-                return JsonResponse({'status': 'error', 'message': 'Invalid signature'}, status=403)
-            data = json.loads(request.body.decode('utf-8'))
-            event = data.get('event')
-            
-            if event == 'charge.success':
-                transaction_data = data.get('data')
-                reference = transaction_data.get('reference')
-                amount = Decimal(transaction_data.get('amount')) / 100  # Convert from kobo to GH¢
-                status = transaction_data.get('status')
-                metadata = transaction_data.get('metadata', {})
-                payment_type = metadata.get('payment_type')
-                
-                session = CustomSession.objects.filter(order_id=reference).first()
-                if not session:
-                    return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
-                
-                if status == 'success':
-                    if session.payment_type == 'TICKET':
-                        event_code = session.event_id
-                        tickets = session.tickets
-                        
-                        try:
-                            event = Event.objects.get(code=event_code)
-                            event.available_tickets -= tickets
-                            event.save()
-                            
-                            PaymentTransaction.objects.create(
-                                order_id=reference,
-                                amount=amount,
-                                status='PAID',
-                                payment_type='TICKET',
-                                event_code=event_code,
-                                tickets=tickets,
-                                timestamp=timezone.now().isoformat()
-                            )
-                            session.delete()
-                            return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
-                        
-                        except Event.DoesNotExist:
-                            return JsonResponse({'status': 'error', 'message': 'Event not found'})
-                    
-                    
-            return JsonResponse({'status': 'error', 'message': 'Unhandled event'}, status=400)
-        
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
-        
-        except Exception as e:
-            print(f'Error: {str(e)}')
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
-
-
-def verify_paystack_webhook(payload, signature):
-    """Verify the webhook signature"""
-    paystack_secret = settings.PAYSTACK_SECRET_KEY
-    computed_signature = hmac.new(
-        paystack_secret.encode('utf-8'),
-        payload,
-        hashlib.sha512
-    ).hexdigest()
-    return hmac.compare_digest(computed_signature, signature)
