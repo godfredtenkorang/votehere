@@ -102,12 +102,13 @@ def ussd_api(request):
                         session.payment_type = 'TICKET'
                         session.level = 'ticket_start'
                         session.save()
+                        message = "Enter Event code"
                         return JsonResponse(send_response(message, True))
                     else:
                         return JsonResponse(send_response("Invalid option. Please try again.", False))
                     
                 # Voting flow
-                elif level == 'voting_start':
+                elif level == 'vote_start':
                     try:
                         nominee = Nominees.objects.get(code__iexact=user_data)
                         
