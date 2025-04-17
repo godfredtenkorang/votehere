@@ -310,7 +310,7 @@ def ussd_api(request):
                         response = requests.post(paystack_url, json=payload, headers=headers)
                         
                     if response.status_code == 200:
-                        session.save()
+                        session.delete()
                         if session.payment_type == 'VOTE':
                             message = f"You are about to pay GH¢{amount:.2f}. Please approve the prompt to make payment."
                         # print(secrete_full)
@@ -375,6 +375,7 @@ def webhook_callback(request):
                         invoice_no=invoice_no,
                         amount=amount,
                         status=status,
+                        payment_type='VOTE',
                         nominee_code=nominee_code,
                         votes=votes,
                         timestamp=timestamp_str
