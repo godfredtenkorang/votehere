@@ -64,6 +64,18 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
         event.available_tickets -= ticket.quantity
         event.save()
         
+        subject = f"Your Ticket for {event.name}"
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [ticket.email]
+        
+        html_content = render_to_string('ticket/ticket_email.html', {'ticket': ticket, 'event': event})
+        text_content = strip_tags(html_content)
+        
+        email = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
+        
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+        
     
         messages.success(request, 'Payment successful! Your ticket has been confirmed.')
         return redirect('ticketForm', event_slug=ticket.event.slug)

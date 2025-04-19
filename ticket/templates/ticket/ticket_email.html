@@ -2,24 +2,20 @@
 <html>
 
 <head>
-    <title>Your Ticket Confirmation</title>
+    <meta charset="UTF-8">
+    <title>Ticket Confirmation</title>
 </head>
 
 <body>
-    <h2>Thank you for your purchase, {{ user.username }}!</h2>
-    <p>Here are your ticket details:</p>
-
-    <h3>{{ ticket.event.name }}</h3>
-    <p><strong>Date:</strong> {{ ticket.event.date }}</p>
-    <p><strong>Venue:</strong> {{ ticket.event.venue }}</p>
-    <p><strong>Number of Tickets:</strong> {{ ticket.quantity }}</p>
-    <p><strong>Total Price:</strong> ₦{{ ticket.total_price }}</p>
-    <p><strong>Reference Number:</strong> {{ ticket.reference }}</p>
-
-    <p>Please present this email (or your reference number) at the event entrance.</p>
-
-    <p>Thank you,</p>
-    <p>The Event Team</p>
+    <h2>Thank you for purchasing your ticket!</h2>
+    <p><strong>Event:</strong> {{ event.name }}</p>
+    <p><strong>Date:</strong> {{ event.date_added }}</p>
+    <p><strong>Quantity:</strong> {{ ticket.quantity }}</p>
+    <p><strong>Total Paid:</strong> GHS {{ ticket.amount }}</p>
+    <p>Your ticket reference: <strong>{{ ticket.ref }}</strong></p>
+    <p>We look forward to seeing you at the event!</p>
+    <br>
+    <p>Best regards,<br>Your Event Team</p>
 </body>
 
 </html>
