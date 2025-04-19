@@ -226,6 +226,7 @@ def ussd_api(request):
                         item_desc = f"Tickets for {session.event_id}"
                     order_id = str(uuid.uuid4())
                     session.order_id = order_id
+                    session.msisdn = msisdn
                     session.save()
                     
             
