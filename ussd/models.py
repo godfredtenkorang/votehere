@@ -7,7 +7,7 @@ class CustomSession(models.Model):
         ('VOTE', 'Vote'),
         ('TICKET', 'Ticket'),
     )
-    
+    msisdn = models.CharField(max_length=15, null=True, blank=True)
     session_key = models.CharField(max_length=32, primary_key=True)
     user_id = models.CharField(max_length=100)
     level = models.CharField(max_length=100, null=True, blank=True)

@@ -356,7 +356,15 @@ def webhook_callback(request):
                             tickets=session.tickets,
                             timestamp=timestamp_str
                         )
-                        
+                        # Send SMS with ticket details
+                        send_ticket_sms(
+                            phone_number=session.msisdn,  # Or use MSISDN from session
+                            event_name=event.name,
+                            ticket_count=session.tickets,
+                            amount=amount,
+                            event_date=event.end_date,
+                            reference=order_id
+                        )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
                     
