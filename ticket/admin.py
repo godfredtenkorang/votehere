@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, TicketPayment
+from .models import Event, TicketPayment, SMSLog
 
 # Register your models here.
 
@@ -17,3 +17,6 @@ class VoteNomineeAdmin(admin.ModelAdmin):
   
   
 admin.site.register(Event, VoteNomineeAdmin)
+
+
+admin.site.register(SMSLog)
