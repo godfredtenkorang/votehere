@@ -14,6 +14,7 @@ from payment.models import Nominees
 from ticket.models import Event
 from datetime import datetime
 from django.utils import timezone
+from ticket.utis import send_ticket_sms
 
 
 
@@ -354,6 +355,15 @@ def webhook_callback(request):
                             event_code=session.event_id,
                             tickets=session.tickets,
                             timestamp=timestamp_str
+                        )
+                        # Send SMS with ticket details
+                        send_ticket_sms(
+                            phone_number=session.user_id,  # Or use MSISDN from session
+                            event_name=event.name,
+                            ticket_count=session.tickets,
+                            amount=amount,
+                            event_date=event.end_date,
+                            reference=order_id
                         )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})

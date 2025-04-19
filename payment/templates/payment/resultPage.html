@@ -1,65 +1,197 @@
 {% extends 'vote/base.html' %}
+{% load results_extras %}
 {% load static %}
 {% block content %}
 
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+    }
 
-    <!-- banner -->
-    <div class="banners">
-        <!-- <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image"> -->
-        <div class="banners-content">
-            <h1>{% if sub_category %}{{ sub_category.content }}{% else %}Award Name{% endif %}</h1>
-            <br>
-            <p>{% if sub_category %}{{ sub_category.category }}{% else %}Award Name{% endif %}</p>
+    body {
+        background-color: #f5f5f5;
+        color: #333;
+        
+
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #fff;
+    }
+
+    .category-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #3498db;
+        text-align: center;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #eee;
+    }
+
+    .nominee-list {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .nominee-item {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .nominee-item:hover {
+        transform: translateY(-3px);
+    }
+
+    .nominee-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #3498db;
+        margin-right: 20px;
+        flex-shrink: 0;
+        
+    }
+
+    .nominee-details {
+        flex-grow: 1;
+    }
+
+    .nominee-name {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #2c3e50;
+    }
+
+    .vote-count {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-bottom: 8px;
+    }
+
+    .progress-container {
+        width: 100%;
+        height: 20px;
+        background: #ecf0f1;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 5px;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(to right, #3498db, #2ecc71);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10px;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        transition: width 0.5s ease;
+    }
+
+    .total-votes {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 16px;
+        color: #7f8c8d;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    .winner-badge {
+        background: #f39c12;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 15px;
+        display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+        .nominee-item {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .nominee-image {
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+
+        .nominee-details {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- banner -->
+<div class="banners">
+    <!-- <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image"> -->
+    <div class="banners-content">
+        <h1>{% if sub_category %}{{ sub_category.content }}{% else %}Award Name{% endif %}</h1>
+        <br>
+        <p>{% if sub_category %}{{ sub_category.category }}{% else %}Award Name{% endif %}</p>
+    </div>
+</div>
+
+<div class="nominee-list">
+    {% with total_votes=results|sum_attr:'total_vote' %}
+    {% for nominee in results %}
+    {% with percentage=nominee.total_vote|divide:total_votes|multiply:100|default:0 %}
+    <div class="nominee-item">
+        <img src="{{ nominee.image.url }}" alt="{{ nominee.name }}" class="nominee-image">
+        <div class="nominee-details">
+            <div class="nominee-name">
+                {{ nominee.name }}
+                {% if forloop.first and nominee.total_vote > 0 %}
+                <span class="winner-badge">WINNER</span>
+                {% endif %}
+            </div>
+            <div class="vote-count">{{ nominee.total_vote }} votes</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: {{ percentage|floatformat:1 }}%;">
+                    {{ percentage|floatformat:1 }}%
+                </div>
+            </div>
         </div>
     </div>
+    {% endwith %}
+    {% empty %}
+    <p style="text-align: center; color: #7f8c8d;">No nominees found for this category.</p>
+    {% endfor %}
+
+    <div class="total-votes">
+        Total Votes: {{ total_votes }}
+    </div>
+    {% endwith %}
+</div>
 
 
-
-    
-    <!-- result of the nominees -->
-    <section class="nominees-result-section">
-        <h2>Voting Result</h2>
-        {% for result in results %}
-        <div class="nominee-result">
-            <!-- nominee image -->
-            <div class="nominee-img">
-                <img src="{{ result.image.url }}" loading="lazy" alt="image">
-            </div>
-
-            <!-- nominee name -->
-            <div class="nominee-name">
-                <h4>{{result.name}}</h4>
-            </div>
-
-            <!-- number of vote nominee has -->
-            <div class="number-of-vote-currently">
-                <p>{{result.total_vote}}</p>
-            </div>
-            
-        </div>
-        {% endfor %}
-       
-    </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {% endblock content %}
+{% endblock content %}

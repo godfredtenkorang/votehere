@@ -25,6 +25,7 @@ class Nominees(models.Model):
         
     def is_due(self):
         return self.end_date < now()
+    
 
     def __str__(self):
         return f"{self.category} - {self.sub_category} - {self.name}"

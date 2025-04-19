@@ -1,6 +1,7 @@
 from django.db import models
 import secrets
 from .paystack import PayStack
+from ussd.models import PaymentTransaction
 
 # Create your models here.
 class Event(models.Model):
@@ -61,3 +62,15 @@ class TicketPayment(models.Model):
         if self.verified:
             return True
         return False
+
+
+class SMSLog(models.Model):
+    phone_number = models.CharField(max_length=15)
+    message = models.TextField()
+    status = models.CharField(max_length=20)  # sent, delivered, failed
+    transaction = models.ForeignKey(PaymentTransaction, null=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+    delivered_at = models.DateTimeField(null=True)
+    
+    def __str__(self):
+        self.phone_number

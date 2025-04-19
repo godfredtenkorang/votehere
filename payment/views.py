@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from payment.models import Payment, Nominees
 from vote.models import SubCategory, Category
-from django.http import HttpRequest, HttpResponseForbidden
+from django.http import HttpRequest, HttpResponseForbidden, JsonResponse
 from django.contrib import messages
 from django.conf import settings
 from . import forms

@@ -12,6 +12,7 @@
   </div>
 </div>
 
+{% if events %}
 <div class="ticket-main">
   <div class="t-head">
     <h2>Ticket Events</h2>
@@ -32,6 +33,10 @@
 
   </div>
 </div>
-
+{% else %}
+<div class="t-head" style="text-align: center;">
+  <h2>No Tickets at the moment.</h2>
+</div>
+{% endif %}
 
 {% endblock content %}
