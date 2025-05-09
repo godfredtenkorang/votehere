@@ -94,7 +94,7 @@ def ussd_api(request):
                         message = (
                             f"Confirm Candidate\n"
                             f"Name: {nominee.name}\n"
-                            f"Category: {nominee.category}\n"
+                            f"Category: {nominee.sub_category}\n"
                             f"1) Confirm\n2) Cancel"
                         )
                         session.candidate_id = nominee.code
