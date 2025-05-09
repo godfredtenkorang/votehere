@@ -11,7 +11,7 @@ from django.views.generic import View
 from .utils import render_to_pdf, send_sms_to_new_nominee
 from payment.forms import NomineeForm
 from django.contrib import messages
-from .forms import SendSmsForm
+from .forms import SendSmsForm, NomineeForm
 from ussd.models import PaymentTransaction
 
 # Create your views here.
@@ -328,3 +328,50 @@ def award_revenue_insight(request, subcategory_id):
         'total_votes': total_votes
     }
     return render(request, 'dashboard/award_revenue_insight.html', context)
+
+
+def get_all_categories(request):
+    awards = Category.objects.all()
+    context = {
+        'awards': awards,
+        'title': 'Categories'
+    }
+    return render(request, 'dashboard/get_nominees/awards.html', context)
+
+def get_nominee_by_category(request, category_slug):
+    category = None
+    award = Nominees.objects.all()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        award = award.filter(category=category)
+        
+
+
+    context = {
+        'category': category,
+        'award': award,
+        'title': 'Nominees'
+    }
+    return render(request, 'dashboard/get_nominees/nominees.html', context)
+
+
+
+def update_nominee_by_category(request, nominee_slug):
+    nominee = get_object_or_404(Nominees, slug=nominee_slug)
+    
+        
+    if request.method == 'POST':
+        form = NomineeForm(request.POST, request.FILES, instance=nominee)
+        if form.is_valid():
+            form.save()
+            return redirect('get_all_categories')
+    else:
+        form = NomineeForm(instance=nominee)
+        
+
+
+    context = {
+        'title': 'Nominees',
+        'form': form
+    }
+    return render(request, 'dashboard/get_nominees/update.html', context)

@@ -7,21 +7,21 @@ from .models import *
 # admin.site.register(SubCategory)
 
 
-class NomineesInLine(admin.TabularInline):
+class SubCategoryInline(admin.TabularInline):  # or admin.StackedInline
     model = SubCategory
-    extra = 3
-    prepopulated_fields = {"slug": ("content",)}
-    
-  
-  
+    extra = 0  # Number of empty forms to display
+
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    fieldsets = [(None, {'fields': ['award', 'title', 'image', 'slug',]}), ('Date Information', {
-        'fields': ['date_added', 'end_date'], 'classes': ['collapse']}), ]
-    inlines = [NomineesInLine]
-    prepopulated_fields = {"slug": ("award",)}
-  
-  
-admin.site.register(Category, CategoryAdmin)
+    list_display = ('award', 'title', 'date_added', 'end_date')
+    inlines = [SubCategoryInline]
+    prepopulated_fields = {'slug': ('award',)}
+
+@admin.register(SubCategory)
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ('content', 'category', 'date')
+    list_filter = ('category',)
+    prepopulated_fields = {'slug': ('content',)}
 
 
 @admin.register(Blog)
