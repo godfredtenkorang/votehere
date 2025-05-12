@@ -229,25 +229,38 @@ def ussd_api(request):
                     session.msisdn = msisdn
                     session.save()
                     
-            
+                    if network_type.upper() == 'VODAFONE':
+                        payload = {
+                            'merchant_id': merchant_id,
+                            'secrete': secrete,
+                            'key': key,
+                            'order_id': order_id,
+                            'customerName': str(telephone),
+                            'amount': str(amount),
+                            'item_desc': item_desc,
+                            'customerNumber': str(telephone),
+                            'payby': 'VODAFONE',
+                            'newVodaPayment': True,  # This is specific to Vodafone
+                            'callback': callback
+                        }
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
-
+                    else:
                     # Payment payload
-                    payload = {
-                        'payby': str(network_type),
-                        'order_id': order_id,
-                        'customerNumber': str(telephone),
-                        'customerName': str(telephone),
-                        'isussd': 1,
-                        'amount': str(amount),
-                        'merchant_id': merchant_id,
-                        'secrete': secrete,
-                        'key': key,
-                        'callback': callback,
-                        'item_desc': item_desc,
+                        payload = {
+                            'payby': str(network_type),
+                            'order_id': order_id,
+                            'customerNumber': str(telephone),
+                            'customerName': str(telephone),
+                            'isussd': 1,
+                            'amount': str(amount),
+                            'merchant_id': merchant_id,
+                            'secrete': secrete,
+                            'key': key,
+                            'callback': callback,
+                            'item_desc': item_desc,
 
-            
-                    }
+                
+                        }
 
                     headers = {
                         "Content-Type": "application/json",
