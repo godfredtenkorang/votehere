@@ -22,7 +22,7 @@ class CustomSession(models.Model):
     # Add any other fields you need to track
     
     def __str__(self):
-        return self.session_key
+        return f"{self.session_key} - {self.candidate_id} - {self.msisdn} - {self.order_id}"
     
 
 class PaymentTransaction(models.Model):
