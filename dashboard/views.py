@@ -279,6 +279,9 @@ def generate(request, pdf):
 
 @login_required
 def add_nominee(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
     if request.method == 'POST':
         form = NomineeForm(request.POST, request.FILES)
         if form.is_valid():
@@ -296,6 +299,9 @@ def add_nominee(request):
 
 
 def send_sms(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
     if request.method == 'POST':
         form = SendSmsForm(request.POST)
         if form.is_valid():
@@ -373,6 +379,9 @@ def award_revenue_insight(request, subcategory_id):
 
 
 def get_all_categories(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
     awards = Category.objects.all()
     context = {
         'awards': awards,
@@ -381,6 +390,9 @@ def get_all_categories(request):
     return render(request, 'dashboard/get_nominees/awards.html', context)
 
 def get_nominee_by_category(request, category_slug):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
     category = None
     award = Nominees.objects.all()
     if category_slug:
@@ -399,6 +411,9 @@ def get_nominee_by_category(request, category_slug):
 
 
 def update_nominee_by_category(request, nominee_slug):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
     nominee = get_object_or_404(Nominees, slug=nominee_slug)
     
         
