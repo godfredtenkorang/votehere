@@ -34,5 +34,5 @@ class CategorySMSForm(forms.Form):
             'placeholder': 'Enter your SMS message here...'
         }),
         label="SMS Message",
-        max_length=300  # Standard SMS length
+        max_length=350  # Standard SMS length
     )

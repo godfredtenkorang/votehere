@@ -79,8 +79,8 @@
         <div class="form-group">
             {{ form.message.label_tag }}
             {{ form.message }}
-            <small class="form-text text-muted">Max 300 characters. Characters remaining: <span
-                    id="char-count">300</span></small>
+            <small class="form-text text-muted">Max 350 characters. Characters remaining: <span
+                    id="char-count">350</span></small>
         </div>
         <button type="submit" class="btn btn-primary">Send SMS</button>
 
@@ -112,7 +112,7 @@
         const charCount = document.getElementById('char-count');
 
         messageField.addEventListener('input', function () {
-            const remaining = 300 - this.value.length;
+            const remaining = 350 - this.value.length;
             charCount.textContent = remaining;
             charCount.style.color = remaining < 0 ? 'red' : '';
         });
