@@ -8,10 +8,10 @@ from django.utils import timezone
 
 from django.http import HttpResponse
 from django.views.generic import View
-from .utils import render_to_pdf, send_sms_to_new_nominee
+from .utils import render_to_pdf, send_sms_to_new_nominee, send_mnotify_sms
 from payment.forms import NomineeForm
 from django.contrib import messages
-from .forms import SendSmsForm, NomineeForm
+from .forms import SendSmsForm, NomineeForm, CategorySMSForm
 from ussd.models import PaymentTransaction
 
 # Create your views here.
@@ -301,6 +301,7 @@ def send_sms(request):
         if form.is_valid():
             send_sms = form.save()
             send_sms_to_new_nominee(send_sms.name, send_sms.phone_number, send_sms.category)
+            messages.success(request, 'Message sent successfully!')
             return redirect('send_sms')
         
     else:
@@ -311,6 +312,47 @@ def send_sms(request):
     }
     
     return render(request, 'dashboard/nominee/send_sms.html', context)
+
+
+def send_sms_to_nominees(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
+    
+    if request.method == 'POST':
+        form = CategorySMSForm(request.POST)
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            sms_message = form.cleaned_data['message']
+            
+            
+            
+            nominees = Nominees.objects.filter(
+                category=category,
+                phone_number__isnull=False
+            ).exclude(phone_number='')
+            
+            if not nominees.exists():
+                messages.warning(request, f"No nominees with phone numbers found in {category.award} category.")
+                return redirect('send_category_sms')
+            
+            phone_numbers = [n.phone_number for n in nominees if n.phone_number]
+            
+            # Send SMS via MNotify
+            send_mnotify_sms(phone_numbers, sms_message)
+            messages.success(request, 'Message sent successfully!')
+            
+            
+            return redirect('send_category_sms')
+    else:
+        form = CategorySMSForm()
+        
+    context = {
+        'form': form,
+        'title': 'Send SMS by Category'
+    }
+        
+    return render(request, 'dashboard/nominee/send_sms_to_nominees.html', context)
 
 
 def get_subcategory_votes(subcategory_id):

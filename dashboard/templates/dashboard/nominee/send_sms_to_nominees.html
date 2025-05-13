@@ -55,7 +55,7 @@
 <div class="main">
     <div class="the-team-container">
         <div class="heading">
-            <h1>Send SMS</h1>
+            <h1>Send SMS to Nominees by Category</h1>
         </div>
 
     </div>
@@ -72,10 +72,18 @@
 
         {% csrf_token %}
 
-        {{form.as_p}}
+        <div class="form-group">
+            {{ form.category.label_tag }}
+            {{ form.category }}
+        </div>
+        <div class="form-group">
+            {{ form.message.label_tag }}
+            {{ form.message }}
+            <small class="form-text text-muted">Max 160 characters. Characters remaining: <span
+                    id="char-count">160</span></small>
+        </div>
+        <button type="submit" class="btn btn-primary">Send SMS</button>
 
-
-        <button type="submit">Send</button>
 
     </form>
 
@@ -97,4 +105,17 @@
     </div>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const messageField = document.getElementById('id_message');
+        const charCount = document.getElementById('char-count');
+
+        messageField.addEventListener('input', function () {
+            const remaining = 160 - this.value.length;
+            charCount.textContent = remaining;
+            charCount.style.color = remaining < 0 ? 'red' : '';
+        });
+    });
+</script>
 {% endblock %}

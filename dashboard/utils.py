@@ -41,3 +41,35 @@ def send_sms_to_new_nominee(name, phone_number, category):
     except requests.exceptions.RequestException as e:
         print(f"Error sending SMS: {e}")
         return None
+
+
+
+def send_mnotify_sms(phone_numbers, message):
+    endpoint = "https://api.mnotify.com/api/sms/quick"
+    apiKey = settings.MNOTIFY_API_KEY
+    
+    # Format phone numbers (ensure they start with country code without +)
+    
+    
+    payload = {
+        "key": apiKey,
+        "sender": 'voteafric',
+        "recipient[]": phone_numbers,
+        "message": message,
+        "is_schedule": False,
+        "schedule_date": ''
+    }
+    
+
+    url = endpoint + '?key=' + apiKey
+    
+   
+    try:
+        response = requests.post(url, data=payload)
+        response.raise_for_status()
+        
+        return response.json()
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending SMS: {e}")
+        return None
