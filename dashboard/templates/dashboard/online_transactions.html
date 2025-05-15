@@ -4,15 +4,56 @@
 <div class="main">
     <div class="transation-details-container">
         <div class="heading">
-            {% if nominee %}
-            <h1>Total Revenue for <span>{{ nominee.name }} </span> as <span> {{ nominee.sub_category }}</span></h1>
+            {% if category %}
+            <h1>Total USSD Revenue for <span>{{ category.award }} </span></h1>
             <h3>Total Revenue made for each category</h3>
             <h4>Total Amount: GH¢{{ total_amount }}</h4>
-            <h4>Total Verified Amount: GH¢{{ total_amount_verified }}</h4>
-            <h4>Total Not Verified Amount: GH¢{{ total_amount_not_verified }}</h4>
+        
             {% endif %}
         </div>
-
+        <form method="get" class="filter-form">
+            <div class="filter-row">
+                <!-- Nominee dropdown -->
+                <select name="nominee">
+                    <option value="">All Nominees</option>
+                    {% for nominee in nominees %}
+                        <option value="{{ nominee.id }}" {% if filter_params.nominee == nominee.id|stringformat:"s" %}selected{% endif %}>
+                            {{ nominee.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+        
+                <!-- Content dropdown -->
+                <select name="content">
+                    <option value="">All Contents</option>
+                    {% for content in contents %}
+                    <option value="{{ content.id }}" {% if filter_params.content == content.id|stringformat:"s" %}selected{% endif %}>
+                        {{ content.content }}
+                    </option>
+                    {% endfor %}
+                </select>
+        
+                <!-- Phone filter -->
+                <input type="text" name="phone" placeholder="Phone number" value="{{ filter_params.phone }}">
+        
+                <!-- Reference filter -->
+                <input type="text" name="ref" placeholder="Reference" value="{{ filter_params.ref }}">
+        
+                <!-- Verified filter -->
+                <select name="verified">
+                    <option value="">All Statuses</option>
+                    <option value="true" {% if filter_params.verified == 'true' %}selected{% endif %}>Verified</option>
+                    <option value="false" {% if filter_params.verified == 'false' %}selected{% endif %}>Not Verified</option>
+                </select>
+        
+                <!-- Date created filter -->
+                <input type="date" name="date_created" value="{{ filter_params.date_created }}">
+        
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="?" class="btn btn-secondary">Clear Filters</a>
+            </div> </form>
+            <br>
+        <div class="table-responsive">
         <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
             <thead>
                 <tr>
@@ -37,7 +78,7 @@
             </tbody>
             {% endfor %}
         </table>
-
+    </div>
         <div class="back-button">
             <a href="{% url 'TransactionMain' %}">
                 <button>Go Back</button>

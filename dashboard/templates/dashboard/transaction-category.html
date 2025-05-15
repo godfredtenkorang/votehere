@@ -12,7 +12,7 @@
                     <h4>Total Not Verified Amount: GH¢{{ total_amount_not_verified }}</h4>
                     {% endif %}
                 </div>
-
+                <div class="table-responsive">
                 <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
                     <thead>
                         <tr>
@@ -37,7 +37,7 @@
                     </tbody>
                     {% endfor %}
                 </table>
-               
+                </div>
                 <div class="back-button">
                     <a href="{% url 'TransactionMain' %}">
                         <button>Go Back</button>

@@ -558,7 +558,10 @@ table tbody tr:hover {
     }
 }
 
-
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
 
 .revenue-table {
     width: 100%;

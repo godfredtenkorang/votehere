@@ -8,39 +8,58 @@
             <h1>Total USSD Revenue for <span>{{ category.award }} </span></h1>
             <h3>Total Revenue made for each category</h3>
             <h4>Total Amount: GH¢{{ total_amount }}</h4>
-            
+
             {% endif %}
         </div>
+        <form method="get">
+            <div class="filter-row">
+                <input type="text" name="invoice_no" placeholder="Invoice No" value="{{ filter_params.invoice_no }}">
+                <select name="payment_type">
+                    <option value="">All Payment Types</option>
+                    <option value="VOTE" {% if filter_params.payment_type == "VOTE" %}selected{% endif %}>Vote</option>
+                    <option value="TICKET" {% if filter_params.payment_type == "TICKET" %}selected{% endif %}>Ticket
+                    </option>
+                </select>
+                <input type="text" name="nominee_code" placeholder="Nominee Code"
+                    value="{{ filter_params.nominee_code }}">
+                <!-- <input type="text" name="event_code" placeholder="Event Code" value="{{ filter_params.event_code }}"> -->
+                <input type="date" name="timestamp" placeholder="Transaction Date"
+                    value="{{ filter_params.timestamp }}">
+                <input type="date" name="created_at" placeholder="Created Date" value="{{ filter_params.created_at }}">
+                <button type="submit">Filter</button>
+                <a href="?">Clear Filters</a>
+            </div>
+        </form>
+        <br>
 
-        <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Invoice No</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Nominee Code</th>
-                    <th>Votes</th>
-                    <th>Timestamp</th>
-                </tr>
-            </thead>
-            {% for p in payments %}
-            <tbody>
-                <tr>
-                    <td>{{ p.order_id }}</td>
-                    <td>{{ p.invoice_no }}</td>
-                    <td>GH¢{{ p.amount }}</td>
-                    <td>{{ p.status }}</td>
-                    <td>{{ p.nominee_code }}</td>
-                    <td>{{ p.votes }}</td>
-                 
-                    <td>{{ p.timestamp }}</td>
-                </tr>
-
-                <!-- Add more rows as needed -->
-            </tbody>
-            {% endfor %}
-        </table>
+        <div class="table-responsive">
+            <table class="revenue-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Invoice No</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Nominee Code</th>
+                        <th>Votes</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td>{{ p.order_id }}</td>
+                        <td>{{ p.invoice_no }}</td>
+                        <td>GH¢{{ p.amount }}</td>
+                        <td>{{ p.status }}</td>
+                        <td>{{ p.nominee_code }}</td>
+                        <td>{{ p.votes }}</td>
+                        <td>{{ p.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         <div class="back-button">
             <a href="{% url 'TransactionMain' %}">

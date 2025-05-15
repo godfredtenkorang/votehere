@@ -210,35 +210,103 @@ def transaction_category(request, transaction_slug):
 def ussd_transactions(request, category_id):
     category = None
     payments = PaymentTransaction.objects.all()
+    
+    # Get filter parameters from request GET
+    invoice_no = request.GET.get('invoice_no')
+    payment_type = request.GET.get('payment_type')
+    nominee_code = request.GET.get('nominee_code')
+    event_code = request.GET.get('event_code')
+    timestamp = request.GET.get('timestamp')
+    created_at = request.GET.get('created_at')
+    
     if category_id:
         category = get_object_or_404(Category, id=category_id)
         payments = payments.filter(category=category, status='PAID')
-        total_amount = payments.aggregate(Total=Sum('amount'))
-        total_amount = total_amount['Total']
+    
+    # Apply additional filters if they exist in the request
+    if invoice_no:
+        payments = payments.filter(invoice_no__icontains=invoice_no)
+    if payment_type:
+        payments = payments.filter(payment_type=payment_type)
+    if nominee_code:
+        payments = payments.filter(nominee_code__icontains=nominee_code)
+    if event_code:
+        payments = payments.filter(event_code__icontains=event_code)
+    if timestamp:
+        payments = payments.filter(timestamp__date=timestamp)
+    if created_at:
+        payments = payments.filter(created_at__date=created_at)
+        
+    total_amount = payments.aggregate(Total=Sum('amount')).get('Total', 0)
+
     
     
     context = {
         'payments': payments,
         'category': category,
         'total_amount': total_amount,
-        'title': 'USSD transactions'
+        'title': 'USSD transactions',
+        'filter_params': {  # Pass filter values back to template to maintain filter state
+            'invoice_no': invoice_no,
+            'payment_type': payment_type,
+            'nominee_code': nominee_code,
+            'event_code': event_code,
+            'timestamp': timestamp,
+            'created_at': created_at,
+        }
     }
     return render(request, 'dashboard/ussd_transactions.html', context)
 
 def online_transactions(request, category_id):
     category = None
     payments = Payment.objects.all()
+    
+    # Get filter parameters from request GET
+    nominee_id = request.GET.get('nominee')
+    content_id = request.GET.get('content')
+    phone = request.GET.get('phone')
+    ref = request.GET.get('ref')
+    verified = request.GET.get('verified')
+    date_created = request.GET.get('date_created')
+    
     if category_id:
         category = get_object_or_404(Category, id=category_id)
         payments = payments.filter(category=category, verified=True)
-        total_amount = payments.aggregate(Total=Sum('amount'))
-        total_amount = total_amount['Total']
+        
+    # Apply additional filters if they exist in the request
+    if nominee_id:
+        payments = payments.filter(nominee_id=nominee_id)
+    if content_id:
+        payments = payments.filter(content_id=content_id)
+    if phone:
+        payments = payments.filter(phone__icontains=phone)
+    if ref:
+        payments = payments.filter(ref__icontains=ref)
+    if verified:
+        # Convert string 'true'/'false' to boolean
+        verified_bool = verified.lower() == 'true'
+        payments = payments.filter(verified=verified_bool)
+    if date_created:
+        payments = payments.filter(date_created__date=date_created)
+        
+    total_amount = payments.aggregate(Total=Sum('total_amount')).get('Total', 0)
+        
     
     
     context = {
         'payments': payments,
         'category': category,
         'total_amount': total_amount,
+        'filter_params': {  # Pass filter values back to template
+            'nominee': nominee_id,
+            'content': content_id,
+            'phone': phone,
+            'ref': ref,
+            'verified': verified,
+            'date_created': date_created,
+        },
+        'nominees': Nominees.objects.all(),  # For nominee dropdown
+        'contents': SubCategory.objects.all(),  # For content dropdown
         'title': 'Online transactions'
     }
     return render(request, 'dashboard/online_transactions.html', context)
