@@ -16,6 +16,18 @@ from ussd.models import PaymentTransaction
 
 # Create your views here.
 
+def access_award_by_code(request):
+    if request.method == 'POST':
+        code = request.POST.get('access_code')
+        try:
+            award = Category.objects.get(access_code=code)
+            return redirect('activity_category', award.slug)
+        except Category.DoesNotExist:
+            messages.error(request, "Invalid access code. Please try again.")
+            return redirect('access_award_by_code')  # or wherever your admin view is named
+    
+    return render(request, 'dashboard/access_code_form.html')
+
 def admin(request):
     awards = Category.objects.all()
     context = {
@@ -95,6 +107,8 @@ def registration_nominee(request, register_slug):
 
     return render(request, 'dashboard/registration-nominee.html', context)
 
+
+
 def transaction(request, nominee_slug):
     sub_category = None
     nominees = Nominees.objects.all()
@@ -139,6 +153,18 @@ def adminHome(request):
     }
     return render(request, 'dashboard/adminHome.html', context)
 
+
+def access_transaction_by_code(request):
+    if request.method == 'POST':
+        code = request.POST.get('access_code')
+        try:
+            award = Category.objects.get(access_code=code)
+            return redirect('TransactionCat', award.slug)
+        except Category.DoesNotExist:
+            messages.error(request, "Invalid access code. Please try again.")
+            return redirect('access_transaction_by_code')  # or wherever your admin view is named
+    
+    return render(request, 'dashboard/access_transaction_code_form.html')
 
 def TransactionMain(request):
     awards = Category.objects.all()

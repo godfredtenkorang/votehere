@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -10,6 +11,13 @@ class Category(models.Model):
     slug = models.SlugField(unique=True)
     date_added = models.DateTimeField('date added', null=True)
     end_date = models.DateTimeField('end date', null=True)
+    access_code = models.CharField(max_length=10, unique=True, null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.access_code:
+            # Generate a random 6-digit code if none exists
+            self.access_code = str(random.randint(100000, 999999))
+        super().save(*args, **kwargs)
     
     class Meta:
         verbose_name_plural = "categories"

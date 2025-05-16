@@ -7,6 +7,7 @@ from .views import GeneratePdf
 urlpatterns = [
     # Activities
     path('admin/', views.admin, name='adminPage'),
+    path('access-award/', views.access_award_by_code, name='access_award_by_code'),
     path('activity-category/<slug:category_slug>/', views.activity_category, name='activity_category'),
     path('activity-nominee/<slug:nominee_slug>/', views.activity_nominee, name='activity_nominee'),
     
@@ -25,6 +26,7 @@ urlpatterns = [
     path('transaction-category/<slug:transaction_slug>/', views.transaction_category, name='transaction_category'),
     path('adminHome/', views.adminHome, name='adminHome'),
     path('TransactionMain/', views.TransactionMain, name='TransactionMain'),
+    path('access-award-transactions/', views.access_transaction_by_code, name='access_transaction_by_code'),
     path('ussd_transactions/<int:category_id>/', views.ussd_transactions, name='ussd_transactions'),
     path('online_transactions/<int:category_id>/', views.online_transactions, name='online_transactions'),
     path('TransactionCat/<slug:category_slug>/', views.TransactionCat, name='TransactionCat'),
