@@ -17,8 +17,7 @@
                 <select name="nominee">
                     <option value="">All Nominees</option>
                     {% for nominee in nominees %}
-                    <option value="{{ nominee.id }}" {% if filter_params.nominee==nominee.id|stringformat:"s"
-                        %}selected{% endif %}>
+                    <option value="{{ nominee.id }}" {% if filter_params.nominee == nominee.id|stringformat:"s"%}selected{% endif %}>
                         {{ nominee.name }}
                     </option>
                     {% endfor %}
@@ -28,8 +27,7 @@
                 <select name="content">
                     <option value="">All Contents</option>
                     {% for content in contents %}
-                    <option value="{{ content.id }}" {% if filter_params.content==content.id|stringformat:"s"
-                        %}selected{% endif %}>
+                    <option value="{{ content.id }}" {% if filter_params.content == content.id|stringformat:"s"%}selected{% endif %}>
                         {{ content.content }}
                     </option>
                     {% endfor %}
@@ -44,8 +42,8 @@
                 <!-- Verified filter -->
                 <select name="verified">
                     <option value="">All Statuses</option>
-                    <option value="true" {% if filter_params.verified=='true' %}selected{% endif %}>Verified</option>
-                    <option value="false" {% if filter_params.verified=='false' %}selected{% endif %}>Not Verified
+                    <option value="true" {% if filter_params.verified == 'true' %}selected{% endif %}>Verified</option>
+                    <option value="false" {% if filter_params.verified == 'false' %}selected{% endif %}>Not Verified
                     </option>
                 </select>
 

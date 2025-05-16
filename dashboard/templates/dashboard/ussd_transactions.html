@@ -16,8 +16,8 @@
                 <input type="text" name="invoice_no" placeholder="Invoice No" value="{{ filter_params.invoice_no }}">
                 <select name="payment_type">
                     <option value="">All Payment Types</option>
-                    <option value="VOTE" {% if filter_params.payment_type=="VOTE" %}selected{% endif %}>Vote</option>
-                    <option value="TICKET" {% if filter_params.payment_type=="TICKET" %}selected{% endif %}>Ticket
+                    <option value="VOTE" {% if filter_params.payment_type == "VOTE" %}selected{% endif %}>Vote</option>
+                    <option value="TICKET" {% if filter_params.payment_type == "TICKET" %}selected{% endif %}>Ticket
                     </option>
                 </select>
                 <input type="text" name="nominee_code" placeholder="Nominee Code"
