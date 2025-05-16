@@ -257,7 +257,7 @@ header {
     padding-top: 4%;
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 1rem;
 }
 .ongoin-awards-container h2,
 .categories-container h2,
@@ -266,7 +266,7 @@ header {
 .registered-category h2,
 .transaction-for-awards h2 {
 
-    font-size: 1rem;
+    font-size: 0.8rem;
     text-align: center;
     color: var(--voiletColor);
     padding: 10px;
@@ -318,6 +318,54 @@ header {
     }
 }
 
+
+
+
+.insight button{
+    width: 100%;
+    max-width: 300px;
+    border: none;
+    background-color: var(--Border-color);
+    cursor: pointer;
+    color: var(--white);
+    height: 8vh;
+    font-size: 1rem;
+}
+
+.revenue-container{
+    width: 100%;
+    padding: 2%;
+ 
+}
+ .revenue-container .table-container{
+    display: none;
+} 
+
+
+
+/* this is banner on the other pages */
+.banners {
+    position: relative;
+   
+   
+}
+
+
+
+
+.banners-content {
+    background-color: var(--voiletColor);
+    width: 100%;
+    height: 30vh;
+
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--whiteColor);
+    
+}
 
 
 
@@ -510,7 +558,10 @@ table tbody tr:hover {
     }
 }
 
-
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
 
 .revenue-table {
     width: 100%;
