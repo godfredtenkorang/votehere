@@ -24,7 +24,7 @@ def login(request):
             if user is not None:
                 auth.login(request, user)
                 
-                return redirect("adminHome")
+                return redirect("access_award_by_code")
         
     context = {
         'form': form
