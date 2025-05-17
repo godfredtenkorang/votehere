@@ -340,7 +340,7 @@ def webhook_callback(request):
                     
                     nominee = update_nominee_votes(nominee_code, votes)
                     
-                    if nominee:
+                    if update_nominee_votes(nominee_code, votes):
                         PaymentTransaction.objects.create(
                             order_id=order_id,
                             invoice_no=invoice_no,
@@ -349,7 +349,7 @@ def webhook_callback(request):
                             payment_type='VOTE',
                             nominee_code=nominee_code,
                             votes=votes,
-                            category=nominee.category,  # Save the category from the nominee
+                            
                             timestamp=timestamp_str
                         )
                         session.delete()
