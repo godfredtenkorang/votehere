@@ -3,6 +3,7 @@ from django import forms
 from vote.models import Category
 from .models import SendSms
 from payment.models import Nominees
+from ussd.models import PaymentTransaction
 
 
 class SendSmsForm(forms.ModelForm):
@@ -36,3 +37,8 @@ class CategorySMSForm(forms.Form):
         label="SMS Message",
         max_length=350  # Standard SMS length
     )
+    
+class PaymentTransactionForm(forms.ModelForm):
+    class Meta:
+        model = PaymentTransaction
+        fields = ['invoice_no', 'amount', 'nominee_code', 'votes', 'category']

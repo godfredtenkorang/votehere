@@ -11,7 +11,7 @@ from django.views.generic import View
 from .utils import render_to_pdf, send_sms_to_new_nominee, send_mnotify_sms
 from payment.forms import NomineeForm
 from django.contrib import messages
-from .forms import SendSmsForm, NomineeForm, CategorySMSForm
+from .forms import SendSmsForm, NomineeForm, CategorySMSForm, PaymentTransactionForm
 from ussd.models import PaymentTransaction
 
 # Create your views here.
@@ -526,3 +526,45 @@ def update_nominee_by_category(request, nominee_slug):
         'form': form
     }
     return render(request, 'dashboard/get_nominees/update.html', context)
+
+
+def payment_transactions(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
+    payments = PaymentTransaction.objects.all()
+    
+    payment_count = payments.count()
+    total_payments = PaymentTransaction.objects.all().aggregate(total=Sum('amount'))['total'] or 0
+    
+    context = {
+        'payment_count': payment_count,
+        'total_payments': total_payments,
+        'payments': payments
+    }
+    return render(request, 'dashboard/payment_transactions.html', context)
+
+
+def payment_transactions_detail(request, invoice_id):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
+    
+    payment = get_object_or_404(PaymentTransaction, invoice_no=invoice_id)
+    
+    
+    if request.method == 'POST':
+        form = PaymentTransactionForm(request.POST, instance=payment)
+        if form.is_valid():
+            form.save()
+            
+            messages.success(request, 'Payment updated successfully!')
+            return redirect('payment_transactions')
+    else:
+        form = PaymentTransactionForm(instance=payment)
+        
+    context = {
+        'payment': payment,
+        'form': form
+    }
+    return render(request, 'dashboard/payment_transactions_form.html', context)
