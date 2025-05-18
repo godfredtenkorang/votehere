@@ -87,6 +87,9 @@ def ussd_api(request):
                     try:
                         nominee = Nominees.objects.get(code__iexact=user_data)
                         
+                        # Get category information
+                        # category_name = nominee.category.award if nominee.category else "General"
+                        
                         # check if voting has ended for this nominee
                         if timezone.now() > nominee.end_date:
                             session.delete()
@@ -307,7 +310,7 @@ def update_nominee_votes(nominee_code, votes):
         nominee = Nominees.objects.get(code__iexact=nominee_code)
         nominee.total_vote += votes
         nominee.save()
-        return True
+        return nominee
     except Nominees.DoesNotExist:
         return False
 
@@ -339,8 +342,7 @@ def webhook_callback(request):
                     votes = session.votes
                     
                     nominee = update_nominee_votes(nominee_code, votes)
-                    
-                    if update_nominee_votes(nominee_code, votes):
+                    if nominee:
                         PaymentTransaction.objects.create(
                             order_id=order_id,
                             invoice_no=invoice_no,
@@ -349,7 +351,7 @@ def webhook_callback(request):
                             payment_type='VOTE',
                             nominee_code=nominee_code,
                             votes=votes,
-                            
+                            category=nominee.category,
                             timestamp=timestamp_str
                         )
                         session.delete()
