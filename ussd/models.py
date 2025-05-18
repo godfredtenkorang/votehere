@@ -50,5 +50,8 @@ class PaymentTransaction(models.Model):
     timestamp = models.DateTimeField(null=True, blank=True)  # To store the timestamp of the transaction
     created_at = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        ordering = ('-timestamp',)
+    
     def __str__(self):
-        return f"Transaction {self.order_id} {self.payment_type} - {self.status} - {self.category} - {self.nominee_code}"
+        return f"Transaction {self.order_id} {self.payment_type} - {self.status} - {self.category} - {self.nominee_code} - {self.timestamp}"
