@@ -25,7 +25,7 @@ class CustomSession(models.Model):
     
     @property
     def is_expired(self):
-        # Session expires after 5 minutes of inactivity
+        # Session expires after 1 minutes of inactivity
         return (timezone.now() - self.last_activity).total_seconds() > 60
     
     def __str__(self):
