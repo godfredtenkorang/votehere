@@ -11,7 +11,7 @@ urlpatterns = [
     path('terms_and_condition/', views.termsCondition, name='termsCondition'),
     path('contact/', views.contact, name='contact'),
 
- path('award/', views.award_page, name='award_page'),
+    path('award/', views.award_page, name='award_page'),
 
 
     path('<slug:category_slug>/', views.category, name='award_by_category'),
