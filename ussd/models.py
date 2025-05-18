@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from vote.models import Category
+from django.utils import timezone
 
 class CustomSession(models.Model):
     SESSION_TYPES = (
@@ -18,8 +19,14 @@ class CustomSession(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     order_id = models.CharField(max_length=255, blank=True, null=True)
     payment_type = models.CharField(max_length=10, choices=SESSION_TYPES, default='VOTE')
+    last_activity = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # Add any other fields you need to track
+    
+    @property
+    def is_expired(self):
+        # Session expires after 5 minutes of inactivity
+        return (timezone.now() - self.last_activity).total_seconds() > 30
     
     def __str__(self):
         return f"{self.session_key} - {self.candidate_id} - {self.msisdn} - {self.order_id}"

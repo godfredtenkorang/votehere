@@ -57,14 +57,24 @@ def ussd_api(request):
         if user_id == 'GODEY100':
             # Generate session key using hashed MSISDN
             session_key = md5(msisdn.encode('utf-8')).hexdigest()
+            
             session, created = CustomSession.objects.get_or_create(session_key=session_key, defaults={'user_id': user_id})
+            
+            # Check if session is expired (except for new sessions)
+            if not created and session.is_expired:
+                session.delete()
+                return JsonResponse(send_response("Session expired. Please start again.", False))
+            # Update last activity for every request
+            session.last_activity = timezone.now()
             
             if msgtype:  # Initial request
                 session.level = 'start'
                 session.save()
                 message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\nContact: 0553912334\nor: 0558156844"
                 return JsonResponse(send_response(message, True))
-            else:  # Follow-up request
+            else:
+                session.last_activity = timezone.now() # Follow-up request
+                session.save()
                 level = session.level
                 if level == 'start':
                     if user_data == '1': # Voting
@@ -80,6 +90,7 @@ def ussd_api(request):
                         message = "Enter Event code"
                         return JsonResponse(send_response(message, True))
                     else:
+                        session.delete()
                         return JsonResponse(send_response("Invalid option. Please try again.", False))
                     
                 # Voting flow
@@ -106,6 +117,7 @@ def ussd_api(request):
                         return JsonResponse(send_response(message, True))
                     
                     except Nominees.DoesNotExist:
+                        session.delete()
                         return JsonResponse(send_response("Invalid nominee code. Please try again.", False))
 
                 elif level == 'voting_confirm':
@@ -120,6 +132,7 @@ def ussd_api(request):
                         session.delete()
                         return JsonResponse(send_response("You have cancelled the process.", False))
                     else:
+                        session.delete()
                         return JsonResponse(send_response("Invalid input. Please try again.", False))
 
                 elif level == 'votes':
@@ -128,8 +141,10 @@ def ussd_api(request):
                         nominee = Nominees.objects.get(code__iexact=session.candidate_id)
                         price_per_vote = nominee.price_per_vote
                     except ValueError:
+                        session.delete()
                         return JsonResponse(send_response("Invalid number of votes entered. Please try again.", False))
                     except Nominees.DoesNotExist:
+                        session.delete()
                         return JsonResponse(send_response("Nominee not found.", False))
                     
                     session.level = 'vote_payment'
@@ -181,6 +196,7 @@ def ussd_api(request):
                         session.delete()
                         return JsonResponse(send_response("You have cancelled the process.", False))
                     else:
+                        session.delete()
                         return JsonResponse(send_response("Invalid option. Enter 1 to confirm or 2 to cancel.", False))
                 
                 elif level == 'ticket_quantity':
@@ -189,10 +205,13 @@ def ussd_api(request):
                         event = Event.objects.get(code=session.event_id)
                         
                         if tickets <= 0:
+                            session.delete()
                             return JsonResponse(send_response("Invalid number of tickets. Please try again.", False))
                         if tickets > event.available_tickets:
+                            session.delete()
                             return JsonResponse(send_response(f"Only {event.available_tickets} tickets available. Please enter a lower number.", False))
                     except ValueError:
+                        session.delete()
                         return JsonResponse(send_response("Invalid number of tickets entered. Please try again.", False))
                     
                     session.tickets = tickets
@@ -292,11 +311,14 @@ def ussd_api(request):
                             
                             
                         else:
+                            session.delete()
                             error_msg = response.json().get('message', 'Payment request failed')
                             return JsonResponse(send_response(f"Payment failed: {error_msg}. Please try again.", False))
                     except requests.exceptions.RequestException as e:
+                        session.delete()
                         return JsonResponse(send_response("Network error processing payment. Please try again.", False))
                 else:
+                    session.delete()
                     return JsonResponse(send_response("Invalid session state.", False))
         else:
             return JsonResponse(send_response("Unknown or invalid account", False))
@@ -334,6 +356,11 @@ def webhook_callback(request):
             
             if not session:
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
+            
+            # Check if session is expired
+            if session.is_expired:
+                session.delete()
+                return JsonResponse({'status': 'error', 'message': 'Session expired'}, status=400)
 
             if status == 'PAID':
                 if session.payment_type == 'VOTE':
