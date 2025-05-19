@@ -1,0 +1,117 @@
+{% extends 'dashboard/tickiting/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main">
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+   
+
+
+
+
+ 
+
+    <!-- TRANSACTIONS SECTION: Table of recent purchases with controls -->
+    <div class="transactions-section">
+      <!-- Section header with title and controls -->
+      <div class="section-header">
+        <h2>Online Transactions </h2>
+       
+        <div class="table-controls">
+          <!-- Search input for filtering transactions -->
+          <input type="text" placeholder="Search transactions...">
+          <!-- Dropdown to filter by transaction status -->
+          <select>
+            <option>All Statuses</option>
+            <option>Completed</option>
+            <option>Pending</option>
+            <option>Refunded</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Transactions table -->
+      <div class="transactions-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Customer</th>
+              <th>Ticket Type</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Sample transaction row -->
+            <tr>
+              <td>#T1001</td>
+              <td>john@example.com</td>
+              <td><span class="badge vip">VIP</span></td>
+              <td>$50.00</td>
+              <td>May 15, 2023</td>
+              <td><span class="badge completed">Completed</span></td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+     
+
+   
+  </div>
+
+</div>
+
+
+
+<script defer src="{% static 'vote/adminScript.js' %}"></script>
+<script defer src="{% static 'vote/adminScript2.js' %}"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

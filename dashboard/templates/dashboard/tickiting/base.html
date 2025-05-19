@@ -1,0 +1,107 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, 
+				initial-scale=1.0">
+    <link rel="icon" href="{% static 'vote/img/our-logo.jpg' %}" type="image/jpeg">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+      
+</head>
+
+<body>
+    <!-- for header part -->
+    <header>
+
+        <div class="logosec">
+            <div class="logo">
+                <a href="{% url 'index' %}"><img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima"></a>
+            </div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+                class="icn menuicn" id="menuicn" alt="menu-icon">
+        </div>
+
+
+
+        <div class="message">
+            <h1>Admin Dashboard</h1>
+        </div>
+
+    </header>
+
+    <div class="main-container">
+        <div class="navcontainer sidebar">
+            <nav class="nav">
+                <div class="nav-upper-options">
+            
+                   
+            
+                    <!-- Access Ticket -->
+                    <a href="{% url 'accessTicket' %}">
+                        <div class="nav-option option1 button">
+                            <h3><i class="fa-solid fa-ticket"></i> Access Ticket</h3>
+                        </div>
+                    </a>
+            
+                    <!-- Ticket Activity -->
+                    <a href="{% url 'ticketActivity' %}">
+                        <div class="nav-option option1 button">
+                            <h3><i class="fa-solid fa-chart-simple"></i> Ticket Activity</h3>
+                        </div>
+                    </a>
+            
+                    <!-- Online Transactions -->
+                    <a href="{% url 'onlineTransaction' %}">
+                        <div class="nav-option option1 button">
+                            <h3><i class="fa-solid fa-globe"></i> Online Transactions</h3>
+                        </div>
+                    </a>
+            
+                    <!-- USSD Transactions -->
+                    <a href="{% url 'ussdTransaction' %}">
+                        <div class="nav-option option1 button">
+                            <h3><i class="fa-solid fa-mobile-screen-button"></i> USSD Transactions</h3>
+                        </div>
+                    </a>
+            
+                   
+            
+                    <!-- Settings -->
+                    <div class="nav-option option1 button Settings">
+                        <div class="sett-but">
+                            <h3><i class="fa-solid fa-sliders"></i> Settings </h3>
+                            <i class="fa-solid fa-caret-down"></i>
+                        </div>
+                        <button class="darkMode-button">Change background Mode</button>
+                    </div>
+            
+                    <!-- Logout -->
+                    <div class="nav-option option1 button logout-btn">
+                        <h3>Logout</h3>
+                    </div>
+            
+                </div>
+            </nav>
+            
+        </div>
+
+
+        {% block content %}{% endblock %}
+        <script defer src="{% static 'vote/adminScript.js' %}"></script>
+        <script defer src="{% static 'vote/adminScript2.js' %}"></script>
+
+
+</body>
+
+</html>

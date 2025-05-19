@@ -1,0 +1,378 @@
+{% extends 'dashboard/tickiting/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main">
+
+    <!-- STATS CARDS SECTION: Displays key metrics in card format -->
+    <div class="stats-container">
+      <!-- Individual stat card for total tickets -->
+      <div class="stats-card">
+
+        <div class="stats-accent accent-blue"></div>
+        <div class="stats-content">
+          <div class="stats-title">Total Tickets</div>
+
+          <div class="stats-number" data-target="200">0</div>
+        </div>
+      </div>
+
+      <!-- Stat card for tickets sold -->
+      <div class="stats-card">
+        <div class="stats-accent accent-green"></div>
+        <div class="stats-content">
+          <div class="stats-title">Tickets Sold</div>
+          <div class="stats-number" data-target="150">0</div>
+        </div>
+      </div>
+
+      <!-- Stat card for remaining tickets -->
+      <div class="stats-card">
+        <div class="stats-accent accent-orange"></div>
+        <div class="stats-content">
+          <div class="stats-title">Tickets Left</div>
+          <div class="stats-number" data-target="50">0</div>
+        </div>
+      </div>
+    </div>
+
+
+ <!-- TICKET TYPE BREAKDOWN SECTION: Shows distribution by ticket category -->
+ <div class="ticket-types">
+  <!-- VIP ticket type card with yellow accent -->
+  <div class="type-card" style="border-left: 4px solid #FFC107;">
+    <span>VIP</span>
+    <strong>50</strong> <!-- Count of VIP tickets -->
+  </div>
+  <!-- General admission ticket type card with blue accent -->
+  <div class="type-card" style="border-left: 4px solid #4361EE;">
+    <span>General</span>
+    <strong>80</strong> <!-- Count of General tickets -->
+  </div>
+  <!-- Early bird ticket type card with light blue accent -->
+  <div class="type-card" style="border-left: 4px solid #4CC9F0;">
+    <span>Early Bird</span>
+    <strong>20</strong> <!-- Count of Early Bird tickets -->
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- QUICK ACTIONS SECTION: Button group for common actions -->
+    <!-- Action Buttons Section -->
+    <div class="action-buttons">
+      <button class="btn btn-blue" id="add-tickets-btn"><i class="fas fa-plus"></i> Add Tickets</button>
+      <button class="btn btn-green" id="create-promo-btn"><i class="fas fa-tag"></i> Create Promo</button>
+      <button class="btn btn-gray"><i class="fas fa-file-export"></i> Export Data</button>
+    </div>
+
+    <!-- Add Tickets Modal -->
+    <div class="modal" id="add-tickets-modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Add New Tickets</h2>
+        <form id="add-tickets-form">
+          <div class="form-group">
+            <label for="ticket-type">Ticket Type:</label>
+            <select id="ticket-type" required>
+              <option value="">Select type</option>
+              <option value="VIP">VIP</option>
+              <option value="General">General Admission</option>
+              <option value="Early Bird">Early Bird</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-quantity">Quantity:</label>
+            <input type="number" id="ticket-quantity" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-price">Price ($):</label>
+            <input type="number" id="ticket-price" min="0" step="0.01" required>
+          </div>
+
+          <button type="submit" class="btn btn-blue">Add Tickets</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Create Promo Modal -->
+    <div class="modal" id="create-promo-modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Create New Promotion</h2>
+        <form id="create-promo-form">
+          <div class="form-group">
+            <label for="promo-name">Promotion Name:</label>
+            <input type="text" id="promo-name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="promo-code">Discount Code:</label>
+            <input type="text" id="promo-code" required>
+          </div>
+
+          <div class="form-group">
+            <label for="promo-type">Discount Type:</label>
+            <select id="promo-type" required>
+              <option value="">Select type</option>
+              <option value="percentage">Percentage</option>
+              <option value="fixed">Fixed Amount</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="promo-value">Discount Value:</label>
+            <input type="number" id="promo-value" min="0" required>
+          </div>
+
+          <div class="form-group">
+            <label for="promo-expiry">Expiry Date:</label>
+            <input type="date" id="promo-expiry" required>
+          </div>
+
+          <button type="submit" class="btn btn-green">Create Promotion</button>
+        </form>
+      </div>
+    </div>
+
+
+
+ 
+
+    <!-- ANALYTICS METRICS SECTION: Key performance indicators -->
+    <div class="analytics-container">
+      <!-- Conversion rate metric card -->
+      <div class="metric-card">
+        <h4>Conversion Rate</h4>
+        <div class="metric-value">12.5%</div>
+        <small>From 1,200 views</small> <!-- Context for the metric -->
+      </div>
+      <!-- Revenue metric card -->
+      <div class="metric-card">
+        <h4>Revenue</h4>
+        <div class="metric-value">$3,750</div>
+        <small>Total earned</small> <!-- Context for the metric -->
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS SECTION: Table of recent purchases with controls -->
+    <div class="transactions-section">
+      <!-- Section header with title and controls -->
+      <div class="section-header">
+        <h2>Recent Transactions <span class="update-badge">Live</span></h2>
+        <!-- "Live" badge indicates real-time updates -->
+        <div class="table-controls">
+          <!-- Search input for filtering transactions -->
+          <input type="text" placeholder="Search transactions...">
+          <!-- Dropdown to filter by transaction status -->
+          <select>
+            <option>All Statuses</option>
+            <option>Completed</option>
+            <option>Pending</option>
+            <option>Refunded</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Transactions table -->
+      <div class="transactions-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Customer</th>
+              <th>Ticket Type</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Sample transaction row -->
+            <tr>
+              <td>#T1001</td>
+              <td>john@example.com</td>
+              <td><span class="badge vip">VIP</span></td>
+              <td>$50.00</td>
+              <td>May 15, 2023</td>
+              <td><span class="badge completed">Completed</span></td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+     
+
+    <!-- CHARTS SECTION: Data visualization area -->
+    <div class="charts-container">
+      <!-- Sales trend chart card -->
+      <div class="chart-card">
+        <h3>Sales Trend</h3>
+        <!-- Canvas element where sales chart will be rendered (likely via Chart.js) -->
+        <canvas id="salesChart"></canvas>
+      </div>
+      <!-- Ticket distribution chart card -->
+      <div class="chart-card">
+        <h3>Ticket Distribution</h3>
+        <!-- Canvas element for ticket type pie/doughnut chart -->
+        <canvas id="ticketChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Counter Animation
+  const counters = document.querySelectorAll('.stats-number');
+  counters.forEach(counter => {
+    const updateCount = () => {
+      const target = +counter.getAttribute('data-target');
+      const count = +counter.innerText;
+      const increment = target / 40;
+
+      if (count < target) {
+        counter.innerText = Math.ceil(count + increment);
+        setTimeout(updateCount, 30);
+      } else {
+        counter.innerText = target;
+      }
+    };
+    updateCount();
+  });
+
+  // Sales Chart
+  const salesCtx = document.getElementById('salesChart').getContext('2d');
+  const salesChart = new Chart(salesCtx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+      datasets: [{
+        label: 'Tickets Sold',
+        data: [20, 45, 30, 60, 80],
+        borderColor: '#4361ee',
+        tension: 0.3,
+        fill: true,
+        backgroundColor: 'rgba(67, 97, 238, 0.1)'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+
+  // Ticket Distribution Chart
+  const ticketCtx = document.getElementById('ticketChart').getContext('2d');
+  const ticketChart = new Chart(ticketCtx, {
+    type: 'pie',
+    data: {
+      labels: ['VIP', 'General', 'Early Bird'],
+      datasets: [{
+        data: [50, 80, 20],
+        backgroundColor: ['#FFC107', '#4361EE', '#4CC9F0'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'right' }
+      }
+    }
+  });
+
+  // Simulate real-time updates
+  setInterval(() => {
+    const badge = document.querySelector('.update-badge');
+    badge.style.opacity = badge.style.opacity === '0.5' ? '1' : '0.5';
+  }, 1000);
+</script>
+
+<script defer src="{% static 'vote/adminScript.js' %}"></script>
+<script defer src="{% static 'vote/adminScript2.js' %}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get modal elements
+    const addTicketsModal = document.getElementById('add-tickets-modal');
+    const createPromoModal = document.getElementById('create-promo-modal');
+
+    // Get buttons
+    const addTicketsBtn = document.getElementById('add-tickets-btn');
+    const createPromoBtn = document.getElementById('create-promo-btn');
+
+    // Get close buttons
+    const closeButtons = document.querySelectorAll('.close-btn');
+
+    // Open Add Tickets modal
+    addTicketsBtn.addEventListener('click', function () {
+      addTicketsModal.style.display = 'block';
+    });
+
+    // Open Create Promo modal
+    createPromoBtn.addEventListener('click', function () {
+      createPromoModal.style.display = 'block';
+    });
+
+    // Close modals when clicking X
+    closeButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        this.closest('.modal').style.display = 'none';
+      });
+    });
+
+    // Close modals when clicking outside
+    window.addEventListener('click', function (event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

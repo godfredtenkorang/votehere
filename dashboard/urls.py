@@ -47,4 +47,12 @@ urlpatterns = [
     
     path('payment-transactions/', views.payment_transactions, name='payment_transactions'),
     path('payment-transactions/<int:invoice_id>/', views.payment_transactions_detail, name='update_transaction'),
+    
+
+
+     path('accessTicket/', views.accessTicket, name='accessTicket'),
+     path('ticketActivity/', views.ticketActivity, name='ticketActivity'),
+     path('onlineTransaction/', views.onlineTransaction, name='onlineTransaction'),
+     path('ussdTransaction/', views.ussdTransaction, name='ussdTransaction'),
+   
 ]
