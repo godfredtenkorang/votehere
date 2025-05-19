@@ -568,3 +568,16 @@ def payment_transactions_detail(request, invoice_id):
         'form': form
     }
     return render(request, 'dashboard/payment_transactions_form.html', context)
+
+
+def accessTicket(request):
+ return render(request, 'dashboard/tickiting/accessTicket.html')
+
+def ticketActivity(request):
+ return render(request, 'dashboard/tickiting/ticketActivity.html')
+
+def onlineTransaction(request):
+ return render(request, 'dashboard/tickiting/onlineTransaction.html')
+
+def ussdTransaction(request):
+ return render(request, 'dashboard/tickiting/ussdTransaction.html')
