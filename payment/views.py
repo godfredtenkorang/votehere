@@ -14,17 +14,33 @@ def make_payment(request):
 
 
 def result(request, result_slug):
-    sub_category = None
-    results = Nominees.objects.all()
-    if result_slug:
-        sub_category = get_object_or_404(SubCategory, slug=result_slug)
-        results = results.filter(sub_category=sub_category)
+    sub_category = get_object_or_404(SubCategory, slug=result_slug)
+    
+    if request.method == 'POST':
+        access_code = request.POST.get('access_code', '').strip()
+        try:
+            nominee = Nominees.objects.get(sub_category=sub_category, access_code=access_code)
+            context = {
+                'sub_category': sub_category,
+                'nominee': nominee,
+                'title': 'Your Result',
+                'show_result': True
+            }
+            return render(request, 'payment/resultPage.html', context)
+        except Nominees.DoesNotExist:
+            messages.error(request, 'Invalid access code.')
+            return redirect('result', result_slug=result_slug)
+    # sub_category = None
+    # results = Nominees.objects.all()
+    # if result_slug:
+    #     sub_category = get_object_or_404(SubCategory, slug=result_slug)
+    #     results = results.filter(sub_category=sub_category)
     # results = get_object_or_404(Nominees, slug=result_slug)
     
     context = {
         'sub_category': sub_category,
-        'results': results,
-        'title': 'Results'
+        'title': 'Enter Access Code',
+        'show_result': False
     }
     
     return render(request, 'payment/resultPage.html', context)

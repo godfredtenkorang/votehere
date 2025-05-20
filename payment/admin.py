@@ -30,7 +30,7 @@ class PaymentInLine(admin.TabularInline):
   
   
 class VoteNomineeAdmin(admin.ModelAdmin):
-    fieldsets = [(None, {'fields': ['category', 'sub_category', 'name', 'image', 'slug', 'total_vote', 'can_vote', 'can_see_result', 'price_per_vote', 'code', 'phone_number']}), ('Date Information', {
+    fieldsets = [(None, {'fields': ['category', 'sub_category', 'name', 'image', 'slug', 'total_vote', 'can_vote', 'can_see_result', 'price_per_vote', 'code', 'access_code', 'phone_number']}), ('Date Information', {
         'fields': ['date_added', 'end_date'], 'classes': ['collapse']}), ]
     inlines = [PaymentInLine]
     prepopulated_fields = {"slug": ("name",)}

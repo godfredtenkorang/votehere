@@ -19,136 +19,116 @@
     }
 
     .container {
-        max-width: 900px;
+        
         margin: 0 auto;
         background: white;
+        
         padding: 30px;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 30px;
-        color: #fff;
-    }
-
-    .category-title {
-        font-size: 24px;
-        margin-bottom: 20px;
-        color: #3498db;
-        text-align: center;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #eee;
-    }
-
-    .nominee-list {
+        margin: 0;
+        padding: 2rem;
         display: flex;
-        flex-direction: column;
-        gap: 25px;
-    }
-
-    .nominee-item {
-        display: flex;
+        justify-content: center;
         align-items: center;
-        background: #fff;
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease;
+        min-height: 40vh;
     }
 
-    .nominee-item:hover {
-        transform: translateY(-3px);
-    }
+/* General form styling */
+.add-nominee-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-    .nominee-image {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #3498db;
-        margin-right: 20px;
-        flex-shrink: 0;
-        
-    }
+/* Style for form elements */
+.add-nominee-form p {
+    margin-bottom: 15px;
+}
 
-    .nominee-details {
-        flex-grow: 1;
-    }
+.add-nominee-form label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
 
-    .nominee-name {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #2c3e50;
-    }
+.add-nominee-form input,
+.add-nominee-form select,
+.add-nominee-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
 
-    .vote-count {
-        font-size: 14px;
-        color: #7f8c8d;
-        margin-bottom: 8px;
-    }
+/* Button styling */
+.add-nominee-form button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
 
-    .progress-container {
-        width: 100%;
-        height: 20px;
-        background: #ecf0f1;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-top: 5px;
-    }
+.add-nominee-form button:hover {
+    background: #0056b3;
+}
+.nominee-card {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    position: relative;
+  }
 
-    .progress-bar {
-        height: 100%;
-        background: linear-gradient(to right, #3498db, #2ecc71);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        padding-right: 10px;
-        color: white;
-        font-size: 12px;
-        font-weight: bold;
-        transition: width 0.5s ease;
-    }
+  .profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ddd;
+    margin-bottom: 1rem;
+  }
 
-    .total-votes {
-        text-align: center;
-        margin-top: 30px;
-        font-size: 16px;
-        color: #7f8c8d;
-        padding-top: 15px;
-        border-top: 1px solid #eee;
-    }
+  .nominee-name {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
 
-    .winner-badge {
-        background: #f39c12;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        margin-left: 15px;
-        display: inline-block;
-    }
+  .result-text {
+    font-size: 1.1rem;
+    color: #666;
+  }
 
-    @media (max-width: 768px) {
-        .nominee-item {
-            flex-direction: column;
-            text-align: center;
-        }
+  .winner-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #2ecc71;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
 
-        .nominee-image {
-            margin-right: 0;
-            margin-bottom: 15px;
-        }
 
-        .nominee-details {
-            width: 100%;
-        }
-    }
 </style>
 
 <!-- banner -->
@@ -160,38 +140,36 @@
         <p>{% if sub_category %}{{ sub_category.category }}{% else %}Award Name{% endif %}</p>
     </div>
 </div>
-
-<div class="nominee-list">
-    {% with total_votes=results|sum_attr:'total_vote' %}
-    {% for nominee in results %}
-    {% with percentage=nominee.total_vote|divide:total_votes|multiply:100|default:0 %}
-    <div class="nominee-item">
-        <img src="{{ nominee.image.url }}" alt="{{ nominee.name }}" class="nominee-image">
-        <div class="nominee-details">
-            <div class="nominee-name">
-                {{ nominee.name }}
-                {% if forloop.first and nominee.total_vote > 0 %}
-                <span class="winner-badge">WINNER</span>
-                {% endif %}
-            </div>
-            <div class="vote-count">{{ nominee.total_vote }} votes</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: {{ percentage|floatformat:1 }}%;">
-                    {{ percentage|floatformat:1 }}%
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endwith %}
-    {% empty %}
-    <p style="text-align: center; color: #7f8c8d;">No nominees found for this category.</p>
+<div style="background-color:#000; width:100%;">
+    {% if messages %}
+    {% for message in messages %}
+    <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
     {% endfor %}
-
-    <div class="total-votes">
-        Total Votes: {{ total_votes }}
-    </div>
-    {% endwith %}
+    {% endif %}
 </div>
+<div class="container">
+{% if not show_result %}
+<!-- Access code form -->
+<form class="add-nominee-form" method="POST" enctype="multipart/form-data">
 
+    {% csrf_token %}
+
+    <input type="text" name="access_code" placeholder="Enter 4-digit code" required>
+    <br><br>
+    <button type="submit">Access Result</button>
+
+
+</form>
+{% else %}
+
+
+    <div class="nominee-card">
+        <!-- <div class="winner-badge">WINNER</div> -->
+        <img src="{{ nominee.image.url }}" alt="Nominee Photo" class="profile-img">
+        <div class="nominee-name">{{ nominee.name }}</div>
+        <div class="result-text">Total Votes: <strong>{{ nominee.total_vote }}</strong></div>
+        </div>
+{% endif %}
+</div>
 
 {% endblock content %}
