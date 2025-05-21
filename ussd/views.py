@@ -15,7 +15,7 @@ from ticket.models import Event
 from datetime import datetime
 from django.utils import timezone
 from ticket.utis import send_ticket_sms
-
+from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote
 
 
 
@@ -374,6 +374,7 @@ def webhook_callback(request):
                         PaymentTransaction.objects.create(
                             order_id=order_id,
                             invoice_no=invoice_no,
+                            transaction_id=invoice_no,
                             amount=amount,
                             status=status,
                             payment_type='VOTE',
@@ -382,7 +383,8 @@ def webhook_callback(request):
                             category=nominee.category,
                             timestamp=timestamp_str
                         )
-                        
+                        send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount, transaction_id=invoice_no)
+                        send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn, transaction_id=invoice_no)
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
                     else:
