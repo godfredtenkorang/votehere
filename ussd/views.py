@@ -382,8 +382,8 @@ def webhook_callback(request):
                             category=nominee.category,
                             timestamp=timestamp_str
                         )
-                        send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount)
-                        send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn)
+                        # send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount)
+                        # send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn)
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
                     else:
