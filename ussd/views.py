@@ -371,7 +371,7 @@ def webhook_callback(request):
                     
                     nominee = update_nominee_votes(nominee_code, votes)
                     if nominee:
-                        transaction = PaymentTransaction.objects.create(
+                        PaymentTransaction.objects.create(
                             order_id=order_id,
                             invoice_no=invoice_no,
                             amount=amount,
@@ -382,8 +382,8 @@ def webhook_callback(request):
                             category=nominee.category,
                             timestamp=timestamp_str
                         )
-                        send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount, transaction_id=transaction.transaction_id)
-                        send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn, transaction_id=transaction.transaction_id)
+                        send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount)
+                        send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn)
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
                     else:

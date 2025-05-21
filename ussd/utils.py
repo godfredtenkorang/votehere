@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 
-def send_sms_to_voter(phone_number, nominee_code, category, amount, transaction_id):
+def send_sms_to_voter(phone_number, nominee_code, category, amount):
     """
     Send OTP to the given phone number.
     Replace the below code with your SMS provider's API integration.
@@ -12,7 +12,7 @@ def send_sms_to_voter(phone_number, nominee_code, category, amount, transaction_
         "key": apiKey,
         "sender": 'voteafric',
         "recipient[]": phone_number,
-        "message": f"Hello, you have successfully voted for {nominee_code} in {category}. GHS{amount} was charged. Trans ID: {transaction_id}",
+        "message": f"Hello, you have successfully voted for {nominee_code} in {category}. GHS{amount} was charged.",
         "is_schedule": False,
         "schedule_date": ''
     }
@@ -32,7 +32,7 @@ def send_sms_to_voter(phone_number, nominee_code, category, amount, transaction_
         return None
     
     
-def send_sms_to_nominee_for_vote(phone_number, nominee_code, vote, phone, transaction_id):
+def send_sms_to_nominee_for_vote(phone_number, nominee_code, vote, phone):
     """
     Send OTP to the given phone number.
     Replace the below code with your SMS provider's API integration.
@@ -43,7 +43,7 @@ def send_sms_to_nominee_for_vote(phone_number, nominee_code, vote, phone, transa
         "key": apiKey,
         "sender": 'voteafric',
         "recipient[]": phone_number,
-        "message": f"Hello {nominee_code}, you have received {vote} votes from {phone}. Trans ID: {transaction_id}",
+        "message": f"Hello {nominee_code}, you have received {vote} votes from {phone}.",
         "is_schedule": False,
         "schedule_date": ''
     }
