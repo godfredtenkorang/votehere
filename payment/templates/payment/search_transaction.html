@@ -1,0 +1,156 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    /* General form styling */
+    .add-nominee-form {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for form elements */
+    .add-nominee-form p {
+        margin-bottom: 15px;
+    }
+
+    .add-nominee-form label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .add-nominee-form input,
+    .add-nominee-form select,
+    .add-nominee-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    /* Button styling */
+    .add-nominee-form button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .add-nominee-form button:hover {
+        background: #0056b3;
+    }
+</style>
+<!-- banner -->
+<div class="banners">
+    <div class="banners-content">
+        <h1>Transaction Details</h1>
+        <div class="button">
+
+            
+
+        </div>
+    </div>
+</div>
+{% if messages %}
+{% for message in messages %}
+<p style="color: red; text-align:center;">{{ message }}</p>
+{% endfor %}
+{% endif %}
+<div class="main">
+    <br><br>
+    <div class="the-team-container">
+        <div class="heading">
+            <h1 style="text-align: center;">Search Transaction</h1>
+        </div>
+
+    </div>
+
+
+
+    <form class="add-nominee-form" method="get" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <input type="text" name="transaction_id" value="{{ transaction_id }}" placeholder="Enter Transaction ID" required>
+        <br><br>
+        <button type="submit">Search</button>
+
+
+    </form>
+    <div style="text-align: center; padding:20px;">
+    {% if payment %}
+    <h2>Transaction Details: {{ payment.transaction_id }}</h2>
+    <br>
+    <!-- <p>ID: {{ payment.transaction_id }}</p> -->
+    <h3>Event: {{ payment.category }}</h3>
+    <br>
+    <h3>Category: {{ payment.content }}</h3>
+    <br>
+    <h3>Nominee Name: {{ payment.nominee.name }}</h3>
+    <br>
+    <h3>Vote count: {{ payment.vote }}</h3>
+    <br>
+    <h3>Amount: GHS{{ payment.total_amount }}</h3>
+    <br>
+    <h3>Status: {% if payment.verified %}Successful{% else %}Pending{% endif %}</h3>
+    <br>
+    <h3>Transaction date: {{ payment.date_created }}</h3>
+    <!-- Add more details as needed -->
+    {% elif transaction_id %}
+    <h3>No transaction found with ID: {{ transaction_id }}</h3>
+    {% endif %}
+</div>
+<h1 style="text-align: center;">OR</h1>
+
+<form class="add-nominee-form" method="get" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <input type="text" name="ussd_transaction_id" value="{{ ussd_transaction_id }}" placeholder="Enter Transaction ID (e.g. VOT-230521-1234)" required>
+    <br><br>
+    <button type="submit">Search</button>
+
+
+</form>
+<div style="text-align: center; padding:20px;">
+    {% if transaction %}
+    <h2>Transaction Details: {{ transaction.transaction_id }}</h2>
+    <br>
+    <h3><strong>Type:</strong> {{ transaction.get_payment_type_display }}</h3>
+    <br>
+    <h3><strong>Amount:</strong> {{ transaction.amount }}</h3>
+    <br>
+    <h3><strong>Status:</strong> {{ transaction.status }}</h3>
+    <br>
+    <h3><strong>Date:</strong> {{ transaction.timestamp }}</h3>
+    <br>
+    {% if transaction.payment_type == 'VOTE' %}
+    <h3><strong>Votes:</strong> {{ transaction.votes }}</h3>
+    <br>
+    <h3><strong>Nominee:</strong> {{ transaction.nominee_code }}</h3>
+    {% elif transaction.payment_type == 'TICKET' %}
+    <h3><strong>Tickets:</strong> {{ transaction.tickets }}</h3>
+    <br>
+    <h3><strong>Event:</strong> {{ transaction.event_code }}</h3>
+    {% endif %}
+    <!-- Add more details as needed -->
+    {% elif ussd_transaction_id %}
+    <h3>No transaction found with ID: {{ ussd_transaction_id }}</h3>
+    {% endif %}
+</div>
+</div>
+
+
+{% endblock %}

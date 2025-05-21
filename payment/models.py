@@ -42,6 +42,7 @@ class Payment(models.Model):
     total_amount = models.FloatField(null=True)
     vote = models.IntegerField(default=0)
     ref = models.CharField(max_length=200)
+    transaction_id = models.CharField(max_length=50, unique=True, null=True, blank=True)  # New field
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     
@@ -57,6 +58,17 @@ class Payment(models.Model):
             object_with_similar_ref = Payment.objects.filter(ref=ref)
             if not object_with_similar_ref:
                 self.ref = ref
+        super().save(*args, **kwargs)
+        
+    # Generate transaction_id if not exists
+        if not self.transaction_id:
+            # You can customize this format as needed
+            # Here using a timestamp + random string for uniqueness
+            from django.utils.timezone import now
+            timestamp = now().strftime("%Y%m%d%H%M%S")
+            random_part = secrets.token_hex(3).upper()
+            self.transaction_id = f"VOAF-{timestamp}-{random_part}"
+            
         super().save(*args, **kwargs)
         
     def amount_value(self) -> int:

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from payment.models import Payment, Nominees
+from ussd.models import PaymentTransaction
 from vote.models import SubCategory, Category
 from django.http import HttpRequest, HttpResponseForbidden, JsonResponse
 from django.contrib import messages
@@ -7,6 +8,7 @@ from django.conf import settings
 from . import forms
 from django.utils import timezone
 from .models import PageExpiration
+from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote
 
 # Create your views here.
 def make_payment(request):
@@ -107,6 +109,8 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
         nominee_obj = payment.nominee
         nominee_obj.total_vote += payment.vote
         nominee_obj.save()
+        send_sms_to_voter(phone_number=payment.phone, name=payment.nominee.name, category=payment.content, amount=payment.total_amount, transaction_id=payment.transaction_id)
+        send_sms_to_nominee_for_vote(phone_number=payment.nominee.phone_number, name=payment.nominee.name, vote=payment.vote, phone=payment.phone, transaction_id=payment.transaction_id)
         return render(request, 'payment/vote_success.html')
     else:
         return render(request, 'payment/vote_failed.html')
@@ -124,6 +128,35 @@ def vote_failed(request):
         'title': 'Vote failed',
     }
     return render(request, 'payment/vote_failed.html', context)
+
+
+def search_transaction(request):
+    transaction_id = request.GET.get('transaction_id', '').strip()
+    payment = None
+    
+    if transaction_id:
+        try:
+            payment = Payment.objects.get(transaction_id=transaction_id)
+        except Payment.DoesNotExist:
+            pass
+    
+    ussd_transaction_id = request.GET.get('ussd_transaction_id', '').strip().upper()
+    transaction = None
+    
+    if ussd_transaction_id:
+        try:
+            transaction = PaymentTransaction.objects.get(transaction_id=ussd_transaction_id)
+        except PaymentTransaction.DoesNotExist:
+            pass
+        
+    return render(request, 'payment/search_transaction.html', {
+        'payment': payment,
+        'transaction_id': transaction_id,
+        'transaction': transaction,
+        'ussd_transaction_id': ussd_transaction_id
+    })
+    
+
 
 
 def access_denied(request):

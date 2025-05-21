@@ -5,10 +5,14 @@
 
 <div class="main">
     <div class="ticket-form-wrapper">
+      <form method="POST">
+        {% csrf_token %}
+      
         <div class="ticket-form">
-          <input type="text" placeholder="Enter 6-digit code" maxlength="6">
-          <button>Access Ticket</button>
+          <input type="text" placeholder="Enter 6-digit code" name="access_code" maxlength="6" required>
+          <button type="submit">Access Ticket</button>
         </div>
+      </form>
       </div>
 </div>
 

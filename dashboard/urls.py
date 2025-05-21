@@ -51,7 +51,7 @@ urlpatterns = [
 
 
      path('accessTicket/', views.accessTicket, name='accessTicket'),
-     path('ticketActivity/', views.ticketActivity, name='ticketActivity'),
+     path('ticketActivity/<slug:event_slug>/', views.ticketActivity, name='ticketActivity'),
      path('onlineTransaction/', views.onlineTransaction, name='onlineTransaction'),
      path('ussdTransaction/', views.ussdTransaction, name='ussdTransaction'),
    

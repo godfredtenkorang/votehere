@@ -12,6 +12,7 @@ urlpatterns = [
     
     path('vote_success/<slug:nominee_slug>/', views.vote_success, name='vote-success'),
     path('vote_failed/<slug:nominee_slug>/', views.vote_failed, name='vote-failed'),
+    path('search-transaction/', views.search_transaction, name='search_transaction'),
     
     path('not_exist/', views.access_denied, name='access-denied')
 ]

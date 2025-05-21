@@ -14,6 +14,8 @@ from django.contrib import messages
 from .forms import SendSmsForm, NomineeForm, CategorySMSForm, PaymentTransactionForm
 from ussd.models import PaymentTransaction
 
+from ticket.models import Event
+
 # Create your views here.
 
 def access_award_by_code(request):
@@ -571,10 +573,24 @@ def payment_transactions_detail(request, invoice_id):
 
 
 def accessTicket(request):
- return render(request, 'dashboard/tickiting/accessTicket.html')
+    if request.method == 'POST':
+        code = request.POST.get('access_code')
+        try:
+            event = Event.objects.get(access_code=code)
+            return redirect('ticketActivity', event.slug)
+        except Event.DoesNotExist:
+            messages.error(request, "Invalid access code. Please try again.")
+            return redirect('accessTicket')  # or wherever your admin view is named
+        
+    return render(request, 'dashboard/tickiting/accessTicket.html')
 
-def ticketActivity(request):
- return render(request, 'dashboard/tickiting/ticketActivity.html')
+def ticketActivity(request, event_slug):
+    event = get_object_or_404(Event, slug=event_slug)
+    context = {
+        'event': event,
+    }
+
+    return render(request, 'dashboard/tickiting/ticketActivity.html', context)
 
 def onlineTransaction(request):
  return render(request, 'dashboard/tickiting/onlineTransaction.html')

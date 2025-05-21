@@ -12,6 +12,7 @@ class Event(models.Model):
     total_tickets = models.PositiveIntegerField()
     available_tickets = models.PositiveIntegerField()
     ticket_image = models.ImageField(upload_to='ticket_img/', default='')
+    access_code = models.CharField(max_length=6, unique=True, null=True, blank=True)
     date_added = models.DateTimeField()
     end_date = models.DateTimeField()
     available = models.BooleanField(default=True)

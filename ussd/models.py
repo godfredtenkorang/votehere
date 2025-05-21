@@ -1,3 +1,4 @@
+import secrets
 from django.db import models
 import uuid
 from vote.models import Category
@@ -39,6 +40,7 @@ class PaymentTransaction(models.Model):
     )
     order_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     invoice_no = models.CharField(max_length=255, null=True, blank=True)
+    transaction_id = models.CharField(max_length=20, unique=True, null=True, blank=True)  # New field
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50) 
     payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES, null=True, blank=True) # new
@@ -55,3 +57,17 @@ class PaymentTransaction(models.Model):
     
     def __str__(self):
         return f"Transaction {self.order_id} {self.payment_type} - {self.status} - {self.category} - {self.nominee_code} - {self.timestamp}"
+    
+    def save(self, *args, **kwargs):
+        if not self.transaction_id:
+            # Generate human-friendly transaction ID
+            prefix = {
+                'VOTE': 'VOAF',
+                'TICKET': 'TKT'
+            }.get(self.payment_type, 'TRN')
+            
+            timestamp_part = (self.timestamp or timezone.now()).strftime("%y%m%d")
+            random_part = secrets.randbelow(10000)  # 4-digit random number
+            self.transaction_id = f"{prefix}-{timestamp_part}-{random_part:04d}"
+            
+        super().save(*args, **kwargs)

@@ -67,7 +67,7 @@
 
         {% csrf_token %}
 
-        <input type="text" name="access_code" placeholder="Enter 6-digit code" required>
+        <input type="text" name="access_code" placeholder="Enter 6-digit code" maxlength="6" required>
         <br><br>
         <button type="submit">Access Award</button>
 
