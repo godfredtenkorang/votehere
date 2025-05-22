@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-from .views import GeneratePdf
+from .views import GeneratePdf, GetSubCategoriesView
 
 
 urlpatterns = [
@@ -37,6 +37,7 @@ urlpatterns = [
     
     
     path('add_nominee/', views.add_nominee, name='add_nominee'),
+    path('get_subcategories/', GetSubCategoriesView.as_view(), name='get_subcategories'),
     path('sms/', views.send_sms, name='send_sms'),
     path('send-category-sms/', views.send_sms_to_nominees, name='send_category_sms'),
     path('award_revenue_insight/<int:subcategory_id>/', views.award_revenue_insight, name='award_revenue_insight'),

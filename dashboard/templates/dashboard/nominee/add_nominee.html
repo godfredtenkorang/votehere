@@ -72,9 +72,28 @@
         <form class="add-nominee-form" method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
+            {{ form.as_p }}
+            <!-- {{form.category.label_tag}}
+            {{form.category}}
+            {{form.sub_category.label_tag}}
+            {{form.sub_category}}
+            {{form.name.label_tag}}
+            {{form.name}}
+            {{form.image.label_tag}}
+            {{form.image}}
+            {{form.slug.label_tag}}
+            {{form.slug}}
+            {{form.code.label_tag}}
+            {{form.code}}
+            {{form.access_code.label_tag}}
+            {{form.access_code}}
+            {{form.phone_number.label_tag}}
+            {{form.phone_number}}
+            {{form.date_added.label_tag}}
+            {{form.date_added}}
+            {{form.end_date.label_tag}}
+            {{form.end_date}} -->
 
-            {{form.as_p}}
-    
     
             <button type="submit">Save</button>
     
@@ -98,4 +117,26 @@
     </div>
 
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#id_category').change(function () {
+            var categoryId = $(this).val();
+            if (categoryId) {
+                $.ajax({
+                    url: '/dashboard/get_subcategories/',
+                    data: {
+                        'category_id': categoryId
+                    },
+                    success: function (data) {
+                        $('#id_sub_category').html(data);
+                    }
+                });
+            } else {
+                $('#id_sub_category').html('<option value="">---------</option>');
+            }
+        });
+    });
+</script>
 {% endblock %}

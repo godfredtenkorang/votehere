@@ -16,6 +16,9 @@ from ussd.models import PaymentTransaction
 
 from ticket.models import Event
 
+from django.http import JsonResponse
+from django.views import View
+
 # Create your views here.
 
 def access_award_by_code(request):
@@ -392,6 +395,20 @@ def add_nominee(request):
         'title': 'Add Nominee'
     }
     return render(request, 'dashboard/nominee/add_nominee.html', context)
+
+
+
+
+class GetSubCategoriesView(View):
+    def get(self, request, *args, **kwargs):
+        category_id = request.GET.get('category_id')
+        if category_id:
+            subcategories = SubCategory.objects.filter(category_id=category_id)
+            options = '<option value="">---------</option>'
+            for subcategory in subcategories:
+                options += f'<option value="{subcategory.id}">{subcategory.content}</option>'
+            return JsonResponse(options, safe=False)
+        return JsonResponse('<option value="">---------</option>', safe=False)
 
 
 def send_sms(request):
