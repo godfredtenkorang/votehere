@@ -67,30 +67,37 @@ def purchase_ticket(request: HttpRequest, event_slug) -> HttpResponse:
 def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     ticket = get_object_or_404(TicketPayment, ref=ref)
     
+    # Case 1: Payment already verified (prevent duplicate processing)
+    if ticket.verified:
+        messages.info(request, "This payment was already processed. Votes were not added again.")
+        return redirect('ticketForm', event_slug=ticket.event.slug)
+
+    
     verified = ticket.verify_payment()
 
     if verified:
-
-        event = ticket.ticket_type
-        event.available_tickets -= ticket.quantity
-        event.save()
-        
-        subject = f"Your Ticket for {event.name}"
-        from_email = settings.EMAIL_HOST_USER
-        recipient_list = [ticket.email]
-        
-        html_content = render_to_string('ticket/ticket_email.html', {'ticket': ticket, 'event': event})
-        text_content = strip_tags(html_content)
-        
-        email = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
-        
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-        
-    
-        messages.success(request, 'Payment successful! Your ticket has been confirmed.')
-        return redirect('ticketForm', event_slug=ticket.event.slug)
-    
+        try:
+            event = ticket.ticket_type
+            event.available_tickets -= ticket.quantity
+            event.save()
+            
+            subject = f"Your Ticket for {event.event.name}"
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [ticket.email]
+            
+            html_content = render_to_string('ticket/ticket_email.html', {'ticket': ticket, 'event': event})
+            text_content = strip_tags(html_content)
+            
+            email = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
+            
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+            
+            messages.success(request, 'Payment successful! Your ticket has been confirmed.')
+            return redirect('ticketForm', event_slug=ticket.event.slug)
+        except Exception as e:
+            messages.error(request, f"Error processing payment: {e}")
+            return redirect('ticketForm', event_slug=ticket.event.slug)
     else:
         messages.error(request, "Payment verification failed.")
         return redirect('ticketForm', event_slug=ticket.event.slug)

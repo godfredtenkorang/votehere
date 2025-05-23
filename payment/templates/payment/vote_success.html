@@ -10,8 +10,16 @@
     
         </div>
     </div>
+    
 </div>
 
+{% if messages %}
+<div class="alert alert-info">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
 
 <!-- This is the form voters can use to vote.
 it is hidden so when voters click on the vote button, the it appears -->

@@ -104,15 +104,29 @@ def nominees(request, nominee_slug):
 
 def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     payment = get_object_or_404(Payment, ref=ref)
+    
+    # Case 1: Payment already verified (prevent duplicate processing)
+    if payment.verified:
+        messages.info(request, "This payment was already processed. Votes were not added again.")
+        return render(request, 'payment/vote_success.html')
+
     verified = payment.verify_payment()
     if verified:
-        nominee_obj = payment.nominee
-        nominee_obj.total_vote += payment.vote
-        nominee_obj.save()
-        send_sms_to_voter(phone_number=payment.phone, name=payment.nominee.name, category=payment.content, amount=payment.total_amount, transaction_id=payment.transaction_id)
-        send_sms_to_nominee_for_vote(phone_number=payment.nominee.phone_number, name=payment.nominee.name, vote=payment.vote, phone=payment.phone, transaction_id=payment.transaction_id)
-        return render(request, 'payment/vote_success.html')
+        try:
+            nominee_obj = payment.nominee
+            nominee_obj.total_vote += payment.vote
+            nominee_obj.save()
+            payment.verified = True
+            payment.save()
+            send_sms_to_voter(phone_number=payment.phone, name=payment.nominee.name, category=payment.content, amount=payment.total_amount, transaction_id=payment.transaction_id)
+            send_sms_to_nominee_for_vote(phone_number=payment.nominee.phone_number, name=payment.nominee.name, vote=payment.vote, phone=payment.phone, transaction_id=payment.transaction_id)
+            messages.success(request, "Payment verified successfully! Votes added.")
+            return render(request, 'payment/vote_success.html')
+        except Exception as e:
+            messages.error(request, f"Error processing payment: {e}")
+            return render(request, 'payment/vote_failed.html')
     else:
+        messages.error(request, "Payment verification failed. Please try again.")
         return render(request, 'payment/vote_failed.html')
     
     
