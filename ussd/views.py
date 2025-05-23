@@ -415,11 +415,13 @@ def webhook_callback(request):
                         PaymentTransaction.objects.create(
                             order_id=order_id,
                             invoice_no=invoice_no,
+                            transaction_id=invoice_no,
                             amount=amount,
                             status=status,
                             payment_type='TICKET',
                             event_code=session.event_id,
                             tickets=session.tickets,
+                            event_category=ticket_type.event.name,
                             timestamp=timestamp_str
                         )
                         # Send SMS with ticket details

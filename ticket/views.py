@@ -69,8 +69,8 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     
     # Case 1: Payment already verified (prevent duplicate processing)
     if ticket.verified:
-        messages.info(request, "This payment was already processed. Votes were not added again.")
-        return redirect('ticketForm', event_slug=ticket.event.slug)
+        messages.info(request, "This payment was already processed. Tickets were not added again.")
+        return render(request, 'ticket/ticket_success.html')
 
     
     verified = ticket.verify_payment()
@@ -94,11 +94,22 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
             email.send()
             
             messages.success(request, 'Payment successful! Your ticket has been confirmed.')
-            return redirect('ticketForm', event_slug=ticket.event.slug)
+            return render(request, 'ticket/ticket_success.html')
         except Exception as e:
             messages.error(request, f"Error processing payment: {e}")
-            return redirect('ticketForm', event_slug=ticket.event.slug)
+            return render(request, 'ticket/ticket_failed.html')
     else:
         messages.error(request, "Payment verification failed.")
-        return redirect('ticketForm', event_slug=ticket.event.slug)
+        return render(request, 'ticket/ticket_failed.html')
     
+def ticket_success(request):
+    context = {
+        'title': 'Ticket success',
+    }
+    return render(request, 'ticket/ticket_success.html', context)
+
+def ticket_failed(request):
+    context = {
+        'title': 'Ticket failed',
+    }
+    return render(request, 'ticket/ticket_failed.html', context)

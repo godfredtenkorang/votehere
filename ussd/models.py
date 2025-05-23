@@ -51,7 +51,7 @@ class PaymentTransaction(models.Model):
     votes = models.IntegerField(null=True, blank=True)
     tickets = models.PositiveIntegerField(null=True, blank=True) # new
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
-    # event_category = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
+    event_category = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
     timestamp = models.DateTimeField(null=True, blank=True)  # To store the timestamp of the transaction
     created_at = models.DateTimeField(auto_now_add=True)
     

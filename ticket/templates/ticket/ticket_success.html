@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 <!-- banner -->
-<div class="banners">
 
     <div class="banners-content">
         <div class="button">
@@ -11,7 +10,9 @@
     
         </div>
     </div>
+    
 </div>
+
 {% if messages %}
 <div class="alert alert-info">
     {% for message in messages %}
@@ -20,15 +21,17 @@
 </div>
 {% endif %}
 
+<!-- This is the form voters can use to vote.
+it is hidden so when voters click on the vote button, the it appears -->
 <section class="vote-succes-or-fail">
 
     <div class="vote-condition">
-        <i class="fa-solid fa-ban"></i>
-        <h1> Vote Failed</h1>
+        <i class="fa fa-check-to-slot"></i>
+        <h1>Successful</h1>
+
     </div>
-   
 </section>
-  
+
 
 
 
