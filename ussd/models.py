@@ -3,6 +3,7 @@ from django.db import models
 import uuid
 from vote.models import Category
 from django.utils import timezone
+from ticket.models import Event
 
 class CustomSession(models.Model):
     SESSION_TYPES = (
@@ -13,6 +14,7 @@ class CustomSession(models.Model):
     session_key = models.CharField(max_length=32, primary_key=True)
     user_id = models.CharField(max_length=100)
     level = models.CharField(max_length=100, null=True, blank=True)
+    ticket_type_id = models.CharField(max_length=100, null=True, blank=True) # New
     candidate_id = models.CharField(max_length=100, null=True, blank=True)
     event_id = models.CharField(max_length=10, null=True, blank=True) # New
     votes = models.IntegerField(null=True, blank=True)
@@ -49,6 +51,7 @@ class PaymentTransaction(models.Model):
     votes = models.IntegerField(null=True, blank=True)
     tickets = models.PositiveIntegerField(null=True, blank=True) # new
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
+    # event_category = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
     timestamp = models.DateTimeField(null=True, blank=True)  # To store the timestamp of the transaction
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -57,4 +60,15 @@ class PaymentTransaction(models.Model):
     
     def __str__(self):
         return f"Transaction {self.order_id} {self.payment_type} - {self.status} - {self.category} - {self.nominee_code} - {self.timestamp}"
+
+
+class SMSLog(models.Model):
+    phone_number = models.CharField(max_length=15)
+    message = models.TextField()
+    status = models.CharField(max_length=20)  # sent, delivered, failed
+    transaction = models.ForeignKey(PaymentTransaction, null=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+    delivered_at = models.DateTimeField(null=True)
     
+    def __str__(self):
+        self.phone_number

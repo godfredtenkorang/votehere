@@ -61,11 +61,24 @@
           <option value="bank">Bank Transfer</option>
         </select>
       </div> -->
+      <div class="t-input">
+        <label for="ticket_type">Ticket Type</label><br>
+        <select id="ticket_type" name="ticket_type" required>
+          <option value="" selected disabled>Select ticket type</option>
+          {% for ticket_type in event.ticket_types.all %}
+          <option value="{{ ticket_type.id }}" data-price="{{ ticket_type.price }}"
+            data-available="{{ ticket_type.available_tickets }}">
+            {{ ticket_type.name }} - GH¢{{ ticket_type.price }} ({{ ticket_type.available_tickets }} available)
+          </option>
+          {% endfor %}
+        </select>
+      </div>
   
       <div class="t-input">
         <label for="phone">Phone Number</label><br>
         <input type="phone" id="phone" name="phone" placeholder="Enter your phone number" required>
       </div>
+      
       <div class="t-input">
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email" placeholder="Enter your email" required>
@@ -94,13 +107,46 @@
 </div>
 
 <script>
-  document.getElementById('quantity').addEventListener('change', function () {
-    const quantity = parseInt(this.value);
-    const price = parseFloat('{{ event.price }}');
-    document.getElementById('total').textContent = (quantity * price).toFixed(2);
+  document.addEventListener('DOMContentLoaded', function () {
+    const ticketTypeSelect = document.getElementById('ticket_type');
+    const quantityInput = document.getElementById('quantity');
+    const totalSpan = document.getElementById('total');
+
+    function calculateTotal() {
+      const selectedOption = ticketTypeSelect.options[ticketTypeSelect.selectedIndex];
+      if (selectedOption && selectedOption.value) {
+        const price = parseFloat(selectedOption.dataset.price);
+        const quantity = parseInt(quantityInput.value) || 0;
+        const maxAvailable = parseInt(selectedOption.dataset.available) || 0;
+
+        // Update quantity max value
+        quantityInput.max = maxAvailable;
+
+        // Validate quantity doesn't exceed available
+        if (quantity > maxAvailable) {
+          quantityInput.value = maxAvailable;
+        }
+
+        // Calculate and display total
+        const total = price * (quantity || 1);
+        totalSpan.textContent = total.toFixed(2);
+      } else {
+        totalSpan.textContent = '0.00';
+      }
+    }
+
+    // Add event listeners
+    ticketTypeSelect.addEventListener('change', function () {
+      calculateTotal();
+      // Reset quantity to 1 when ticket type changes
+      quantityInput.value = 1;
+    });
+
+    quantityInput.addEventListener('input', calculateTotal);
+
+    // Initialize calculation
+    calculateTotal();
   });
-  // Trigger change event on load
-  document.getElementById('quantity').dispatchEvent(new Event('change'));
 </script>
 
 {% endblock content %}

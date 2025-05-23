@@ -1,16 +1,19 @@
 from django.db import models
 import secrets
 from .paystack import PayStack
-from ussd.models import PaymentTransaction
 
 # Create your models here.
+
+
+
+
 class Event(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10, unique=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    # price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    total_tickets = models.PositiveIntegerField()
-    available_tickets = models.PositiveIntegerField()
+    # total_tickets = models.PositiveIntegerField()
+    # available_tickets = models.PositiveIntegerField()
     ticket_image = models.ImageField(upload_to='ticket_img/', default='')
     access_code = models.CharField(max_length=6, unique=True, null=True, blank=True)
     date_added = models.DateTimeField()
@@ -18,12 +21,32 @@ class Event(models.Model):
     available = models.BooleanField(default=True)
     slug = models.SlugField(null=True, blank=True)
     
+    @property
+    def total_tickets(self):
+        return sum(ticket_type.total_tickets for ticket_type in self.ticket_types.all())
+    
+    @property
+    def available_tickets(self):
+        return sum(ticket_type.available_tickets for ticket_type in self.ticket_types.all())
+    
+    
     def __str__(self):
         return self.name
+    
+class TicketType(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='ticket_types')
+    name = models.CharField(max_length=100)  # e.g., "Single", "VIP", "Couple"
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_tickets = models.PositiveIntegerField()
+    available_tickets = models.PositiveIntegerField()
+    
+    def __str__(self):
+        return f"{self.name} - {self.event.name}"
 
 
 class TicketPayment(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    ticket_type = models.ForeignKey(TicketType, on_delete=models.SET_NULL, null=True)
     phone = models.CharField(max_length=14, null=True)
     email = models.EmailField(null=True, blank=True)
     quantity = models.PositiveIntegerField()
@@ -65,13 +88,3 @@ class TicketPayment(models.Model):
         return False
 
 
-class SMSLog(models.Model):
-    phone_number = models.CharField(max_length=15)
-    message = models.TextField()
-    status = models.CharField(max_length=20)  # sent, delivered, failed
-    transaction = models.ForeignKey(PaymentTransaction, null=True, on_delete=models.SET_NULL)
-    created_at = models.DateTimeField(auto_now_add=True)
-    delivered_at = models.DateTimeField(null=True)
-    
-    def __str__(self):
-        self.phone_number

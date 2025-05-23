@@ -11,7 +11,7 @@ from decimal import Decimal
 import random
 from django.conf import settings
 from payment.models import Nominees
-from ticket.models import Event
+from ticket.models import Event, TicketType
 from datetime import datetime
 from django.utils import timezone
 from ticket.utis import send_ticket_sms
@@ -165,17 +165,26 @@ def ussd_api(request):
                         if event.available_tickets <= 0:
                             session.delete()
                             return JsonResponse(send_response("Tickets are sold out.", False))
-                        
-                        message = (
-                            f"Confirm Event\n"
-                            f"Name: {event.name}\n"
-                            f"Price per ticket: GH¢{event.price:.2f}\n"
-                            f"Available tickets: {event.available_tickets}\n"
-                            f"1) Confirm\n"
-                            f"2) Cancel"
+                        # Build ticket type options
+                        ticket_options = "\n".join(
+                            [f"{i+1}) {t.name} - GH¢{t.price:.2f}" 
+                            for i, t in enumerate(event.ticket_types.all())]
                         )
+                        message = (
+                            f"Select Ticket Type:\n"
+                            f"{ticket_options}\n"
+                            f"0) Cancel"
+                        )
+                        # message = (
+                        #     f"Confirm Event\n"
+                        #     f"Name: {event.name}\n"
+                        #     f"Price per ticket: GH¢{event.price:.2f}\n"
+                        #     f"Available tickets: {event.available_tickets}\n"
+                        #     f"1) Confirm\n"
+                        #     f"2) Cancel"
+                        # )
                         session.event_id = event.code
-                        session.level = 'ticket_confirm'
+                        session.level = 'ticket_type_select'
                         session.save()
                         return JsonResponse(send_response(message, True))
                     
@@ -185,42 +194,49 @@ def ussd_api(request):
                         print(f"Error processing event code: {str(e)}")  # For debugging
                         return JsonResponse(send_response("System error. Please try again later.", False))
                 
-                elif level == 'ticket_confirm':
-                    if user_data == '1':
+                elif level == 'ticket_type_select':
+                    try:
+                        option = int(user_data)
+                        if option == 0:
+                            session.delete()
+                            return JsonResponse(send_response("You have cancelled the process.", False))
+                            
+                        ticket_types = list(Event.objects.get(code=session.event_id).ticket_types.all())
+                        selected_type = ticket_types[option-1]
+                        
+                        session.ticket_type_id = selected_type.id
                         session.level = 'ticket_quantity'
                         session.save()
-                        event = Event.objects.get(code=session.event_id)
-                        message = f"Enter number of tickets (1-{event.available_tickets})"
+                        
+                        message = f"Enter number of tickets (1-{selected_type.available_tickets})"
                         return JsonResponse(send_response(message, True))
-                    
-                    elif user_data == '2':
+                        
+                    except (ValueError, IndexError):
                         session.delete()
-                        return JsonResponse(send_response("You have cancelled the process.", False))
-                    else:
-                        session.delete()
-                        return JsonResponse(send_response("Invalid option. Enter 1 to confirm or 2 to cancel.", False))
-                
+                        return JsonResponse(send_response("Invalid option selected. Please try again.", False))
+
                 elif level == 'ticket_quantity':
                     try:
                         tickets = int(user_data)
-                        event = Event.objects.get(code=session.event_id)
+                        ticket_type = TicketType.objects.get(id=session.ticket_type_id)
                         
                         if tickets <= 0:
                             session.delete()
                             return JsonResponse(send_response("Invalid number of tickets. Please try again.", False))
-                        if tickets > event.available_tickets:
+                        if tickets > ticket_type.available_tickets:
                             session.delete()
-                            return JsonResponse(send_response(f"Only {event.available_tickets} tickets available. Please enter a lower number.", False))
+                            return JsonResponse(send_response(f"Only {ticket_type.available_tickets} tickets available. Please enter a lower number.", False))
                     except ValueError:
                         session.delete()
                         return JsonResponse(send_response("Invalid number of tickets entered. Please try again.", False))
                     
                     session.tickets = tickets
-                    session.amount = Decimal(tickets) * event.price
+                    session.amount = Decimal(tickets) * ticket_type.price
                     session.level = 'ticket_payment'
                     session.save()
-                    message = f"You have entered {tickets} tickets \nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
+                    message = f"You have selected {ticket_type.name} tickets\nQuantity: {tickets}\nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
+
                 
                 elif level.endswith('_payment'):
                     if user_data != '1':
@@ -392,9 +408,9 @@ def webhook_callback(request):
                  # Handle Ticketing
                 elif session.payment_type == 'TICKET':
                     try:
-                        event = Event.objects.get(code=session.event_id)
-                        event.available_tickets -= session.tickets
-                        event.save()
+                        ticket_type = TicketType.objects.get(id=session.ticket_type_id)
+                        ticket_type.available_tickets -= session.tickets
+                        ticket_type.save()
                         
                         PaymentTransaction.objects.create(
                             order_id=order_id,
@@ -409,10 +425,10 @@ def webhook_callback(request):
                         # Send SMS with ticket details
                         send_ticket_sms(
                             phone_number=session.msisdn,  # Or use MSISDN from session
-                            event_name=event.name,
+                            event_name=ticket_type.event.name,
                             ticket_count=session.tickets,
                             amount=amount,
-                            event_date=event.end_date,
+                            event_date=ticket_type.event.end_date,
                             reference=order_id
                         )
                         session.delete()

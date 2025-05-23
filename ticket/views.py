@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.http import HttpRequest
-from .models import Event, TicketPayment
+from .models import Event, TicketPayment, TicketType
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse
@@ -25,23 +25,34 @@ def purchase_ticket(request: HttpRequest, event_slug) -> HttpResponse:
     event = get_object_or_404(Event, slug=event_slug)
     if request.method == 'POST':
         phone = request.POST.get('phone')
+        
         email = request.POST.get('email')
         quantity = int(request.POST.get('quantity', 1))
-        if quantity > event.available_tickets:
-            messages.error(request, "Not enough tickets available.")
+        ticket_type_id = request.POST.get('ticket_type')
+        try:
+            ticket_type = TicketType.objects.get(id=ticket_type_id, event=event)
+        except TicketType.DoesNotExist:
+            messages.error(request, "Invalid ticket type selected.")
             return redirect('ticketForm', event_slug=event.slug)
-        amount = int(event.price * quantity)
-       
-        tickets = TicketPayment(
+            
+        if quantity > ticket_type.available_tickets:
+            messages.error(request, f"Only {ticket_type.available_tickets} tickets available for {ticket_type.name}.")
+            return redirect('ticketForm', event_slug=event.slug)
+            
+        amount = int(ticket_type.price * quantity)
+        
+
+        ticket = TicketPayment(
             event=event,
+            ticket_type=ticket_type,
             phone=phone,
             email=email,
             quantity=quantity,
             amount=amount,
         )
-        tickets.save()
+        ticket.save()
         
-        return render(request, 'ticket/make_payment.html', {'ticket': tickets, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
+        return render(request, 'ticket/make_payment.html', {'ticket': ticket, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
 
         
        
@@ -60,7 +71,7 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
 
     if verified:
 
-        event = ticket.event
+        event = ticket.ticket_type
         event.available_tickets -= ticket.quantity
         event.save()
         
