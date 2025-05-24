@@ -8,10 +8,10 @@ from django.utils import timezone
 
 from django.http import HttpResponse
 from django.views.generic import View
-from .utils import render_to_pdf, send_sms_to_new_nominee, send_mnotify_sms
+from .utils import render_to_pdf, send_sms_to_new_nominee, send_mnotify_sms, send_access_code_to_new_nominee
 from payment.forms import NomineeForm
 from django.contrib import messages
-from .forms import SendSmsForm, NomineeForm, CategorySMSForm, PaymentTransactionForm
+from .forms import SendSmsForm, NomineeForm, CategorySMSForm, PaymentTransactionForm, AccessCodeSMSForm
 from ussd.models import PaymentTransaction
 
 from ticket.models import Event
@@ -587,6 +587,32 @@ def payment_transactions_detail(request, invoice_id):
         'form': form
     }
     return render(request, 'dashboard/payment_transactions_form.html', context)
+
+def send_access_code_to_nominee(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to send SMS.")
+        return redirect('adminPage')
+    
+    if request.method == 'POST':
+        
+            name = request.POST.get('name')
+            phone_number = request.POST.get('phone_number')
+            access_code = request.POST.get('access_code')
+            category = request.POST.get('category')
+            
+            # Send SMS via MNotify
+            send_access_code_to_new_nominee(name, phone_number, access_code, category)
+            messages.success(request, 'Message sent successfully!')
+            
+            
+            return redirect('send_access_code')
+ 
+    context = {
+     
+        'title': 'Send Access Code'
+    }
+        
+    return render(request, 'dashboard/nominee/send_access_code.html', context)
 
 
 def accessTicket(request):

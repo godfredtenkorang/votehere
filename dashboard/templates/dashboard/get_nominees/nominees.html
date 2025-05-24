@@ -15,6 +15,7 @@
                     <th>Image</th>
                     <th>Votes</th>
                     <th>Code</th>
+                    <th>Access Code</th>
                     <th>Date date</th>
                     <th>End date</th>
                     <th>Update</th>
@@ -28,6 +29,7 @@
                     <td><a href="{{ p.image.url }}">image</a></td>
                     <td>{{ p.total_vote }}</td>
                     <td>{{ p.code }}</td>
+                    <td>{{ p.access_code }}</td>
                     <td>{{ p.date_added }}</td>
                     <td>{{ p.end_date }}</td>
                     <td><a href="{% url 'update_nominee' p.slug %}">update</a></td>

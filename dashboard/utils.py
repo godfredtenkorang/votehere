@@ -73,3 +73,30 @@ def send_mnotify_sms(phone_numbers, message):
     except requests.exceptions.RequestException as e:
         print(f"Error sending SMS: {e}")
         return None
+
+
+def send_access_code_to_new_nominee(name, phone_number, access_code, category):
+    endpoint = "https://api.mnotify.com/api/sms/quick"
+    apiKey = settings.MNOTIFY_API_KEY
+    payload = {
+        "key": apiKey,
+        "sender": 'voteafric',
+        "recipient[]": phone_number,
+        "message": f"Dear {name}, \nYou can now check your individual results. Please use this code to access your results: {access_code} for the category {category}. If you have any questions, feel free to contact us. \nThank you. \n\nVoteAfric!",
+        "is_schedule": False,
+        "schedule_date": ''
+    }
+    
+
+    url = endpoint + '?key=' + apiKey
+    
+   
+    try:
+        response = requests.post(url, data=payload)
+        response.raise_for_status()
+        
+        return response.json()
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending SMS: {e}")
+        return None

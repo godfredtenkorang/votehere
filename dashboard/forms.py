@@ -57,3 +57,30 @@ class PaymentTransactionForm(forms.ModelForm):
     class Meta:
         model = PaymentTransaction
         fields = ['invoice_no', 'amount', 'nominee_code', 'votes', 'category']
+        
+
+class AccessCodeSMSForm(forms.Form):
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter name'
+        }),
+        label='SMS Name',
+    )
+    phone_number = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter phone number'
+        }),
+        label='SMS Phone Number',
+    )
+    access_code = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter Access Code'
+        }),
+        label='SMS Access Code',
+    )
+    category = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter Category'
+        }),
+        label='SMS Category',
+    )

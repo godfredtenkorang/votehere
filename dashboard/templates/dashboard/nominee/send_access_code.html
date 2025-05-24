@@ -55,28 +55,35 @@
 <div class="main">
     <div class="the-team-container">
         <div class="heading">
-            <h1>Enter Award Access Code</h1>
+            <h1>Send Access Code SMS</h1>
         </div>
 
     </div>
-
+    <div style="background-color:#000; width:100%;">
+        {% if messages %}
+        {% for message in messages %}
+        <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
 
 
     <form class="add-nominee-form" method="POST" enctype="multipart/form-data">
 
         {% csrf_token %}
 
-        <input type="text" name="access_code" placeholder="Enter 6-digit code" maxlength="6" required>
+        <input type="text" name="name" placeholder="Enter Name"  required>
         <br><br>
-        <button type="submit">Access Transaction</button>
+        <input type="text" name="phone_number" placeholder="Enter Phone Number"  required>
+        <br><br>
+        <input type="text" name="access_code" placeholder="Enter Access Code"  required>
+        <br><br>
+        <input type="text" name="category" placeholder="Enter Category" required>
 
+        <br><br>
+        <button type="submit">Send</button>
 
     </form>
-    {% if messages %}
-    {% for message in messages %}
-    <p style="color: red; text-align:center;">{{ message }}</p>
-    {% endfor %}
-    {% endif %}
 
 
 </div>

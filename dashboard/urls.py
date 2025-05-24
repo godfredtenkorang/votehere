@@ -40,6 +40,7 @@ urlpatterns = [
     path('get_subcategories/', GetSubCategoriesView.as_view(), name='get_subcategories'),
     path('sms/', views.send_sms, name='send_sms'),
     path('send-category-sms/', views.send_sms_to_nominees, name='send_category_sms'),
+    path('send-access-code/', views.send_access_code_to_nominee, name='send_access_code'),
     path('award_revenue_insight/<int:subcategory_id>/', views.award_revenue_insight, name='award_revenue_insight'),
     
     path('get_all_categories/', views.get_all_categories, name='get_all_categories'),
