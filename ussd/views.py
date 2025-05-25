@@ -356,14 +356,14 @@ def update_nominee_votes(nominee_code, votes):
     except Nominees.DoesNotExist:
         return False
     
-def update_tickets(event_code, tickets):
-    try:
-        ticket_type = TicketType.objects.get(event__code=event_code)
-        ticket_type.available_tickets -= tickets
-        ticket_type.save()
-        return ticket_type
-    except TicketType.DoesNotExist:
-        return False
+# def update_tickets(event_code, tickets):
+#     try:
+#         ticket_type = TicketType.objects.get(event__code=event_code)
+#         ticket_type.available_tickets -= tickets
+#         ticket_type.save()
+#         return ticket_type
+#     except TicketType.DoesNotExist:
+#         return False
 
 @csrf_exempt
 def webhook_callback(request):
@@ -419,16 +419,16 @@ def webhook_callback(request):
                         return JsonResponse({'status': 'error', 'message': 'Nominee not found'})
                  # Handle Ticketing
                 elif session.payment_type == 'TICKET':
-                    ticket_type = update_tickets(event_code, tickets)
-                    event_code = session.event_id
-                    tickets = session.tickets
-                    
-                    if ticket_type:
-                        # ticket_type = TicketType.objects.get(id=session.ticket_type_id, event__code=session.event_id)
-                        # ticket_type.available_tickets -= session.tickets
-                        # ticket_type.save()
+                    # ticket_type = update_tickets(event_code, tickets)
+                    try:
+                        ticket_type = TicketType.objects.get(id=session.ticket_type_id, event__code=session.event_id)
+                        ticket_type.available_tickets -= session.tickets
+                        ticket_type.save()
                         
-                        
+                        event_code = session.event_id
+                        tickets = session.tickets
+                        ticket_name = ticket_type.name
+                        event_category = ticket_type.event.name
                         
                         PaymentTransaction.objects.create(
                             order_id=order_id,
@@ -439,15 +439,15 @@ def webhook_callback(request):
                             payment_type='TICKET',
                             event_code=event_code,
                             tickets=tickets,
-                            ticket_type=ticket_type.name,
-                            event_category=ticket_type.event.name,
+                            ticket_type=ticket_name,
+                            event_category=event_category,
                             timestamp=timestamp_str
                         )
                         # Send SMS with ticket details
                         send_ticket_sms(
                             phone_number=session.msisdn,  # Or use MSISDN from session
                             event_name=ticket_type.event.name,
-                            ticket_count=tickets,
+                            ticket_count=session.tickets,
                             amount=amount,
                             event_date=ticket_type.event.end_date,
                             reference=order_id
@@ -455,7 +455,7 @@ def webhook_callback(request):
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
                     
-                    else:
+                    except TicketType.DoesNotExist:
                         return JsonResponse({'status': 'error', 'message': 'Invalid Ticket type for event not found'})
                 
             else:
