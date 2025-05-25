@@ -38,6 +38,7 @@ urlpatterns = [
     path('payment/', include('payment.urls')),
     path('register/', include('register.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('maindashboard/', include('maindashboard.urls')),
     path('user/', include('user.urls')),
     path('ussd/', include('ussd.urls')),
     path('/', include('ticket.urls')),

@@ -45,19 +45,19 @@
                 <div class="nav-upper-options">
 
                     <!-- home button -->
-                    <a href="{% url 'adminHome' %}">
+                    <a href="{% url 'main_dashboard' %}">
 
                         <div class="nav-option option1 button">
                             <h3><i class="fa-solid fa-house"></i> Home</h3>
                         </div>
                     </a>
                     <!-- acivities button -->
-                    <a href="{% url 'access_award_by_code' %}">
+                    <!-- <a href="{% url 'access_award_by_code' %}">
 
                         <div class="nav-option option1 button">
-                            <h3><i class="fa-solid fa-chart-simple"></i> Awards</h3>
+                            <h3><i class="fa-solid fa-chart-simple"></i> Activities</h3>
                         </div>
-                    </a>
+                    </a> -->
 
 
                     <!-- registration button -->
@@ -75,28 +75,47 @@
                             <h3> <i class="fa-solid fa-money-bill"></i> Transactions</h3>
                         </div>
                     </a> -->
-                    <a href="{% url 'accessTicket' %}">
+                    <!-- <a href="{% url 'accessTicket' %}">
                         <div class="nav-option option1 button">
                             <h3> <i class="fa-solid fa-money-bill"></i> Events</h3>
                         </div>
+                    </a> -->
+                    <a href="{% url 'send_sms' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> New Nominee SMS</h3>
+                        </div>
                     </a>
-                    <!-- <a href="{% url 'send_category_sms' %}">
+                    <a href="{% url 'send_category_sms' %}">
                         <div class="nav-option option1 button">
                             <h3> <i class="fa-solid fa-money-bill"></i> SMS to Nominees</h3>
                         </div>
-                    </a> -->
-                    <!-- <a href="{% url 'send_access_code' %}">
+                    </a>
+                    <a href="{% url 'send_access_code' %}">
                         <div class="nav-option option1 button">
-                            <h3> <i class="fa-solid fa-money-bill"></i> Access Code</h3>
+                            <h3> <i class="fa-solid fa-money-bill"></i> Send Access Code</h3>
                         </div>
-                    </a> -->
-                    <a href="{% url 'main_dashboard' %}">
-                        <div class="nav-option option1 button">
-                            <h3> <i class="fa-solid fa-money-bill"></i> More</h3>
+                    </a>
+                    <a href="{% url 'add_nominee' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> Add Nominee</h3>
                         </div>
                     </a>
                     
+                    <a href="{% url 'get_all_categories' %}">
                     
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> All Categories</h3>
+                        </div>
+                    </a>
+                    <!-- <a href="{% url 'payment_transactions' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> Payment Transactions</h3>
+                        </div>
+                    </a> -->
+
 
                     <!-- team button -->
                     <!-- <a href="{% url 'team' %}">
@@ -120,24 +139,7 @@
                         <h3>Logout</h3>
                     </div>
 
-                    <!-- <a href="{% url 'add_nominee' %}">
-
-                        <div class="nav-option option1 button ">
-                            <h3> <i class="fa-solid fa-cash-register"></i> Add Nominee</h3>
-                        </div>
-                    </a> -->
-                    <!-- <a href="{% url 'send_sms' %}">
                     
-                        <div class="nav-option option1 button ">
-                            <h3> <i class="fa-solid fa-cash-register"></i> Send SMS</h3>
-                        </div>
-                    </a>  -->
-                    <!-- <a href="{% url 'get_all_categories' %}">
-                    
-                        <div class="nav-option option1 button ">
-                            <h3> <i class="fa-solid fa-cash-register"></i> All Categories</h3>
-                        </div>
-                    </a> -->
 
 
 

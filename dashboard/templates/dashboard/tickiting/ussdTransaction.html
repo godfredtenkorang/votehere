@@ -39,14 +39,7 @@
        
         <div class="table-controls">
           <!-- Search input for filtering transactions -->
-          <input type="text" placeholder="Search transactions...">
-          <!-- Dropdown to filter by transaction status -->
-          <select>
-            <option>All Statuses</option>
-            <option>Completed</option>
-            <option>Pending</option>
-            <option>Refunded</option>
-          </select>
+          
         </div>
       </div>
 
@@ -56,8 +49,9 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Customer</th>
+              
               <th>Ticket Type</th>
+              <th>Tickets</th>
               <th>Amount</th>
               <th>Date</th>
               <th>Status</th>
@@ -65,15 +59,18 @@
           </thead>
           <tbody>
             <!-- Sample transaction row -->
+            {% for payment in payments %}
             <tr>
-              <td>#T1001</td>
-              <td>john@example.com</td>
-              <td><span class="badge vip">VIP</span></td>
-              <td>$50.00</td>
-              <td>May 15, 2023</td>
-              <td><span class="badge completed">Completed</span></td>
+              <td>{{ payment.invoice_no }}</td>
+              
+              <td><span class="badge vip">{{ payment.ticket_type }}</span></td>
+              <td><span>{{ payment.tickets }}</span></td>
+              <td>{{ payment.amount }}</td>
+              <td>{{ payment.timestamp }}</td>
+              <td><span class="badge completed">{{ payment.status }}</span></td>
 
             </tr>
+            {% endfor %}
 
           </tbody>
         </table>
@@ -86,7 +83,21 @@
 
 </div>
 
+<div class="logout-pop">
+  <div class="logout">
+    <p>Are you sure you want to log out from the admin pannel ?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button>Log Out</button>
+      </a>
 
+      <p>Or</p>
+
+      <button class="DontLogout">No</button>
+    </div>
+  </div>
+
+</div>
 
 <script defer src="{% static 'vote/adminScript.js' %}"></script>
 <script defer src="{% static 'vote/adminScript2.js' %}"></script>

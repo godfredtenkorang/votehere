@@ -1,0 +1,89 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main">
+
+    <div class="admin-main-page">
+        <div class="heading">
+            <h1>Welcome to the admin dashboard, {{ user }}</h1>
+        </div>
+        <div style="background-color:#000; width:100%;">
+            {% if messages %}
+            {% for message in messages %}
+            <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="statistics-container">
+            <div class="stat-row">
+                <h4>Total Awards organized so far</h4>
+
+                <p>{{ award_count }}</p>
+
+            </div>
+            <div class="stat-row">
+                <h4>Total categories for all awards organized</h4>
+
+                <p>{{ category_count }}</p>
+
+            </div>
+            <div class="stat-row">
+                <h4>Total number of nominees across all categories</h4>
+
+                <p>{{ nominee_count }}</p>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-project">
+        <h3>Recent Project</h3>
+
+        <div class="tables">
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Awards Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for a in awards %}
+                    <tr>
+                        <td>{{ a.award }}</td>
+                        <td>
+                            {% if current_time < a.end_date %} In Progress {% else %} Ended {% endif %} </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+</div>
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

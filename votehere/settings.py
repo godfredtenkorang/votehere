@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'payment',
     'register',
     'dashboard',
+    'maindashboard',
     'user',
     'ussd',
     'ticket',

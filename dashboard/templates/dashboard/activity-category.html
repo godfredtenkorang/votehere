@@ -9,11 +9,12 @@
             <div class="category-interface-container">
                 <div class="heading">
                     <h2>List of Category for awards {{category}}</h2>
+
                 </div>
 
-                <!-- <a href=""class="insight">
-                <button>Award Revenue Insights </button>
-                </a> -->
+                <a href="{% url 'access_transaction_by_code' %}"class="insight">
+                <button>Access Transactions </button>
+                </a>
 
                 <div class="categories-container">
                     {% for n in award %}

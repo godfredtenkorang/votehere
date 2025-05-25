@@ -1,0 +1,67 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main">
+    <div class="transation-details-container">
+        <div class="heading">
+
+
+            <h3>Total Transactions: {{ payment_count }}</h3>
+            <h3>Total Transactions: GH¢{{ total_payments }}</h3>
+
+        </div>
+
+        <br>
+
+        <div class="table-responsive">
+            <table class="revenue-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Invoice No</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Nominee Code</th>
+                        <th>Votes</th>
+                        <th>Category</th>
+                        <th>Timestamp</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td>{{ p.order_id }}</td>
+                        <td>{{ p.invoice_no }}</td>
+                        <td>GH¢{{ p.amount }}</td>
+                        <td>{{ p.status }}</td>
+                        <td>{{ p.nominee_code }}</td>
+                        <td>{{ p.votes }}</td>
+                        <td>{{ p.category }}</td>
+                        <td>{{ p.timestamp }}</td>
+                        <td><a href="{% url 'update_transaction' p.invoice_no %}">update</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

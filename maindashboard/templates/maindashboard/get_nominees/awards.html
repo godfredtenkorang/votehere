@@ -1,0 +1,82 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- interface that will show when a button is clicked the main conntainer -->
+<div class="main">
+    <div class=" awards-ongoing">
+        <div class="heading">
+            <h1>List of Awards ongoing</h1>
+            <p> The listed awards are currently in the midst of ongoing voting processes.</p>
+        </div>
+
+        <!-- THE INTERFACE FOR THE ACTIVITY BUTTON -->
+        <!-- ongoing awards -->
+
+
+
+        <div class="ongoin-awards-container">
+            {% for a in awards %}
+            <a href="{% url 'get_nominee_by_category' a.slug %}">
+
+                <div class="awards-container">
+                    <!-- awards img -->
+                    <div class="awards-img">
+                        <img src="{{ a.image.url }}" alt="geima">
+                    </div>
+                    <!-- awards name -->
+                    <div class="awards-name">
+                        <h2>{{ a.award }}</h2>
+
+                    </div>
+
+                    <div class="duration">
+                        <div class="start-date column">
+                            <div class="start-col">
+                                <p>Start Date</p>
+
+                            </div>
+                            <div class="start-col">
+
+                                <p>{{ a.date_added|date:"N j, o" }}</p>
+                            </div>
+                        </div>
+
+                        <div class="endDate column">
+                            <div class="start-col">
+                                <p>End Date</p>
+
+                            </div>
+                            <div class="start-col">
+
+                                <p>{{ a.end_date|date:"N j, o" }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -421,6 +421,7 @@ def webhook_callback(request):
                             payment_type='TICKET',
                             event_code=session.event_id,
                             tickets=session.tickets,
+                            ticket_type=ticket_type.name,
                             event_category=ticket_type.event.name,
                             timestamp=timestamp_str
                         )

@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from vote.models import Category, SubCategory
 from payment.models import Nominees, Payment
@@ -14,7 +15,7 @@ from django.contrib import messages
 from .forms import SendSmsForm, NomineeForm, CategorySMSForm, PaymentTransactionForm, AccessCodeSMSForm
 from ussd.models import PaymentTransaction
 
-from ticket.models import Event
+from ticket.models import Event, TicketPayment
 
 from django.http import JsonResponse
 from django.views import View
@@ -376,243 +377,243 @@ def generate(request, pdf):
 
     return render(request, 'dashboard/generate.html', context)
 
-@login_required
-def add_nominee(request):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
-    if request.method == 'POST':
-        form = NomineeForm(request.POST, request.FILES)
-        if form.is_valid():
-            nominee = form.save(commit=False)
-            nominee.save()
-            messages.success(request, f'Nominee {nominee.name} added successfully.')
-            return redirect('add_nominee')
-    else:
-        form = NomineeForm(request.FILES)
-    context = {
-        'form': form,
-        'title': 'Add Nominee'
-    }
-    return render(request, 'dashboard/nominee/add_nominee.html', context)
+# @login_required
+# def add_nominee(request):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to add nominee.")
+#         return redirect('adminHome')
+#     if request.method == 'POST':
+#         form = NomineeForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             nominee = form.save(commit=False)
+#             nominee.save()
+#             messages.success(request, f'Nominee {nominee.name} added successfully.')
+#             return redirect('add_nominee')
+#     else:
+#         form = NomineeForm(request.FILES)
+#     context = {
+#         'form': form,
+#         'title': 'Add Nominee'
+#     }
+#     return render(request, 'dashboard/nominee/add_nominee.html', context)
 
 
 
 
-class GetSubCategoriesView(View):
-    def get(self, request, *args, **kwargs):
-        category_id = request.GET.get('category_id')
-        if category_id:
-            subcategories = SubCategory.objects.filter(category_id=category_id)
-            options = '<option value="">---------</option>'
-            for subcategory in subcategories:
-                options += f'<option value="{subcategory.id}">{subcategory.content}</option>'
-            return JsonResponse(options, safe=False)
-        return JsonResponse('<option value="">---------</option>', safe=False)
+# class GetSubCategoriesView(View):
+#     def get(self, request, *args, **kwargs):
+#         category_id = request.GET.get('category_id')
+#         if category_id:
+#             subcategories = SubCategory.objects.filter(category_id=category_id)
+#             options = '<option value="">---------</option>'
+#             for subcategory in subcategories:
+#                 options += f'<option value="{subcategory.id}">{subcategory.content}</option>'
+#             return JsonResponse(options, safe=False)
+#         return JsonResponse('<option value="">---------</option>', safe=False)
 
 
-def send_sms(request):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
-    if request.method == 'POST':
-        form = SendSmsForm(request.POST)
-        if form.is_valid():
-            send_sms = form.save()
-            send_sms_to_new_nominee(send_sms.name, send_sms.phone_number, send_sms.category)
-            messages.success(request, 'Message sent successfully!')
-            return redirect('send_sms')
+# def send_sms(request):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to send SMS.")
+#         return redirect('adminHome')
+#     if request.method == 'POST':
+#         form = SendSmsForm(request.POST)
+#         if form.is_valid():
+#             send_sms = form.save()
+#             send_sms_to_new_nominee(send_sms.name, send_sms.phone_number, send_sms.category)
+#             messages.success(request, 'Message sent successfully!')
+#             return redirect('send_sms')
         
-    else:
-        form = SendSmsForm()
-    context = {
-        'form': form,
-        'title': 'SMS'
-    }
+#     else:
+#         form = SendSmsForm()
+#     context = {
+#         'form': form,
+#         'title': 'SMS'
+#     }
     
-    return render(request, 'dashboard/nominee/send_sms.html', context)
+#     return render(request, 'dashboard/nominee/send_sms.html', context)
 
 
-def send_sms_to_nominees(request):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
+# def send_sms_to_nominees(request):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to send SMS.")
+#         return redirect('adminHome')
     
-    if request.method == 'POST':
-        form = CategorySMSForm(request.POST)
-        if form.is_valid():
-            category = form.cleaned_data['category']
-            sms_message = form.cleaned_data['message']
+#     if request.method == 'POST':
+#         form = CategorySMSForm(request.POST)
+#         if form.is_valid():
+#             category = form.cleaned_data['category']
+#             sms_message = form.cleaned_data['message']
             
             
             
-            nominees = Nominees.objects.filter(
-                category=category,
-                phone_number__isnull=False
-            ).exclude(phone_number='')
+#             nominees = Nominees.objects.filter(
+#                 category=category,
+#                 phone_number__isnull=False
+#             ).exclude(phone_number='')
             
-            if not nominees.exists():
-                messages.warning(request, f"No nominees with phone numbers found in {category.award} category.")
-                return redirect('send_category_sms')
+#             if not nominees.exists():
+#                 messages.warning(request, f"No nominees with phone numbers found in {category.award} category.")
+#                 return redirect('send_category_sms')
             
-            phone_numbers = [n.phone_number for n in nominees if n.phone_number]
+#             phone_numbers = [n.phone_number for n in nominees if n.phone_number]
             
-            # Send SMS via MNotify
-            send_mnotify_sms(phone_numbers, sms_message)
-            messages.success(request, 'Message sent successfully!')
+#             # Send SMS via MNotify
+#             send_mnotify_sms(phone_numbers, sms_message)
+#             messages.success(request, 'Message sent successfully!')
             
             
-            return redirect('send_category_sms')
-    else:
-        form = CategorySMSForm()
+#             return redirect('send_category_sms')
+#     else:
+#         form = CategorySMSForm()
         
-    context = {
-        'form': form,
-        'title': 'Send SMS by Category'
-    }
+#     context = {
+#         'form': form,
+#         'title': 'Send SMS by Category'
+#     }
         
-    return render(request, 'dashboard/nominee/send_sms_to_nominees.html', context)
+#     return render(request, 'dashboard/nominee/send_sms_to_nominees.html', context)
 
 
-def get_subcategory_votes(subcategory_id):
-    try:
-        subcategory = SubCategory.objects.get(id=subcategory_id)
-        total_votes = Nominees.objects.filter(sub_category=subcategory).aggregate(total=Sum('total_vote'))['total'] or 0
-        return subcategory, total_votes
-    except SubCategory.DoesNotExist:
-        return None, 0
+# def get_subcategory_votes(subcategory_id):
+#     try:
+#         subcategory = SubCategory.objects.get(id=subcategory_id)
+#         total_votes = Nominees.objects.filter(sub_category=subcategory).aggregate(total=Sum('total_vote'))['total'] or 0
+#         return subcategory, total_votes
+#     except SubCategory.DoesNotExist:
+#         return None, 0
 
-def award_revenue_insight(request, subcategory_id):
-    subcategory, total_votes = get_subcategory_votes(subcategory_id)
-    context = {
-        'subcategory': subcategory,
-        'total_votes': total_votes
-    }
-    return render(request, 'dashboard/award_revenue_insight.html', context)
-
-
-def get_all_categories(request):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
-    awards = Category.objects.all()
-    context = {
-        'awards': awards,
-        'title': 'Categories'
-    }
-    return render(request, 'dashboard/get_nominees/awards.html', context)
-
-def get_nominee_by_category(request, category_slug):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
-    category = None
-    award = Nominees.objects.all()
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        award = award.filter(category=category)
-        
+# def award_revenue_insight(request, subcategory_id):
+#     subcategory, total_votes = get_subcategory_votes(subcategory_id)
+#     context = {
+#         'subcategory': subcategory,
+#         'total_votes': total_votes
+#     }
+#     return render(request, 'dashboard/award_revenue_insight.html', context)
 
 
-    context = {
-        'category': category,
-        'award': award,
-        'title': 'Nominees'
-    }
-    return render(request, 'dashboard/get_nominees/nominees.html', context)
+# def get_all_categories(request):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to send SMS.")
+#         return redirect('adminHome')
+#     awards = Category.objects.all()
+#     context = {
+#         'awards': awards,
+#         'title': 'Categories'
+#     }
+#     return render(request, 'dashboard/get_nominees/awards.html', context)
 
-
-
-def update_nominee_by_category(request, nominee_slug):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
-    nominee = get_object_or_404(Nominees, slug=nominee_slug)
-    
-        
-    if request.method == 'POST':
-        form = NomineeForm(request.POST, request.FILES, instance=nominee)
-        if form.is_valid():
-            form.save()
-            return redirect('get_all_categories')
-    else:
-        form = NomineeForm(instance=nominee)
+# def get_nominee_by_category(request, category_slug):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to send SMS.")
+#         return redirect('adminHome')
+#     category = None
+#     award = Nominees.objects.all()
+#     if category_slug:
+#         category = get_object_or_404(Category, slug=category_slug)
+#         award = award.filter(category=category)
         
 
 
-    context = {
-        'title': 'Nominees',
-        'form': form
-    }
-    return render(request, 'dashboard/get_nominees/update.html', context)
+#     context = {
+#         'category': category,
+#         'award': award,
+#         'title': 'Nominees'
+#     }
+#     return render(request, 'dashboard/get_nominees/nominees.html', context)
 
 
-def payment_transactions(request):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
-    payments = PaymentTransaction.objects.all()
-    
-    payment_count = payments.count()
-    total_payments = PaymentTransaction.objects.all().aggregate(total=Sum('amount'))['total'] or 0
-    
-    context = {
-        'payment_count': payment_count,
-        'total_payments': total_payments,
-        'payments': payments
-    }
-    return render(request, 'dashboard/payment_transactions.html', context)
 
-
-def payment_transactions_detail(request, invoice_id):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
+# def update_nominee_by_category(request, nominee_slug):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to update nominee.")
+#         return redirect('adminHome')
+#     nominee = get_object_or_404(Nominees, slug=nominee_slug)
     
-    payment = get_object_or_404(PaymentTransaction, invoice_no=invoice_id)
-    
-    
-    if request.method == 'POST':
-        form = PaymentTransactionForm(request.POST, instance=payment)
-        if form.is_valid():
-            form.save()
-            
-            messages.success(request, 'Payment updated successfully!')
-            return redirect('payment_transactions')
-    else:
-        form = PaymentTransactionForm(instance=payment)
         
-    context = {
-        'payment': payment,
-        'form': form
-    }
-    return render(request, 'dashboard/payment_transactions_form.html', context)
-
-def send_access_code_to_nominee(request):
-    if not request.user.is_staff:
-        messages.error(request, "You don't have permission to send SMS.")
-        return redirect('adminPage')
-    
-    if request.method == 'POST':
+#     if request.method == 'POST':
+#         form = NomineeForm(request.POST, request.FILES, instance=nominee)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('get_all_categories')
+#     else:
+#         form = NomineeForm(instance=nominee)
         
-            name = request.POST.get('name')
-            phone_number = request.POST.get('phone_number')
-            access_code = request.POST.get('access_code')
-            category = request.POST.get('category')
+
+
+#     context = {
+#         'title': 'Nominees',
+#         'form': form
+#     }
+#     return render(request, 'dashboard/get_nominees/update.html', context)
+
+
+# def payment_transactions(request):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to view transactions.")
+#         return redirect('adminHome')
+#     payments = PaymentTransaction.objects.all()
+    
+#     payment_count = payments.count()
+#     total_payments = PaymentTransaction.objects.all().aggregate(total=Sum('amount'))['total'] or 0
+    
+#     context = {
+#         'payment_count': payment_count,
+#         'total_payments': total_payments,
+#         'payments': payments
+#     }
+#     return render(request, 'dashboard/payment_transactions.html', context)
+
+
+# def payment_transactions_detail(request, invoice_id):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to view transaction details.")
+#         return redirect('adminHome')
+    
+#     payment = get_object_or_404(PaymentTransaction, invoice_no=invoice_id)
+    
+    
+#     if request.method == 'POST':
+#         form = PaymentTransactionForm(request.POST, instance=payment)
+#         if form.is_valid():
+#             form.save()
             
-            # Send SMS via MNotify
-            send_access_code_to_new_nominee(name, phone_number, access_code, category)
-            messages.success(request, 'Message sent successfully!')
+#             messages.success(request, 'Payment updated successfully!')
+#             return redirect('payment_transactions')
+#     else:
+#         form = PaymentTransactionForm(instance=payment)
+        
+#     context = {
+#         'payment': payment,
+#         'form': form
+#     }
+#     return render(request, 'dashboard/payment_transactions_form.html', context)
+
+# def send_access_code_to_nominee(request):
+#     if not request.user.is_staff:
+#         messages.error(request, "You don't have permission to send access code SMS.")
+#         return redirect('adminHome')
+    
+#     if request.method == 'POST':
+        
+#             name = request.POST.get('name')
+#             phone_number = request.POST.get('phone_number')
+#             access_code = request.POST.get('access_code')
+#             category = request.POST.get('category')
+            
+#             # Send SMS via MNotify
+#             send_access_code_to_new_nominee(name, phone_number, access_code, category)
+#             messages.success(request, 'Message sent successfully!')
             
             
-            return redirect('send_access_code')
+#             return redirect('send_access_code')
  
-    context = {
+#     context = {
      
-        'title': 'Send Access Code'
-    }
+#         'title': 'Send Access Code'
+#     }
         
-    return render(request, 'dashboard/nominee/send_access_code.html', context)
+#     return render(request, 'dashboard/nominee/send_access_code.html', context)
 
 
 def accessTicket(request):
@@ -629,14 +630,104 @@ def accessTicket(request):
 
 def ticketActivity(request, event_slug):
     event = get_object_or_404(Event, slug=event_slug)
+    tickets_sold = event.total_tickets - event.available_tickets
+    
+    ticket_types_data = []
+    for ticket_type in event.ticket_types.all():
+        ticket_types_data.append({
+            'name': ticket_type.name,
+            'total': ticket_type.total_tickets,
+            'sold': ticket_type.total_tickets - ticket_type.available_tickets,
+            'available': ticket_type.available_tickets
+        })
+        
+     # Calculate total revenue from TicketPayment
+    ticket_payment_revenue = TicketPayment.objects.filter(
+        event=event,
+        verified=True
+    ).aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    
+    # Calculate total revenue from PaymentTransaction
+    payment_transaction_revenue = PaymentTransaction.objects.filter(
+        payment_type='TICKET',
+        event_category=event,
+        status='successful'
+    ).aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    
+    # Combine revenues
+    total_revenue = ticket_payment_revenue + payment_transaction_revenue
+    # Get recent ticket payments (max 5)
+    ticket_payments = TicketPayment.objects.filter(
+        event=event,
+        verified=True
+    ).order_by('-date_created')[:5]
+    
+    # Get recent payment transactions (max 5)
+    payment_transactions = PaymentTransaction.objects.filter(
+        payment_type='TICKET',
+        event_category=event,
+        status='PAID'
+    ).order_by('-created_at')[:5]
+    
+    # Combine and sort transactions (newest first)
+    recent_transactions = sorted(
+        list(ticket_payments) + list(payment_transactions),
+        key=lambda x: x.date_created if hasattr(x, 'date_created') else x.created_at,
+        reverse=True
+    )[:10]  # Ensure we only show 10 most recent
+    
     context = {
         'event': event,
+        'tickets_sold': tickets_sold,
+        'ticket_types_data': ticket_types_data,
+        'recent_transactions': recent_transactions,
+        'total_revenue': total_revenue
     }
 
     return render(request, 'dashboard/tickiting/ticketActivity.html', context)
 
-def onlineTransaction(request):
- return render(request, 'dashboard/tickiting/onlineTransaction.html')
+def onlineTransaction(request, event_id):
+    event = None
+    payments = TicketPayment.objects.all()
+    
+    
+    if event_id:
+        event = get_object_or_404(Event, id=event_id)
+        payments = payments.filter(event=event, verified=True)
+        
+   
+        total_amount = payments.aggregate(Total=Sum('amount')).get('Total', 0)
+        
+    
+    
+    context = {
+        'payments': payments,
+        'event': event,
+        'total_amount': total_amount,
+        
+        'title': 'Online transactions'
+    }
+    return render(request, 'dashboard/tickiting/onlineTransaction.html', context)
 
-def ussdTransaction(request):
- return render(request, 'dashboard/tickiting/ussdTransaction.html')
+def ussdTransaction(request, event_id):
+    event = None
+    payments = PaymentTransaction.objects.all()
+    
+  
+    if event_id:
+        event = get_object_or_404(Event, id=event_id)
+        payments = payments.filter(event_category=event, status='PAID')
+    
+    
+        total_amount = payments.aggregate(Total=Sum('amount')).get('Total', 0)
+
+    
+    
+    context = {
+        'payments': payments,
+        'event': event,
+        'total_amount': total_amount,
+        'title': 'USSD transactions',
+        
+    }
+    return render(request, 'dashboard/tickiting/ussdTransaction.html', context)

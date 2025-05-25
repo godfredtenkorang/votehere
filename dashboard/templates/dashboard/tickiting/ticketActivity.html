@@ -2,59 +2,86 @@
 {% load static %}
 {% block content %}
 
+<style>
+  .badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge.vip {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.badge.general {
+    background-color: #4361EE;
+    color: #fff;
+}
+
+.badge.completed {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.badge.pending {
+    background-color: #FF9800;
+    color: #fff;
+}
+
+.badge.refunded {
+    background-color: #F44336;
+    color: #fff;
+}
+</style>
+
 <div class="main">
 
-    <!-- STATS CARDS SECTION: Displays key metrics in card format -->
-    <div class="stats-container">
-      <!-- Individual stat card for total tickets -->
-      <div class="stats-card">
+  <!-- STATS CARDS SECTION: Displays key metrics in card format -->
+  <div class="stats-container">
+    <!-- Individual stat card for total tickets -->
+    <div class="stats-card">
 
-        <div class="stats-accent accent-blue"></div>
-        <div class="stats-content">
-          <div class="stats-title">Total Tickets</div>
+      <div class="stats-accent accent-blue"></div>
+      <div class="stats-content">
+        <div class="stats-title">Total Tickets</div>
 
-          <div class="stats-number" data-target="{{ event.total_tickets }}">0</div>
-        </div>
-      </div>
-
-      <!-- Stat card for tickets sold -->
-      <div class="stats-card">
-        <div class="stats-accent accent-green"></div>
-        <div class="stats-content">
-          <div class="stats-title">Tickets Sold</div>
-          <div class="stats-number" data-target="150">0</div>
-        </div>
-      </div>
-
-      <!-- Stat card for remaining tickets -->
-      <div class="stats-card">
-        <div class="stats-accent accent-orange"></div>
-        <div class="stats-content">
-          <div class="stats-title">Tickets Left</div>
-          <div class="stats-number" data-target="50">0</div>
-        </div>
+        <div class="stats-number" data-target="{{ event.total_tickets }}">0</div>
       </div>
     </div>
 
+    <!-- Stat card for tickets sold -->
+    <div class="stats-card">
+      <div class="stats-accent accent-green"></div>
+      <div class="stats-content">
+        <div class="stats-title">Tickets Sold</div>
+        <div class="stats-number" data-target="{{ tickets_sold }}">0</div>
+      </div>
+    </div>
 
- <!-- TICKET TYPE BREAKDOWN SECTION: Shows distribution by ticket category -->
- <div class="ticket-types">
-  <!-- VIP ticket type card with yellow accent -->
-  <div class="type-card" style="border-left: 4px solid #FFC107;">
-    <span>VIP</span>
-    <strong>50</strong> <!-- Count of VIP tickets -->
+    <!-- Stat card for remaining tickets -->
+    <div class="stats-card">
+      <div class="stats-accent accent-orange"></div>
+      <div class="stats-content">
+        <div class="stats-title">Tickets Left</div>
+        <div class="stats-number" data-target="{{ event.available_tickets }}">0</div>
+      </div>
+    </div>
   </div>
-  <!-- General admission ticket type card with blue accent -->
-  <div class="type-card" style="border-left: 4px solid #4361EE;">
-    <span>General</span>
-    <strong>80</strong> <!-- Count of General tickets -->
+
+
+  <!-- TICKET TYPE BREAKDOWN SECTION: Shows distribution by ticket category -->
+  <div class="ticket-types">
+    <!-- VIP ticket type card with yellow accent -->
+    {% for ticket_type in ticket_types_data %}
+    <div class="type-card"style="border-left: 4px solid {% cycle '#FFC107' '#4361EE' '#4CC9F0' '#F72585' %};">
+      <span>{{ ticket_type.name }}</span>
+      <strong>{{ ticket_type.sold }}</strong>
+      <small>of {{ ticket_type.total }} sold</small>
+    </div>
+    {% endfor %}
   </div>
-  <!-- Early bird ticket type card with light blue accent -->
-  <div class="type-card" style="border-left: 4px solid #4CC9F0;">
-    <span>Early Bird</span>
-    <strong>20</strong> <!-- Count of Early Bird tickets -->
-  </div>
-</div>
 
 
 
@@ -72,154 +99,193 @@
 
 
 
-    <!-- QUICK ACTIONS SECTION: Button group for common actions -->
-    <!-- Action Buttons Section -->
-    <div class="action-buttons">
-      <button class="btn btn-blue" id="add-tickets-btn"><i class="fas fa-plus"></i> Add Tickets</button>
-      <button class="btn btn-green" id="create-promo-btn"><i class="fas fa-tag"></i> Create Promo</button>
-      <button class="btn btn-gray"><i class="fas fa-file-export"></i> Export Data</button>
-    </div>
+  <!-- QUICK ACTIONS SECTION: Button group for common actions -->
+  <!-- Action Buttons Section -->
+  <!-- <div class="action-buttons">
+    <button class="btn btn-blue" id="add-tickets-btn"><i class="fas fa-plus"></i> Add Tickets</button>
+    <button class="btn btn-green" id="create-promo-btn"><i class="fas fa-tag"></i> Create Promo</button>
+    <button class="btn btn-gray"><i class="fas fa-file-export"></i> Export Data</button>
+  </div> -->
 
-    <!-- Add Tickets Modal -->
-    <div class="modal" id="add-tickets-modal">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Add New Tickets</h2>
-        <form id="add-tickets-form">
-          <div class="form-group">
-            <label for="ticket-type">Ticket Type:</label>
-            <select id="ticket-type" required>
-              <option value="">Select type</option>
-              <option value="VIP">VIP</option>
-              <option value="General">General Admission</option>
-              <option value="Early Bird">Early Bird</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="ticket-quantity">Quantity:</label>
-            <input type="number" id="ticket-quantity" min="1" required>
-          </div>
-
-          <div class="form-group">
-            <label for="ticket-price">Price ($):</label>
-            <input type="number" id="ticket-price" min="0" step="0.01" required>
-          </div>
-
-          <button type="submit" class="btn btn-blue">Add Tickets</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Create Promo Modal -->
-    <div class="modal" id="create-promo-modal">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Create New Promotion</h2>
-        <form id="create-promo-form">
-          <div class="form-group">
-            <label for="promo-name">Promotion Name:</label>
-            <input type="text" id="promo-name" required>
-          </div>
-
-          <div class="form-group">
-            <label for="promo-code">Discount Code:</label>
-            <input type="text" id="promo-code" required>
-          </div>
-
-          <div class="form-group">
-            <label for="promo-type">Discount Type:</label>
-            <select id="promo-type" required>
-              <option value="">Select type</option>
-              <option value="percentage">Percentage</option>
-              <option value="fixed">Fixed Amount</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="promo-value">Discount Value:</label>
-            <input type="number" id="promo-value" min="0" required>
-          </div>
-
-          <div class="form-group">
-            <label for="promo-expiry">Expiry Date:</label>
-            <input type="date" id="promo-expiry" required>
-          </div>
-
-          <button type="submit" class="btn btn-green">Create Promotion</button>
-        </form>
-      </div>
-    </div>
-
-
-
- 
-
-    <!-- ANALYTICS METRICS SECTION: Key performance indicators -->
-    <div class="analytics-container">
-      <!-- Conversion rate metric card -->
-      <div class="metric-card">
-        <h4>Conversion Rate</h4>
-        <div class="metric-value">12.5%</div>
-        <small>From 1,200 views</small> <!-- Context for the metric -->
-      </div>
-      <!-- Revenue metric card -->
-      <div class="metric-card">
-        <h4>Revenue</h4>
-        <div class="metric-value">$3,750</div>
-        <small>Total earned</small> <!-- Context for the metric -->
-      </div>
-    </div>
-
-    <!-- TRANSACTIONS SECTION: Table of recent purchases with controls -->
-    <div class="transactions-section">
-      <!-- Section header with title and controls -->
-      <div class="section-header">
-        <h2>Recent Transactions <span class="update-badge">Live</span></h2>
-        <!-- "Live" badge indicates real-time updates -->
-        <div class="table-controls">
-          <!-- Search input for filtering transactions -->
-          <input type="text" placeholder="Search transactions...">
-          <!-- Dropdown to filter by transaction status -->
-          <select>
-            <option>All Statuses</option>
-            <option>Completed</option>
-            <option>Pending</option>
-            <option>Refunded</option>
+  <!-- Add Tickets Modal -->
+  <div class="modal" id="add-tickets-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Add New Tickets</h2>
+      <form id="add-tickets-form">
+        <div class="form-group">
+          <label for="ticket-type">Ticket Type:</label>
+          <select id="ticket-type" required>
+            <option value="">Select type</option>
+            <option value="VIP">VIP</option>
+            <option value="General">General Admission</option>
+            <option value="Early Bird">Early Bird</option>
           </select>
         </div>
-      </div>
 
-      <!-- Transactions table -->
-      <div class="transactions-table">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Customer</th>
-              <th>Ticket Type</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Status</th>
+        <div class="form-group">
+          <label for="ticket-quantity">Quantity:</label>
+          <input type="number" id="ticket-quantity" min="1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="ticket-price">Price ($):</label>
+          <input type="number" id="ticket-price" min="0" step="0.01" required>
+        </div>
+
+        <button type="submit" class="btn btn-blue">Add Tickets</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create Promo Modal -->
+  <div class="modal" id="create-promo-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Create New Promotion</h2>
+      <form id="create-promo-form">
+        <div class="form-group">
+          <label for="promo-name">Promotion Name:</label>
+          <input type="text" id="promo-name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="promo-code">Discount Code:</label>
+          <input type="text" id="promo-code" required>
+        </div>
+
+        <div class="form-group">
+          <label for="promo-type">Discount Type:</label>
+          <select id="promo-type" required>
+            <option value="">Select type</option>
+            <option value="percentage">Percentage</option>
+            <option value="fixed">Fixed Amount</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="promo-value">Discount Value:</label>
+          <input type="number" id="promo-value" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label for="promo-expiry">Expiry Date:</label>
+          <input type="date" id="promo-expiry" required>
+        </div>
+
+        <button type="submit" class="btn btn-green">Create Promotion</button>
+      </form>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- ANALYTICS METRICS SECTION: Key performance indicators -->
+  <div class="analytics-container">
+    <!-- Conversion rate metric card -->
+    <div class="metric-card">
+      <h4>Conversion Rate</h4>
+      <div class="metric-value">5%</div>
+      <!-- <small>From 1,200 views</small> Context for the metric -->
+    </div>
+    <!-- Revenue metric card -->
+    <div class="metric-card">
+      <h4>Revenue</h4>
+      <div class="metric-value">GH¢{{ total_revenue|floatformat:2 }}</div>
+      <small>Total earned</small> <!-- Context for the metric -->
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS SECTION: Table of recent purchases with controls -->
+  <div class="transactions-section">
+    <!-- Section header with title and controls -->
+    <div class="section-header">
+      <h2>Recent Transactions <span class="update-badge">Live</span></h2>
+      <!-- "Live" badge indicates real-time updates -->
+       <div class="table-controls">
+
+         <a href="{% url 'onlineTransaction' event.id %}"><button class="btn btn-blue"> Online Transactions</button></a>
+         <a href="{% url 'ussdTransaction' event.id %}"><button class="btn btn-blue"> USSD Transactions</button></a>
+       </div>
+    </div>
+
+    <!-- Transactions table -->
+    <div class="transactions-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Type</th>
+            <th>Tickets</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sample transaction row -->
+           {% for transaction in recent_transactions %}
+          <tr>
+            <td>
+              {% if transaction.ref %}
+                #{{ transaction.ref|slice:":8" }} <!-- TicketPayment reference -->
+              {% else %}
+                #{{ transaction.invoice_no|slice:":8" }} <!-- PaymentTransaction ID -->
+              {% endif %}
+            </td>
+            <td>
+              {% if transaction.email %}
+                {{ transaction.email }}
+              {% else %}
+                {{ transaction.phone|default:"N/A" }}
+              {% endif %}
+            </td>
+            <td>
+              {% if transaction.ticket_type %}
+                <span class="badge vip">{{ transaction.ticket_type.name }}</span>
+              {% else %}
+                <span class="badge general">{{ transaction.ticket_type }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if transaction.quantity %}
+              {{ transaction.quantity }}
+              {% else %}
+              {{ transaction.tickets }}
+              {% endif %}
+            </td>
+            <td>
+              {% if transaction.amount %}
+              GH¢{{ transaction.amount }}
+              {% else %}
+              ₦0
+              {% endif %}
+            </td>
+            <td>
+              {% if transaction.date_created %}
+              {{ transaction.date_created|date:"M d, Y" }}
+              {% else %}
+              {{ transaction.created_at|date:"M d, Y" }}
+              {% endif %}
+            </td>
+            <td>
+              <span class="badge completed">Completed</span>
+            </td>
             </tr>
-          </thead>
-          <tbody>
-            <!-- Sample transaction row -->
+            {% empty %}
             <tr>
-              <td>#T1001</td>
-              <td>john@example.com</td>
-              <td><span class="badge vip">VIP</span></td>
-              <td>$50.00</td>
-              <td>May 15, 2023</td>
-              <td><span class="badge completed">Completed</span></td>
-
+              <td colspan="6">No transactions yet</td>
             </tr>
+          {% endfor %}
 
-          </tbody>
-        </table>
-      </div>
+        </tbody>
+      </table>
+    </div>
 
-     
+
 
     <!-- CHARTS SECTION: Data visualization area -->
     <div class="charts-container">
@@ -235,6 +301,21 @@
         <!-- Canvas element for ticket type pie/doughnut chart -->
         <canvas id="ticketChart"></canvas>
       </div>
+    </div>
+  </div>
+
+</div>
+<div class="logout-pop">
+  <div class="logout">
+    <p>Are you sure you want to log out from the admin pannel ?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button>Log Out</button>
+      </a>
+
+      <p>Or</p>
+
+      <button class="DontLogout">No</button>
     </div>
   </div>
 
@@ -261,7 +342,38 @@
     updateCount();
   });
 
-  // Sales Chart
+  // Update the charts with real data
+  document.addEventListener('DOMContentLoaded', function () {
+    // Ticket Distribution Chart
+    const ticketCtx = document.getElementById('ticketChart').getContext('2d');
+    const ticketChart = new Chart(ticketCtx, {
+      type: 'pie',
+      data: {
+        labels: [{% for ticket_type in ticket_types_data %}
+                  '{{ ticket_type.name }}'{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+          ],
+    datasets: [{
+      data: [
+        {% for ticket_type in ticket_types_data %}
+                      {{ ticket_type.sold }}{% if not forloop.last %}, {% endif %}
+  {% endfor %}
+              ],
+  backgroundColor: [
+    '#FFC107', '#4361EE', '#4CC9F0', '#F72585', '#7209B7'
+  ],
+    borderWidth: 0
+          }]
+      },
+  options: {
+    responsive: true,
+      plugins: {
+      legend: { position: 'right' }
+    }
+  }
+  });
+
+  // Sales Chart (you would need to implement actual sales data)
   const salesCtx = document.getElementById('salesChart').getContext('2d');
   const salesChart = new Chart(salesCtx, {
     type: 'line',
@@ -283,32 +395,8 @@
       }
     }
   });
+});
 
-  // Ticket Distribution Chart
-  const ticketCtx = document.getElementById('ticketChart').getContext('2d');
-  const ticketChart = new Chart(ticketCtx, {
-    type: 'pie',
-    data: {
-      labels: ['VIP', 'General', 'Early Bird'],
-      datasets: [{
-        data: [50, 80, 20],
-        backgroundColor: ['#FFC107', '#4361EE', '#4CC9F0'],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'right' }
-      }
-    }
-  });
-
-  // Simulate real-time updates
-  setInterval(() => {
-    const badge = document.querySelector('.update-badge');
-    badge.style.opacity = badge.style.opacity === '0.5' ? '1' : '0.5';
-  }, 1000);
 </script>
 
 <script defer src="{% static 'vote/adminScript.js' %}"></script>

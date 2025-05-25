@@ -37,17 +37,7 @@
       <div class="section-header">
         <h2>Online Transactions </h2>
        
-        <div class="table-controls">
-          <!-- Search input for filtering transactions -->
-          <input type="text" placeholder="Search transactions...">
-          <!-- Dropdown to filter by transaction status -->
-          <select>
-            <option>All Statuses</option>
-            <option>Completed</option>
-            <option>Pending</option>
-            <option>Refunded</option>
-          </select>
-        </div>
+        
       </div>
 
       <!-- Transactions table -->
@@ -55,9 +45,10 @@
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Customer</th>
+              <th>Phone</th>
+              <th>Email</th>
               <th>Ticket Type</th>
+              <th>Quantity</th>
               <th>Amount</th>
               <th>Date</th>
               <th>Status</th>
@@ -65,15 +56,21 @@
           </thead>
           <tbody>
             <!-- Sample transaction row -->
+            {% for payment in payments %}
             <tr>
-              <td>#T1001</td>
-              <td>john@example.com</td>
-              <td><span class="badge vip">VIP</span></td>
-              <td>$50.00</td>
-              <td>May 15, 2023</td>
+              <td>{{ payment.phone }}</td>
+              <td>{{ payment.email }}</td>
+              <td><span class="badge vip">{{ payment.ticket_type.name }}</span></td>
+              <td>{{ payment.quantity }}</td>
+              <td>GH¢{{ payment.amount }}</td>
+              <td>{{ payment.date_created }}</td>
+              {% if payment.verified %}
               <td><span class="badge completed">Completed</span></td>
-
+              {% else %}
+              <td>Not Completed</td>
+              {% endif %}
             </tr>
+            {% endfor %}
 
           </tbody>
         </table>
@@ -110,7 +107,21 @@
 
 
 
+<div class="logout-pop">
+  <div class="logout">
+    <p>Are you sure you want to log out from the admin pannel ?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button>Log Out</button>
+      </a>
 
+      <p>Or</p>
+
+      <button class="DontLogout">No</button>
+    </div>
+  </div>
+
+</div>
 
 
 

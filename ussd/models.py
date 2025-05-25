@@ -32,7 +32,7 @@ class CustomSession(models.Model):
         return (timezone.now() - self.last_activity).total_seconds() > 60
     
     def __str__(self):
-        return f"{self.session_key} - {self.candidate_id} - {self.msisdn} - {self.order_id}"
+        return f"{self.session_key} - {self.candidate_id} - {self.event_id} - {self.msisdn} - {self.order_id}"
     
 
 class PaymentTransaction(models.Model):
@@ -50,6 +50,7 @@ class PaymentTransaction(models.Model):
     event_code = models.CharField(max_length=10, null=True, blank=True) # new
     votes = models.IntegerField(null=True, blank=True)
     tickets = models.PositiveIntegerField(null=True, blank=True) # new
+    ticket_type = models.CharField(max_length=20, null=True, blank=True) # new
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
     event_category = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
     timestamp = models.DateTimeField(null=True, blank=True)  # To store the timestamp of the transaction
