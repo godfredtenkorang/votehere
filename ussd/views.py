@@ -218,7 +218,7 @@ def ussd_api(request):
                 elif level == 'ticket_quantity':
                     try:
                         tickets = int(user_data)
-                        ticket_type = TicketType.objects.get(id=session.ticket_type_id)
+                        ticket_type = TicketType.objects.get(id=session.ticket_type_id, event__code=session.event_id)
                         
                         if tickets <= 0:
                             session.delete()
@@ -229,6 +229,9 @@ def ussd_api(request):
                     except ValueError:
                         session.delete()
                         return JsonResponse(send_response("Invalid number of tickets entered. Please try again.", False))
+                    except TicketType.DoesNotExist:
+                        session.delete()
+                        return JsonResponse(send_response("Invalid ticket selection. Please start over.", False))
                     
                     session.tickets = tickets
                     session.amount = Decimal(tickets) * ticket_type.price
@@ -408,7 +411,7 @@ def webhook_callback(request):
                  # Handle Ticketing
                 elif session.payment_type == 'TICKET':
                     try:
-                        ticket_type = TicketType.objects.get(id=session.ticket_type_id)
+                        ticket_type = TicketType.objects.get(id=session.ticket_type_id, event__code=session.event_id)
                         ticket_type.available_tickets -= session.tickets
                         ticket_type.save()
                         
@@ -437,8 +440,8 @@ def webhook_callback(request):
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
                     
-                    except Event.DoesNotExist:
-                        return JsonResponse({'status': 'error', 'message': 'Event not found'})
+                    except TicketType.DoesNotExist:
+                        return JsonResponse({'status': 'error', 'message': 'Invalid Ticket type for event not found'})
                 
             else:
                 return JsonResponse({'status': 'error', 'message': 'Payment failed'})
