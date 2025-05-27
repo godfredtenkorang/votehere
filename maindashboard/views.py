@@ -3,13 +3,14 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from dashboard.forms import CategorySMSForm, NomineeForm, PaymentTransactionForm, SendSmsForm
+from dashboard.forms import CategorySMSForm, PaymentTransactionForm, SendSmsForm
 from dashboard.utils import send_access_code_to_new_nominee, send_mnotify_sms, send_sms_to_new_nominee
 from payment.models import Nominees
 from ussd.models import PaymentTransaction
 from vote.models import Category, SubCategory
 from django.utils import timezone
 from django.db.models import Sum
+from .forms import NomineeForm
 
 # Create your views here.
 def dashboard(request):
