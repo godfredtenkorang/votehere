@@ -18,6 +18,20 @@ def make_payment(request):
 def result(request, result_slug):
     sub_category = get_object_or_404(SubCategory, slug=result_slug)
     
+    # If sub_category allows checking results without access code
+    if sub_category.can_check_result:
+        # Get all nominees for this sub_category ordered by votes
+        nominees = Nominees.objects.filter(sub_category=sub_category).order_by('-total_vote')
+        context = {
+            'sub_category': sub_category,
+            'nominees': nominees,
+            'title': 'Results',
+            'show_result': True,
+            'public_results': True  # Add this flag to differentiate in template
+        }
+        return render(request, 'payment/resultPage.html', context)
+
+    
     if request.method == 'POST':
         access_code = request.POST.get('access_code', '').strip()
         try:
@@ -26,7 +40,8 @@ def result(request, result_slug):
                 'sub_category': sub_category,
                 'nominee': nominee,
                 'title': 'Your Result',
-                'show_result': True
+                'show_result': True,
+                'public_results': False
             }
             return render(request, 'payment/resultPage.html', context)
         except Nominees.DoesNotExist:

@@ -39,6 +39,7 @@ class SubCategory(models.Model):
     content = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     date = models.DateTimeField(timezone.now)
+    can_check_result = models.BooleanField(default=False)  # Add this field
     
     class Meta:
         verbose_name_plural = "sub categories"

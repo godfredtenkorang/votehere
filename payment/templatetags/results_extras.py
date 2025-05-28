@@ -16,3 +16,7 @@ def divide(value, arg):
 @register.filter
 def multiply(value, arg):
     return float(value) * float(arg)
+
+@register.filter
+def sum_total_votes(queryset):
+    return sum(nominee.total_vote for nominee in queryset)
