@@ -21,7 +21,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class SubCategoryAdmin(admin.ModelAdmin):
     list_display = ('content', 'category', 'date', 'can_check_result')
     list_filter = ('category', 'can_check_result')
-    actions = ['can_check_result',]
+    list_editable = ('can_check_result',)
+    actions = ['can_check_result']
     prepopulated_fields = {'slug': ('content',)}
 
 
