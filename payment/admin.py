@@ -33,6 +33,7 @@ class VoteNomineeAdmin(admin.ModelAdmin):
     fieldsets = [(None, {'fields': ['category', 'sub_category', 'name', 'image', 'slug', 'total_vote', 'can_vote', 'can_see_result', 'price_per_vote', 'code', 'access_code', 'phone_number']}), ('Date Information', {
         'fields': ['date_added', 'end_date'], }), ]
     inlines = [PaymentInLine]
+    list_display = ['category', 'sub_category', 'name', 'total_vote', 'code', 'access_code', 'phone_number']
     list_filter = ('category', 'sub_category')
     search_fields = ('name', 'code')
     prepopulated_fields = {"slug": ("name",)}
