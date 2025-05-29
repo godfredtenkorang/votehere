@@ -19,8 +19,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):
-    list_display = ('content', 'category', 'date')
-    list_filter = ('category',)
+    list_display = ('content', 'category', 'date', 'can_check_result')
+    list_filter = ('category', 'can_check_result')
     prepopulated_fields = {'slug': ('content',)}
 
 
