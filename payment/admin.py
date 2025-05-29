@@ -34,6 +34,7 @@ class VoteNomineeAdmin(admin.ModelAdmin):
         'fields': ['date_added', 'end_date'], }), ]
     inlines = [PaymentInLine]
     list_filter = ('category', 'sub_category')
+    search_fields = ('name', 'code')
     prepopulated_fields = {"slug": ("name",)}
   
   
