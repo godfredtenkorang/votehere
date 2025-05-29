@@ -1,0 +1,120 @@
+{% extends 'voting/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<style>
+    .voting-form {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .candidate-photo-container {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .candidate-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 3px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+    
+    .no-photo {
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #6c757d;
+    }
+    
+    .form-check-input:checked ~ .candidate-photo-container .candidate-photo {
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
+    
+    .candidate-option:hover .candidate-photo {
+        transform: scale(1.05);
+        border-color: #adb5bd;
+    }
+    
+    .category-section {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+        .candidate-photo-container {
+            width: 80px;
+            height: 80px;
+        }
+    }
+</style>
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+<br>
+<h2 class="text-center" style="font-weight: 800; text-transform: uppercase;">{{ election.title }}</h2>
+    <form method="post" class="voting-form">
+        {% csrf_token %}
+    
+        {% for field in form %}
+        <div class="category-section card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">{{ field.label }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for choice in field %}
+                    <div class="col-md-4 mb-3">
+                        <div class="candidate-option text-center">
+                            <!-- Radio Button -->
+                            <div class="form-check d-flex justify-content-center">
+                                <input class="form-check-input" type="radio" name="{{ field.name }}"
+                                    id="{{ choice.id_for_label }}" value="{{ choice.data.value }}"
+                                    style="transform: scale(1.5); margin-top: 1.8rem;">
+                            </div>
+    
+                            <!-- Candidate Photo -->
+                            <div class="candidate-photo-container mx-auto mb-2">
+                                {% if choice.data.label.photo %}
+                                <img src="{{ choice.data.label.photo.url }}" alt="{{ choice.choice_label }}"
+                                    class="candidate-photo rounded-circle">
+                                {% else %}
+                                <div class="candidate-photo rounded-circle no-photo">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+    
+                            <!-- Candidate Info -->
+                            <label class="form-check-label d-block" for="{{ choice.id_for_label }}">
+                                <h5 class="mb-1">{{ choice.choice_label }}</h5>
+                                {% if choice.data.label.bio %}
+                                <p class="text-muted small mb-0">{{ choice.data.label.bio|truncatewords:15 }}</p>
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                <i class="fas fa-check-circle mr-2"></i> Submit All Votes
+            </button>
+        </div>
+        </form>
+
+{% endblock %}

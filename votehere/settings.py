@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vote',
+    'voting',
     'payment',
     'register',
     'dashboard',
@@ -255,7 +256,10 @@ MNOTIFY_API_KEY= config("MNOTIFY_API_KEY")
 # MNOTIFY_API_KEY= os.environ.get('MNOTIFY_API_KEY')
 
 
-
+AUTHENTICATION_BACKENDS = [
+    'voting.backends.VoterAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 
 

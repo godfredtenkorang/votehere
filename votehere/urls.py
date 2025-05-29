@@ -35,6 +35,7 @@ urlpatterns = [
     path('robots.txt/', TemplateView.as_view(template_name="vote/robots.txt", content_type="text/plain")),
     path('voteafric_admin/', admin.site.urls),
     path('', include('vote.urls')),
+    path('voting/', include('voting.urls')),
     path('payment/', include('payment.urls')),
     path('register/', include('register.urls')),
     path('dashboard/', include('dashboard.urls')),

@@ -1,0 +1,43 @@
+{% extends 'voting/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<br>
+
+<h2 class="text-center" style="font-weight: 800; text-transform: uppercase;">Election Results: {{ election.title }}</h2>
+<br>
+<div class="container">
+
+
+{% for result in results %}
+<div class="category-results">
+    <h3>{{ result.category.name }}</h3>
+    <p>Total votes: {{ result.total_votes }}</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Candidate</th>
+                <th>Votes</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for candidate in result.candidates %}
+            <tr>
+                <td>{{ candidate.candidate.name }}</td>
+                <td>{{ candidate.votes }}</td>
+                <td>{{ candidate.percentage|floatformat:1 }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<hr>
+{% endfor %}
+
+<a href="{% url 'vote-logout' %}" class="btn btn-secondary">Logout</a>
+</div>
+<br>
+{% endblock %}

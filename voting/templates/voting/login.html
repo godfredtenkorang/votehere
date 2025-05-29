@@ -1,0 +1,37 @@
+{% extends 'voting/base.html' %}
+{% load static %}
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+<section class="paymentForm adminLogin-form">
+
+
+
+    <form class="form-for-voting" method="POST">
+        <div class="welcome-area">
+            <h2>Voter Login</h2>
+        </div>
+
+        {% csrf_token %}
+        
+        <div class="t-input">
+            <label for="username">Username</label><br>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <br>
+            <div class="t-input">
+                <label for="password">Password</label><br>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+        <!-- pay button -->
+        <button type="submit">Login</button>
+
+    </form>
+</section>
+
+{% endblock content %}
