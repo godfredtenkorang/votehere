@@ -21,7 +21,7 @@ def send_sms_to_new_nominee(name, phone_number, category):
     apiKey = settings.MNOTIFY_API_KEY
     payload = {
         "key": apiKey,
-        "sender": 'voteafric',
+        "sender": 'VOTEAFRIC',
         "recipient[]": phone_number,
         "message": f"Congrat {name}, your {category} of the year nomination has been received and under review. We will notify you on the status soon. Voteafric!",
         "is_schedule": False,
@@ -53,7 +53,7 @@ def send_mnotify_sms(phone_numbers, message):
     
     payload = {
         "key": apiKey,
-        "sender": 'voteafric',
+        "sender": 'VOTEAFRIC',
         "recipient[]": phone_numbers,
         "message": message,
         "is_schedule": False,
@@ -80,7 +80,7 @@ def send_access_code_to_new_nominee(name, phone_number, access_code, category):
     apiKey = settings.MNOTIFY_API_KEY
     payload = {
         "key": apiKey,
-        "sender": 'voteafric',
+        "sender": 'VOTEAFRIC',
         "recipient[]": phone_number,
         "message": f"Dear {name}, \nYou can now check your individual results. Please use this code to access your results: {access_code} for the category {category}. If you have any questions, feel free to contact us. \nThank you. \n\nVoteAfric!",
         "is_schedule": False,

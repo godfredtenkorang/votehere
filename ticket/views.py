@@ -82,7 +82,7 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
             event.save()
             
             subject = f"Your Ticket for {event.event.name}"
-            from_email = settings.EMAIL_HOST_USER
+            from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [ticket.email]
             
             html_content = render_to_string('ticket/ticket_email.html', {'ticket': ticket, 'event': event})

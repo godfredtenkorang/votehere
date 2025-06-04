@@ -10,7 +10,7 @@ def send_sms_to_voter(phone_number, name, category, amount, transaction_id):
     apiKey = settings.MNOTIFY_API_KEY
     payload = {
         "key": apiKey,
-        "sender": 'voteafric',
+        "sender": 'VOTEAFRIC',
         "recipient[]": phone_number,
         "message": f"Hello, you have successfully voted for {name} in {category}. GHS{amount} was charged. Trans ID: {transaction_id}",
         "is_schedule": False,
@@ -41,7 +41,7 @@ def send_sms_to_nominee_for_vote(phone_number, name, vote, phone, transaction_id
     apiKey = settings.MNOTIFY_API_KEY
     payload = {
         "key": apiKey,
-        "sender": 'voteafric',
+        "sender": 'VOTEAFRIC',
         "recipient[]": phone_number,
         "message": f"Hello {name}, you have received {vote} votes from {phone}. Trans ID: {transaction_id}",
         "is_schedule": False,

@@ -23,7 +23,7 @@ def send_ticket_sms(phone_number, event_name, ticket_count, amount, event_date, 
     formatted_date = event_date.strftime('%b %d, %Y at %I:%M %p')
     payload = {
         "key": apiKey,
-        "sender": 'voteafric',
+        "sender": 'VOTEAFRIC',
         "recipient[]": phone_number,
         "message": 
             f"Your ticket(s) for {event_name}\n"
