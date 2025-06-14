@@ -49,14 +49,21 @@ class PaymentTransaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50) 
     payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES, null=True, blank=True) # new
+    
+    # Vote-specific fields
     nominee_code = models.CharField(max_length=10, null=True, blank=True)
-    event_code = models.CharField(max_length=10, null=True, blank=True) # new
-    donation_code = models.CharField(max_length=10, null=True, blank=True) # New
     votes = models.IntegerField(null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
+    
+    # Ticket-specific fields
+    event_code = models.CharField(max_length=10, null=True, blank=True) # new
     tickets = models.PositiveIntegerField(null=True, blank=True) # new
     ticket_type = models.CharField(max_length=20, null=True, blank=True) # new
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
     event_category = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True, related_name='paymenttransactions')
+    
+    # Donation-specific fields
+    donation_code = models.CharField(max_length=10, null=True, blank=True) # New
+    
     timestamp = models.DateTimeField(null=True, blank=True)  # To store the timestamp of the transaction
     created_at = models.DateTimeField(auto_now_add=True)
     

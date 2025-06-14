@@ -464,6 +464,7 @@ def webhook_callback(request):
                 return JsonResponse({'status': 'error', 'message': 'Session expired'}, status=400)
 
             if status == 'PAID':
+                # Handle VOTE payment
                 if session.payment_type == 'VOTE':
                 
                     nominee_code = session.candidate_id
@@ -497,10 +498,7 @@ def webhook_callback(request):
                         ticket_type.available_tickets -= session.tickets
                         ticket_type.save()
                         
-                        event_code = session.event_id
-                        tickets = session.tickets
-                        ticket_name = ticket_type.name
-                        event_category = ticket_type.event.name
+                        
                         
                         PaymentTransaction.objects.create(
                             order_id=order_id,
@@ -509,10 +507,10 @@ def webhook_callback(request):
                             amount=amount,
                             status=status,
                             payment_type='TICKET',
-                            event_code=event_code,
-                            tickets=tickets,
-                            ticket_type=ticket_name,
-                            event_category=event_category,
+                            event_code=session.event_id,
+                            tickets=session.tickets,
+                            ticket_type=ticket_type.name,
+                            event_category=ticket_type.event.name,
                             timestamp=timestamp_str
                         )
                         # Send SMS with ticket details
@@ -529,6 +527,7 @@ def webhook_callback(request):
                     
                     except TicketType.DoesNotExist:
                         return JsonResponse({'status': 'error', 'message': 'Invalid Ticket type for event not found'})
+                
                 elif session.payment_type == 'DONATION':
                     try:
                         cause = DonationCause.objects.get(code=session.donation_id)
@@ -538,6 +537,7 @@ def webhook_callback(request):
                         PaymentTransaction.objects.create(
                             order_id=order_id,
                             invoice_no=invoice_no,
+                            transaction_id=invoice_no,
                             amount=amount,
                             status=status,
                             payment_type='DONATION',
