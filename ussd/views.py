@@ -498,8 +498,7 @@ def webhook_callback(request):
                     # ticket_type = update_tickets(event_code, tickets)
                     try:
                         ticket_type = TicketType.objects.get(id=session.ticket_type_id, event__code=session.event_id)
-                        ticket_type.available_tickets -= session.tickets
-                        ticket_type.save()
+                        
                         
                         
                         
@@ -516,6 +515,9 @@ def webhook_callback(request):
                             event_category=ticket_type.event.name,
                             timestamp=timestamp_str
                         )
+                        
+                        ticket_type.available_tickets -= session.tickets
+                        ticket_type.save()
                         # Send SMS with ticket details
                         send_ticket_sms(
                             phone_number=session.msisdn,  
