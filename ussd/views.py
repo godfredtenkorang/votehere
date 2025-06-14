@@ -2,6 +2,8 @@ import hashlib
 import hmac
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
+from donation.utils import send_donation_sms
 from .models import CustomSession, PaymentTransaction
 import json
 from hashlib import md5
@@ -548,6 +550,13 @@ def webhook_callback(request):
                             payment_type='DONATION',
                             donation_code=session.donation_id,
                             timestamp=timestamp_str
+                        )
+                        # Send donation confirmation SMS
+                        send_donation_sms(
+                            phone_number=session.msisdn,
+                            cause_name=cause.name,
+                            amount=amount,
+                            reference=order_id
                         )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Donation successful'})
