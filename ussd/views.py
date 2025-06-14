@@ -510,7 +510,7 @@ def webhook_callback(request):
                             event_code=session.event_id,
                             tickets=session.tickets,
                             ticket_type=ticket_type.name,
-                            event_category=ticket_type.event.name,
+                            event_category=ticket_type.event,
                             timestamp=timestamp_str
                         )
                         # Send SMS with ticket details
