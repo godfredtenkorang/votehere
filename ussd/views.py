@@ -17,7 +17,7 @@ from ticket.models import Event, TicketType
 from donation.models import DonationCause
 from datetime import datetime
 from django.utils import timezone
-from ticket.utis import send_ticket_sms
+from ticket.utils import send_ticket_sms
 from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote
 
 
