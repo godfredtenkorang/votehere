@@ -3,7 +3,7 @@ import hmac
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from donation.utils import send_donation_sms
+
 from .models import CustomSession, PaymentTransaction
 import json
 from hashlib import md5
@@ -17,8 +17,8 @@ from ticket.models import Event, TicketType
 from donation.models import DonationCause
 from datetime import datetime
 from django.utils import timezone
-from ticket.utils import send_ticket_sms
-from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote
+
+from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote, send_donation_sms, send_ticket_sms
 
 
 
