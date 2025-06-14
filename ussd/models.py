@@ -15,8 +15,8 @@ class CustomSession(models.Model):
     session_key = models.CharField(max_length=32, primary_key=True)
     user_id = models.CharField(max_length=100)
     level = models.CharField(max_length=100, null=True, blank=True)
-    ticket_type_id = models.CharField(max_length=100, null=True, blank=True) # New
     candidate_id = models.CharField(max_length=100, null=True, blank=True)
+    ticket_type_id = models.CharField(max_length=100, null=True, blank=True) # New
     event_id = models.CharField(max_length=10, null=True, blank=True) # New
     donation_id = models.CharField(max_length=10, blank=True, null=True)
     votes = models.IntegerField(null=True, blank=True)
