@@ -262,9 +262,9 @@ def ussd_api(request):
                         
                         message = (
                             f"Confrim Cause\n"
-                            f"Name: {cause.name}"
-                            f"Target: GH¢{cause.target_amount:.2f}\n"
-                            f"Current: GH¢{cause.current_amount:.2f}\n"
+                            f"Name: {cause.name}\n"
+                            # f"Target: GH¢{cause.target_amount:.2f}\n"
+                            # f"Current: GH¢{cause.current_amount:.2f}\n"
                             f"1) Confirm\n2) Cancel"
                         )
                         session.donation_id = cause.code
@@ -280,7 +280,10 @@ def ussd_api(request):
                     if user_data == '1':
                         session.level = 'donation_amount'
                         session.save()
-                        message = "Enter donation amount (GH¢)"
+                        message = (
+                            f"VoteAfric Foundation\n\n"
+                            f"Enter donation amount (GH¢)"
+                        )
                         return JsonResponse(send_response(message, True))
                     elif user_data == '2':
                         session.delete()
