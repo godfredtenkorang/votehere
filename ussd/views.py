@@ -264,7 +264,7 @@ def ussd_api(request):
                         
                         message = (
                             f"Confrim Cause\n"
-                            f"Name: {cause.name}\n"
+                            f"{cause.name}\n"
                             # f"Target: GH¢{cause.target_amount:.2f}\n"
                             # f"Current: GH¢{cause.current_amount:.2f}\n"
                             f"1) Confirm\n2) Cancel"

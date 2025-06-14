@@ -6,6 +6,58 @@
 {% block tw-image %}{{ c.image }}{% endblock %}
 {% block content %}
 
+<style>
+  .donation-banner {
+    position: relative;
+    background: url('{% static "vote/img/donation_bg.jpeg" %}') no-repeat center center/cover;
+    height: 400px;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .donation-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Black opacity overlay */
+    z-index: 0;
+  }
+
+  .donation-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    max-width: 800px;
+  }
+
+  .donation-content h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .donation-content h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #ffcc00;
+  }
+
+  .donation-content p {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+
+  .donation-steps {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+  }
+</style>
 <!-- banner section -->
 <section id="banner">
   <div class="container">
@@ -44,6 +96,26 @@
   </div>
   </div>
 </section>
+
+<br>
+
+<div class="donation-banner">
+  <div class="donation-content">
+    <h1>Your support makes a difference</h1>
+    <h2>VOTEAFRIC FOUNDATION</h2>
+    <p><em>Building a better future together</em></p>
+
+    <div class="donation-steps">
+      <p><strong>Donation Process:</strong></p>
+      <p>Dial <strong>*920*106#</strong></p>
+      <p>Select <strong>Donation</strong></p>
+      <p>Enter Donation cause code: <strong>VTF</strong></p>
+      <p>Confirm</p>
+      <p>Enter amount</p>
+      <p>Proceed to make payment</p>
+    </div>
+  </div>
+</div>
 <!-- search bar -->
 <!-- <div class="search-bar-section">
   <form action="{% url 'index' %}">
