@@ -6,5 +6,5 @@ admin.site.register(CustomSession)
 
 @admin.register(PaymentTransaction)
 class PaymentTransactionAdmin(admin.ModelAdmin):
-    list_display = ['invoice_no', 'amount', 'status', 'payment_type', 'nominee_code', 'event_code', 'votes', 'tickets', 'category', 'timestamp']
+    list_display = ['invoice_no', 'amount', 'status', 'payment_type', 'nominee_code', 'event_code', 'donation_code', 'votes', 'tickets', 'category', 'timestamp']
     list_filter = ('category', 'event_category', 'nominee_code', 'payment_type')

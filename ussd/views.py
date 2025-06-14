@@ -12,6 +12,7 @@ import random
 from django.conf import settings
 from payment.models import Nominees
 from ticket.models import Event, TicketType
+from donation.models import DonationCause
 from datetime import datetime
 from django.utils import timezone
 from ticket.utis import send_ticket_sms
@@ -71,7 +72,7 @@ def ussd_api(request):
             if msgtype:  # Initial request
                 session.level = 'start'
                 session.save()
-                message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\nContact: 0553912334\nor: 0558156844"
+                message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\n3. Donation\nContact: 0553912334\nor: 0558156844"
                 return JsonResponse(send_response(message, True))
             else:
                 session.last_activity = timezone.now() # Follow-up request
@@ -89,6 +90,12 @@ def ussd_api(request):
                         session.level = 'ticket_start'
                         session.save()
                         message = "Enter Event code"
+                        return JsonResponse(send_response(message, True))
+                    elif user_data == '3': # Donation
+                        session.payment_type = 'DONATION'
+                        session.level = 'donation_start'
+                        session.save()
+                        message = "Enter Donation cause code"
                         return JsonResponse(send_response(message, True))
                     else:
                         session.delete()
@@ -240,7 +247,64 @@ def ussd_api(request):
                     message = f"You have selected {ticket_type.name} tickets\nQuantity: {tickets}\nTotal amount is GH¢{float(session.amount):.2f}.\n\nPress 1 to proceed."
                     return JsonResponse(send_response(message, True))
 
-                
+                # Donation flow
+                elif level == 'donation_start':
+                    try:
+                        cause = DonationCause.objects.get(code__iexact=user_data)
+                        
+                        if timezone.now() > cause.end_date:
+                            session.delete()
+                            return JsonResponse(send_response('Donation period has ended', False))
+                        
+                        if not cause.active:
+                            session.delete()
+                            return JsonResponse(send_response('Donation are currently closed for this cause.', False))
+                        
+                        message = (
+                            f"Confrim Cause\n"
+                            f"Name: {cause.name}"
+                            f"Target: GH¢{cause.target_amount:.2f}\n"
+                            f"Current: GH¢{cause.current_amount:.2f}\n"
+                            f"1) Confirm\n2) Cancel"
+                        )
+                        session.donation_id = cause.code
+                        session.level = 'donation_confirm'
+                        session.save()
+                        return JsonResponse(send_response(message, True))
+                    
+                    except DonationCause.DoesNotExist:
+                        session.delete()
+                        return JsonResponse(send_response('Invalid cause code. Please try again.', False))
+                    
+                elif level == 'donation_confirm':
+                    if user_data == '1':
+                        session.level = 'donation_amount'
+                        session.save()
+                        message = "Enter donation amount (GH¢)"
+                        return JsonResponse(send_response(message, True))
+                    elif user_data == '2':
+                        session.delete()
+                        return JsonResponse(send_response('You have cancelled the process.', False))
+                    else:
+                        session.delete()
+                        return JsonResponse(send_response('Invalid input. Please try again.', False))
+                    
+                elif level == 'donation_amount':
+                    try:
+                        amount = Decimal(user_data)
+                        if amount <= 0:
+                            session.delete()
+                            return JsonResponse(send_response('Invalid amount. Please try again.', False))
+                    except (ValueError, TypeError):
+                        session.delete()
+                        return JsonResponse(send_response('Invalid amount entered. Please try again.', False))
+                    
+                    session.level = 'donation_payment'
+                    session.amount = amount
+                    session.save()
+                    message = f"You are donating GH¢{float(amount):.2f}.\n\nPress 1 to proceed."
+                    return JsonResponse(send_response(message, True))
+                    
                 elif level.endswith('_payment'):
                     if user_data != '1':
                         session.delete()
@@ -264,8 +328,14 @@ def ussd_api(request):
                     # Determine payment description based on type
                     if session.payment_type == 'VOTE':
                         item_desc = f"Votes for {session.candidate_id}"
+                        reference = session.candidate_id
                     elif session.payment_type == 'TICKET':
                         item_desc = f"Tickets for {session.event_id}"
+                        reference = session.event_id
+                    else:
+                        item_desc = f"Donation for {session.donation_id}"
+                        reference = session.donation_id
+                        
                     order_id = str(uuid.uuid4())
                     session.order_id = order_id
                     session.msisdn = msisdn
@@ -283,7 +353,8 @@ def ussd_api(request):
                             'customerNumber': str(telephone),
                             'payby': 'VODAFONE',
                             'newVodaPayment': True,  # This is specific to Vodafone
-                            'callback': callback
+                            'callback': callback,
+                            'reference': reference # Added reference
                         }
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
                     else:
@@ -300,6 +371,7 @@ def ussd_api(request):
                             'key': key,
                             'callback': callback,
                             'item_desc': item_desc,
+                            'reference': reference # Added reference
 
                 
                         }
@@ -457,7 +529,26 @@ def webhook_callback(request):
                     
                     except TicketType.DoesNotExist:
                         return JsonResponse({'status': 'error', 'message': 'Invalid Ticket type for event not found'})
-                
+                elif session.payment_type == 'DONATION':
+                    try:
+                        cause = DonationCause.objects.get(code=session.donation_id)
+                        cause.current_amount += Decimal(amount)
+                        cause.save()
+                        
+                        PaymentTransaction.objects.create(
+                            order_id=order_id,
+                            invoice_no=invoice_no,
+                            amount=amount,
+                            status=status,
+                            payment_type='DONATION',
+                            donation_code=session.donation_id,
+                            timestamp=timestamp_str
+                        )
+                        session.delete()
+                        return JsonResponse({'status': 'success', 'message': 'Donation successful'})
+                    except DonationCause.DoesNotExist:
+                        return JsonResponse({'status': 'error', 'message': 'Cause not found'})
+                return JsonResponse({'status': 'error', 'message': 'Unknown payment type'}, status=400)
             else:
                 return JsonResponse({'status': 'error', 'message': 'Payment failed'})
         

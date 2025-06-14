@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'user',
     'ussd',
     'ticket',
+    'donation',
     'rest_framework',
     'rest_framework.authtoken',
     # 'storages',
