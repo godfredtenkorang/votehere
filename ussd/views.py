@@ -527,7 +527,7 @@ def webhook_callback(request):
                             ticket_count=session.tickets,
                             amount=amount,
                             event_date=ticket_type.event.end_date,
-                            reference=order_id
+                            reference=invoice_no
                         )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
@@ -556,7 +556,7 @@ def webhook_callback(request):
                             phone_number=session.msisdn,
                             cause_name=cause.name,
                             amount=amount,
-                            reference=order_id
+                            reference=invoice_no
                         )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Donation successful'})
