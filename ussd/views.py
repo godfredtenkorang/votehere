@@ -333,13 +333,13 @@ def ussd_api(request):
                     # Determine payment description based on type
                     if session.payment_type == 'VOTE':
                         item_desc = f"Votes for {session.candidate_id}"
-                        reference = session.candidate_id
+                        
                     elif session.payment_type == 'TICKET':
                         item_desc = f"Tickets for {session.event_id}"
-                        reference = session.event_id
+                        
                     else:
                         item_desc = f"Donation for {session.donation_id}"
-                        reference = session.donation_id
+                        
                         
                     order_id = str(uuid.uuid4())
                     session.order_id = order_id
@@ -359,7 +359,7 @@ def ussd_api(request):
                             'payby': 'VODAFONE',
                             'newVodaPayment': True,  # This is specific to Vodafone
                             'callback': callback,
-                            'reference': reference # Added reference
+                            
                         }
                     # secrete = f"{secrete[:4]} {secrete[4:]}"
                     else:
@@ -376,7 +376,7 @@ def ussd_api(request):
                             'key': key,
                             'callback': callback,
                             'item_desc': item_desc,
-                            'reference': reference # Added reference
+                            
 
                 
                         }
