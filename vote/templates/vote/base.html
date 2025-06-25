@@ -64,9 +64,11 @@
                     <li><a href="{% url 'ticketing' %}">Tickets</a></li>
                     <li><a href="{% url 'search_transaction' %}">Verify Payment</a></li>
                     <!-- <li><a href="{% url 'blog' %}">Blog</a></li> -->
-                    <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
-                    <li><a href="{% url 'termsCondition' %}">Term & Condition </a></li>
+                   
                     <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                     <a href="{% url 'joinUs' %}" class="joinUs">
+                        <button>Join us  </button>
+                       </a> 
                     <div class="remove-navbar">
                         <i class="fas fa-times"></i>
                     </div>
@@ -86,14 +88,66 @@
 
     {% block content %} {% endblock %}
 
-    <!-- footer section -->
-    <footer>
-        <!-- <a href="https://wa.link/gj4et8">Godey Tech</a> -->
-        <!-- <a href="https://godeytech.com/">Godey Tech</a>
-        <a href="https://wa.link/908k9b">BenTech</a> -->
-        <p> © Copyright 2025 VoteAfric. All right reserved {% if user.is_authenticated %}<a href="{% url 'adminHome' %}">Admin</a> {% else %} <a href="{% url 'login' %}">Admin</a> {% endif %}</p>
-    </footer>
+    
+  <footer class="footer">
+    <div class="footer-top">
+      <p>Get connected with us on social networks:</p>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-google"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
 
+    <div class="footer-content">
+      <div class="footer-box">
+       <div class="logo">
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="voteafric">
+
+
+                    </a>
+
+                </div>
+        <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions..</p>
+      </div>
+
+      <div class="footer-box">
+        <h4>Liks</h4>
+        <li><a  href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'ticketing' %}">Tickets</a></li>
+                    
+      </div>
+
+      <div class="footer-box">
+      <li><a href="{% url 'search_transaction' %}">Verify Payment</a></li>
+                   
+                   
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'termsCondition' %}">Term & Condition </a></li>
+                    <li><a href="">Join us </a> </li>
+
+      </div>
+
+      <div class="footer-box">
+        <h4>CONTACT</h4>
+        <p><i class="fas fa-home"></i> Ghana</p>
+        <p><i class="fas fa-envelope"></i> voteafric66@gmail.com</p>
+        <p><i class="fas fa-phone"></i> +233 55 678 3586</p>
+        <p><i class="fas fa-print"></i> + 233 536 626 936</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 Copyright:
+      <a href="#" style="color: #bbb;"> voteafric.com</a>
+    </div>
+  </footer>
 
 
     <!-- here is the link to javasc ript-->

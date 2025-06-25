@@ -1,0 +1,70 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- banners -->
+<div class="banners">
+  
+    <div class="banners-content">
+        <h1>Join Us</h1>
+    </div>
+
+</div>
+
+
+
+
+</head>
+<body>
+<div class="join-container">
+  <div class="join-left">
+  <h2>Why Join Vote Afric?</h2>
+  <p>Vote Afric is Ghana and Africa’s leading digital voting service for Reality Shows, Awards, Beauty Pageants, TV shows, and all forms of viewer-choice awards and competitions.</p>
+  <p>Vote Afric enables event managers to maximize revenues from their event voting using our AI-powered system, ensuring significant profitability.</p>
+  <p>With Vote Afric, event organizers have full control of their events through the Event Manager Dashboard. You can monitor in real time the voting, vote tallies, payment transactions, highest weekly voters, and receive AI-powered analytics and insights of your events.</p>
+  <p>Vote Afric also gives event organizers total control of their event voting revenue, allowing them to request settlement at their convenience anytime.</p>
+  <p>This is why Vote Afric is trusted by the biggest events in Ghana and Africa. Join Vote Afric now.</p>
+  <h3 style="margin-top: 20px;">Vote Afric</h3>
+</div>
+
+
+  <div class="join-right">
+    <div class="join-button-group">
+      <button class="join-button btn-organizer">Join As an Event Organizer</button>
+    </div>
+
+    <form>
+      <input type="text" class="join-form-input" placeholder="Name of Event" required>
+      <input type="text" class="join-form-input" placeholder="Name of Organization" required>
+      <input type="text" class="join-form-input" placeholder="Enter Your Name" required>
+      <input type="tel" class="join-form-input" placeholder="Phone Number of Contact Person" required>
+      <input type="email" class="join-form-input" placeholder="Enter Your Email" required>
+      <textarea class="join-form-textarea" placeholder="What is the event about?" required></textarea>
+      <input type="text" class="join-form-input" placeholder="Promo Code (Optional)">
+
+      <div class="event-type-group">
+        <label class="event-type-option"><input type="radio" name="type" value="Reality Show"> Reality Show</label>
+        <label class="event-type-option"><input type="radio" name="type" value="Awards"> Awards</label>
+        <label class="event-type-option"><input type="radio" name="type" value="Elections"> Elections</label>
+        <label class="event-type-option"><input type="radio" name="type" value="Quiz"> Quiz</label>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

@@ -6,7 +6,7 @@
 {% block tw-image %}{{ c.image }}{% endblock %}
 {% block content %}
 
-<style>
+<!-- <style>
   .donation-banner {
     position: relative;
     background: url('{% static "vote/img/donation_bg.jpeg" %}') no-repeat center center/cover;
@@ -57,7 +57,94 @@
     padding: 15px;
     border-radius: 8px;
   }
+</style> -->
+
+
+
+<style>
+  .donation-banner {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 3%;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .donate-img {
+    flex: 1;
+    max-width: 700px;
+  }
+
+  .donate-img img {
+    width: 100%;
+    height: 70vh;
+   
+    border-radius: 10px;
+  }
+
+  .donation-content {
+    flex: 1;
+    max-width: 600px;
+  }
+
+  .donation-content h1 {
+    font-size: 2rem;
+    color: #522a83;
+  }
+
+  .donation-content h2 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: #fb812b;
+  }
+
+  .donation-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #444;
+  }
+
+  .donation-steps {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fbe9e7;
+    border-left: 5px solid #fb812b;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .donation-banner {
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    .donate-img img {
+      height: auto;
+    }
+  }
+video {
+    width: 100%;
+    max-width: 50%;
+  
+    display: block;
+    
+   
+
+  }
+
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- banner section -->
 <section id="banner">
   <div class="container">
@@ -100,11 +187,26 @@
 <br>
 
 <div class="donation-banner">
+  <div class="donate-img">
+     <img src="{% static 'vote/img/help.jpg' %}" alt="image">
+  </div>
   <div class="donation-content">
     <h1>Your support makes a difference</h1>
     <h2>VOTEAFRIC FOUNDATION</h2>
     <p><em>Building a better future together</em></p>
 
+    <!-- ❤️ Emotional Appeal -->
+    <p>
+      Every cedi you give brings hope to someone in need. Whether it's helping a child go to school, supporting a struggling family, or empowering a community through education and opportunity — your donation creates real change.
+    </p>
+    <p>
+      Many lives in Ghana and across Africa are waiting for a second chance — a chance you can help provide. Let your kindness be the light that leads them forward.
+    </p>
+    <p>
+      Together, we can build a future where no one is left behind.
+    </p>
+
+    <!-- 📞 Donation Steps -->
     <div class="donation-steps">
       <p><strong>Donation Process:</strong></p>
       <p>Dial <strong>*920*106#</strong></p>
@@ -116,6 +218,58 @@
     </div>
   </div>
 </div>
+
+
+
+
+<!-- ongoing award -->
+<div class="award-main-container">
+  <div class="ongoin-event">
+    {% if all_categories %}
+    <h2>Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
+    {% else %}
+    <h2>No Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
+    {% endif %}
+  </div>
+
+  <!-- awards -->
+  <div class="award-container">
+    <!-- Individual award items -->
+    {% for c in all_categories %}
+    <div class="award">
+      <a href="{% url 'award_by_category' c.slug %}">
+        <img src="{{ c.image.url }}" alt="image" height="250px" loading="lazy">
+        <div class="award-text">
+          <h4>{{ c.title }}</h4>
+          <h5>{{ c.award }}</h5>
+        </div>
+      </a>
+    </div>
+
+
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- search bar -->
 <!-- <div class="search-bar-section">
   <form action="{% url 'index' %}">
@@ -123,51 +277,10 @@
   </form>
 </div> -->
 <!-- end of banner section -->
-<div class="spinner">
+<!-- <div class="spinner">
   <div class="skeleton-spinner"></div>
   <p>Please wait! We are putting everything togethere for you</p>
-</div>
-
-
-
-
-    <!-- About us section -->
-    <section class="about-us-container ">
-      <div class="about-image">
-    
-     
-
-
-      <img src="{% static 'vote/img/study-group-african-people.jpg' %}"  alt="">
-      
-
-        <div class="play-overlay">
-          <button id="playBtn">
-            <i class="fas fa-play"></i>
-          </button>
-          <div id="transcription" class="hidden"></div>
-        </div>
-      
-    
-        <audio id="audio" src="{% static 'vote/audio/ElevenLabs_2025-04-06T22_43_40_John Doe Gentle_pvc_sp100_s43_sb52_se0_b_m2.mp3' %}" controls class="hidden audio-controls"></audio> 
-      </div>
-      
-      
-      
-      <div class="about-us-content">
-        <div class="col">
-          <h2>Empowering Voices Through Fair and Inclusive Award Voting</h2>
-          <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency, using technology and community engagement to serve both voters and organizers. Our mission is to ensure every vote counts, recognizing excellence across various industries through democratic and credible elections.</p>
-          <div class="readmore">
-           <a href="{% url 'about' %}">
-            <button>Read more</button>
-           </a>
-          </div>
-        </div>
-        
-      </div>
-  </section>
-
+</div> -->
 
   <section class="how-it-works">
     <h2>How It Works</h2>
@@ -207,15 +320,50 @@
 
   </section>
   
-  <section class="hero-section">
-    <div class="hero-left">
-      <div class="image-wrapper">
-        <img src="{% static 'vote/img/man.png' %}"  alt="">
+
+
+    <!-- About us section -->
+    <section class="about-us-container ">
+     
+    <video autoplay controls >
+  <source src="{% static 'vote/img/vote.mp4' %}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+     
+
+
+      
+
+        <!-- <div class="play-overlay">
+          <button id="playBtn">
+            <i class="fas fa-play"></i>
+          </button>
+          <div id="transcription" class="hidden"></div>
+        </div> -->
+      
+    
       </div>
-      <div class="rotating-circle">
+      
+      
+      
+      <div class="about-us-content">
+        <div class="col">
+          <h2>Empowering Voices Through Fair and Inclusive Award Voting</h2>
+          <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency, using technology and community engagement to serve both voters and organizers. Our mission is to ensure every vote counts, recognizing excellence across various industries through democratic and credible elections.</p>
+          <div class="readmore">
+           <a href="{% url 'about' %}">
+            <button>Read more</button>
+           </a>
+          </div>
+        </div>
         
       </div>
-    </div>
+  </section>
+
+
+
+  <section class="hero-section">
+    
     <div class="hero-right">
       <h5>VoteAfric & Ticket</h5>
       <h1>
@@ -234,6 +382,14 @@
        <a href="https://wa.link/9g6bco">
         <button class="secondary-btn">Send a message</button>
        </a>
+      </div>
+    </div>
+    <div class="hero-left">
+      <div class="image-wrapper">
+        <img src="{% static 'vote/img/ben.jpg' %}"  alt="">
+      </div>
+      <div class="rotating-circle">
+        
       </div>
     </div>
 </section>
@@ -299,7 +455,7 @@
 
 
 
-<script>
+<!-- <script>
   const playBtn = document.getElementById('playBtn');
   const audio = document.getElementById('audio');
   const transcription = document.getElementById('transcription');
@@ -335,7 +491,7 @@
       transcription.textContent = "Live transcription not supported in this browser.";
     }
   });
-</script>
+</script> -->
 
 <script>
   const textSlide = document.querySelector(".text-slide")
