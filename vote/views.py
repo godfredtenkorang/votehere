@@ -193,3 +193,7 @@ def award_page(request):
         'all_categories': all_categories,
     }
     return render(request, 'vote/awardPage.html', context)
+
+
+def joinUs(request):
+    return render(request, 'vote/joinUs.html')
