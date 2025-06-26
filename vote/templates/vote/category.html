@@ -17,10 +17,12 @@
         </div> -->
     </div>
  <!-- search bar -->
- <div class="search-bar-section">
-    <form action="">
-      <input type="search" name="search" id="search" placeholder="Search Category....">
-  </form>
+
+<div class="search-bar-section">
+    <form action="" method="GET">
+        <input type="search" name="search" id="search" placeholder="Search Category...."
+            value="{{ search_item|default:'' }}">
+    </form>
 </div>
 
     <!-- end of banner section -->

@@ -2,6 +2,42 @@
 {% load static %}
 {% block content %}
 
+<style>
+
+.submit-button {
+  background: #522a83;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.submit-button:hover {
+  background: #7049a0;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+</style>
 
 <!-- banners -->
 <div class="banners">
@@ -30,25 +66,47 @@
 
 
   <div class="join-right">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
     <div class="join-button-group">
       <button class="join-button btn-organizer">Join As an Event Organizer</button>
     </div>
 
-    <form>
-      <input type="text" class="join-form-input" placeholder="Name of Event" required>
-      <input type="text" class="join-form-input" placeholder="Name of Organization" required>
-      <input type="text" class="join-form-input" placeholder="Enter Your Name" required>
-      <input type="tel" class="join-form-input" placeholder="Phone Number of Contact Person" required>
-      <input type="email" class="join-form-input" placeholder="Enter Your Email" required>
-      <textarea class="join-form-textarea" placeholder="What is the event about?" required></textarea>
-      <input type="text" class="join-form-input" placeholder="Promo Code (Optional)">
-
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" class="join-form-input" name="event_name" placeholder="Name of Event" required>
+      <input type="text" class="join-form-input" name="organization_name" placeholder="Name of Organization" required>
+      <input type="text" class="join-form-input" name="contact_name" placeholder="Enter Your Name" required>
+      <input type="tel" class="join-form-input" name="phone_number" placeholder="Phone Number of Contact Person" required>
+      <input type="email" class="join-form-input" name="email" placeholder="Enter Your Email" required>
+      <textarea class="join-form-textarea" name="event_description" placeholder="What is the event about?"
+        required></textarea>
+      <input type="text" class="join-form-input" name="promo_code" placeholder="Promo Code (Optional)">
+      
       <div class="event-type-group">
-        <label class="event-type-option"><input type="radio" name="type" value="Reality Show"> Reality Show</label>
-        <label class="event-type-option"><input type="radio" name="type" value="Awards"> Awards</label>
-        <label class="event-type-option"><input type="radio" name="type" value="Elections"> Elections</label>
-        <label class="event-type-option"><input type="radio" name="type" value="Quiz"> Quiz</label>
+        <label class="event-type-option">
+          <input type="radio" name="event_type" value="REALITY" required> Reality Show
+        </label>
+        <label class="event-type-option">
+          <input type="radio" name="event_type" value="AWARDS"> Awards
+        </label>
+        <label class="event-type-option">
+          <input type="radio" name="event_type" value="ELECTIONS"> Elections
+        </label>
+        <label class="event-type-option">
+          <input type="radio" name="event_type" value="QUIZ"> Quiz
+        </label>
+        <label class="event-type-option">
+          <input type="radio" name="event_type" value="OTHER"> Other
+        </label>
       </div>
+      <br>
+      <button type="submit" class="submit-button">Submit Application</button>
     </form>
   </div>
 </div>

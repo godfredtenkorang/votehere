@@ -9,6 +9,7 @@ from . import forms
 from django.utils import timezone
 from .models import PageExpiration
 from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote
+from django.db.models import Q  # New
 
 # Create your views here.
 def make_payment(request):
@@ -100,6 +101,7 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
 
 
 def nominees(request, nominee_slug):
+    search_item = request.GET.get('search')
     sub_category = None
     nominees = Nominees.objects.all()
     current_time = timezone.now()
@@ -107,12 +109,17 @@ def nominees(request, nominee_slug):
         sub_category = get_object_or_404(SubCategory, slug=nominee_slug)
         nominees = nominees.filter(sub_category=sub_category)
     
-    
+    # Add search functionality
+    if search_item:
+        nominees = nominees.filter(
+            Q(name__icontains=search_item)
+        )
     context = {
         'sub_category': sub_category,
         'nominees': nominees,
         'current_time': current_time,
         'title': 'Nominees',
+        'search_item': search_item,
     }
     return render(request, 'payment/nomineesPage.html', context)
 

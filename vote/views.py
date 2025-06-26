@@ -1,12 +1,16 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from payment.models import Nominees
+from register.forms import EventOrganizerForm
+from register.models import EventOrganizer
 from ussd.models import CustomSession, PaymentTransaction
 from .models import *
 from django.db.models import Q  # New
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib import messages
+from .utils import receive_sms_from_event_organizer
 
 
 def index(request):
@@ -15,7 +19,7 @@ def index(request):
     if search_item:
         all_categories = Category.objects.filter(Q(award__icontains=search_item))
     else:
-        all_categories = Category.objects.all()
+        all_categories = Category.objects.all()[:6]
 
     context = {
         'all_categories': all_categories,
@@ -67,16 +71,27 @@ def contact(request):
 
 
 def category(request, category_slug=None):
+    search_item = request.GET.get('search')
+    
+    
     category = None
     award = SubCategory.objects.all()
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         award = award.filter(category=category)
+        
+    # Add search functionality
+    if search_item:
+        award = award.filter(
+            Q(category__title__icontains=search_item) | 
+            Q(content__icontains=search_item)
+        )
 
     context = {
         'category': category,
         'award': award,
-        'title': 'Category Detail'
+        'title': 'Category Detail',
+        'search_item': search_item  # Pass the search term back to template
     }
     return render(request, 'vote/category.html', context)
 
@@ -196,4 +211,41 @@ def award_page(request):
 
 
 def joinUs(request):
-    return render(request, 'vote/joinUs.html')
+    if request.method == 'POST':
+        # Get form data
+        event_name = request.POST.get('event_name')
+        organization_name = request.POST.get('organization_name')
+        contact_name = request.POST.get('contact_name')
+        phone_number = request.POST.get('phone_number')
+        email = request.POST.get('email')
+        event_description = request.POST.get('event_description')
+        event_type = request.POST.get('event_type')
+        promo_code = request.POST.get('promo_code', None)
+        
+        # Basic validation
+        if not all([event_name, organization_name, contact_name, phone_number, email, event_description, event_type]):
+            messages.error(request, 'Please fill in all required fields.')
+            return redirect('joinUs')
+        
+        # Save to database
+        try:
+            EventOrganizer.objects.create(
+                event_name=event_name,
+                organization_name=organization_name,
+                contact_name=contact_name,
+                phone_number=phone_number,
+                email=email,
+                event_description=event_description,
+                event_type=event_type,
+                promo_code=promo_code if promo_code else None
+            )
+            receive_sms_from_event_organizer(event_name)
+            messages.success(request, 'Your application has been submitted successfully! We will contact you soon.')
+            return redirect('joinUs')
+        except Exception as e:
+            messages.error(request, f'An error occurred: {str(e)}')
+            return redirect('joinUs')
+    context = {
+        
+    }
+    return render(request, 'vote/joinUs.html', context)
