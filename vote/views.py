@@ -86,12 +86,15 @@ def category(request, category_slug=None):
             Q(category__title__icontains=search_item) | 
             Q(content__icontains=search_item)
         )
+    
+    now = timezone.now().date()
 
     context = {
         'category': category,
         'award': award,
         'title': 'Category Detail',
-        'search_item': search_item  # Pass the search term back to template
+        'search_item': search_item,  # Pass the search term back to template
+        'now': now
     }
     return render(request, 'vote/category.html', context)
 

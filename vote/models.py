@@ -12,6 +12,8 @@ class Category(models.Model):
     date_added = models.DateTimeField('date added', null=True)
     end_date = models.DateTimeField('end date', null=True)
     access_code = models.CharField(max_length=10, unique=True, null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    nomination_end_date = models.DateField(null=True, blank=True)
     
     def save(self, *args, **kwargs):
         if not self.access_code:
