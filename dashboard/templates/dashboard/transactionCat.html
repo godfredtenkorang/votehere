@@ -18,7 +18,7 @@
                 <br>
                 <!-- <h4 style="font-family: 'Times New Roman', Times, serif;">Total Online Payment After Charges (2%): GH¢{{ total_online_payments|floatformat:2 }}</h4>
                 <h4 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payment After Charges (3%): GH¢{{ total_ussd_payments|floatformat:2 }}</h4> -->
-                <h4 style="font-family: 'Times New Roman', Times, serif;">Total Payment After Charges (5%): GH¢{{ original_total_payment|floatformat:2 }}</h4>
+                <h4 style="font-family: 'Times New Roman', Times, serif;">Total Payment After Charges (3%): GH¢{{ original_total_payment|floatformat:2 }}</h4>
                 <br>
                 <h4><a href="{% url 'ussd_transactions' category.id  %}">CLICK HERE</a> TO GET ALL USSD TRANSACTIONS</h4>
                 <h4><a href="{% url 'online_transactions' category.id  %}">CLICK HERE</a> TO GET ALL ONLINE TRANSACTIONS</h4>
