@@ -9,8 +9,8 @@ class NomineeForm(forms.ModelForm):
         fields = '__all__'
         
         widgets = {
-            'date_added': forms.DateTimeInput(attrs={'type': 'date'}),
-            'end_date': forms.DateTimeInput(attrs={'type': 'date'}),
+            'date_added': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
         
     def __init__(self, *args, **kwargs):
