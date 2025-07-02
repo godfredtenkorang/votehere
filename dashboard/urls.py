@@ -56,5 +56,6 @@ urlpatterns = [
      path('ticketActivity/<slug:event_slug>/', views.ticketActivity, name='ticketActivity'),
      path('onlineTransaction/<int:event_id>/', views.onlineTransaction, name='onlineTransaction'),
      path('ussdTransaction/<int:event_id>/', views.ussdTransaction, name='ussdTransaction'),
-   
+    
+     path('request-payment/<slug:category_slug>/', views.request_for_payment, name='request_payment'),
 ]

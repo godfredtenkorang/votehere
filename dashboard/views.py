@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from vote.models import Category, SubCategory
-from payment.models import Nominees, Payment
+from payment.models import Nominees, Payment, RequestForPayment
 from register.models import Register
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
@@ -9,10 +9,10 @@ from django.utils import timezone
 
 from django.http import HttpResponse
 from django.views.generic import View
-from .utils import render_to_pdf, send_sms_to_new_nominee, send_mnotify_sms, send_access_code_to_new_nominee
+from .utils import render_to_pdf, send_sms_to_new_nominee, send_mnotify_sms, send_access_code_to_new_nominee, request_for_payment_sms, receive_request_for_payment_sms
 from payment.forms import NomineeForm
 from django.contrib import messages
-from .forms import SendSmsForm, NomineeForm, CategorySMSForm, PaymentTransactionForm, AccessCodeSMSForm
+from .forms import RequestForPaymentForm, SendSmsForm, NomineeForm, CategorySMSForm, PaymentTransactionForm, AccessCodeSMSForm
 from ussd.models import PaymentTransaction
 
 from ticket.models import Event, TicketPayment
@@ -191,19 +191,30 @@ def TransactionCat(request, category_slug):
         award = award.filter(category=category)
         online_payments = online_payments.filter(category=category, verified=True)
         ussd_payments = ussd_payments.filter(category=category, status='PAID')
-        total_online_payments = online_payments.aggregate(Total=Sum('total_amount'))
-        total_online_payments = total_online_payments['Total']
+        
+        # Calculate online payments total and deduct 2%
+        total_online = online_payments.aggregate(Total=Sum('total_amount')).get('Total', 0) or 0
+        total_online_payments = Decimal(total_online) * Decimal(0.98)  # Deduct 2%
+        
+       
         
         
-        total_ussd_payments = ussd_payments.aggregate(Total=Sum('amount'))
-        total_ussd_payments = total_ussd_payments['Total']
+        # Calculate USSD payments total and deduct 3%
+        total_ussd = ussd_payments.aggregate(Total=Sum('amount')).get('Total', 0) or 0
+        total_ussd_payments = total_ussd * Decimal(0.97)  # Deduct 3%
         # total_ussd_payments = total_ussd_value.quantize(Decimal('1'))
+        
+        # Optionally keep original totals if needed
+        original_online_total = total_online
+        original_ussd_total = total_ussd
 
     context = {
         'category': category,
         'award': award,
         'total_online_payments': total_online_payments,
         'total_ussd_payments': total_ussd_payments,
+        'original_online_total': original_online_total,
+        'original_ussd_total': original_ussd_total,
         'title': 'TransactionCat'
     }
 
@@ -270,6 +281,7 @@ def ussd_transactions(request, category_id):
         payments = payments.filter(created_at__date=created_at)
         
     total_amount = payments.aggregate(Total=Sum('amount')).get('Total', 0)
+    total_amount_after_charge = total_amount * Decimal(0.97)  # Deduct 3%
 
     
     
@@ -277,6 +289,7 @@ def ussd_transactions(request, category_id):
         'payments': payments,
         'category': category,
         'total_amount': total_amount,
+        'total_amount_after_charge': total_amount_after_charge,
         'title': 'USSD transactions',
         'filter_params': {  # Pass filter values back to template to maintain filter state
             'invoice_no': invoice_no,
@@ -322,13 +335,14 @@ def online_transactions(request, category_id):
         payments = payments.filter(date_created__date=date_created)
         
     total_amount = payments.aggregate(Total=Sum('total_amount')).get('Total', 0)
-        
+    total_amount_after_charge = Decimal(total_amount) * Decimal(0.98)  # Deduct 2%
     
     
     context = {
         'payments': payments,
         'category': category,
         'total_amount': total_amount,
+        'total_amount_after_charge': total_amount_after_charge,
         'filter_params': {  # Pass filter values back to template
             'nominee': nominee_id,
             'content': content_id,
@@ -731,3 +745,28 @@ def ussdTransaction(request, event_id):
         
     }
     return render(request, 'dashboard/tickiting/ussdTransaction.html', context)
+
+def request_for_payment(request, category_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    if request.method == 'POST':
+        form = RequestForPaymentForm(request.POST)
+        if form.is_valid():
+            request_payment = form.save(commit=False)
+            request_payment.category = category
+            request_payment.save()
+            request_for_payment_sms(
+                request_payment.name,
+                request_payment.phone,
+                request_payment.amount,
+            )
+            receive_request_for_payment_sms(
+                request_payment.name,
+                request_payment.phone,
+                request_payment.amount,
+                request_payment.category.award,
+            )
+            messages.success(request, 'Request for payment submitted successfully.')
+            return redirect('request_payment', category_slug=category.slug)
+    else:
+        form = RequestForPaymentForm()
+    return render(request, 'dashboard/request_payment.html', {'form': form, 'category': category, 'title': 'Request for Payment'})

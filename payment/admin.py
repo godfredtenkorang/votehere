@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Payment, Nominees, PageExpiration
+from .models import Payment, Nominees, PageExpiration, RequestForPayment
 
 # admin.site.register(Payment)
 # admin.site.register(Nominees)
@@ -44,3 +44,10 @@ admin.site.register(Nominees, VoteNomineeAdmin)
 
 
 admin.site.register(PageExpiration)
+
+
+@admin.register(RequestForPayment)
+class RequestForPaymentAdmin(admin.ModelAdmin):
+    list_display = ['category', 'name', 'phone', 'email', 'amount', 'date_requested']
+    list_filter = ('category',)
+    search_fields = ('phone', 'category')

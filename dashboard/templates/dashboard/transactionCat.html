@@ -7,9 +7,16 @@
                     <h2>Transaction for each Category</h2>
                     <p> When clicking on a specific Category, you will be able to view transactions for each
                         nominee associated with that award. </p>
+                        <br>
+                        <a href="{% url 'request_payment' category.slug %}" class="insight">
+                            <button>Request for Payment </button>
+                        </a>
                 </div>
-                <h1 style="font-family: 'Times New Roman', Times, serif;">Total Online Payments: GH¢{{ total_online_payments }}</h1>
-                <h1 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payments: GH¢{{ total_ussd_payments }}</h1>
+                <h1 style="font-family: 'Times New Roman', Times, serif;">Total Online Payments: GH¢{{ original_online_total|floatformat:2 }}</h1>
+                <h1 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payments: GH¢{{ original_ussd_total|floatformat:2 }}</h1>
+                <br>
+                <h4 style="font-family: 'Times New Roman', Times, serif;">Total Online Payment After Charges: GH¢{{ total_online_payments|floatformat:2 }}</h4>
+                <h4 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payment After Charges: GH¢{{ total_ussd_payments|floatformat:2 }}</h4>
                 <br>
                 <h4><a href="{% url 'ussd_transactions' category.id  %}">CLICK HERE</a> TO GET ALL USSD TRANSACTIONS</h4>
                 <h4><a href="{% url 'online_transactions' category.id  %}">CLICK HERE</a> TO GET ALL ONLINE TRANSACTIONS</h4>

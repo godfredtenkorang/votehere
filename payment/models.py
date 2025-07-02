@@ -89,6 +89,22 @@ class Payment(models.Model):
     #     return reverse("nominee_detail", kwargs={
     #         "ref": self.ref,
     #     })
+    
+
+class RequestForPayment(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField(max_length=225)
+    phone = models.CharField(max_length=14)
+    email = models.EmailField(null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    account_details = models.TextField()
+    date_requested = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-date_requested',)
+
+    def __str__(self) -> str:
+        return f"{self.category} - Request Payment: {self.amount} GHS"
 
 
 class PageExpiration(models.Model):

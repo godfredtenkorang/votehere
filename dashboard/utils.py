@@ -100,3 +100,58 @@ def send_access_code_to_new_nominee(name, phone_number, access_code, category):
     except requests.exceptions.RequestException as e:
         print(f"Error sending SMS: {e}")
         return None
+    
+    
+
+def request_for_payment_sms(name, phone, amount):
+    endpoint = "https://api.mnotify.com/api/sms/quick"
+    apiKey = settings.MNOTIFY_API_KEY
+    payload = {
+        "key": apiKey,
+        "sender": 'VOTEAFRIC',
+        "recipient[]": phone,
+        "message": f"Dear {name}, \nYou have successfully requested for GH¢{amount}. You will here from us soon.\nThank you. \n\nVoteAfric!",
+        "is_schedule": False,
+        "schedule_date": ''
+    }
+    
+
+    url = endpoint + '?key=' + apiKey
+    
+   
+    try:
+        response = requests.post(url, data=payload)
+        response.raise_for_status()
+        
+        return response.json()
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending SMS: {e}")
+        return None
+    
+    
+def receive_request_for_payment_sms(name, phone, amount, category):
+    endpoint = "https://api.mnotify.com/api/sms/quick"
+    apiKey = settings.MNOTIFY_API_KEY
+    payload = {
+        "key": apiKey,
+        "sender": 'VOTEAFRIC',
+        "recipient[]": '0553912334',  # Replace with the actual phone number to receive the request
+        "message": f"New Payment Request\n\nName: {name}, \nPhone: {phone}, \nAmount: GH¢{amount}, \nCategory: {category}",
+        "is_schedule": False,
+        "schedule_date": ''
+    }
+    
+
+    url = endpoint + '?key=' + apiKey
+    
+   
+    try:
+        response = requests.post(url, data=payload)
+        response.raise_for_status()
+        
+        return response.json()
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending SMS: {e}")
+        return None

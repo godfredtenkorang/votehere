@@ -2,7 +2,7 @@ from django import forms
 
 from vote.models import Category, SubCategory
 from .models import SendSms
-from payment.models import Nominees
+from payment.models import Nominees, RequestForPayment
 from ussd.models import PaymentTransaction
 
 
@@ -84,3 +84,16 @@ class AccessCodeSMSForm(forms.Form):
         }),
         label='SMS Category',
     )
+
+class RequestForPaymentForm(forms.ModelForm):
+    class Meta:
+        model = RequestForPayment
+        fields = ['name', 'phone', 'email', 'amount', 'account_details']
+        
+        widgets = {
+            'amount': forms.NumberInput(attrs={'placeholder': 'Enter amount'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Enter your name'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'Enter your phone number'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Enter your email address'}),
+            'account_details': forms.Textarea(attrs={'placeholder': 'Enter account details'}),
+        }
