@@ -211,7 +211,7 @@ def TransactionCat(request, category_slug):
         # Calculate sum of original totals
         sum_total = original_online_total + original_ussd_total
         
-        original_total_payment = sum_total * Decimal(0.95)  # Deduct 5% from the total sum
+        original_total_payment = sum_total * Decimal(0.97)  # Deduct 5% from the total sum
 
     context = {
         'category': category,
