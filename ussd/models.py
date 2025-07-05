@@ -30,8 +30,8 @@ class CustomSession(models.Model):
     
     @property
     def is_expired(self):
-        # Session expires after 1 minutes of inactivity
-        return (timezone.now() - self.last_activity).total_seconds() > 70
+        
+        return (timezone.now() - self.last_activity).total_seconds() > 75
     
     def __str__(self):
         return f"{self.session_key} - {self.candidate_id} - {self.event_id} - {self.msisdn} - {self.order_id}"
