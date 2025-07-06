@@ -347,13 +347,15 @@ def ussd_api(request):
                     session.save()
                     
                     if network_type.upper() == 'VODAFONE':
+                        # Format amount to ensure exactly 2 decimal places
+                        formatted_amount = "{:.2f}".format(float(amount))
                         payload = {
                             'merchant_id': merchant_id,
                             'secrete': secrete,
                             'key': key,
                             'order_id': order_id,
                             'customerName': str(telephone),
-                            'amount': str(amount),
+                            'amount': formatted_amount,  # Use formatted amoun
                             'item_desc': item_desc,
                             'customerNumber': str(telephone),
                             'payby': 'VODAFONE',
