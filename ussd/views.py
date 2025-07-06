@@ -359,7 +359,7 @@ def ussd_api(request):
                             'item_desc': item_desc,
                             'customerNumber': str(telephone),
                             'payby': 'VODAFONE',
-                            'newVodaPayment': True,  # This is specific to Vodafone
+                            # 'newVodaPayment': True,  # This is specific to Vodafone
                             'callback': callback,
                             
                         }
