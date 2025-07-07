@@ -140,8 +140,8 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
             nominee_obj.save()
             payment.verified = True
             payment.save()
-            send_sms_to_voter(phone_number=payment.phone, name=payment.nominee.name, category=payment.content, amount=payment.total_amount, transaction_id=payment.transaction_id)
-            send_sms_to_nominee_for_vote(phone_number=payment.nominee.phone_number, name=payment.nominee.name, vote=payment.vote, phone=payment.phone, transaction_id=payment.transaction_id)
+            # send_sms_to_voter(phone_number=payment.phone, name=payment.nominee.name, category=payment.content, amount=payment.total_amount, transaction_id=payment.transaction_id)
+            # send_sms_to_nominee_for_vote(phone_number=payment.nominee.phone_number, name=payment.nominee.name, vote=payment.vote, phone=payment.phone, transaction_id=payment.transaction_id)
             messages.success(request, "Payment verified successfully! Votes added.")
             return render(request, 'payment/vote_success.html')
         except Exception as e:

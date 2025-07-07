@@ -491,8 +491,8 @@ def webhook_callback(request):
                             category=nominee.category,
                             timestamp=timestamp_str
                         )
-                        send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount, transaction_id=invoice_no)
-                        send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn, transaction_id=invoice_no)
+                        # send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount, transaction_id=invoice_no)
+                        # send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn, transaction_id=invoice_no)
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
                     else:
@@ -523,14 +523,14 @@ def webhook_callback(request):
                         ticket_type.available_tickets -= session.tickets
                         ticket_type.save()
                         # Send SMS with ticket details
-                        send_ticket_sms(
-                            phone_number=session.msisdn,  
-                            event_name=ticket_type.event.name,
-                            ticket_count=session.tickets,
-                            amount=amount,
-                            event_date=ticket_type.event.end_date,
-                            reference=invoice_no
-                        )
+                        # send_ticket_sms(
+                        #     phone_number=session.msisdn,  
+                        #     event_name=ticket_type.event.name,
+                        #     ticket_count=session.tickets,
+                        #     amount=amount,
+                        #     event_date=ticket_type.event.end_date,
+                        #     reference=invoice_no
+                        # )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
                     
@@ -554,12 +554,12 @@ def webhook_callback(request):
                             timestamp=timestamp_str
                         )
                         # Send donation confirmation SMS
-                        send_donation_sms(
-                            phone_number=session.msisdn,
-                            cause_name=cause.name,
-                            amount=amount,
-                            reference=invoice_no
-                        )
+                        # send_donation_sms(
+                        #     phone_number=session.msisdn,
+                        #     cause_name=cause.name,
+                        #     amount=amount,
+                        #     reference=invoice_no
+                        # )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Donation successful'})
                     except DonationCause.DoesNotExist:
