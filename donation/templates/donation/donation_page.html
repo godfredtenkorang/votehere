@@ -20,6 +20,7 @@
     </div>
     <div class="ticket-container">
         {% for donation in donation_causes %}
+        {% if donation.active %}
         <a href="{% url 'donation_detail' donation.slug %}" class="ticket">
 
             <img src="{{ donation.image.url }}" alt="" class="mask blog-img" />
@@ -30,7 +31,18 @@
                 <p>Code: {{ donation.code }}</p>
             </div>
         </a>
+        {% else %}
+        <div class="ticket" style="background-color: #f0f0f0;">
+            <img src="{{ donation.image.url }}" alt="" class="mask blog-img" />
+            <div class="ticket-text">
+                <h3>{{ donation.name }}</h3>
+                <p>Code: {{ donation.code }}</p> 
+                <p style="color: red;">This donation is currently inactive.</p>
+            </div>
+        </div>
+        {% endif %}
         {% endfor %}
+        
 
     </div>
 </div>
