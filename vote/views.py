@@ -41,8 +41,10 @@ def blog(request):
     }
     return render(request, 'vote/blog.html', context)
 
-def blog_detail(request):
+def blog_detail(request, blog_slug):
+    blog = get_object_or_404(Blog, slug=blog_slug)
     context = {
+        'blog': blog,
         'title': 'Blog Detail'
     }
     return render(request, 'vote/blog-detail.html', context)

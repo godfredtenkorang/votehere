@@ -1,0 +1,43 @@
+{% extends 'vote/base.html' %} {% load static %} primary: #ffb535; text-color:
+#363738;
+<style></style>
+
+{% block content %}
+
+<!-- banner -->
+<div class="banners">
+    <div class="banners-content">
+        <h1>VoteAfric Donation</h1>
+        <!-- <h1>E-ticketing company in Ghana</h1> -->
+    </div>
+</div>
+
+{% if donation_causes %}
+<div class="ticket-main">
+    <div class="t-head">
+        <h2>Donation Causes</h2>
+        <p>Please select a donation.</p>
+    </div>
+    <div class="ticket-container">
+        {% for donation in donation_causes %}
+        <a href="{% url 'donation_detail' donation.slug %}" class="ticket">
+
+            <img src="{{ donation.image.url }}" alt="" class="mask blog-img" />
+
+            <div class="ticket-text">
+                <h3>{{ donation.name }}</h3>
+                <!-- <p>{{ donation.description }}</p> -->
+                <p>Code: {{ donation.code }}</p>
+            </div>
+        </a>
+        {% endfor %}
+
+    </div>
+</div>
+{% else %}
+<div class="t-head" style="text-align: center;">
+    <h2>No Donation at the moment.</h2>
+</div>
+{% endif %}
+
+{% endblock content %}

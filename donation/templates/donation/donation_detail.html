@@ -1,0 +1,62 @@
+{% extends 'vote/base.html' %} {% load static %} primary: #ffb535; text-color:
+#363738;
+<style></style>
+
+{% block content %}
+
+<!-- banner -->
+<div class="banners">
+    <div class="banners-content">
+        <h1>VoteAfric Donation</h1>
+        <!-- <h1>E-ticketing company in Ghana</h1> -->
+    </div>
+</div>
+{% if messages %}
+<div class="alert alert-info">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+<div id="validation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modal-message"></p>
+    </div>
+</div>
+<div class="ticket-main ticket-forms">
+    <h3 class="t-name">{{donation.name}} </h3>
+
+
+    <div class="ticket-form">
+        <p>Donation Form </p>
+        <form  class="t-form" id="vote-form" method="POST">
+            {% csrf_token %}
+            <div class="t-input">
+                <label for="ticket_type">Name</label><br>
+                <input type="text" name="name" id="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="t-input">
+                <label for="phone">Phone Number</label><br>
+                <input type="phone" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+
+            <div class="t-input">
+                <label for="email">Email</label><br>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+            </div>
+
+            <div class="t-input">
+                <label for="amount">Amount</label><br>
+                <input type="tel" id="amount" name="amount" placeholder="Enter amount" required>
+            </div>
+            
+
+            <button type="submit" onclick="payWithPayStack()" id="django-paystack-button">Proceed</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock content %}

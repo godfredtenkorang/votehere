@@ -43,6 +43,7 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('ussd/', include('ussd.urls')),
     path('/', include('ticket.urls')),
+    path('donation/', include('donation.urls')),
     path('api/vote/', include('vote.api.urls')),
 ]
 

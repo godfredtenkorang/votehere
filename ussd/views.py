@@ -554,12 +554,12 @@ def webhook_callback(request):
                             timestamp=timestamp_str
                         )
                         # Send donation confirmation SMS
-                        # send_donation_sms(
-                        #     phone_number=session.msisdn,
-                        #     cause_name=cause.name,
-                        #     amount=amount,
-                        #     reference=invoice_no
-                        # )
+                        send_donation_sms(
+                            phone_number=session.msisdn,
+                            cause_name=cause.name,
+                            amount=amount,
+                            reference=invoice_no
+                        )
                         session.delete()
                         return JsonResponse({'status': 'success', 'message': 'Donation successful'})
                     except DonationCause.DoesNotExist:

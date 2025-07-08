@@ -1,0 +1,42 @@
+{% extends 'vote/base.html' %}
+
+{% block content %}
+
+<section class="donate-section-cont">
+    <div class="donate-secs">
+        <div class="donate-sec">
+            <h1 style="justify-content: center; text-align:center;">Make Donation of GH¢{{donation.amount }} for the donation cause: <br> {{ donation.donation.name }}</h1>
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+        </div>
+        <br>
+        <div>
+            <button class="donate-btn" onclick="payWithPayStack()" id="django-paystack-button" type="submit">Donate Now</button>
+        </div>
+    </div>
+</section>
+<script>
+    function payWithPayStack() {
+        let currency = "GHS";
+        let plan = "";
+        let ref = "{{ donation.ref }}";
+        let obj = {
+            key: "{{ paystack_public_key }}",
+            email: "{{ donation.email }}",
+            phone: "{{ donation.phone }}",
+            amount: "{{ donation.amount_value }}",
+            ref: ref,
+            callback: function (response) {
+                window.location.href = "{% url 'donation-verify-payment' donation.ref %}";
+            },
+        }
+        if (Boolean(currency)) {
+            obj.currency = currency.toUpperCase()
+        }
+        if (Boolean(plan)) {
+            obj.plan = plan;
+        }
+        var handler = PaystackPop.setup(obj);
+        handler.openIframe();
+    }
+</script>
+{% endblock %}

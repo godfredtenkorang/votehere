@@ -20,77 +20,20 @@ text-color: #363738;
 <br><br>
 <div class="blog-container">
     <div class="cards">
-
+        {% for blog in blogs %}
         <div class="cards_items">
             <div class="square">
-                <img src="{% static 'vote/img/award-banner.jpg' %}" alt="" class="mask blog-img">
+                <img src="{{ blog.image.url }}" alt="" class="mask blog-img">
                 <div class="blog-h1">
-                    nice work
+                    {{ blog.title }}
                 </div>
-                <p class="blog-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis eius facere nesciunt
-                    voluptatum, mollitia suscipit cupiditate nostrum, sequi porro quia maiores explicabo quidem alias
-                    minima perspiciatis error necessitatibus non deleniti.</p>
+                <p class="blog-p">{{ blog.content }}</p>
                 <div>
-                    <a class="blog-button" href="{% url 'blog-detail' %}">Read More</a>
+                    <a class="blog-button" href="{% url 'blog-detail' blog.slug %}">Read More</a>
                 </div>
             </div>
         </div>
-        <div class="cards_items">
-            <div class="square">
-                <img src="{% static 'vote/img/award-banner.jpg' %}" alt="" class="mask blog-img">
-                <div class="blog-h1">
-                    nice work
-                </div>
-                <p class="blog-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis eius facere nesciunt
-                    voluptatum, mollitia suscipit cupiditate nostrum, sequi porro quia maiores explicabo quidem alias
-                    minima perspiciatis error necessitatibus non deleniti.</p>
-                <div>
-                    <a class="blog-button" href="">Read More</a>
-                </div>
-            </div>
-        </div>
-        <div class="cards_items">
-            <div class="square">
-                <img src="{% static 'vote/img/award-banner.jpg' %}" alt="" class="mask blog-img">
-                <div class="blog-h1">
-                    nice work
-                </div>
-                <p class="blog-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis eius facere nesciunt
-                    voluptatum, mollitia suscipit cupiditate nostrum, sequi porro quia maiores explicabo quidem alias
-                    minima perspiciatis error necessitatibus non deleniti.</p>
-                <div>
-                    <a class="blog-button" href="">Read More</a>
-                </div>
-            </div>
-        </div>
-        <div class="cards_items">
-            <div class="square">
-                <img src="{% static 'vote/img/award-banner.jpg' %}" alt="" class="mask blog-img">
-                <div class="blog-h1">
-                    nice work
-                </div>
-                <p class="blog-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis eius facere nesciunt
-                    voluptatum, mollitia suscipit cupiditate nostrum, sequi porro quia maiores explicabo quidem alias
-                    minima perspiciatis error necessitatibus non deleniti.</p>
-                <div>
-                    <a class="blog-button" href="">Read More</a>
-                </div>
-            </div>
-        </div>
-        <div class="cards_items">
-            <div class="square">
-                <img src="{% static 'vote/img/award-banner.jpg' %}" alt="" class="mask blog-img">
-                <div class="blog-h1">
-                    nice work
-                </div>
-                <p class="blog-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis eius facere nesciunt
-                    voluptatum, mollitia suscipit cupiditate nostrum, sequi porro quia maiores explicabo quidem alias
-                    minima perspiciatis error necessitatibus non deleniti.</p>
-                <div>
-                    <a class="blog-button" href="">Read More</a>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 
