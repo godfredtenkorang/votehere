@@ -7,7 +7,7 @@ from .utils import send_sms_to_donor
 
 # Create your views here.
 def donation_page(request):
-    donation = DonationCause.objects.all()
+    donation = DonationCause.objects.all().order_by('-date_added')
     
     context = {
         'donation_causes': donation,
