@@ -39,7 +39,7 @@ class BlogListView(ListView):
     model = Blog
     template_name = 'vote/blog.html'
     context_object_name = 'blogs'
-    paginate_by = 6  # Number of blogs per page
+    paginate_by = 8  # Number of blogs per page
     
     def get_queryset(self):
         return Blog.objects.filter(blog_recommended=True).order_by('-date_added')

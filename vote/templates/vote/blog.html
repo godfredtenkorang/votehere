@@ -4,7 +4,6 @@ primary: #ffb535;
 text-color: #363738;
 <style>
 
-
 </style>
 
 {% block content %}
@@ -19,8 +18,9 @@ text-color: #363738;
 </div>
 <br><br>
 
+{% if blogs %}
 <div class="blog-containers">
-
+    
     {% for blog in blogs %}
     <div class="blog-sub">
         <a href="{% url 'blog-detail' blog.slug %}">
@@ -56,6 +56,7 @@ text-color: #363738;
         </a>
     </div>
     {% endfor %}
+    
     {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination">
@@ -79,5 +80,9 @@ text-color: #363738;
 
 
 </div>
-
+{% else %}
+<div style="text-align: center; justify-content: center; align-items: center; display: flex; height: 100px;">
+    <h2>No blogs available at the moment.</h2>
+</div>
+{% endif %}
 {% endblock content %}
