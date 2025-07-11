@@ -2,6 +2,7 @@ import random
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -61,10 +62,16 @@ class SubCategory(models.Model):
 
 
 class Blog(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=200)
     content = models.TextField()
-    tags = models.CharField(max_length=250)
+    content1 = models.TextField(blank=True, null=True)
+    content2 = models.TextField(blank=True, null=True)
+    content3 = models.TextField(blank=True, null=True)
+    content4 = models.TextField(blank=True, null=True)
+    content5 = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='blog-img')
+    blog_recommended = models.BooleanField(default=False)
     slug = models.SlugField(max_length=10, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     
@@ -74,3 +81,16 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse('blog-detail', kwargs={'slug': self.slug})
+    
+    def get_share_urls(self, request):
+        absolute_url = request.build_absolute_uri(self.get_absolute_url())
+        return {
+            'facebook': f'https://www.facebook.com/sharer/sharer.php?u={absolute_url}',
+            'twitter': f'https://twitter.com/intent/tweet?url={absolute_url}&text={self.title}',
+            'linkedin': f'https://www.linkedin.com/shareArticle?mini=true&url={absolute_url}&title={self.title}',
+            'whatsapp': f'https://wa.me/?text={self.title}%20{absolute_url}',
+            'tiktok': 'https://www.tiktok.com/upload?lang=en',  # TikTok doesn't have direct sharing
+        }

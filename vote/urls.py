@@ -1,13 +1,16 @@
 from django.urls import path
 from . import views
+from .views import BlogListView, BlogDetailView
 
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),
-    path('blog/', views.blog, name='blog'),
+    # path('blog/', views.blog, name='blog'),
+    path('blog/', BlogListView.as_view(), name='blog'),
     # path('blog-detail/<slug:blog_slug>/', views.blog_detail, name='blog-detail'),
-    path('blog-detail/', views.blog_detail, name='blog-detail'),
+    # path('blog-detail/', views.blog_detail, name='blog-detail'),
+    path('blog/<slug:slug>/', BlogDetailView.as_view(), name='blog-detail'),
     path('policy/', views.policy, name='policy'),
     path('terms_and_condition/', views.termsCondition, name='termsCondition'),
     path('contact/', views.contact, name='contact'),

@@ -11,166 +11,71 @@ text-color: #363738;
 
 <!-- banner -->
 <div class="banners">
-   
+
     <div class="blog-banner">
         <h1>Blog</h1>
     </div>
 
 </div>
 <br><br>
+
 <div class="blog-containers">
-    <!-- <div class="cards">
-        {% for blog in blogs %}
-        <div class="cards_items">
-            <div class="square">
-                <img src="{{ blog.image.url }}" alt="" class="mask blog-img">
-                <div class="blog-h1">
-                    {{ blog.title }}
+
+    {% for blog in blogs %}
+    <div class="blog-sub">
+        <a href="{% url 'blog-detail' blog.slug %}">
+            <div class="blog-img">
+                <img src="{{ blog.image.url }}" alt="">
+            </div>
+            <div class="blog-text">
+                <div class="date">
+                    <p> <i class="fa fa-calendar"></i> {{ blog.date_added|date:"F d, Y" }} </p>
+                    <p><i class="fas fa-user"></i> By {{ blog.author.username }}</p>
+
+
                 </div>
-                <p class="blog-p">{{ blog.content }}</p>
-                <div>
-                    <a class="blog-button" href="{% url 'blog-detail' blog.slug %}">Read More</a>
+                <div class="text">
+
+                    <div class="blog-head">
+                        <h1>{{ blog.title }}</h1>
+                    </div>
+                    <!-- <div class="blog-p">
+                        <p>{{ blog.content }}</p>
+                    </div> -->
+
+                    <div class="read-detail">
+                        <a href="{% url 'blog-detail' blog.slug %}"> Read more</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-    </div> -->
 
- <div class="blog-sub">
-    <a  href="{% url 'blog-detail' %}">
-<div class="blog-img">
-          <img src="{% static 'vote/img/ben.jpg' %}"  alt="">
+
+            <div class="trending">
+                <p>Trending</p>
+            </div>
+        </a>
     </div>
-    <div class="blog-text">
-        <div class="date">
-      <p>   <i class="fa fa-calendar"></i> 9th July, 2025 </p>
-      <p><i class="fas fa-user"></i> By Benjamin</p>
+    {% endfor %}
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
 
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endfor %}
 
-        </div>
-        <div class="text">
-
-            <div class="blog-head">
-                <h1>Breaking the cycles of poverty - Tips on how to make and save money</h1>
-            </div>
-            <div class="blog-p">
-                <p>Saving money is harder when you are poor and that’s not your fault. It’s not that you’re undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem isn’t just saving , it’s earning more. </p>
-            </div>
-
-            <div class="read-detail">
-                <a href=""> Read more</a>
-            </div>
-        </div>
-    </div>
-
-
-<div class="trending">
-    <p>Trending</p>
-</div>
-    </a>
- </div>
-
- <div class="blog-sub">
-    <a href="">
-<div class="blog-img">
-          <img src="{% static 'vote/img/ben.jpg' %}"  alt="">
-    </div>
-    <div class="blog-text">
-        <div class="date">
-      <p>   <i class="fa fa-calendar"></i> 9th July, 2025 </p>
-      <p><i class="fas fa-user"></i> By Benjamin</p>
-
-
-        </div>
-        <div class="text">
-
-            <div class="blog-head">
-                <h1>Breaking the cycles of poverty - Tips on how to make and save money</h1>
-            </div>
-            <div class="blog-p">
-                <p>Saving money is harder when you are poor and that’s not your fault. It’s not that you’re undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem isn’t just saving , it’s earning more. </p>
-            </div>
-
-            <div class="read-detail">
-                <a href=""> Read more</a>
-            </div>
-        </div>
-    </div>
-
-
-<div class="trending">
-    <p>Trending</p>
-</div>
-    </a>
- </div>
-
- <div class="blog-sub">
-    <a href="">
-<div class="blog-img">
-          <img src="{% static 'vote/img/ben.jpg' %}"  alt="">
-    </div>
-    <div class="blog-text">
-        <div class="date">
-      <p>   <i class="fa fa-calendar"></i> 9th July, 2025 </p>
-      <p><i class="fas fa-user"></i> By Benjamin</p>
-
-
-        </div>
-        <div class="text">
-
-            <div class="blog-head">
-                <h1>Breaking the cycles of poverty - Tips on how to make and save money</h1>
-            </div>
-            <div class="blog-p">
-                <p>Saving money is harder when you are poor and that’s not your fault. It’s not that you’re undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem isn’t just saving , it’s earning more. </p>
-            </div>
-
-            <div class="read-detail">
-                <a href=""> Read more</a>
-            </div>
-        </div>
-    </div>
-
-
-<div class="trending">
-    <p>Trending</p>
-</div>
-    </a>
- </div>
-
- <div class="blog-sub">
-    <a href="">
-<div class="blog-img">
-          <img src="{% static 'vote/img/ben.jpg' %}"  alt="">
-    </div>
-    <div class="blog-text">
-        <div class="date">
-      <p>   <i class="fa fa-calendar"></i> 9th July, 2025 </p>
-      <p><i class="fas fa-user"></i> By Benjamin</p>
-
-
-        </div>
-        <div class="text">
-
-            <div class="blog-head">
-                <h1>Breaking the cycles of poverty - Tips on how to make and save money</h1>
-            </div>
-            <div class="blog-p">
-                <p>Saving money is harder when you are poor and that’s not your fault. It’s not that you’re undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem isn’t just saving , it’s earning more. </p>
-            </div>
-
-            <div class="read-detail">
-                <a href=""> Read more</a>
-            </div>
-        </div>
-    </div>
-
-
-<div class="trending">
-    <p>Trending</p>
-</div>
-    </a>
- </div>
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 
 
 </div>

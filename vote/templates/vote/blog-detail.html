@@ -13,7 +13,7 @@ text-color: #363738;
 
 <div class="blog-detail-container">
     <div class="heading">
-        <h1> Breaking the cycles of poverty - Tips on how to make and save money</h1>
+        <h1> {{ blog.title }}</h1>
     </div>
 
     <div class="blogs-d">
@@ -21,50 +21,44 @@ text-color: #363738;
         <div class="the-blogs">
             <div class="blog-date">
                 <p class="td">Trending</p>
-                <p> <i class="fa fa-calendar"></i> 9th July, 2025 </p>
-                <p><i class="fas fa-user"></i> By Benjamin</p>
+                <p> <i class="fa fa-calendar"></i> {{ blog.date_added|date:"F d, Y" }} </p>
+                <p><i class="fas fa-user"></i> By {{ blog.author.username }}</p>
             </div>
 
             <div class="blog-big-image">
-                <img src="{% static 'vote/img/ben.jpg' %}" alt="">
+                <img src="{{ blog.image.url }}" alt="">
             </div>
             <div class="detail-text">
-                <p> 1. Saving money is harder when you are poor and that’s not your fault. It’s not that you’re
-                    undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem
-                    isn’t just saving , it’s earning more.
-                    2. You don’t save money by cutting out just small expenses.The little expenses aren’t the problem
-                    it’s the big ones. Rent, lifestyle, loans, and habits.Focus on fixing the real leaks, not feeling
-                    guilty over small joys.</p> <br>
-                <p> 1. Saving money is harder when you are poor and that’s not your fault. It’s not that you’re
-                    undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem
-                    isn’t just saving , it’s earning more.
-                    2. You don’t save money by cutting out just small expenses.The little expenses aren’t the problem
-                    it’s the big ones. Rent, lifestyle, loans, and habits.Focus on fixing the real leaks, not feeling
-                    guilty over small joys.</p> <br>
-                <p> 1. Saving money is harder when you are poor and that’s not your fault. It’s not that you’re
-                    undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem
-                    isn’t just saving , it’s earning more.
-                    2. You don’t save money by cutting out just small expenses.The little expenses aren’t the problem
-                    it’s the big ones. Rent, lifestyle, loans, and habits.Focus on fixing the real leaks, not feeling
-                    guilty over small joys.</p> <br>
-                <p> 1. Saving money is harder when you are poor and that’s not your fault. It’s not that you’re
-                    undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem
-                    isn’t just saving , it’s earning more.
-                    2. You don’t save money by cutting out just small expenses.The little expenses aren’t the problem
-                    it’s the big ones. Rent, lifestyle, loans, and habits.Focus on fixing the real leaks, not feeling
-                    guilty over small joys.</p> <br>
-                <p> 1. Saving money is harder when you are poor and that’s not your fault. It’s not that you’re
-                    undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem
-                    isn’t just saving , it’s earning more.
-                    2. You don’t save money by cutting out just small expenses.The little expenses aren’t the problem
-                    it’s the big ones. Rent, lifestyle, loans, and habits.Focus on fixing the real leaks, not feeling
-                    guilty over small joys.</p> <br>
-                <p> 1. Saving money is harder when you are poor and that’s not your fault. It’s not that you’re
-                    undisciplined. It’s that your income is too low You can’t save what doesn’t exist. So the problem
-                    isn’t just saving , it’s earning more.
-                    2. You don’t save money by cutting out just small expenses.The little expenses aren’t the problem
-                    it’s the big ones. Rent, lifestyle, loans, and habits.Focus on fixing the real leaks, not feeling
-                    guilty over small joys.</p> <br>
+                {% if blog.content1 %}
+                    <p> 
+                        {{ blog.content1|linebreaks }}
+                    </p>
+                {% endif %} 
+                <br>
+                {% if blog.content2 %}
+                <p>
+                    {{ blog.content2|linebreaks }}
+                </p>
+                {% endif %} 
+                <br>
+                {% if blog.content3 %}
+                <p>
+                    {{ blog.content3|linebreaks }}
+                </p>
+                {% endif %} 
+                <br>
+                {% if blog.content4 %}
+                <p>
+                    {{ blog.content4|linebreaks }}
+                </p>
+                {% endif %} 
+                <br>
+                {% if blog.content5 %}
+                <p>
+                    {{ blog.content5|linebreaks }}
+                </p>
+                {% endif %}
+                <br>
             </div>
         </div>
 
@@ -80,22 +74,22 @@ text-color: #363738;
    <p> Share this page <i class="fas fa-share"></i> </p>
    <div class="socials">
   <!-- Facebook -->
-  <a href="https://facebook.com/yourprofile" target="_blank">
+  <a href="{{ share_urls.facebook }}" target="_blank">
     <i class="fab fa-facebook-f" style="color: #1877F2;"></i>
   </a>
 
   <!-- TikTok -->
-  <a href="https://tiktok.com/@yourusername" target="_blank">
-    <i class="fab fa-tiktok" style="color: #010101;"></i>
+  <a href="{{ share_urls.twitter }}" target="_blank">
+    <i class="fab fa-twitter" style="color: #010101;"></i>
   </a>
 
   <!-- Instagram -->
-  <a href="https://instagram.com/yourprofile" target="_blank">
-    <i class="fab fa-instagram" style="color: #E4405F;"></i>
+  <a href="{{ share_urls.linkedin }}" target="_blank">
+    <i class="fab fa-linkedin-in" style="color: #E4405F;"></i>
   </a>
 
   <!-- WhatsApp -->
-  <a href="https://wa.me/yourphonenumber" target="_blank">
+  <a href="{{ share_urls.whatsapp }}" target="_blank">
     <i class="fab fa-whatsapp" style="color: #25D366;"></i>
   </a>
 </div>
@@ -104,36 +98,21 @@ text-color: #363738;
 
 <div class="reconmended">
     <p>Also reconmemnded</p> <br>
+    {% if recommended_blogs %}
+    {% for blog in recommended_blogs %}
+    <a href="{{ blog.get_absolute_url }}">
     <div class="blog-rec">
           <img src="{% static 'vote/img/ben.jpg' %}" alt="">
           <div class="blog-rec-ext">
-            Breaking the cycles of poverty - Tips on how to make and
+            {{ blog.title }}
           </div>
+          
     </div>
-    <div class="blog-rec">
-          <img src="{% static 'vote/img/ben.jpg' %}" alt="">
-          <div class="blog-rec-ext">
-            Breaking the cycles of poverty - Tips on how to make and
-          </div>
-    </div>
-    <div class="blog-rec">
-          <img src="{% static 'vote/img/ben.jpg' %}" alt="">
-          <div class="blog-rec-ext">
-            Breaking the cycles of poverty - Tips on how to make and
-          </div>
-    </div>
-    <div class="blog-rec">
-          <img src="{% static 'vote/img/ben.jpg' %}" alt="">
-          <div class="blog-rec-ext">
-            Breaking the cycles of poverty - Tips on how to make and
-          </div>
-    </div>
-    <div class="blog-rec">
-          <img src="{% static 'vote/img/ben.jpg' %}" alt="">
-          <div class="blog-rec-ext">
-            Breaking the cycles of poverty - Tips on how to make and
-          </div>
-    </div>
+</a>
+    {% endfor %}
+    {% endif %}
+    
+    
 </div>
 </div>
 

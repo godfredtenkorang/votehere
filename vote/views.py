@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib import messages
 from .utils import receive_sms_from_event_organizer
+from django.views.generic import ListView, DetailView
 
 
 def index(request):
@@ -33,6 +34,21 @@ def about(request):
     }
     return render(request, 'vote/about.html', context)
 
+
+class BlogListView(ListView):
+    model = Blog
+    template_name = 'vote/blog.html'
+    context_object_name = 'blogs'
+    paginate_by = 6  # Number of blogs per page
+    
+    def get_queryset(self):
+        return Blog.objects.filter(blog_recommended=True).order_by('-date_added')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recommended_blogs'] = Blog.objects.filter(blog_recommended=True).order_by('-date_added')[:3]
+        return context
+
 def blog(request):
     blogs = Blog.objects.all()
     context = {
@@ -48,6 +64,18 @@ def blog(request):
 #         'title': 'Blog Detail'
 #     }
 #     return render(request, 'vote/blog-detail.html', context)
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = 'vote/blog-detail.html'
+    context_object_name = 'blog'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['share_urls'] = self.object.get_share_urls(self.request)
+        context['recommended_blogs'] =  Blog.objects.filter(blog_recommended=True).exclude(id=self.object.id).order_by('-date_added')[:3]
+        return context
+
 def blog_detail(request):
     return render(request, 'vote/blog-detail.html')
 
