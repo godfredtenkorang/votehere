@@ -22,15 +22,37 @@
                 <br>
                 <h4><a href="{% url 'ussd_transactions' category.id  %}">CLICK HERE</a> TO GET ALL USSD TRANSACTIONS</h4>
                 <h4><a href="{% url 'online_transactions' category.id  %}">CLICK HERE</a> TO GET ALL ONLINE TRANSACTIONS</h4>
-                <div class="transaction-for-awards">
+                <br>
+                <div class="table-responsive">
+                    <table class="revenue-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Action</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for n in award %}
+                            <tr>
+                                <td>{{ n.content }}</td>
+                                <td><a href="{% url 'transaction' n.slug %}">click</a></td>
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>  
+                </div>
+                
+                <!-- <div class="transaction-for-awards">
                     {% for n in award %}
                     <a href="{% url 'transaction' n.slug %}">
                         <div class="awards-transaction-container">
-                            <!-- awards img -->
+                            
                             <div class="awards-img">
                                 <img src="{{ n.category.image.url }}" alt="geima">
                             </div>
-                            <!-- Category name -->
+                            
                             <div class="awards-name">
                                 <h2>{{ n.content }}</h2>
 
@@ -38,13 +60,13 @@
                         </div>
                     </a>
                     {% endfor %}
-                </div>
-                <div class="back-button">
+                </div> -->
+                <!-- <div class="back-button">
                     <a class="active" href="{% url 'TransactionMain' %}">
                         <button>Go Back</button>
                     </a>
 
-                </div>
+                </div> -->
             </div>
 
         </div>

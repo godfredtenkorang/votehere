@@ -11,22 +11,46 @@
                     <h2>List of Category for awards {{category}}</h2>
 
                 </div>
+                <br>
 
                 <a href="{% url 'access_transaction_by_code' %}"class="insight">
                 <button>Access Transactions </button>
                 </a>
+                <br>
+                <br>
 
-                <div class="categories-container">
+                <div class="table-responsive">
+                    <table class="revenue-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Action</th>
+                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for n in award %}
+                            <tr>
+                                <td>{{ n.content }}</td>
+                                <td><a href="{% url 'transaction' n.slug %}">click</a></td>
+                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- <div class="categories-container">
                     {% for n in award %}
 
 
                     <a href="{% url 'activity_nominee' n.slug %}">
                         <div class="category">
-                            <!-- cat img -->
+                           
                             <div class="cat-img">
                                 <img src="{{ n.category.image.url }}" alt="geima">
                             </div>
-                            <!-- cat name -->
+                            
                             <div class="cat-name">
                                 <h2>{{ n.content }}</h2>
                             </div>
@@ -34,14 +58,14 @@
                         </div>
                     </a>
                     {% endfor %}
-                </div>
+                </div> -->
 
-                <div class="back-button">
+                <!-- <div class="back-button">
                     <a class="active" href="{% url 'adminPage' %}">
                         <button>Go Back</button>
                     </a>
 
-                </div>
+                </div> -->
 
 
 
