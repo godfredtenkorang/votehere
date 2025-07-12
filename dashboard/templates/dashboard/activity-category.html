@@ -32,7 +32,7 @@
                             {% for n in award %}
                             <tr>
                                 <td>{{ n.content }}</td>
-                                <td><a href="{% url 'transaction' n.slug %}">click</a></td>
+                                <td><a href="{% url 'activity_nominee' n.slug %}">click</a></td>
                 
                             </tr>
                             {% endfor %}
