@@ -1,0 +1,72 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main">
+    <div class="transation-details-container">
+        <div class="heading">
+
+
+            <h3>Blogs </h3>
+            
+
+        </div>
+        <div style="background-color:#000; width:100%;">
+            {% if messages %}
+            {% for message in messages %}
+            <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
+            {% endfor %}
+            {% endif %}
+            </div>
+
+        <br>
+        <h2><a href="{% url 'add_blog' %}">Add Blog</a></h2>
+
+        <br>
+        <div class="table-responsive">
+            <table class="revenue-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Blog Recommended</th>
+                        <th>Date Added</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for blog in blogs %}
+                    <tr>
+                        <td>{{ blog.title }}</td>
+                        <td>{{ blog.author }}</td>
+                        <td>{{ blog.blog_recommended }}</td>
+                        <td>{{ blog.date_added }}</td>
+                        
+                        <td><a href="{% url 'update_blog' blog.id %}">update</a></td>
+                        <td><a href="{% url 'delete_blog' blog.id %}">delete</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

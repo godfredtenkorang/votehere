@@ -16,4 +16,9 @@ urlpatterns = [
     
     path('payment-transactions/', views.payment_transactions, name='payment_transactions'),
     path('payment-transactions/<int:invoice_id>/', views.payment_transactions_detail, name='update_transaction'),
+    
+    path('blog_list/', views.blog_list, name='blog_list'),
+    path('add_blog/', views.add_blog, name='add_blog'),
+    path('update_blog/<int:blog_id>/', views.update_blog, name='update_blog'),
+    path('delete_blog/<int:blog_id>/', views.delete_blog, name='delete_blog'),
 ]

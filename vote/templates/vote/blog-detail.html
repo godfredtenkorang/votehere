@@ -29,6 +29,12 @@ text-color: #363738;
                 <img src="{{ blog.image.url }}" alt="">
             </div>
             <div class="detail-text">
+                {% if blog.content %}
+                    <p> 
+                        {{ blog.content|linebreaks }}
+                    </p>
+                {% endif %} 
+                <br>
                 {% if blog.content1 %}
                     <p> 
                         {{ blog.content1|linebreaks }}

@@ -7,10 +7,10 @@ from dashboard.forms import CategorySMSForm, PaymentTransactionForm, SendSmsForm
 from dashboard.utils import send_access_code_to_new_nominee, send_mnotify_sms, send_sms_to_new_nominee
 from payment.models import Nominees
 from ussd.models import PaymentTransaction
-from vote.models import Category, SubCategory
+from vote.models import Blog, Category, SubCategory
 from django.utils import timezone
 from django.db.models import Sum
-from .forms import NomineeForm
+from .forms import NomineeForm, BlogForm
 
 # Create your views here.
 def dashboard(request):
@@ -260,3 +260,68 @@ def send_access_code_to_nominee(request):
     }
         
     return render(request, 'maindashboard/nominee/send_access_code.html', context)
+
+
+def blog_list(request):
+    blogs = Blog.objects.all().order_by('-date_added')
+    context = {
+        'blogs': blogs,
+        'title': 'Blog List'
+    }
+    return render(request, 'maindashboard/blog_list.html', context)
+
+def add_blog(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to add blog.")
+        return redirect('adminHome')
+    
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.author = request.user
+            blog.save()
+            messages.success(request, f'Blog {blog.title} added successfully.')
+            return redirect('blog_list')
+    else:
+        form = BlogForm()
+    
+    context = {
+        'form': form,
+        'title': 'Add Blog'
+    }
+    
+    return render(request, 'maindashboard/add_blog.html', context)
+
+def update_blog(request, blog_id):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to update blog.")
+        return redirect('adminHome')
+    
+    blog = get_object_or_404(Blog, id=blog_id)
+    
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Blog {blog.title} updated successfully.')
+            return redirect('blog_list')
+    else:
+        form = BlogForm(instance=blog)
+    
+    context = {
+        'form': form,
+        'title': 'Update Blog'
+    }
+    
+    return render(request, 'maindashboard/update_blog.html', context)
+
+def delete_blog(request, blog_id):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to delete blog.")
+        return redirect('adminHome')
+    
+    blog = get_object_or_404(Blog, id=blog_id)
+    blog.delete()
+    messages.success(request, f'Blog {blog.title} deleted successfully.')
+    return redirect('blog_list')

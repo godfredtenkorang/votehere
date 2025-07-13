@@ -1,7 +1,7 @@
 from django import forms
 
 from payment.models import Nominees
-from vote.models import SubCategory
+from vote.models import Blog, SubCategory
 
 class NomineeForm(forms.ModelForm):
     class Meta:
@@ -28,3 +28,18 @@ class NomineeForm(forms.ModelForm):
         else:
             self.fields['sub_category'].queryset = SubCategory.objects.none()
         
+        
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ['title', 'content', 'content1', 'content2', 'content3', 'content4', 'content5', 'image', 'blog_recommended', 'slug']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'content1': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'content2': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'content3': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'content4': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'content5': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'blog_recommended': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
