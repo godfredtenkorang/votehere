@@ -342,7 +342,9 @@ def online_transactions(request, category_id):
         payments = payments.filter(date_created__date=date_created)
         
     total_amount = payments.aggregate(Total=Sum('total_amount')).get('Total', 0)
-    total_amount_after_charge = Decimal(total_amount) * Decimal(0.98)  # Deduct 2%
+    if total_amount is None:
+        total_amount = 0  # Handle case where no payments exist 
+    total_amount_after_charge = total_amount * Decimal(0.98)  # Deduct 2%
     
     
     context = {
