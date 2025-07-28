@@ -78,7 +78,7 @@ def result(request, result_slug):
 def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
     nominee = get_object_or_404(Nominees, slug=nominee_slug)
     
-    if nominee.is_due():
+    if nominee.category.is_due():
         return render(request, 'payment/access_denied.html')
     
     if request.method == 'POST':
