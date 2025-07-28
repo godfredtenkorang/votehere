@@ -9,12 +9,18 @@
         <br>
         <p>{% if sub_category %}{{ sub_category.category }}{% else %}Award Name{% endif %}</p>
         
+        {% if sub_category.category.close_result %}
         {% if sub_category.category.end_date > current_time %}
         <div class="button">
 
             <a href="{% url 'result' sub_category.slug %}">View Results</a>
 
         </div>
+        {% else %}
+    
+
+        {% endif %}
+
         {% else %}
 
         {% endif %}
