@@ -112,7 +112,7 @@ def ussd_api(request):
                         # category_name = nominee.category.award if nominee.category else "General"
                         
                         # check if voting has ended for this nominee
-                        if timezone.now() > nominee.end_date:
+                        if timezone.now() > nominee.category.end_date:
                             session.delete()
                             return JsonResponse(send_response("Voting has ended.", False))
                         message = (
