@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 
 class Category(models.Model):
@@ -21,6 +22,9 @@ class Category(models.Model):
             # Generate a random 6-digit code if none exists
             self.access_code = str(random.randint(100000, 999999))
         super().save(*args, **kwargs)
+        
+    def is_due(self):
+        return self.end_date < now()
     
     class Meta:
         verbose_name_plural = "categories"
