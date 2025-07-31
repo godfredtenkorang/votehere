@@ -1,0 +1,411 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<style>
+.form-box {
+      background: white;
+      padding: 20px 30px;
+      max-width: 700px;
+      margin: 5% 0;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+    }
+
+    .inline {
+      display: flex;
+      gap: 10px;
+    }
+
+    .inline .form-group {
+      flex: 1;
+    }
+
+    .checkbox-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 5px;
+    }
+
+    .submit-btn {
+      background: orange;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+
+
+
+
+
+
+
+.receipt-box {
+    background: white;
+    border: 4px solid orange;
+    padding: 20px;
+    max-width: 900px;
+    margin: 5% 0;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #153C59;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+strong{
+    color:#522a83;
+    padding-right: 30px;
+}
+
+.logo {
+    font-weight: bold;
+ 
+    color: white;
+    padding: 10px;
+}
+
+.title {
+    text-align: center;
+}
+
+.title h2 {
+    margin: 0;
+    color: #153C59;
+}
+
+.company-details {
+    font-size: 14px;
+    text-align: right;
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.content p {
+    margin: 10px 0;
+    border-bottom: 1px dashed #aaa;
+    padding-bottom: 4px;
+}
+
+.split-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.box {
+    border: 1px solid #000;
+    padding: 5px 30px;
+}
+
+.signature {
+    text-align: right;
+    font-weight: bold;
+    border-top: 1px solid #000;
+    padding-top: 5px;
+}
+
+
+
+
+
+
+</style>
+
+<div class="main">
+ <form action="" method="" class="form-box">
+    <h2>Generate Money Receipt</h2>
+
+    <div class="inline">
+      <div class="form-group">
+        <label for="receipt_no">Receipt No</label>
+        <input type="text" name="receipt_no" required>
+      </div>
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" name="date" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="organizer">Award Scheme Name / Organizer</label>
+      <input type="text" name="organizer" required>
+    </div>
+
+    <div class="form-group">
+      <label for="total_votes">Total Vote Count</label>
+      <input type="number" name="total_votes" required>
+    </div>
+
+    <div class="inline">
+      <div class="form-group">
+        <label for="total_proceeds">Total Voting Proceeds (GHS)</label>
+        <input type="number" name="total_proceeds" required>
+      </div>
+      <div class="form-group">
+        <label for="shared_amount">Amount Shared (GHS)</label>
+        <input type="number" name="shared_amount" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="amount_words">Amount In Words</label>
+      <input type="text" name="amount_words" required>
+    </div>
+
+    <div class="form-group">
+      <label for="voting_period">Voting Period</label>
+      <input type="text" name="voting_period" placeholder="e.g. July 1 – July 15, 2025" required>
+    </div>
+
+    <div class="form-group">
+      <label>Payment Method</label>
+      <div class="checkbox-group">
+        <label><input type="radio" name="payment_method" value="Cash" required> Cash</label>
+        <label><input type="radio" name="payment_method" value="Mobile Money"> Mobile Money</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="momo_ref">MoMo Reference No (if applicable)</label>
+      <input type="text" name="momo_ref">
+    </div>
+
+    <div class="inline">
+      <div class="form-group">
+        <label for="received_by">Received By</label>
+        <input type="text" name="received_by" required>
+      </div>
+      <div class="form-group">
+        <label for="authorized">Authorized Signature</label>
+        <input type="text" name="authorized" required>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">Generate Receipt</button>
+  </form>
+
+
+
+
+
+
+
+
+<div class="receipt-box">
+  <div class="header">
+    <div class="logo">
+<img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima">
+
+    </div>
+    <div class="title">
+      <h2>MONEY RECEIPT</h2>
+      <p>For Voting Revenue Share</p>
+      <p>+233 55 678 3586 &nbsp;|&nbsp; ✉ voteafric66@gmail.com</p>
+    </div>
+    <div class="company-details">
+      <strong>VoteAfric Ghana Ltd</strong><br>
+      
+      Kumasi, Ghana<br>
+      www.voteafric.com
+    </div>
+  </div>
+
+  <div class="top-row">
+    <div><strong>Receipt No:</strong>  <span id="receipt_no"></span></div>
+    <div><strong>Date:</strong> <span id="receipt_date"></span></div>
+  </div>
+
+  <div class="content">
+    <p><strong>Received from:</strong> VoteAfric Ghana Ltd</p>
+    <p><strong>Paid to :</strong> <span id="organizer_name"></span></p>
+    <p><strong>Total Voting Proceeds:</strong> GHS <span id="total_proceeds"></span></p>
+    <p><strong>Amount Shared :</strong> GHS <span id="amount_shared"></span></p>
+    <p><strong>In Words:</strong> <span id="in_words"></span></p>
+    <p><strong>Payment For:</strong> Revenue share from <em><span id="award_scheme">[Award Scheme Name]</span></em> voting proceeds</p>
+    <p><strong>Voting Period:</strong> <span id="voting_period"></span></p>
+
+    <div class="split-row">
+      <div><strong>Payment Method:</strong></div>
+      <div>
+        <label><input type="checkbox" id="payment_cash" disabled> Cash</label>
+        <label><input type="checkbox" id="payment_momo" disabled> Mobile Money</label>
+      </div>
+    </div>
+
+    <p><strong>MoMo Reference No:</strong> <span id="momo_reference"></span></p>
+
+    <div class="footer-row">
+      <div>Received by: <span id="received_by"></span></div>
+      <div class="signature">Authorized Signature</div>
+    </div>
+  </div>
+</div>
+<button type="button" onclick="downloadReceipt()" class="submit-btn">Download Receipt</button>
+
+<!-- <button type="button" onclick="downloadReceipt()" class="submit-btn">Download Receipt</button> -->
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+<!-- <script>
+  // Set today's date automatically on page load
+  window.addEventListener("DOMContentLoaded", function () {
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelector('input[name="date"]').value = today;
+  });
+
+  // Disable MoMo Ref if payment is Cash
+  document.querySelectorAll('input[name="payment_method"]').forEach((radio) => {
+    radio.addEventListener("change", function () {
+      const momoInput = document.querySelector('input[name="momo_ref"]');
+      if (this.value === "Cash") {
+        momoInput.disabled = true;
+        momoInput.value = "";
+      } else {
+        momoInput.disabled = false;
+      }
+    });
+  });
+
+  // Form submission
+  document.querySelector('.form-box').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const receiptNo = form.receipt_no.value.trim();
+    const date = form.date.value.trim();
+    const organizer = form.organizer.value.trim();
+    const totalVotes = form.total_votes.value.trim();
+    const totalProceeds = form.total_proceeds.value.trim();
+    const sharedAmount = form.shared_amount.value.trim();
+    const inWords = form.amount_words.value.trim();
+    const votingPeriod = form.voting_period.value.trim();
+    const paymentMethod = form.payment_method.value;
+    const momoRef = form.momo_ref.value.trim();
+    const receivedBy = form.received_by.value.trim();
+
+    // Basic validation between numerals and text (soft check)
+    if (inWords.toLowerCase().includes(sharedAmount) === false) {
+      alert("⚠ Amount in words may not match amount shared.");
+    }
+
+    // Update receipt preview
+    document.getElementById('receipt_no').textContent = receiptNo;
+    document.getElementById('receipt_date').textContent = date;
+    document.getElementById('organizer_name').textContent = organizer;
+    document.getElementById('total_proceeds').textContent = totalProceeds;
+    document.getElementById('amount_shared').textContent = sharedAmount;
+    document.getElementById('in_words').textContent = inWords;
+    document.getElementById('award_scheme').textContent = organizer;
+    document.getElementById('voting_period').textContent = votingPeriod;
+    document.getElementById('momo_reference').textContent = momoRef;
+    document.getElementById('received_by').textContent = receivedBy;
+
+    document.getElementById('payment_cash').checked = paymentMethod === 'Cash';
+    document.getElementById('payment_momo').checked = paymentMethod === 'Mobile Money';
+  });
+
+  // Download receipt
+  function downloadReceipt() {
+    const receiptBox = document.querySelector('.receipt-box');
+
+    html2canvas(receiptBox).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'voteafric_receipt.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  }
+</script>
+ -->
+
+
+
+<script>
+  // Automatically set today's date on load
+  window.addEventListener("DOMContentLoaded", function () {
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelector('input[name="date"]').value = today;
+  });
+
+  // Download receipt as PDF
+  function downloadReceipt() {
+    const receipt = document.querySelector(".receipt-box");
+    const opt = {
+      margin: 0.5,
+      filename: 'voteafric_receipt.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'A4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(receipt).save();
+  }
+</script>
+
+
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
