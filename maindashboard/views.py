@@ -325,3 +325,7 @@ def delete_blog(request, blog_id):
     blog.delete()
     messages.success(request, f'Blog {blog.title} deleted successfully.')
     return redirect('blog_list')
+
+
+def receipt(request):
+    return render(request, 'maindashboard/receipt.html') 
