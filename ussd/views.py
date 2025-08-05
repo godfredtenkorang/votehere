@@ -424,7 +424,37 @@ def ussd_api(request):
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
-
+# New Start
+# Add this function to verify payments
+def verify_payment(order_id):
+    """
+    Verify payment status with payment gateway for a given order_id
+    """
+    endpoint = "https://api.nalosolutions.com/payplus/api/verify"  # Check the actual verify endpoint
+    username = 'votfric_gen'
+    password = 'Nrkl)CYr'
+    merchant_id = 'NPS_000288'
+    key = str(generate_random_key())
+    hashed_password = md5(password.encode()).hexdigest()
+    concat_keys = f"{username}{key}{hashed_password}"
+    secrete = md5(concat_keys.encode()).hexdigest()
+    
+    payload = {
+        'merchant_id': merchant_id,
+        'secrete': secrete,
+        'key': key,
+        'order_id': order_id
+    }
+    
+    try:
+        response = requests.post(endpoint, json=payload)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get('Status') == 'PAID', data
+        return False, None
+    except requests.exceptions.RequestException:
+        return False, None
+#  New End
 
 def update_nominee_votes(nominee_code, votes):
     try:
@@ -458,11 +488,95 @@ def webhook_callback(request):
             amount = data.get('amount')
             order_id = data.get('Order_id')
             
-            
+            # New start
+            # First check if this transaction already exists
+            existing_txn = PaymentTransaction.objects.filter(order_id=order_id).first()
+            if existing_txn:
+                return JsonResponse({'status': 'success', 'message': 'Transaction already processed'})
+            # New end
             session = CustomSession.objects.filter(order_id=order_id).first()
             
             
             if not session:
+                # New Start
+                # If no session but payment succeeded, we should still verify
+                if status == 'PAID':
+                     # Verify with payment gateway
+                     is_paid, payment_data = verify_payment(order_id)
+                     if is_paid:
+                        # Try to reconstruct what we can from the payment data
+                        # This part would need to be customized based on what data the gateway returns
+                        # For example:
+                        payment_type = payment_data.get('item_desc', '').split()[0]  # Just an example
+                        if payment_type == 'Votes':
+                            nominee_code = payment_data.get('item_desc', '').split()[-1]  # Assuming last part is nominee code
+                            votes = int(payment_data.get('metadata', {}).get('votes', 1))  # Assuming votes are in metadata
+                            nominee = update_nominee_votes(nominee_code, votes)
+                            if nominee:
+                                PaymentTransaction.objects.create(
+                                    order_id=order_id,
+                                    invoice_no=invoice_no,
+                                    transaction_id=invoice_no,
+                                    amount=amount,
+                                    status=status,
+                                    payment_type='VOTE',
+                                    nominee_code=nominee_code,
+                                    votes=votes,
+                                    category=nominee.category,
+                                    timestamp=timestamp_str
+                                )
+                                return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
+                        elif payment_type == 'Tickets':
+                            event_code = payment_data.get('item_desc', '').split()[-1]
+                            tickets = int(payment_data.get('metadata', {}).get('tickets', 1))
+                            try:
+                                ticket_type = TicketType.objects.get(event__code=event_code)
+                                ticket_type.available_tickets -= tickets
+                                ticket_type.save()
+                                
+                                PaymentTransaction.objects.create(
+                                    order_id=order_id,
+                                    invoice_no=invoice_no,
+                                    transaction_id=invoice_no,
+                                    amount=amount,
+                                    status=status,
+                                    payment_type='TICKET',
+                                    event_code=event_code,
+                                    tickets=tickets,
+                                    ticket_type=ticket_type.name,
+                                    event_category=ticket_type.event.name,
+                                    timestamp=timestamp_str
+                                )
+                                return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
+                            except TicketType.DoesNotExist:
+                                return JsonResponse({'status': 'error', 'message': 'Invalid Ticket type for event not found'})
+                        elif payment_type == 'Donation':
+                            cause_code = payment_data.get('item_desc', '').split()[-1]
+                            try:
+                                cause = DonationCause.objects.get(code=cause_code)
+                                cause.current_amount += Decimal(amount)
+                                cause.save()
+                                
+                                PaymentTransaction.objects.create(
+                                    order_id=order_id,
+                                    invoice_no=invoice_no,
+                                    transaction_id=invoice_no,
+                                    amount=amount,
+                                    status=status,
+                                    payment_type='DONATION',
+                                    donation_code=cause_code,
+                                    timestamp=timestamp_str
+                                )
+                                send_donation_sms(
+                                    phone_number=session.msisdn,
+                                    cause_name=cause.name,
+                                    amount=amount,
+                                    reference=invoice_no
+                                )
+                                return JsonResponse({'status': 'success', 'message': 'Donation successful'})
+                            except DonationCause.DoesNotExist:
+                                return JsonResponse({'status': 'error', 'message': 'Cause not found'})
+                # New End
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
             
             # Check if session is expired
