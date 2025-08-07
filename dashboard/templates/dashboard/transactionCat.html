@@ -14,11 +14,16 @@
                 </div>
                 <!-- <h1 style="font-family: 'Times New Roman', Times, serif;">Total Online Payments: GH¢{{ original_online_total|floatformat:2 }}</h1>
                 <h1 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payments: GH¢{{ original_ussd_total|floatformat:2 }}</h1> -->
-                <h1 style="font-family: 'Times New Roman', Times, serif;">Total Payments: GH¢{{ sum_total|floatformat:2 }}</h1>
+
+                <!-- The total payment without charges -->
+                <!-- <h1 style="font-family: 'Times New Roman', Times, serif;">Total Payments: GH¢{{ sum_total|floatformat:2 }}</h1> -->
+                <h1 style="font-family: 'Times New Roman', Times, serif;">Total Payments: GH¢{{ original_total_payment|floatformat:2 }}</h1>
+
                 <br>
                 <!-- <h4 style="font-family: 'Times New Roman', Times, serif;">Total Online Payment After Charges (2%): GH¢{{ total_online_payments|floatformat:2 }}</h4>
                 <h4 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payment After Charges (3%): GH¢{{ total_ussd_payments|floatformat:2 }}</h4> -->
-                <h2 style="font-family: 'Times New Roman', Times, serif;">Total Payment After Charges (3%): GH¢{{ original_total_payment|floatformat:2 }}</h2>
+                <!-- The total payment after charges -->
+                <!-- <h2 style="font-family: 'Times New Roman', Times, serif;">Total Payment After Charges (3%): GH¢{{ original_total_payment|floatformat:2 }}</h2> -->
                 <br>
                 <h4><a href="{% url 'ussd_transactions' category.id  %}">CLICK HERE</a> TO GET ALL USSD TRANSACTIONS</h4>
                 <h4><a href="{% url 'online_transactions' category.id  %}">CLICK HERE</a> TO GET ALL ONLINE TRANSACTIONS</h4>
