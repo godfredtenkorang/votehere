@@ -15,7 +15,7 @@ urlpatterns = [
     path('terms_and_condition/', views.termsCondition, name='termsCondition'),
     path('contact/', views.contact, name='contact'),
 
-    path('award/', views.award_page, name='award_page'),
+    path('awards/', views.award_page, name='award_page'),
     path('joinUs/', views.joinUs, name='joinUs'),
  
 
