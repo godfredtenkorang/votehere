@@ -16,6 +16,7 @@ class Category(models.Model):
     access_code = models.CharField(max_length=10, unique=True, null=True, blank=True)
     link = models.URLField(null=True, blank=True)
     nomination_end_date = models.DateField(null=True, blank=True)
+    bulk_voting_options = models.JSONField(null=True, blank=True, default=list, help_text="JSON list of bulk voting options in format [{'amount': X, 'votes': Y}]")  # New field
     close_result = models.BooleanField(default=False)  # Add this field
     
     

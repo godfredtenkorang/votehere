@@ -1,6 +1,45 @@
 {% extends 'vote/base.html' %}
 {% load static %}
 {% block content %}
+
+<style>
+    .vote-type-selector {
+        margin: 15px 0;
+        display: flex;
+        gap: 20px;
+    }
+
+    .bulk-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .bulk-option input[type="radio"] {
+        display: none;
+    }
+
+    .package-card {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .package-card:hover {
+        border-color: #4CAF50;
+    }
+
+    .bulk-option input[type="radio"]:checked+.package-card {
+        background-color: #4CAF50;
+        color: white;
+        border-color: #4CAF50;
+    }
+</style>
+
 <!-- banner -->
 <div class="banners">
     <!-- <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image"> -->
@@ -54,22 +93,55 @@ it is hidden so when voters click on the vote button, the it appears -->
                 <label for=""><i class="fa-solid fa-envelope"></i> Email Address</label> <br>
                 <input type="email" name="email" id="email" placeholder="Email Address" required> <br> -->
 
-        <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label> <br>
-        <input type="number" name="phone" id="" placeholder="Phone Number" required> <br>
-
-        <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Vote <span>(GHS {{nominee.price_per_vote}} per vote)</span></label>
-        <br>
-        <input type="number" name="vote" id="number-of-vote" placeholder="Number of vote" required> <br>
-
-        <input type="" hidden name="total_amount" id="amount-top-pay" placeholder="Amount to pay per vote" required>
-        <br>
-
-        <input type="number" hidden name="amount" id="total-amount-top-pay" placeholder="Amount to pay per vote"
-            required>
-        <div class="alert-amount-to-pay">
-
+        <div class="vote-type-selector">
+            <label>
+                <input type="radio" name="vote_type" value="single" checked onclick="toggleVoteType('single')">
+                Single Vote
+            </label>
+            <label>
+                <input type="radio" name="vote_type" value="bulk" onclick="toggleVoteType('bulk')">
+                Bulk Vote
+            </label>
         </div>
-        <!-- pay button -->
+        
+        <!-- Single vote section (shown by default) -->
+        <div id="single-vote-section">
+            <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label> <br>
+            <input type="number" name="phone" placeholder="Phone Number" > <br>
+        <br>
+            <label for=""><i class="fa-solid fa-check-to-slot"></i> Number of Votes <span>(GHS {{nominee.price_per_vote}} per
+                    vote)</span></label>
+            <br>
+            <input type="number" name="vote" id="number-of-vote" placeholder="Number of votes"> <br>
+        </div>
+        
+        
+        <!-- Bulk vote section (hidden by default) -->
+        <div id="bulk-vote-section" style="display:none;">
+            <label for=""><i class="fa-solid fa-phone"></i> Phone Number</label> <br>
+            <input type="number" name="phone" placeholder="Phone Number"> <br>
+            <br>
+            <label><i class="fa-solid fa-boxes-packing"></i> Select Bulk Package</label>
+            <div class="bulk-options">
+                {% for option in bulk_options %}
+                <label class="bulk-option">
+                    <input type="radio" name="bulk_package" value="{{ forloop.counter0 }}">
+                    <div class="package-card">
+                        <h4>GHS {{ option.amount }}</h4>
+                        <p>{{ option.votes }} votes</p>
+                        <small>{{ option.description|default:"" }}</small>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Hidden fields -->
+        <input type="hidden" name="total_amount" id="amount-top-pay">
+        <input type="hidden" name="amount" id="total-amount-top-pay">
+        
+        <div class="alert-amount-to-pay"></div>
+        <br>
         <button type="submit">Pay Now</button>
 
     </form>
@@ -78,18 +150,27 @@ it is hidden so when voters click on the vote button, the it appears -->
 
     </div> -->
 </section>
+<script>
+    function toggleVoteType(type) {
+        if (type === 'single') {
+            document.getElementById('single-vote-section').style.display = 'block';
+            document.getElementById('bulk-vote-section').style.display = 'none';
+        } else {
+            document.getElementById('single-vote-section').style.display = 'none';
+            document.getElementById('bulk-vote-section').style.display = 'block';
+        }
+    }
 
-<script defer>
-
-    price_per_vote = "{{nominee.price_per_vote}}"
-
+    // Update your existing voteForm function to handle bulk packages
     function voteForm() {
+        const voteTypeRadios = document.querySelectorAll('input[name="vote_type"]');
         const numberOfVotesInput = document.getElementById("number-of-vote");
         const amountToPayInput = document.getElementById("amount-top-pay");
         const totalAmountToPayInput = document.getElementById("total-amount-top-pay");
         const alertAmountToPay = document.querySelector('.alert-amount-to-pay');
-        const amountPerVote = price_per_vote;
+        const amountPerVote = parseFloat("{{nominee.price_per_vote}}");
         const totalAmountTopPay = amountPerVote * 100;
+        //const bulkOptions = JSON.parse('{{ bulk_options|escapejs }}');
 
         numberOfVotesInput.addEventListener("input", () => {
             const numberOfVotes = parseFloat(numberOfVotesInput.value);
@@ -119,11 +200,27 @@ it is hidden so when voters click on the vote button, the it appears -->
             amountToPayInput.value = parseFloat(amountToPayInput.value);
             // You may add more validation or processing before form submission
         });
+
+        // Handle bulk package selection
+        document.querySelectorAll('input[name="bulk_package"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (document.querySelector('input[name="vote_type"]:checked').value !== 'bulk') return;
+
+                const package = bulkOptions[this.value];
+                const votes = package.votes;
+                const amount = package.amount;
+
+                amountToPayInput.value = amount;
+                totalAmountToPayInput.value = amount * 100;
+
+                updateAmountAlert(votes, amount);
+            });
+        });
+
+        
     }
 
     voteForm();
-
 </script>
-
 
 {% endblock content %}

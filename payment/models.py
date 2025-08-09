@@ -44,6 +44,7 @@ class Payment(models.Model):
     ref = models.CharField(max_length=200)
     transaction_id = models.CharField(max_length=50, unique=True, null=True, blank=True)  # New field
     verified = models.BooleanField(default=False)
+    is_bulk = models.BooleanField(default=False)  # New field to indicate bulk voting
     date_created = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -72,13 +73,16 @@ class Payment(models.Model):
         super().save(*args, **kwargs)
         
     def amount_value(self) -> int:
-        return self.amount
+        if self.is_bulk:
+            return self.amount * 100
+        else:
+            return self.amount  # Convert to pesewas
     
     def verify_payment(self):
         paystack = PayStack()
         status, result = paystack.verify_payment(self.ref, self.amount)
         if status:
-            if result['amount'] == self.amount:
+            if result['amount'] == self.amount_value():
                 self.verified = True
             self.save()
         if self.verified:

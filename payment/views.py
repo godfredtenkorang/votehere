@@ -84,18 +84,45 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
     if request.method == 'POST':
         category = nominee.category
         phone = request.POST['phone']
-        vote = request.POST['vote']
-        amount = request.POST['amount']
-        total_amount = request.POST['total_amount']
-        payment = Payment(category=category, nominee=nominee, content=nominee.sub_category, phone=phone, vote=vote, amount=amount, total_amount=total_amount)
+        vote_type = request.POST.get('vote_type', 'single')  # 'single' or 'bulk'
+        
+        if vote_type == 'single':
+            vote_count = request.POST['vote']
+            amount = request.POST['amount']
+            total_amount = request.POST['total_amount']
+            is_bulk = False
+            
+        else: # Bulk voting
+            package_index = int(request.POST['bulk_package'])
+            bulk_options = nominee.category.bulk_voting_options or []
+            package = bulk_options[package_index]
+            vote_count = package['votes']
+            amount = package['amount']
+            total_amount = amount # convert to pesewas
+            is_bulk = True
+            
+            
+            
+        payment = Payment(
+            category=category, 
+            nominee=nominee, 
+            content=nominee.sub_category, 
+            phone=phone, 
+            vote=vote_count, 
+            amount=amount, 
+            total_amount=total_amount,
+            is_bulk=is_bulk
+        )
         payment.save()
-        return render(request, 'payment/make_payment.html', {'payment': payment, 'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY})
-
-
+        return render(request, 'payment/make_payment.html', {
+            'payment': payment, 
+            'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY
+        })
 
     context = {
         'title': 'Vote',
         'nominee': nominee,
+        'bulk_options': nominee.category.bulk_voting_options or []
     }
     return render(request, 'payment/vote.html', context)
 
