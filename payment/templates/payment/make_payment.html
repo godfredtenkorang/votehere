@@ -22,7 +22,7 @@
         let ref = "{{ payment.ref }}";
         let obj = {
             key: "{{ paystack_public_key }}",
-            email: "voteafric66@gmail.com",
+            email: "{{payment.phone}}@gmail.com",
             phone: "{{ payment.phone }}",
             amount: "{{ payment.amount_value }}",
             ref: ref,
