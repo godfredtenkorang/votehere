@@ -63,6 +63,8 @@
                         <th>Category</th>
                         <th>Reference</th>
                         <th>Amount</th>
+                        <th>Votes</th>
+                        <th>Code</th>
                         <th>Verification</th>
                         <th>Date & Time</th>
                     </tr>
@@ -73,6 +75,8 @@
                         <td>{{ p.content }}</td>
                         <td>{{ p.ref }}</td>
                         <td>GH¢{{ p.total_amount }}</td>
+                        <td>{{ p.vote }}</td>
+                        <td>{{ p.nominee.code }}</td>
                         <td>{{ p.verified }}</td>
                         <td>{{ p.date_created }}</td>
                     </tr>
