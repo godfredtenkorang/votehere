@@ -104,6 +104,13 @@ it is hidden so when voters click on the vote button, the it appears -->
             <p><i class="fa-solid fa-info"></i> Note: Make sure you are voting for the right nominee, please. This
                 purchase cannot be reversed.</p>
         </div>
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
         {% csrf_token %}
         <!-- <label for=""><i class="fa-solid fa-user"></i> Full Name</label> <br>
                 <input type="text" name="name" id="user-name" placeholder="Your Full Name" required> <br>
