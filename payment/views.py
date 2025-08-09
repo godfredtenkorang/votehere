@@ -83,7 +83,11 @@ def vote(request: HttpRequest, nominee_slug) -> HttpResponse:
     
     if request.method == 'POST':
         category = nominee.category
-        phone = request.POST['phone']
+        phone = request.POST.get('phone', '').strip()
+        # Validate phone number
+        if not phone or len(phone) < 10:
+            messages.error(request, 'Please enter a valid phone number (at least 10 digits)')
+            return redirect('vote-page', nominee_slug=nominee_slug)
         vote_type = request.POST.get('vote_type', 'single')  # 'single' or 'bulk'
         
         if vote_type == 'single':
