@@ -108,7 +108,7 @@ text-color: #363738;
     {% for blog in recommended_blogs %}
     <a href="{{ blog.get_absolute_url }}">
     <div class="blog-rec">
-          <img src="{% static 'vote/img/ben.jpg' %}" alt="">
+          <img src="{{ blog.image.url }}" alt="">
           <div class="blog-rec-ext">
             {{ blog.title }}
           </div>
