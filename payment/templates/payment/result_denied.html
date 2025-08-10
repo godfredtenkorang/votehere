@@ -1,0 +1,64 @@
+{% extends 'vote/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    /* General Reset */
+    .vote-body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+    }
+
+    /* Container */
+    .container {
+        text-align: center;
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        height: 100%;
+        max-width: 500px;
+    }
+
+    /* Message Box */
+    .message-box h1 {
+        font-size: 2rem;
+        color: #333333;
+        margin-bottom: 10px;
+    }
+
+    .message-box p {
+        font-size: 1rem;
+        color: #666666;
+    }
+</style>
+<!-- banner -->
+<div class="banners">
+    <div class="banners-content">
+        <div class="button">
+
+            <a href="{% url 'index' %}">Return Home</a>
+
+        </div>
+    </div>
+</div>
+<br><br><br><br><br>
+<div class="vote-body">
+    <div class="container">
+        <div class="message-box">
+            <h1>Result is closed</h1>
+            <!-- <p>Thank you for your participation. The voting session is now closed.</p> -->
+        </div>
+    </div>
+</div>
+<br><br><br>
+
+{% endblock content %}

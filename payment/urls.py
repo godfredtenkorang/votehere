@@ -14,5 +14,6 @@ urlpatterns = [
     path('vote_failed/<slug:nominee_slug>/', views.vote_failed, name='vote-failed'),
     path('search-transaction/', views.search_transaction, name='search_transaction'),
     
-    path('not_exist/', views.access_denied, name='access-denied')
+    path('not_exist/', views.access_denied, name='access-denied'),
+    path('result_denied/', views.result_denied, name='result-denied'),
 ]

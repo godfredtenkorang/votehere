@@ -5,12 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from dashboard.forms import CategorySMSForm, PaymentTransactionForm, SendSmsForm
 from dashboard.utils import send_access_code_to_new_nominee, send_mnotify_sms, send_sms_to_new_nominee
-from payment.models import Nominees
+from payment.models import Nominees, Payment
 from ussd.models import PaymentTransaction
 from vote.models import Blog, Category, SubCategory
 from django.utils import timezone
 from django.db.models import Sum
 from .forms import NomineeForm, BlogForm
+
 
 # Create your views here.
 def dashboard(request):
@@ -195,6 +196,27 @@ def update_nominee_by_category(request, nominee_slug):
         'form': form
     }
     return render(request, 'maindashboard/get_nominees/update.html', context)
+
+
+def get_bulk_voting_transactions_by_category(request, category_slug):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to view transactions.")
+        return redirect('adminHome')
+    
+    category = get_object_or_404(Category, slug=category_slug)
+    transactions = Payment.objects.filter(category=category, is_bulk=True).order_by('-date_created')
+    
+    total_amount = transactions.aggregate(total=Sum('total_amount'))['total'] or 0
+    transaction_count = transactions.count()
+    
+    context = {
+        'category': category,
+        'transactions': transactions,
+        'total_amount': total_amount,
+        'transaction_count': transaction_count,
+        'title': f'Bulk Voting Transactions - {category.title}'
+    }
+    return render(request, 'maindashboard/bulk_voting_transactions.html', context)
 
 
 def payment_transactions(request):

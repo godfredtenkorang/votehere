@@ -19,6 +19,9 @@ def make_payment(request):
 def result(request, result_slug):
     sub_category = get_object_or_404(SubCategory, slug=result_slug)
     
+    if sub_category.category.close_result == False:
+        # If results are closed, show access denied
+        return render(request, 'payment/result_denied.html')
     # If sub_category allows checking results without access code
     if sub_category.can_check_result:
         # Get all nominees for this sub_category ordered by votes
@@ -228,3 +231,6 @@ def search_transaction(request):
 
 def access_denied(request):
     return render(request, 'payment/access_denied.html')
+
+def result_denied(request):
+    return render(request, 'payment/result_denied.html')
