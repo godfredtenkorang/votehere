@@ -6,6 +6,7 @@
         <div class="heading">
             <h1>{{ category }}</h1>
             <h3>Total Votes: {{ total_votes }}</h3>
+            <a href="{% url 'bulk_voting_transactions' category.slug %}">Check Bulk Payment</a>
         </div>
         <div class="table-responsive">
         <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->

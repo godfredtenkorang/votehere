@@ -204,7 +204,7 @@ def get_bulk_voting_transactions_by_category(request, category_slug):
         return redirect('adminHome')
     
     category = get_object_or_404(Category, slug=category_slug)
-    transactions = Payment.objects.filter(category=category, is_bulk=True).order_by('-date_created')
+    transactions = Payment.objects.filter(category=category, is_bulk=True, verified=True).order_by('-date_created')
     
     total_amount = transactions.aggregate(total=Sum('total_amount'))['total'] or 0
     transaction_count = transactions.count()

@@ -14,6 +14,8 @@ urlpatterns = [
     path('get_all_nominees/<slug:category_slug>/', views.get_nominee_by_category, name='get_nominee_by_category'),
     path('update_nominee/<slug:nominee_slug>/', views.update_nominee_by_category, name='update_nominee'),
     
+    path('bulk_voting_transactions/<slug:category_slug>/', views.get_bulk_voting_transactions_by_category, name='bulk_voting_transactions'),
+    
     path('payment-transactions/', views.payment_transactions, name='payment_transactions'),
     path('payment-transactions/<int:invoice_id>/', views.payment_transactions_detail, name='update_transaction'),
     
