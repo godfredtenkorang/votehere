@@ -158,12 +158,15 @@ def get_nominee_by_category(request, category_slug):
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         award = award.filter(category=category)
+        total_votes = award.aggregate(total=Sum('total_vote'))['total'] or 0
+        
         
 
 
     context = {
         'category': category,
         'award': award,
+        'total_votes': total_votes,
         'title': 'Nominees'
     }
     return render(request, 'maindashboard/get_nominees/nominees.html', context)

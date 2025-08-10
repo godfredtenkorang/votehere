@@ -1,0 +1,63 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main">
+    <div class="transation-details-container">
+        <div class="heading">
+            <h1>{{category}}</h1>
+            <h1>Nominees in Order by Category</h1>
+            <h3>Total Nominees: {{ nominee_count }}</h3>
+            <h3>Total Votes: {{ total_votes }}</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Image</th>
+                        <th>Votes</th>
+                        <th>Code</th>
+                        
+                        
+                        
+                    </tr>
+                </thead>
+                {% for p in nominees %}
+                <tbody>
+                    <tr>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.sub_category }}</td>
+                        <td><a href="{{ p.image.url }}">image</a></td>
+                        <td>{{ p.total_vote }}</td>
+                        <td>{{ p.code }}</td>
+                        
+                        
+                    </tr>
+
+                    <!-- Add more rows as needed -->
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</div>
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

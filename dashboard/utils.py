@@ -23,7 +23,7 @@ def send_sms_to_new_nominee(name, phone_number, category):
         "key": apiKey,
         "sender": 'VOTEAFRIC',
         "recipient[]": phone_number,
-        "message": f"Congrat {name}, your {category} of the year nomination has been received and under review. We will notify you on the status soon. Voteafric!",
+        "message": f"Congrats {name}, your {category} nomination has been received and under review. We will notify you on the status soon. VoteAfric!",
         "is_schedule": False,
         "schedule_date": ''
     }

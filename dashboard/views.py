@@ -227,7 +227,27 @@ def TransactionCat(request, category_slug):
 
     return render(request, 'dashboard/transactionCat.html', context)
 
+def vote_in_order_by_category(request, category_slug):
+    category = None
+    award = SubCategory.objects.all()
+    nominees = Nominees.objects.all()
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        award = award.filter(category=category)
+        nominees = nominees.filter(category=category).order_by('-total_vote')
+        total_votes = nominees.aggregate(total=Sum('total_vote'))
+        total_nominees = nominees.count()
 
+    context = {
+        'category': category,
+        'award': award,
+        'nominees': nominees,
+        'total_votes': total_votes['total'] if total_votes['total'] else 0,
+        'nominee_count': total_nominees,
+        'title': 'Vote in order by category'
+    }
+    
+    return render(request, 'dashboard/vote_in_order_by_category.html', context)
 
 def transaction_category(request, transaction_slug):
     nominee = None
@@ -359,8 +379,8 @@ def online_transactions(request, category_id):
             'verified': verified,
             'date_created': date_created,
         },
-        'nominees': Nominees.objects.all(),  # For nominee dropdown
-        'contents': SubCategory.objects.all(),  # For content dropdown
+        'nominees': Nominees.objects.filter(category=category),  # For nominee dropdown
+        'contents': SubCategory.objects.filter(category=category),  # For content dropdown
         'title': 'Online transactions'
     }
     return render(request, 'dashboard/online_transactions.html', context)

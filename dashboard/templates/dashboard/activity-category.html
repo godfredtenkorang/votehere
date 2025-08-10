@@ -16,6 +16,9 @@
                 <a href="{% url 'access_transaction_by_code' %}"class="insight">
                 <button>Access Transactions </button>
                 </a>
+                <a href="{% url 'vote_in_order_by_category' category.slug %}"class="insight">
+                <button>Votes In Order </button>
+                </a>
                 <br>
                 <br>
 
@@ -24,7 +27,7 @@
                         <thead>
                             <tr>
                                 <th>Category</th>
-                                <th>Action</th>
+                                <th>Action (check results)</th>
                 
                             </tr>
                         </thead>

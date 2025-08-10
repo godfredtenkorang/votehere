@@ -11,6 +11,8 @@ urlpatterns = [
     path('activity-category/<slug:category_slug>/', views.activity_category, name='activity_category'),
     path('activity-nominee/<slug:nominee_slug>/', views.activity_nominee, name='activity_nominee'),
     
+    path('vote-in-order-by-category/<slug:category_slug>/', views.vote_in_order_by_category, name='vote_in_order_by_category'),
+    
     # Registration
     path('registration/', views.registration, name='registration'),
     path('registration-category/', views.registration_category, name='registration_category'),
