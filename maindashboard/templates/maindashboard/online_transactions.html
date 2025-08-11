@@ -1,0 +1,90 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main">
+    <div class="transation-details-container">
+        <div class="heading">
+            
+            <h1>Total ONLINE Revenue </span></h1>
+            
+            <h4>Total Amount: GH¢{{ total_amount }}</h4>
+            <!-- <h4>Total Amount After Charges (2%): GH¢{{ total_amount_after_charge }}</h4> -->
+
+           
+        </div>
+        <form method="get" class="filter-form">
+            <div class="filter-row">
+                <!-- Nominee dropdown -->
+                
+
+                
+
+                <!-- Phone filter -->
+                <input type="text" name="phone_number" placeholder="Phone number" value="{{ filter_params.phone }}">
+
+                
+
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="?" class="btn btn-secondary">Clear Filters</a>
+            </div>
+        </form>
+        <br>
+        <div class="table-responsive">
+            <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Reference</th>
+                        <th>Phone</th>
+                        <th>Amount</th>
+                        <th>Votes</th>
+                        <th>Code</th>
+                        <th>Verification</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                {% for p in transactions %}
+                <tbody>
+                    <tr>
+                        <td>{{ p.content }}</td>
+                        <td>{{ p.ref }}</td>
+                        <td>{{ p.phone }}</td>
+                        <td>GH¢{{ p.total_amount }}</td>
+                        <td>{{ p.vote }}</td>
+                        <td>{{ p.nominee.code }}</td>
+                        <td>{{ p.verified }}</td>
+                        <td>{{ p.date_created }}</td>
+                    </tr>
+
+                    <!-- Add more rows as needed -->
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <!-- <div class="back-button">
+        <a href="{% url 'TransactionMain' %}">
+            <button>Go Back</button>
+        </a>
+
+    </div> -->
+</div>
+</div>
+
+</div>
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -218,7 +218,7 @@ def get_bulk_voting_transactions_by_category(request, category_slug):
     }
     return render(request, 'maindashboard/bulk_voting_transactions.html', context)
 
-
+# USSD
 def payment_transactions(request):
     if not request.user.is_staff:
         messages.error(request, "You don't have permission to view transactions.")
@@ -259,6 +259,28 @@ def payment_transactions_detail(request, invoice_id):
         'form': form
     }
     return render(request, 'maindashboard/payment_transactions_form.html', context)
+
+# Online
+# Filter online transactions by phone number
+def filter_online_transactions(request):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to view transactions.")
+        return redirect('adminHome')
+    
+    phone_number = request.GET.get('phone_number', '').strip()
+    transactions = Payment.objects.all().order_by('-date_created')
+    
+    if phone_number:
+        transactions = transactions.filter(phone__icontains=phone_number)
+        
+    total_amount = transactions.aggregate(total=Sum('total_amount'))['total'] or 0
+    
+    context = {
+        'transactions': transactions,
+        'total_amount': total_amount,
+        'title': 'Online Transactions'
+    }
+    return render(request, 'maindashboard/online_transactions.html', context)
 
 def send_access_code_to_nominee(request):
     if not request.user.is_staff:
