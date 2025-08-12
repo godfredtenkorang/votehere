@@ -26,7 +26,6 @@ from .models import Payment, Nominees, PageExpiration, RequestForPayment
 class PaymentInLine(admin.TabularInline):
     model = Payment
     extra = 3
-    exclude = ('amount',)
   
   
 class VoteNomineeAdmin(admin.ModelAdmin):
