@@ -375,4 +375,5 @@ def delete_blog(request, blog_id):
 
 
 def receipt(request):
+    
     return render(request, 'maindashboard/receipt.html') 
