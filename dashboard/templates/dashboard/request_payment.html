@@ -58,6 +58,12 @@
             <h1>Request Payment</h1>
 
         </div>
+        <div class="payment-info">
+            <h3>Category keeps {{ percentage_earned }}% of all payments</h3>
+            <h3>Total Revenue Earned: GHS<span id="">{{ original_total_payment|floatformat:2 }}</span></h3>
+            <h3>Award Earnings: GHS<span id="">{{ category_earnings|floatformat:2 }}</span></h3>
+            
+        </div>
 
     </div>
     <div style="background-color:#000; width:100%;">
@@ -98,4 +104,18 @@
     </div>
 
 </div>
+<script>
+    // Add JavaScript to calculate and display amounts in real-time
+    document.getElementById('id_amount').addEventListener('input', function () {
+        const amount = parseFloat(this.value) || 0;
+        const percentage = parseFloat("{{ percentage_earned }}");
+
+        const categoryEarns = (amount * percentage) / 100;
+        const clientEarns = amount - categoryEarns;
+
+        document.getElementById('amount-display').textContent = amount.toFixed(2);
+        document.getElementById('category-earns').textContent = categoryEarns.toFixed(2);
+        document.getElementById('client-earns').textContent = clientEarns.toFixed(2);
+    });
+</script>
 {% endblock %}

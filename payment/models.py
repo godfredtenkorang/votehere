@@ -103,12 +103,17 @@ class RequestForPayment(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     account_details = models.TextField()
     date_requested = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
+    
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    category_earned = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    client_earned = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     class Meta:
         ordering = ('-date_requested',)
 
     def __str__(self) -> str:
-        return f"{self.category} - Request Payment: {self.amount} GHS"
+        return f"{self.category} - {self.name} - Request Payment: {self.amount} GHS"
 
 
 class PageExpiration(models.Model):

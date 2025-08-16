@@ -18,7 +18,7 @@ class Category(models.Model):
     nomination_end_date = models.DateField(null=True, blank=True)
     bulk_voting_options = models.JSONField(null=True, blank=True, default=list, help_text="JSON list of bulk voting options in format [{'amount': X, 'votes': Y}]")  # New field
     close_result = models.BooleanField(default=False)  # Add this field
-    
+    percentage_earned = models.DecimalField(max_digits=5, decimal_places=2, default=80.00, help_text="Percentage that the Award will earn (e.g., 80.00 for 80%)")
     
     def save(self, *args, **kwargs):
         if not self.access_code:

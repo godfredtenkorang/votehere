@@ -182,7 +182,7 @@ def TransactionMain(request):
 
 
 def TransactionCat(request, category_slug):
-    category = None
+    category = None 
     award = SubCategory.objects.all()
     online_payments = Payment.objects.all()
     ussd_payments = PaymentTransaction.objects.all()
@@ -776,12 +776,50 @@ def ussdTransaction(request, event_id):
 
 def request_for_payment(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
+    
+    online_payments = Payment.objects.all()
+    ussd_payments = PaymentTransaction.objects.all()
+    
+   
+    online_payments = online_payments.filter(category=category, verified=True)
+    ussd_payments = ussd_payments.filter(category=category, status='PAID')
+    
+    # Calculate online payments total and deduct 2%
+    total_online = online_payments.aggregate(Total=Sum('total_amount')).get('Total', 0) or 0
+    # Calculate USSD payments total and deduct 3%
+    total_ussd = ussd_payments.aggregate(Total=Sum('amount')).get('Total', 0) or 0
+    
+    # Optionally keep original totals if needed
+    original_online_total = Decimal(total_online)
+    original_ussd_total = Decimal(total_ussd)
+    
+    # Calculate sum of original totals
+    sum_total = original_online_total + original_ussd_total
+    
+    original_total_payment = sum_total * Decimal(0.97)  # Deduct 5% from the total sum
+    
+    category_earnings = (category.percentage_earned * original_total_payment) / 100
+    
+    
+    
     if request.method == 'POST':
         form = RequestForPaymentForm(request.POST)
         if form.is_valid():
             request_payment = form.save(commit=False)
             request_payment.category = category
+            
+            # Calculate the amounts based on the percentage
+            total_amount = request_payment.amount
+            category_earned = (Decimal(total_amount) * category.percentage_earned) / Decimal(100)
+            client_earned = total_amount - category_earned
+            
+            # Save these amounts to the model if needed
+            request_payment.total_amount = total_amount
+            request_payment.category_earned = category_earned
+            request_payment.client_earned = client_earned
+            
             request_payment.save()
+            
             request_for_payment_sms(
                 request_payment.name,
                 request_payment.phone,
@@ -797,4 +835,4 @@ def request_for_payment(request, category_slug):
             return redirect('request_payment', category_slug=category.slug)
     else:
         form = RequestForPaymentForm()
-    return render(request, 'dashboard/request_payment.html', {'form': form, 'category': category, 'title': 'Request for Payment'})
+    return render(request, 'dashboard/request_payment.html', {'form': form, 'category': category, 'title': 'Request for Payment', 'percentage_earned': category.percentage_earned, 'original_total_payment': original_total_payment, 'category_earnings': category_earnings})
