@@ -329,7 +329,7 @@ def ussd_api(request):
                     concat_keys = f"{username}{key}{hashed_password}"
                     secrete = md5(concat_keys.encode()).hexdigest()
                     callback = 'https://voteafric.com/ussd/webhooks/callback/'
-                    # item_desc = 'Payment for vote'
+                    item_desc = 'Payment for vote'
                     # Determine payment description based on type
                     if session.payment_type == 'VOTE':
                         item_desc = f"Votes for {session.candidate_id}"
