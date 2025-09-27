@@ -457,17 +457,7 @@ def verify_payment(order_id):
         return False, None
 #  New End
 
-def update_nominee_votes(nominee_code, votes):
-    try:
-        nominee = Nominees.objects.get(code__iexact=nominee_code)
-        nominee.total_vote += votes
-        nominee.save(update_fields=['total_vote'])
-        return nominee
-    except Nominees.DoesNotExist:
-        return False
-    except Exception as e:
-        print(f"Error updating nominee votes: {str(e)}")
-        return False
+
     
 # def update_tickets(event_code, tickets):
 #     try:
@@ -636,7 +626,7 @@ def process_vote_payment(session, order_id, invoice_no, amount, status, timestam
         #     print(f"SMS sending failed: {sms_error}")
         #     # Don't fail the transaction if SMS fails
         
-        # return {'success': True, 'message': 'Votes updated successfully'}
+        return {'success': True, 'message': 'Votes updated successfully'}
         
     
     except Exception as e:
@@ -691,7 +681,7 @@ def process_ticket_payment(session, order_id, invoice_no, amount, status, timest
         # except Exception as sms_error:
         #     print(f"SMS sending failed: {sms_error}")
         
-        # return {'success': True, 'message': 'Ticket purchase successful'}
+        return {'success': True, 'message': 'Ticket purchase successful'}
         
     except TicketType.DoesNotExist:
         return {'success': False, 'message': 'Ticket type not found'}
@@ -734,7 +724,7 @@ def process_donation_payment(session, order_id, invoice_no, amount, status, time
         # except Exception as sms_error:
         #     print(f"SMS sending failed: {sms_error}")
         
-        # return {'success': True, 'message': 'Donation successful'}
+        return {'success': True, 'message': 'Donation successful'}
         
     except DonationCause.DoesNotExist:
         return {'success': False, 'message': 'Cause not found'}
@@ -745,9 +735,23 @@ def process_donation_payment(session, order_id, invoice_no, amount, status, time
     
 def handle_payment_without_session(order_id, invoice_no, amount, status, timestamp, payment_data):
     """Handle payments when session is missing but payment was successful"""
+   
     """
     Handle payment verification when no active session exists.
     This can occur if the session expired before payment was completed.
     """
     print(f"Handling payment without session for order_id: {order_id}")
     return JsonResponse({'status': 'error', 'message': 'Session not found, payment requires manual review'}, status=400)
+
+
+def update_nominee_votes(nominee_code, votes):
+    try:
+        nominee = Nominees.objects.get(code__iexact=nominee_code)
+        nominee.total_vote += votes
+        nominee.save(update_fields=['total_vote'])
+        return nominee
+    except Nominees.DoesNotExist:
+        return False
+    except Exception as e:
+        print(f"Error updating nominee votes: {str(e)}")
+        return False
