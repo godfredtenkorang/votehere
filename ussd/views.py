@@ -23,6 +23,7 @@ from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote, send_donatio
 
 
 from django.views import View
+from django.db import transaction
 
 
 
@@ -460,9 +461,12 @@ def update_nominee_votes(nominee_code, votes):
     try:
         nominee = Nominees.objects.get(code__iexact=nominee_code)
         nominee.total_vote += votes
-        nominee.save()
+        nominee.save(update_fields=['total_vote'])
         return nominee
     except Nominees.DoesNotExist:
+        return False
+    except Exception as e:
+        print(f"Error updating nominee votes: {str(e)}")
         return False
     
 # def update_tickets(event_code, tickets):
@@ -483,15 +487,35 @@ def webhook_callback(request):
             print(f'Raw callback data: {data}')
  
             timestamp_str = data.get('Timestamp')
-            status = data.get('Status')  # Expecting 'success' or 'failed'
+            status = data.get('Status', '').upper()  # Expecting 'success' or 'failed'
             invoice_no = data.get('InvoiceNo')
-            amount = data.get('amount')
+            amount_str = data.get('amount')
             order_id = data.get('Order_id')
             
+            # Validate required fields
+            if not all([order_id, status, amount_str]):
+                return JsonResponse({'status': 'error', 'message': 'Missing required fields'}, status=400)
+            
+            # convert amount to Decimal
+            try:
+                amount = Decimal(str(amount_str))
+            except (ValueError, TypeError):
+                return JsonResponse({'status': 'error', 'message': 'Invalid amount format'}, status=400)
+            
+            # convert timestamp to datetime object
+            try:
+                if timestamp_str:
+                    timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+                else:
+                    timestamp = timezone.now()
+                    
+            except (ValueError, TypeError):
+                timestamp = timezone.now()  # Fallback to current time if parsing fails 
             # New start
             # First check if this transaction already exists
             existing_txn = PaymentTransaction.objects.filter(order_id=order_id).first()
             if existing_txn:
+                print(f'Transaction with order_id {order_id} already exists. With status {existing_txn.status}')
                 return JsonResponse({'status': 'success', 'message': 'Transaction already processed'})
             # New end
             session = CustomSession.objects.filter(order_id=order_id).first()
@@ -503,185 +527,46 @@ def webhook_callback(request):
                 if status == 'PAID':
                      # Verify with payment gateway
                      is_paid, payment_data = verify_payment(order_id)
+                     
                      if is_paid:
+                        return handle_payment_without_session(order_id, invoice_no, amount, status, timestamp, payment_data)
+                
+                return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
                         # Try to reconstruct what we can from the payment data
                         # This part would need to be customized based on what data the gateway returns
                         # For example:
-                        payment_type = payment_data.get('item_desc', '').split()[0]  # Just an example
-                        if payment_type == 'Votes':
-                            nominee_code = payment_data.get('item_desc', '').split()[-1]  # Assuming last part is nominee code
-                            votes = int(payment_data.get('metadata', {}).get('votes', 1))  # Assuming votes are in metadata
-                            nominee = update_nominee_votes(nominee_code, votes)
-                            if nominee:
-                                PaymentTransaction.objects.create(
-                                    order_id=order_id,
-                                    invoice_no=invoice_no,
-                                    transaction_id=invoice_no,
-                                    amount=amount,
-                                    status=status,
-                                    payment_type='VOTE',
-                                    nominee_code=nominee_code,
-                                    votes=votes,
-                                    category=nominee.category,
-                                    timestamp=timestamp_str
-                                )
-                                return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
-                        elif payment_type == 'Tickets':
-                            event_code = payment_data.get('item_desc', '').split()[-1]
-                            tickets = int(payment_data.get('metadata', {}).get('tickets', 1))
-                            try:
-                                ticket_type = TicketType.objects.get(event__code=event_code)
-                                ticket_type.available_tickets -= tickets
-                                ticket_type.save()
-                                
-                                PaymentTransaction.objects.create(
-                                    order_id=order_id,
-                                    invoice_no=invoice_no,
-                                    transaction_id=invoice_no,
-                                    amount=amount,
-                                    status=status,
-                                    payment_type='TICKET',
-                                    event_code=event_code,
-                                    tickets=tickets,
-                                    ticket_type=ticket_type.name,
-                                    event_category=ticket_type.event.name,
-                                    timestamp=timestamp_str
-                                )
-                                return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
-                            except TicketType.DoesNotExist:
-                                return JsonResponse({'status': 'error', 'message': 'Invalid Ticket type for event not found'})
-                        elif payment_type == 'Donation':
-                            cause_code = payment_data.get('item_desc', '').split()[-1]
-                            try:
-                                cause = DonationCause.objects.get(code=cause_code)
-                                cause.current_amount += Decimal(amount)
-                                cause.save()
-                                
-                                PaymentTransaction.objects.create(
-                                    order_id=order_id,
-                                    invoice_no=invoice_no,
-                                    transaction_id=invoice_no,
-                                    amount=amount,
-                                    status=status,
-                                    payment_type='DONATION',
-                                    donation_code=cause_code,
-                                    timestamp=timestamp_str
-                                )
-                                send_donation_sms(
-                                    phone_number=session.msisdn,
-                                    cause_name=cause.name,
-                                    amount=amount,
-                                    reference=invoice_no
-                                )
-                                return JsonResponse({'status': 'success', 'message': 'Donation successful'})
-                            except DonationCause.DoesNotExist:
-                                return JsonResponse({'status': 'error', 'message': 'Cause not found'})
-                # New End
-                return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
-            
+                        
             # Check if session is expired
             if session.is_expired:
+                print(f'Session expired for order_id {order_id}')
                 session.delete()
                 return JsonResponse({'status': 'error', 'message': 'Session expired'}, status=400)
-
+            
             if status == 'PAID':
-                # Handle VOTE payment
-                if session.payment_type == 'VOTE':
+                # Use database transaction to ensure data consistency
+                try:
+                    with transaction.atomic():
+                        result = process_payment_based_on_type(session, order_id, invoice_no, amount, status, timestamp)
+                        
+                        if result['success']:
+                            # Only delete session after successful transaction creation
+                            session.delete()
+                            return JsonResponse({'status': 'success', 'message': result['message']})
+                        
+                        else:
+                            return JsonResponse({'status': 'error', 'message': result['message']}, status=400)
+                        
+                except Exception as e:
+                    print(f'Error processing payment without session: {str(e)}')
+                    return JsonResponse({'status': 'error', 'message': 'Internal server error'}, status=500)
                 
-                    nominee_code = session.candidate_id
-                    votes = session.votes
                     
-                    nominee = update_nominee_votes(nominee_code, votes)
-                    if nominee:
-                        PaymentTransaction.objects.create(
-                            order_id=order_id,
-                            invoice_no=invoice_no,
-                            transaction_id=invoice_no,
-                            amount=amount,
-                            status=status,
-                            payment_type='VOTE',
-                            nominee_code=nominee_code,
-                            votes=votes,
-                            category=nominee.category,
-                            timestamp=timestamp_str
-                        )
-                        # send_sms_to_voter(phone_number=session.msisdn, nominee_code=nominee_code, category=nominee.category, amount=amount, transaction_id=invoice_no)
-                        # send_sms_to_nominee_for_vote(phone_number=nominee.phone_number, nominee_code=nominee_code, vote=votes, phone=session.msisdn, transaction_id=invoice_no)
-                        session.delete()
-                        return JsonResponse({'status': 'success', 'message': 'Votes updated successfully'})
-                    else:
-                        return JsonResponse({'status': 'error', 'message': 'Nominee not found'})
-                 # Handle Ticketing
-                elif session.payment_type == 'TICKET':
-                    # ticket_type = update_tickets(event_code, tickets)
-                    try:
-                        ticket_type = TicketType.objects.get(id=session.ticket_type_id, event__code=session.event_id)
-                        
-                        
-                        
-                        
-                        PaymentTransaction.objects.create(
-                            order_id=order_id,
-                            invoice_no=invoice_no,
-                            transaction_id=invoice_no,
-                            amount=amount,
-                            status=status,
-                            payment_type='TICKET',
-                            event_code=session.event_id,
-                            tickets=session.tickets,
-                            ticket_type=ticket_type.name,
-                            event_category=ticket_type.event.name,
-                            timestamp=timestamp_str
-                        )
-                        
-                        ticket_type.available_tickets -= session.tickets
-                        ticket_type.save()
-                        # Send SMS with ticket details
-                        # send_ticket_sms(
-                        #     phone_number=session.msisdn,  
-                        #     event_name=ticket_type.event.name,
-                        #     ticket_count=session.tickets,
-                        #     amount=amount,
-                        #     event_date=ticket_type.event.end_date,
-                        #     reference=invoice_no
-                        # )
-                        session.delete()
-                        return JsonResponse({'status': 'success', 'message': 'Ticket purchase successful'})
-                    
-                    except TicketType.DoesNotExist:
-                        return JsonResponse({'status': 'error', 'message': 'Invalid Ticket type for event not found'})
-                
-                elif session.payment_type == 'DONATION':
-                    try:
-                        cause = DonationCause.objects.get(code=session.donation_id)
-                        cause.current_amount += Decimal(amount)
-                        cause.save()
-                        
-                        PaymentTransaction.objects.create(
-                            order_id=order_id,
-                            invoice_no=invoice_no,
-                            transaction_id=invoice_no,
-                            amount=amount,
-                            status=status,
-                            payment_type='DONATION',
-                            donation_code=session.donation_id,
-                            timestamp=timestamp_str
-                        )
-                        # Send donation confirmation SMS
-                        send_donation_sms(
-                            phone_number=session.msisdn,
-                            cause_name=cause.name,
-                            amount=amount,
-                            reference=invoice_no
-                        )
-                        session.delete()
-                        return JsonResponse({'status': 'success', 'message': 'Donation successful'})
-                    except DonationCause.DoesNotExist:
-                        return JsonResponse({'status': 'error', 'message': 'Cause not found'})
-                return JsonResponse({'status': 'error', 'message': 'Unknown payment type'}, status=400)
             else:
+                session.delete()
                 return JsonResponse({'status': 'error', 'message': 'Payment failed'})
-        
+            
+            
+              
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'}, status=400)
         
@@ -690,3 +575,179 @@ def webhook_callback(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+
+
+
+def process_payment_based_on_type(session, order_id, invoice_no, amount, status, timestamp):
+    """Process payment based on payment type with proper error handling"""
+    
+    if session.payment_type == 'VOTE':
+        return process_vote_payment(session, order_id, invoice_no, amount, status, timestamp)
+    elif session.payment_type == 'TICKET':
+        return process_ticket_payment(session, order_id, invoice_no, amount, status, timestamp)
+    elif session.payment_type == 'DONATION':
+        return process_donation_payment(session, order_id, invoice_no, amount, status, timestamp)
+    else:
+        return {'success': False, 'message': 'Unknown payment type'}
+    
+def process_vote_payment(session, order_id, invoice_no, amount, status, timestamp):
+    try:
+        nominee_code = session.candidate_id
+        votes = session.votes
+        
+        if not nominee_code or not votes:
+            return {'success': False, 'message': 'Incomplete session data for vote payment'}
+        
+        nominee = update_nominee_votes(nominee_code, votes)
+        if not nominee:
+            return {'success': False, 'message': 'Nominee not found'}
+        
+        # Create payment transaction record
+        PaymentTransaction.objects.create(
+            order_id=order_id,
+            invoice_no=invoice_no,
+            transaction_id=invoice_no,
+            amount=amount,
+            status=status,
+            payment_type='VOTE',
+            nominee_code=nominee_code,
+            votes=votes,
+            category=nominee.category,
+            timestamp=timestamp
+        )
+        
+        # Send SMS notifications
+        # try:
+        #     send_sms_to_voter(
+        #         phone_number=session.msisdn, 
+        #         nominee_code=nominee_code, 
+        #         category=nominee.category, 
+        #         amount=amount, 
+        #         transaction_id=invoice_no
+        #     )
+        #     send_sms_to_nominee_for_vote(
+        #         phone_number=nominee.phone_number, 
+        #         nominee_code=nominee_code, 
+        #         vote=votes, 
+        #         phone=session.msisdn, 
+        #         transaction_id=invoice_no
+        #     )
+        # except Exception as sms_error:
+        #     print(f"SMS sending failed: {sms_error}")
+        #     # Don't fail the transaction if SMS fails
+        
+        # return {'success': True, 'message': 'Votes updated successfully'}
+        
+    
+    except Exception as e:
+        print(f'Error processing vote payment: {str(e)}')
+        return {'success': False, 'message': 'Error processing vote payment'}
+    
+
+def process_ticket_payment(session, order_id, invoice_no, amount, status, timestamp):
+    """Process ticket payment with proper error handling"""
+    try:
+        if not session.event_id or not session.tickets or not session.ticket_type_id:
+            return {'success': False, 'message': 'Missing ticket data in session'}
+        
+        ticket_type = TicketType.objects.select_related('event').get(
+            id=session.ticket_type_id, 
+            event__code=session.event_id
+        )
+        
+        # Check ticket availability
+        if session.tickets > ticket_type.available_tickets:
+            return {'success': False, 'message': f'Only {ticket_type.available_tickets} tickets available'}
+        
+        # Create payment transaction
+        PaymentTransaction.objects.create(
+            order_id=order_id,
+            invoice_no=invoice_no,
+            transaction_id=invoice_no,
+            amount=amount,
+            status=status,
+            payment_type='TICKET',
+            event_code=session.event_id,
+            tickets=session.tickets,
+            ticket_type=ticket_type.name,
+            event_category=ticket_type.event,
+            timestamp=timestamp
+        )
+        
+        # Update available tickets
+        ticket_type.available_tickets -= session.tickets
+        ticket_type.save()
+        
+        # Send SMS
+        # try:
+        #     send_ticket_sms(
+        #         phone_number=session.msisdn,  
+        #         event_name=ticket_type.event.name,
+        #         ticket_count=session.tickets,
+        #         amount=amount,
+        #         event_date=ticket_type.event.end_date,
+        #         reference=invoice_no
+        #     )
+        # except Exception as sms_error:
+        #     print(f"SMS sending failed: {sms_error}")
+        
+        # return {'success': True, 'message': 'Ticket purchase successful'}
+        
+    except TicketType.DoesNotExist:
+        return {'success': False, 'message': 'Ticket type not found'}
+    except Exception as e:
+        print(f"Error processing ticket payment: {str(e)}")
+        return {'success': False, 'message': f'Error processing ticket payment: {str(e)}'}
+
+def process_donation_payment(session, order_id, invoice_no, amount, status, timestamp):
+    """Process donation payment with proper error handling"""
+    try:
+        if not session.donation_id:
+            return {'success': False, 'message': 'Missing donation data in session'}
+        
+        cause = DonationCause.objects.get(code=session.donation_id)
+        
+        # Update donation amount
+        cause.current_amount += amount
+        cause.save()
+        
+        # Create payment transaction
+        PaymentTransaction.objects.create(
+            order_id=order_id,
+            invoice_no=invoice_no,
+            transaction_id=invoice_no,
+            amount=amount,
+            status=status,
+            payment_type='DONATION',
+            donation_code=session.donation_id,
+            timestamp=timestamp
+        )
+        
+        # Send SMS
+        # try:
+        #     send_donation_sms(
+        #         phone_number=session.msisdn,
+        #         cause_name=cause.name,
+        #         amount=amount,
+        #         reference=invoice_no
+        #     )
+        # except Exception as sms_error:
+        #     print(f"SMS sending failed: {sms_error}")
+        
+        # return {'success': True, 'message': 'Donation successful'}
+        
+    except DonationCause.DoesNotExist:
+        return {'success': False, 'message': 'Cause not found'}
+    except Exception as e:
+        print(f"Error processing donation payment: {str(e)}")
+        return {'success': False, 'message': f'Error processing donation payment: {str(e)}'}
+    
+    
+def handle_payment_without_session(order_id, invoice_no, amount, status, timestamp, payment_data):
+    """Handle payments when session is missing but payment was successful"""
+    """
+    Handle payment verification when no active session exists.
+    This can occur if the session expired before payment was completed.
+    """
+    print(f"Handling payment without session for order_id: {order_id}")
+    return JsonResponse({'status': 'error', 'message': 'Session not found, payment requires manual review'}, status=400)
