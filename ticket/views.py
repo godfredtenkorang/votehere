@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from .models import Event, TicketPayment, TicketType
 from django.contrib import messages
 from django.conf import settings
@@ -64,6 +64,64 @@ def purchase_ticket(request: HttpRequest, event_slug) -> HttpResponse:
     return render(request, 'ticket/ticketForm.html', context)
 
 
+def verify_ticket_qr(request, verification_token):
+    try:
+        ticket = TicketPayment.objects.get(qr_verification_token=verification_token)
+    except TicketPayment.DoesNotExist:
+        
+        return JsonResponse({
+            'status': 'error', 
+            'message': 'Invalid ticket QR code'
+            }, status=404)
+
+    # Verify the QR code
+    result = ticket.verify_qr_code()
+    
+    if result == "already_scanned":
+        return JsonResponse({
+            'status': 'already_scanned', 
+            'message': 'This ticket has already been scanned.',
+            'ticket_info': {
+                'event': ticket.event.name,
+                'ticket_type': ticket.ticket_type.name,
+                'quantity': ticket.quantity,
+                'qr_verification_date': ticket.qr_verification_date.isoformat() if ticket.qr_verification_date else None,
+            }
+            })
+    elif result == "verified":
+        return JsonResponse({
+            'status': 'verified', 
+            'message': 'Ticket verified successfully.',
+            'ticket_info': {
+                'event': ticket.event.name,
+                'ticket_type': ticket.ticket_type.name,
+                'quantity': ticket.quantity,
+                'qr_verification_date': ticket.qr_verification_date.isoformat(),
+            }
+            })
+    return JsonResponse({
+        'status': 'error', 
+        'message': 'An error occurred during verification.'
+        }, status=500)
+    
+
+def ticket_verification_page(request):
+    """Page for event staff to manually verify tickets"""
+    if request.method == 'POST':
+        verification_token = request.POST.get('verification_token')
+        try:
+            ticket = TicketPayment.objects.get(qr_verification_token=verification_token)
+            result = ticket.verify_qr_code()
+            if result == "already_scanned":
+                messages.warning(request, f"This ticket has already scanned on {ticket.qr_verification_date}.")
+            elif result == "verified":
+                messages.success(request, f"Ticket verified successfully for {ticket.event.name}.")
+            return render(request, 'ticket/verification_result.html', {'ticket': ticket, 'result': result})
+        except TicketPayment.DoesNotExist:
+            messages.error(request, "Invalid ticket QR code.")
+    return render(request, 'ticket/ticket_verification.html')
+
+
 def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     ticket = get_object_or_404(TicketPayment, ref=ref)
     
@@ -77,10 +135,17 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
 
     if verified:
         try:
+            # Update available ticket
             event = ticket.ticket_type
             event.available_tickets -= ticket.quantity
             event.save()
             
+            # Generate QR code if not already generated
+            if not ticket.qr_code:
+                ticket.generate_qr_code()
+            
+            
+            # Send email with QR code
             subject = f"Your Ticket for {event.event.name}"
             from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [ticket.email]

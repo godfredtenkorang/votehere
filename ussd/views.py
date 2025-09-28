@@ -669,17 +669,17 @@ def process_ticket_payment(session, order_id, invoice_no, amount, status, timest
         ticket_type.save()
         
         # Send SMS
-        # try:
-        #     send_ticket_sms(
-        #         phone_number=session.msisdn,  
-        #         event_name=ticket_type.event.name,
-        #         ticket_count=session.tickets,
-        #         amount=amount,
-        #         event_date=ticket_type.event.end_date,
-        #         reference=invoice_no
-        #     )
-        # except Exception as sms_error:
-        #     print(f"SMS sending failed: {sms_error}")
+        try:
+            send_ticket_sms(
+                phone_number=session.msisdn,  
+                event_name=ticket_type.event.name,
+                ticket_count=session.tickets,
+                amount=amount,
+                event_date=ticket_type.event.end_date,
+                reference=invoice_no
+            )
+        except Exception as sms_error:
+            print(f"SMS sending failed: {sms_error}")
         
         return {'success': True, 'message': 'Ticket purchase successful'}
         
@@ -714,15 +714,15 @@ def process_donation_payment(session, order_id, invoice_no, amount, status, time
         )
         
         # Send SMS
-        # try:
-        #     send_donation_sms(
-        #         phone_number=session.msisdn,
-        #         cause_name=cause.name,
-        #         amount=amount,
-        #         reference=invoice_no
-        #     )
-        # except Exception as sms_error:
-        #     print(f"SMS sending failed: {sms_error}")
+        try:
+            send_donation_sms(
+                phone_number=session.msisdn,
+                cause_name=cause.name,
+                amount=amount,
+                reference=invoice_no
+            )
+        except Exception as sms_error:
+            print(f"SMS sending failed: {sms_error}")
         
         return {'success': True, 'message': 'Donation successful'}
         

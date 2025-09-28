@@ -1,0 +1,95 @@
+{% extends 'vote/base.html' %} {% load static %} primary: #ffb535; text-color:
+#363738;
+<style></style>
+
+{% block content %}
+
+<!-- banner -->
+<div class="banners">
+    <div class="banners-content">
+        <h1>Ticket Verification</h1>
+        <!-- <h1>E-ticketing company in Ghana</h1> -->
+    </div>
+</div>
+{% if messages %}
+<div class="alert alert-info">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+<div id="validation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modal-message"></p>
+    </div>
+</div>
+<div class="ticket-main ticket-forms">
+    
+
+
+    <div class="ticket-form">
+        
+        <form class="t-form" method="POST">
+            {% csrf_token %}
+        
+            <div class="t-input">
+                
+                <input type="text" id="verification_token" name="verification_token" placeholder="Enter verification code" required>
+            </div>
+
+            <button type="submit">Verify Ticket</button>
+        </form>
+    </div>
+
+
+
+
+
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ticketTypeSelect = document.getElementById('ticket_type');
+        const quantityInput = document.getElementById('quantity');
+        const totalSpan = document.getElementById('total');
+
+        function calculateTotal() {
+            const selectedOption = ticketTypeSelect.options[ticketTypeSelect.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                const price = parseFloat(selectedOption.dataset.price);
+                const quantity = parseInt(quantityInput.value) || 0;
+                const maxAvailable = parseInt(selectedOption.dataset.available) || 0;
+
+                // Update quantity max value
+                quantityInput.max = maxAvailable;
+
+                // Validate quantity doesn't exceed available
+                if (quantity > maxAvailable) {
+                    quantityInput.value = maxAvailable;
+                }
+
+                // Calculate and display total
+                const total = price * (quantity || 1);
+                totalSpan.textContent = total.toFixed(2);
+            } else {
+                totalSpan.textContent = '0.00';
+            }
+        }
+
+        // Add event listeners
+        ticketTypeSelect.addEventListener('change', function () {
+            calculateTotal();
+            // Reset quantity to 1 when ticket type changes
+            quantityInput.value = 1;
+        });
+
+        quantityInput.addEventListener('input', calculateTotal);
+
+        // Initialize calculation
+        calculateTotal();
+    });
+</script>
+
+{% endblock content %}

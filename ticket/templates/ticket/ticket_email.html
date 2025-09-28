@@ -13,7 +13,20 @@
     <p><strong>Quantity:</strong> {{ ticket.quantity }}</p>
     <p><strong>Total Paid:</strong> GHS {{ ticket.amount }}</p>
     <p>Your ticket reference: <strong>{{ ticket.ref }}</strong></p>
-    <p>We look forward to seeing you at the event!</p>
+    <div class="qr-code">
+        <p><strong>Scan this QR code at the event:</strong></p>
+        <img src="{{ ticket.qr_code.url }}" alt="QR Code" style="max-width: 200px;">
+        <p><small>Present this QR code for verification at the event entrance</small></p>
+    </div>
+    <br>
+    <div class="instructions">
+        <h3>Instructions:</h3>
+        <ul>
+            <li>Save this email or take a screenshot of the QR code</li>
+            <li>Present the QR code at the event entrance for scanning</li>
+            <li>Each QR code can only be scanned once</li>
+        </ul>
+    </div>
     <br>
     <p>Best regards,<br>Your Event Team</p>
 </body>

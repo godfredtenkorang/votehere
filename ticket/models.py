@@ -1,6 +1,11 @@
 from django.db import models
 import secrets
 from .paystack import PayStack
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from django.core.files.base import ContentFile
+from django.utils import timezone
 
 # Create your models here.
 
@@ -54,7 +59,11 @@ class TicketPayment(models.Model):
     ref = models.CharField(max_length=200)
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
-    
+# Add these new fields for QR code functionality
+    qr_code = models.ImageField(upload_to='qrcodes/', blank=True, null=True)
+    qr_verified = models.BooleanField(default=False)
+    qr_verification_date = models.DateTimeField(null=True, blank=True)
+    qr_verification_token = models.CharField(max_length=100, null=True, blank=True)
     
 
     
@@ -71,7 +80,42 @@ class TicketPayment(models.Model):
             object_with_similar_ref = TicketPayment.objects.filter(ref=ref)
             if not object_with_similar_ref:
                 self.ref = ref
+                
+        # Generate QR code if not already generated
+        if not self.qr_verification_token:
+            self.qr_verification_token = secrets.token_urlsafe(20)
+            
         super().save(*args, **kwargs)
+        
+        if not self.qr_code:
+            self.generate_qr_code()
+            
+    def generate_qr_code(self):
+        if self.qr_verification_token:
+            # Create QR code data - use a verification URL
+            verification_url = f"https://voteafric.com/%2Fverify-ticket/{self.qr_verification_token}/"
+            
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(verification_url)
+            qr.make(fit=True)
+            
+            img = qr.make_image(fill_color="black", back_color="white")
+            
+            # Save to BytesIO buffer
+            buffer = BytesIO()
+            img.save(buffer, format='PNG')
+            
+            # Save to model field
+            filename = f'ticket_qr_{self.ref}.png'
+            self.qr_code.save(filename, ContentFile(buffer.getvalue()), save=False)
+            
+            # Save the model again to store the QR code
+            super().save(update_fields=['qr_code'])
         
     def amount_value(self) -> int:
         return self.amount * 100
@@ -86,5 +130,15 @@ class TicketPayment(models.Model):
         if self.verified:
             return True
         return False
+    
+    def verify_qr_code(self):
+        """Verify the QR code and mark as scanned"""
+        if self.qr_verified:
+            return "already_scanned"
+        
+        self.qr_verified = True
+        self.qr_verification_date = timezone.now()
+        self.save()
+        return "verified"
 
 

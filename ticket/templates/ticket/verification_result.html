@@ -1,0 +1,112 @@
+{% extends 'vote/base.html' %} {% load static %} primary: #ffb535; text-color:
+#363738;
+<style></style>
+
+{% block content %}
+
+<!-- banner -->
+<div class="banners">
+    <div class="banners-content">
+        <h1>Verification Result</h1>
+        <!-- <h1>E-ticketing company in Ghana</h1> -->
+    </div>
+</div>
+{% if messages %}
+<div class="alert alert-info">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+<div id="validation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modal-message"></p>
+    </div>
+</div>
+<div class="ticket-main ticket-forms">
+
+
+
+    <div class="ticket-form">
+
+        <form class="t-form">
+            
+
+            <div class="t-input">
+
+                {% if result == "verified" %}
+                <div>
+                    <h2 style="color: green;">Ticket Verified Successfully!</h2>
+                    <p>Your ticket is valid. Enjoy the event!</p>
+                </div>
+                {% elif result == "already_scanned" %}
+                <div>
+                    <h2 style="color: orange;">Ticket Already Scanned</h2>
+                    <p>This ticket was scanned on: {{ ticket.qr_verification_date }}</p>
+                </div>
+                {% endif %}
+            </div>
+            <div>
+                <h4>Ticket Details:</h4>
+                <p><strong>Event:</strong> {{ ticket.event.name }}</p>
+                <p><strong>Ticket Type:</strong> {{ ticket.ticket_type.name }}</p>
+                <p><strong>Quantity:</strong> {{ ticket.quantity }}</p>
+                <p><strong>Reference:</strong> {{ ticket.ref }}</p>
+            </div>
+
+            <a href="{% url 'ticket_verification_page' %}"><button type="submit">Verify Another Ticket</button></a>
+        </form>
+    </div>
+
+
+
+
+
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ticketTypeSelect = document.getElementById('ticket_type');
+        const quantityInput = document.getElementById('quantity');
+        const totalSpan = document.getElementById('total');
+
+        function calculateTotal() {
+            const selectedOption = ticketTypeSelect.options[ticketTypeSelect.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                const price = parseFloat(selectedOption.dataset.price);
+                const quantity = parseInt(quantityInput.value) || 0;
+                const maxAvailable = parseInt(selectedOption.dataset.available) || 0;
+
+                // Update quantity max value
+                quantityInput.max = maxAvailable;
+
+                // Validate quantity doesn't exceed available
+                if (quantity > maxAvailable) {
+                    quantityInput.value = maxAvailable;
+                }
+
+                // Calculate and display total
+                const total = price * (quantity || 1);
+                totalSpan.textContent = total.toFixed(2);
+            } else {
+                totalSpan.textContent = '0.00';
+            }
+        }
+
+        // Add event listeners
+        ticketTypeSelect.addEventListener('change', function () {
+            calculateTotal();
+            // Reset quantity to 1 when ticket type changes
+            quantityInput.value = 1;
+        });
+
+        quantityInput.addEventListener('input', calculateTotal);
+
+        // Initialize calculation
+        calculateTotal();
+    });
+</script>
+
+{% endblock content %}
