@@ -9,7 +9,7 @@ class PaymentInLine(admin.TabularInline):
   
   
 class DonationCauseAdmin(admin.ModelAdmin):
-    fieldsets = [(None, {'fields': ['name', 'code', 'image', 'slug', 'description', 'description1', 'description2' 'description3', 'description4', 'description5', 'description6', 'description7', 'description8', 'target_amount', 'current_amount', 'end_date', 'active']}), ]
+    fieldsets = [(None, {'fields': ['name', 'code', 'image', 'slug', 'description', 'description1', 'description2', 'description3', 'description4', 'description5', 'description6', 'description7', 'description8', 'target_amount', 'current_amount', 'end_date', 'active']}), ]
     inlines = [PaymentInLine]
     list_filter = ('name', 'code')
     search_fields = ('name', 'code')
