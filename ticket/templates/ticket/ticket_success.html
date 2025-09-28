@@ -27,9 +27,20 @@ it is hidden so when voters click on the vote button, the it appears -->
 
     <div class="vote-condition">
         <i class="fa fa-check-to-slot"></i>
-        <h1>Successful</h1>
-
+        <h1>✅ Payment Successful!</h1>
+        <p>Your ticket has been confirmed and will be sent to your email shortly.</p>
+<div style="margin: 20px 0; padding: 20px; border: 1px solid #ddd;">
+    <h3>Ticket Details:</h3>
+    <p><strong>Reference:</strong> {{ ticket.ref }}</p>
+    <p><strong>If you don't receive the email within 5 minutes, please:</strong></p>
+    <ul style="text-align: left; display: inline-block;">
+        <li>Check your spam folder</li>
+        <li>Contact support with your reference number</li>
+        <li>Keep this reference number for verification</li>
+    </ul>
+</div>
     </div>
+    
 </section>
 
 

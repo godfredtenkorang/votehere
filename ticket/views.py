@@ -7,7 +7,7 @@ from django.urls import reverse
 from paystackapi.transaction import Transaction
 import random
 import string
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
@@ -136,9 +136,9 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     if verified:
         try:
             # Update available ticket
-            event = ticket.ticket_type
-            event.available_tickets -= ticket.quantity
-            event.save()
+            ticket_type = ticket.ticket_type
+            ticket_type.available_tickets -= ticket.quantity
+            ticket_type.save()
             
             # Generate QR code if not already generated
             if not ticket.qr_code:
@@ -146,17 +146,17 @@ def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
             
             
             # Send email with QR code
-            subject = f"Your Ticket for {event.event.name}"
+            subject = f"Your Ticket for {ticket.event.name}"
             from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [ticket.email]
             
-            html_content = render_to_string('ticket/ticket_email.html', {'ticket': ticket, 'event': event})
+            html_content = render_to_string('ticket/ticket_email.html', {'ticket': ticket})
             text_content = strip_tags(html_content)
             
             email = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
             
             email.attach_alternative(html_content, "text/html")
-            email.send()
+            email.send(fail_silently=False)
             
             messages.success(request, 'Payment successful! Your ticket has been confirmed.')
             return render(request, 'ticket/ticket_success.html')

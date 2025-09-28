@@ -8,16 +8,18 @@
 
 <body>
     <h2>Thank you for purchasing your ticket!</h2>
-    <p><strong>Event:</strong> {{ event.name }}</p>
-    <p><strong>Date:</strong> {{ event.date_added }}</p>
+    <p><strong>Event:</strong> {{ ticket.event.name }}</p>
+    <p><strong>Ticket Type:</strong> {{ ticket.ticket_type.name }}</p>
     <p><strong>Quantity:</strong> {{ ticket.quantity }}</p>
-    <p><strong>Total Paid:</strong> GHS {{ ticket.amount }}</p>
+    <p><strong>Amount Paid:</strong> GHS {{ ticket.amount }}</p>
     <p>Your ticket reference: <strong>{{ ticket.ref }}</strong></p>
+    {% if ticket.qr_code %}
     <div class="qr-code">
         <p><strong>Scan this QR code at the event:</strong></p>
         <img src="{{ ticket.qr_code.url }}" alt="QR Code" style="max-width: 200px;">
         <p><small>Present this QR code for verification at the event entrance</small></p>
     </div>
+    {% endif %}
     <br>
     <div class="instructions">
         <h3>Instructions:</h3>
@@ -25,10 +27,11 @@
             <li>Save this email or take a screenshot of the QR code</li>
             <li>Present the QR code at the event entrance for scanning</li>
             <li>Each QR code can only be scanned once</li>
+            <li>If QR code is not visible, use the verification code above</li>
         </ul>
     </div>
     <br>
-    <p>Best regards,<br>Your Event Team</p>
+    <p>Thank you for your purchase!</p>
 </body>
 
 </html>
