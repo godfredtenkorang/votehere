@@ -75,7 +75,7 @@ def ussd_api(request):
             if msgtype:  # Initial request
                 session.level = 'start'
                 session.save()
-                message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\n3. Donation\nContact: 0553912334\nor: 0558156844"
+                message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\n3. Donation\n4. Contact Details"
                 return JsonResponse(send_response(message, True))
             else:
                 session.last_activity = timezone.now() # Follow-up request
@@ -99,6 +99,11 @@ def ussd_api(request):
                         session.level = 'donation_start'
                         session.save()
                         message = "Enter Donation cause code"
+                        return JsonResponse(send_response(message, True))
+                    elif user_data == '4': # Donation
+                        session.level = 'contact_start'
+                        session.save()
+                        message = "Welcome to VoteAfric\n\n0553912334 or 0558156844"
                         return JsonResponse(send_response(message, True))
                     else:
                         session.delete()
