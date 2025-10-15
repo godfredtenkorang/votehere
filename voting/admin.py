@@ -16,7 +16,7 @@ class CategoryInline(admin.TabularInline):
 
 class ElectionAdmin(admin.ModelAdmin):
     inlines = [CategoryInline]
-    list_display = ('title', 'start_date', 'end_date', 'is_active')
+    list_display = ('id' ,'title', 'start_date', 'end_date', 'is_active')
     list_filter = ('is_active',)
 
 class CategoryAdmin(admin.ModelAdmin):

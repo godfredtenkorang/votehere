@@ -44,6 +44,8 @@ class Voter(models.Model):
     unique_key = models.CharField(max_length=50, unique=True)
     has_voted = models.BooleanField(default=False)
     vote_timestamp = models.DateTimeField(null=True, blank=True)
+    password_changed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     
     
 

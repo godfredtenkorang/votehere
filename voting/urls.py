@@ -6,5 +6,7 @@ urlpatterns = [
     path('logout/', views.voter_logout, name='vote-logout'),
     path('vote/<int:election_id>/', views.vote, name='voting'),
     path('results/<int:election_id>/', views.results, name='vote-results'),
+    
+    path('upload-voters/', views.upload_voters, name='upload_voters'),  # New path for uploading voters
 
 ]
