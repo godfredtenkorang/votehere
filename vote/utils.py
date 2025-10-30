@@ -12,7 +12,7 @@ def receive_sms_from_event_organizer(event_name):
     payload = {
         "key": apiKey,
         "sender": 'VOTEAFRIC',
-        "recipient[]": '0553912334',
+        "recipient[]": ['0553912334', '0554823175'],
         "message": f"Hello, you have a new event organizer. \n\nEvent Name: {event_name}",
         "is_schedule": False,
         "schedule_date": ''
