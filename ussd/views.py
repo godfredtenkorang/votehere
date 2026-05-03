@@ -433,9 +433,9 @@ def ussd_api(request):
                     nal_network = network_map.get(network.upper(), 'MTN') # Default to MTN if unknown
                     # Generate unique reference for this transaction
                     # timestamp = datetime.now().strftime("%Y")
-                    our_ref = f"REF_{datetime.now().strftime('%Y')}_002"
+                    our_ref = f"REF_{datetime.now().strftime('%Y')}_{uuid.uuid4().hex[:3].upper()}"
                     # our_ref = f"REF_{timestamp}_001"
-                    session.reference = our_ref  # Store our reference in session for tracking
+                    session.order_id = our_ref  # Store our reference in session for tracking
                     session.save()
                     
                     # Determine description based on payment type
@@ -804,9 +804,21 @@ def process_vote_payment(session, order_id, invoice_no, amount, status, timestam
         if not nominee_code or not votes:
             return {'success': False, 'message': 'Incomplete session data for vote payment'}
         
-        nominee = update_nominee_votes(nominee_code, votes)
-        if not nominee:
+        # Check for duplicate transaction before doing anything
+        if PaymentTransaction.objects.filter(order_id=order_id).exists():
+            return {'success': True, 'message': 'Transaction already processed'}
+        
+        try:
+            nominee = Nominees.objects.select_for_update().get(code__iexact=nominee_code)
+        except Nominees.DoesNotExist:
             return {'success': False, 'message': 'Nominee not found'}
+        # nominee = update_nominee_votes(nominee_code, votes)
+        # if not nominee:
+        #     return {'success': False, 'message': 'Nominee not found'}
+        
+        # Update vote count
+        nominee.total_vote = (nominee.total_vote or 0) + votes
+        nominee.save(update_fields=['total_vote'])
         
         # Create payment transaction record
         PaymentTransaction.objects.create(
