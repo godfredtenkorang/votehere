@@ -60,7 +60,7 @@ class PaymentTransaction(models.Model):
         ('PAID', 'Paid'),
         ('FAILED', 'Failed'),
     )
-    order_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order_id = models.CharField(max_length=255, primary_key=True)  # Unique order ID for each transaction
     invoice_no = models.CharField(max_length=255, null=True, blank=True)
     transaction_id = models.CharField(max_length=20, null=True, blank=True)  # New field
     amount = models.DecimalField(max_digits=10, decimal_places=2)

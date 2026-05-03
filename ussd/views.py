@@ -438,6 +438,9 @@ def ussd_api(request):
                     session.order_id = our_ref  # Store our reference in session for tracking
                     session.save()
                     
+                    session.msisdn = msisdn
+                    session.save()
+                    
                     # Determine description based on payment type
                     if session.payment_type == 'VOTE':
                         desc = f"Votes for {session.candidate_id}"
@@ -647,6 +650,7 @@ def webhook_callback(request):
             amount_str = data.get('amount')
             extra_data = data.get('extra_data', {})
             our_reference = extra_data.get('reference')  # This is the reference we sent in the payment request
+            reference = data.get('reference')  # This is the reference from Nalo, which should match our_reference
             
             if not nalo_order_id or not our_reference:
                 return JsonResponse({'status': 'error', 'message': 'Missing order_id or reference'}, status=400)
@@ -658,16 +662,17 @@ def webhook_callback(request):
                 amount = Decimal('0')  # Default to 0 if amount is missing or invalid
             
             # Find session using our own reference (stored in session.order_id)
-            session = CustomSession.objects.filter(order_id=our_reference).first()
+            session = CustomSession.objects.filter(nalo_order_id=nalo_order_id).first()
             if not session:
                 # Possibly session expired but payment succeeded, we should still verify with gateway and process if valid
-                print(f"Session not found for reference {our_reference}. Verifying with gateway...")
+                print(f"Session not found for reference {reference}. Verifying with gateway...")
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
             
             if status == 'COMPLETED':
                 with transaction.atomic():
                     result = process_payment_based_on_type(
                         session,
+                        msisdn=session.msisdn,
                         order_id=nalo_order_id,
                         invoice_no=nalo_order_id,  # Assuming invoice_no is same as order_id for
                         amount=amount,
@@ -784,19 +789,19 @@ def webhook_callback(request):
 
 
 
-def process_payment_based_on_type(session, order_id, invoice_no, amount, status, timestamp):
+def process_payment_based_on_type(session, msisdn, nalo_order_id, invoice_no, amount, status, timestamp):
     """Process payment based on payment type with proper error handling"""
     
     if session.payment_type == 'VOTE':
-        return process_vote_payment(session, order_id, invoice_no, amount, status, timestamp)
+        return process_vote_payment(session, msisdn, nalo_order_id, invoice_no, amount, status, timestamp)
     elif session.payment_type == 'TICKET':
-        return process_ticket_payment(session, order_id, invoice_no, amount, status, timestamp)
+        return process_ticket_payment(session, msisdn,  nalo_order_id, invoice_no, amount, status, timestamp)
     elif session.payment_type == 'DONATION':
-        return process_donation_payment(session, order_id, invoice_no, amount, status, timestamp)
+        return process_donation_payment(session,msisdn,  nalo_order_id, invoice_no, amount, status, timestamp)
     else:
         return {'success': False, 'message': 'Unknown payment type'}
     
-def process_vote_payment(session, order_id, invoice_no, amount, status, timestamp):
+def process_vote_payment(session, nalo_order_id, invoice_no, amount, status, timestamp):
     try:
         nominee_code = session.candidate_id
         votes = session.votes
@@ -805,7 +810,7 @@ def process_vote_payment(session, order_id, invoice_no, amount, status, timestam
             return {'success': False, 'message': 'Incomplete session data for vote payment'}
         
         # Check for duplicate transaction before doing anything
-        if PaymentTransaction.objects.filter(order_id=order_id).exists():
+        if PaymentTransaction.objects.filter(order_id=nalo_order_id).exists():
             return {'success': True, 'message': 'Transaction already processed'}
         
         try:
@@ -822,7 +827,7 @@ def process_vote_payment(session, order_id, invoice_no, amount, status, timestam
         
         # Create payment transaction record
         PaymentTransaction.objects.create(
-            order_id=order_id,
+            order_id=nalo_order_id,
             invoice_no=invoice_no,
             transaction_id=invoice_no,
             amount=amount,
@@ -961,14 +966,14 @@ def process_donation_payment(session, order_id, invoice_no, amount, status, time
         return {'success': False, 'message': f'Error processing donation payment: {str(e)}'}
     
     
-def handle_payment_without_session(order_id, invoice_no, amount, status, timestamp, payment_data):
+def handle_payment_without_session(nalo_order_id, invoice_no, amount, status, timestamp, payment_data):
     """Handle payments when session is missing but payment was successful"""
    
     """
     Handle payment verification when no active session exists.
     This can occur if the session expired before payment was completed.
     """
-    print(f"Handling payment without session for order_id: {order_id}")
+    print(f"Handling payment without session for order_id: {nalo_order_id}")
     return JsonResponse({'status': 'error', 'message': 'Session not found, payment requires manual review'}, status=400)
 
 
