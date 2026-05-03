@@ -23,6 +23,8 @@ class CustomSession(models.Model):
     tickets = models.PositiveIntegerField(null=True, blank=True) # New
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     order_id = models.CharField(max_length=255, blank=True, null=True)
+    reference = models.CharField(max_length=255, blank=True, null=True)
+    trans_hash = models.CharField(max_length=255, blank=True, null=True)
     payment_type = models.CharField(max_length=10, choices=SESSION_TYPES, default='VOTE') # New
     last_activity = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -32,6 +34,14 @@ class CustomSession(models.Model):
     def is_expired(self):
         
         return (timezone.now() - self.last_activity).total_seconds() > 75
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['order_id']),
+            models.Index(fields=['reference']),
+            models.Index(fields=['trans_hash']),
+
+        ]
     
     def __str__(self):
         return f"{self.session_key} - {self.candidate_id} - {self.event_id} - {self.msisdn} - {self.order_id}"
@@ -43,12 +53,23 @@ class PaymentTransaction(models.Model):
         ('TICKET', 'Ticket'),
         ('DONATION', 'Donation'),
     )
+    
+    STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('PAID', 'Paid'),
+        ('FAILED', 'Failed'),
+    )
     order_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     invoice_no = models.CharField(max_length=255, null=True, blank=True)
     transaction_id = models.CharField(max_length=20, null=True, blank=True)  # New field
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=50) 
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='PENDING') 
     payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES, null=True, blank=True) # new
+    
+    # Additional fields for better tracking
+    trans_hash = models.CharField(max_length=255, null=True, blank=True)
+    account_number = models.CharField(max_length=20, null=True, blank=True)
+    account_name = models.CharField(max_length=255, null=True, blank=True)
     
     # Vote-specific fields
     nominee_code = models.CharField(max_length=10, null=True, blank=True)
@@ -69,6 +90,11 @@ class PaymentTransaction(models.Model):
     
     class Meta:
         ordering = ('-timestamp',)
+        indexes = [
+            models.Index(fields=['order_id']),
+            models.Index(fields=['transaction_id']),
+            models.Index(fields=['trans_hash']),
+        ]
     
     def __str__(self):
         return f"Transaction {self.order_id} {self.payment_type} - {self.status} - {self.category} - {self.nominee_code} - {self.timestamp}"

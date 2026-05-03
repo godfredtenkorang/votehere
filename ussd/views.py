@@ -328,8 +328,10 @@ def ussd_api(request):
                     network_type = network
                     username = 'votfric_gen'
                     # password = 'bVdwy86yoWtdZcW'
-                    password = 'Nrkl)CYr'
-                    merchant_id = 'NPS_000288'
+                    # password = 'Nrkl)CYr'
+                    password = 'a20df3af88ff53967a929dddf985e31f9a0b0ab157962ed0044ea9bd44d5cf14'
+                    merchant_id = '2aUunThCfbEpXabAhjkJoa'
+                    # merchant_id = 'NPS_000288'
                     key = str(generate_random_key())
                     hashed_password = md5(password.encode()).hexdigest()
                     concat_keys = f"{username}{key}{hashed_password}"
