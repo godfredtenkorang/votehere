@@ -23,6 +23,7 @@ class CustomSession(models.Model):
     tickets = models.PositiveIntegerField(null=True, blank=True) # New
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     order_id = models.CharField(max_length=255, blank=True, null=True)
+    nalo_order_id = models.CharField(max_length=100, blank=True, null=True)
     reference = models.CharField(max_length=255, blank=True, null=True)
     trans_hash = models.CharField(max_length=255, blank=True, null=True)
     payment_type = models.CharField(max_length=10, choices=SESSION_TYPES, default='VOTE') # New

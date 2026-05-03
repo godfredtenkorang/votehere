@@ -1,5 +1,6 @@
 import hashlib
 import hmac
+import time
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -25,6 +26,105 @@ from .utils import send_sms_to_voter, send_sms_to_nominee_for_vote, send_donatio
 from django.views import View
 from django.db import transaction
 
+import hmac
+import hashlib
+
+
+def generate_nalo_token():
+    NALO_BASE_URL = 'https://api.nalopay.com'
+    url = "https://api.nalopay.com/clientapi/generate-payment-token/"
+    headers = {
+        "Authorization": "Basic e5f5ff516fe0ce92047cf0ae4c28499efad55e8552062cab1d838c0075d2b586f7998d906787eedd38d3e1bf94d071fa244ed1385ded4b4e9c90a2536bbf12da",
+        "Content-Type": "application/json",
+    }
+    payload = {'merchant_id': '2aUunThCfbEpXabAhjkJoa'}
+    try:
+        
+        resp = requests.post(url, json=payload, headers=headers)
+        print(f"[TOKEN] Status: {resp.status_code}, Text: {resp.text[:200]}")  # Debugging log
+        resp.raise_for_status()
+        data = resp.json()
+    except requests.exceptions.JSONDecodeError as e:
+        raise Exception(f"Token endpoint returned non-JSON: {resp.text[:200]}") from e
+    except Exception as e:
+        raise Exception(f"Token request failed: {str(e)}") from e
+    if data.get('success'):
+        return data['data']['token']
+    else:
+        raise Exception(f"Token generation failed: {data.get('code', 'Unknown error')}")
+
+def create_nalo_collection(account_number, account_name, network, amount, reference, description, extra_data=None):
+    token = generate_nalo_token()
+    # Build message for HMAC: merchant_id + account_number + amount + reference
+    merchant_id = '2aUunThCfbEpXabAhjkJoa'
+    NALO_SECRET_KEY = 'a20df3af88ff53967a929dddf985e31f9a0b0ab157962ed0044ea9bd44d5cf14'
+    # Clean values FIRST, then use the same cleaned values in BOTH the hash and the payload
+    clean_account = str(account_number).lstrip('+')
+    clean_amount = str(amount)      # e.g. "0.50"
+    clean_reference = str(reference)
+    
+    message = f"{merchant_id}{clean_account}{clean_amount}{clean_reference}"
+    trans_hash = hmac.new(
+        NALO_SECRET_KEY.encode(),
+        message.encode(),
+        hashlib.sha256
+    ).hexdigest()
+    NALO_BASE_URL = 'https://api.nalopay.com'
+    
+    url = "https://api.nalopay.com/clientapi/collection/"
+    headers = {'token': token, "Content-Type": "application/json"}
+    payload = {
+        'merchant_id': merchant_id,
+        'service_name': 'MOMO_TRANSACTION',
+        'trans_hash': trans_hash,
+        'account_number': str(account_number).lstrip('+'),
+        'account_name': str(account_name).lstrip('+'),
+        'description': description,
+        'reference': str(reference),
+        'callback': 'https://voteafric.com/ussd/webhooks/callback/',
+        'network': str(network),
+        'amount': str(amount),
+    }
+    if extra_data:
+        payload['extra_data'] = extra_data
+
+    print(f"[COLLECTION] Sending to {url}")
+    print(f"[COLLECTION] Headers: {headers}")
+    print(f"[COLLECTION] Payload: {payload}")
+    
+    try:
+        resp = requests.post(url, json=payload, headers=headers, timeout=15)
+        print(f"[COLLECTION] Status: {resp.status_code}")
+        print(f"[COLLECTION] Raw response: {resp.text[:500]}")
+        resp.raise_for_status()
+        
+        # Try to parse JSON
+        try:
+            result = resp.json()
+        except ValueError as e:
+            raise Exception(f"Collection response is not JSON: {resp.text[:200]}") from e
+        
+        if result.get('success'):
+            return result
+        else:
+            raise Exception(f"Collection API error: {result.get('code', 'Unknown error')} - {result.get('message', '')}")
+    
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"HTTP request failed: {str(e)}") from e
+
+
+def check_payment_status(nalo_order_id):
+    """Call /clientapi/collection-status/ to verify payment"""
+    NALO_BASE_URL = 'https://api.nalopay.com'
+    url = "https://api.nalopay.com/clientapi/collection-status/"
+    payload = {
+        'merchant_id': '2aUunThCfbEpXabAhjkJoa',
+        'order_id': nalo_order_id
+    }
+    headers = {'Content-Type': "application/json"}
+    resp = requests.post(url, json=payload, headers=headers)
+    resp.raise_for_status()
+    return resp.json()
 
 
 def generate_random_key():
@@ -39,11 +139,11 @@ def ussd_api(request):
         # Extracting request data
         user_id = data.get('USERID')
         msisdn = data.get('MSISDN')
-         # Ensure MSISDN starts with 233
-        if msisdn.startswith("0"):  # If it starts with 0, replace it
-            msisdn = "233" + msisdn[1:]
-        elif not msisdn.startswith("233"):  # If it doesn’t start with 233, ensure proper format
-            msisdn = "233" + msisdn
+        #  # Ensure MSISDN starts with 233
+        # if msisdn.startswith("0"):  # If it starts with 0, replace it
+        #     msisdn = "233" + msisdn[1:]
+        # elif not msisdn.startswith("233"):  # If it doesn’t start with 233, ensure proper format
+        #     msisdn = "233" + msisdn
             
         user_data = data.get('USERDATA', '').strip().upper()
         msgtype = data.get('MSGTYPE')  # Determines if initial request (True) or follow-up (False)
@@ -321,109 +421,163 @@ def ussd_api(request):
                         session.delete()
                         return JsonResponse(send_response('Transaction cancelled.', False))
                     
-
+                    
                     amount = session.amount
-                    endpoint = "https://api.nalosolutions.com/payplus/api/"
-                    telephone = msisdn
-                    network_type = network
-                    username = 'votfric_gen'
-                    # password = 'bVdwy86yoWtdZcW'
-                    # password = 'Nrkl)CYr'
-                    password = 'a20df3af88ff53967a929dddf985e31f9a0b0ab157962ed0044ea9bd44d5cf14'
-                    merchant_id = '2aUunThCfbEpXabAhjkJoa'
-                    # merchant_id = 'NPS_000288'
-                    key = str(generate_random_key())
-                    hashed_password = md5(password.encode()).hexdigest()
-                    concat_keys = f"{username}{key}{hashed_password}"
-                    secrete = md5(concat_keys.encode()).hexdigest()
-                    callback = 'https://voteafric.com/ussd/webhooks/callback/'
-                    item_desc = 'Payment for vote'
-                    # Determine payment description based on type
-                    if session.payment_type == 'VOTE':
-                        item_desc = f"Votes for {session.candidate_id}"
-                        
-                    elif session.payment_type == 'TICKET':
-                        item_desc = f"Tickets for {session.event_id}"
-                        
-                    else:
-                        item_desc = f"Donation for {session.donation_id}"
-                        
-                        
-                    order_id = str(uuid.uuid4())
-                    session.order_id = order_id
-                    session.msisdn = msisdn
+                    telephone = msisdn # already formatted to start with 233
+                    # Map network names to Nalo's expected values
+                    network_map = {
+                        'MTN': 'MTN',
+                        'AT': 'AT',
+                        'TELECEL': 'TELECEL',
+                    }
+                    nal_network = network_map.get(network.upper(), 'MTN') # Default to MTN if unknown
+                    # Generate unique reference for this transaction
+                    # timestamp = datetime.now().strftime("%Y")
+                    our_ref = f"REF_{datetime.now().strftime('%Y')}_002"
+                    # our_ref = f"REF_{timestamp}_001"
+                    session.reference = our_ref  # Store our reference in session for tracking
                     session.save()
                     
-                    if network_type.upper() == 'VODAFONE':
-                        # Format amount to ensure exactly 2 decimal places
-                        formatted_amount = "{:.2f}".format(float(amount))
-                        payload = {
-                            'merchant_id': merchant_id,
-                            'secrete': secrete,
-                            'key': key,
-                            'order_id': order_id,
-                            'customerName': str(telephone),
-                            'amount': formatted_amount,  # Use formatted amoun
-                            'item_desc': item_desc,
-                            'customerNumber': str(telephone),
-                            'payby': 'VODAFONE',
-                            'newVodaPayment': True,  # This is specific to Vodafone
-                            'callback': callback,
-                            
-                        }
-                    # secrete = f"{secrete[:4]} {secrete[4:]}"
+                    # Determine description based on payment type
+                    if session.payment_type == 'VOTE':
+                        desc = f"Votes for {session.candidate_id}"
+                    elif session.payment_type == 'TICKET':
+                        desc = f"Tickets for {session.event_id}"
                     else:
-                    # Payment payload
-                        payload = {
-                            'payby': str(network_type),
-                            'order_id': order_id,
-                            'customerNumber': str(telephone),
-                            'customerName': str(telephone),
-                            'isussd': 1,
-                            'amount': str(amount),
-                            'merchant_id': merchant_id,
-                            'secrete': secrete,
-                            'key': key,
-                            'callback': callback,
-                            'item_desc': item_desc,
-                            
-
-                
-                        }
-
-                    headers = {
-                        "Content-Type": "application/json",
-                    }
-
-                    try:
+                        desc = f"Donation for {session.donation_id}"
                         
-                    # Sending payment request
-                        response = requests.post(endpoint, json=payload, headers=headers)
-                        print(response)
-                
+                    # We'll sent our_ref inside extra_data so that when we get the callback from Nalo, we can match it to our session and transaction
+                    extra_data = {'reference': our_ref}
                     
-                    
-                        if response.status_code == 200:
+                    try:
+                        collection_resp = create_nalo_collection(
+                            account_number=str(telephone),
+                            account_name=str(telephone),  # Nalo may not require this for mobile money, but we'll just pass the number again
+                            description=desc,
+                            reference=our_ref,
+                            network=nal_network,
+                            amount=str(amount),
+                            extra_data=extra_data
+                        )
+                        if collection_resp.get('success'):
+                            # Store Nalo's order_id if needed for manual verification
+                            session.nalo_order_id = collection_resp['data']['order_id']
                             session.save()
-                            # print(secrete_full)
-                            print(hashed_password)
-                            print(concat_keys)
-                            print(secrete)
-                            print(key)
                             message = (
                                 f"You are about to pay GH¢{amount:.2f}. "
                                 f"Please approve the payment prompt on your phone."
                             )
                             return JsonResponse(send_response(message, False))
-                            
-                            
                         else:
                             session.delete()
-                            error_msg = response.json().get('message', 'Payment request failed')
-                            return JsonResponse(send_response(f"Payment failed: {error_msg}. Please try again.", False))
+                            error_msg = collection_resp.get('message', 'Payment request failed')
+                            return JsonResponse(send_response(f"Payment failed: {error_msg}. Try again.", False))
                     except requests.exceptions.RequestException as e:
                         session.delete()
+                        print(f"Collection error: {str(e)}")  # Log the error for debugging
                         return JsonResponse(send_response("Network error processing payment. Please try again.", False))
+                    # amount = session.amount
+                    # endpoint = "https://api.nalosolutions.com/payplus/api/"
+                    # telephone = msisdn
+                    # network_type = network
+                    # username = 'votfric_gen'
+                    # # password = 'bVdwy86yoWtdZcW'
+                    # # password = 'Nrkl)CYr'
+                    # password = 'a20df3af88ff53967a929dddf985e31f9a0b0ab157962ed0044ea9bd44d5cf14'
+                    # merchant_id = '2aUunThCfbEpXabAhjkJoa'
+                    # # merchant_id = 'NPS_000288'
+                    # key = str(generate_random_key())
+                    # hashed_password = md5(password.encode()).hexdigest()
+                    # concat_keys = f"{username}{key}{hashed_password}"
+                    # secrete = md5(concat_keys.encode()).hexdigest()
+                    # callback = 'https://voteafric.com/ussd/webhooks/callback/'
+                    # item_desc = 'Payment for vote'
+                    # # Determine payment description based on type
+                    # if session.payment_type == 'VOTE':
+                    #     item_desc = f"Votes for {session.candidate_id}"
+                        
+                    # elif session.payment_type == 'TICKET':
+                    #     item_desc = f"Tickets for {session.event_id}"
+                        
+                    # else:
+                    #     item_desc = f"Donation for {session.donation_id}"
+                        
+                        
+                    # order_id = str(uuid.uuid4())
+                    # session.order_id = order_id
+                    # session.msisdn = msisdn
+                    # session.save()
+                    
+                    # if network_type.upper() == 'VODAFONE':
+                    #     # Format amount to ensure exactly 2 decimal places
+                    #     formatted_amount = "{:.2f}".format(float(amount))
+                    #     payload = {
+                    #         'merchant_id': merchant_id,
+                    #         'secrete': secrete,
+                    #         'key': key,
+                    #         'order_id': order_id,
+                    #         'customerName': str(telephone),
+                            # 'amount': formatted_amount,  # Use formatted amoun
+                    #         'item_desc': item_desc,
+                    #         'customerNumber': str(telephone),
+                    #         'payby': 'VODAFONE',
+                    #         'newVodaPayment': True,  # This is specific to Vodafone
+                    #         'callback': callback,
+                            
+                    #     }
+                    # # secrete = f"{secrete[:4]} {secrete[4:]}"
+                    # else:
+                    # # Payment payload
+                    #     payload = {
+                    #         'payby': str(network_type),
+                    #         'order_id': order_id,
+                    #         'customerNumber': str(telephone),
+                    #         'customerName': str(telephone),
+                    #         'isussd': 1,
+                    #         'amount': str(amount),
+                    #         'merchant_id': merchant_id,
+                    #         'secrete': secrete,
+                    #         'key': key,
+                    #         'callback': callback,
+                    #         'item_desc': item_desc,
+                            
+
+                
+                    #     }
+
+                    # headers = {
+                    #     "Content-Type": "application/json",
+                    # }
+
+                    # try:
+                        
+                    # # Sending payment request
+                    #     response = requests.post(endpoint, json=payload, headers=headers)
+                    #     print(response)
+                
+                    
+                    
+                    #     if response.status_code == 200:
+                    #         session.save()
+                    #         # print(secrete_full)
+                    #         print(hashed_password)
+                    #         print(concat_keys)
+                    #         print(secrete)
+                    #         print(key)
+                    #         message = (
+                    #             f"You are about to pay GH¢{amount:.2f}. "
+                    #             f"Please approve the payment prompt on your phone."
+                    #         )
+                    #         return JsonResponse(send_response(message, False))
+                            
+                            
+                    #     else:
+                    #         session.delete()
+                    #         error_msg = response.json().get('message', 'Payment request failed')
+                    #         return JsonResponse(send_response(f"Payment failed: {error_msg}. Please try again.", False))
+                    # except requests.exceptions.RequestException as e:
+                    #     session.delete()
+                    #     return JsonResponse(send_response("Network error processing payment. Please try again.", False))
                 else:
                     session.delete()
                     return JsonResponse(send_response("Invalid session state.", False))
@@ -434,34 +588,39 @@ def ussd_api(request):
 
 # New Start
 # Add this function to verify payments
-def verify_payment(order_id):
-    """
-    Verify payment status with payment gateway for a given order_id
-    """
-    endpoint = "https://api.nalosolutions.com/payplus/api/verify"  # Check the actual verify endpoint
-    username = 'votfric_gen'
-    password = 'Nrkl)CYr'
-    merchant_id = 'NPS_000288'
-    key = str(generate_random_key())
-    hashed_password = md5(password.encode()).hexdigest()
-    concat_keys = f"{username}{key}{hashed_password}"
-    secrete = md5(concat_keys.encode()).hexdigest()
+def verify_payment(nalo_order_id):
+    result = check_payment_status(nalo_order_id)
+    if result.get('success'):
+        data = result.get('data', {})
+        return data.get('status') == 'COMPLETED', data
+    return False, None
+    # """
+    # Verify payment status with payment gateway for a given order_id
+    # """
+    # endpoint = "https://api.nalosolutions.com/payplus/api/verify"  # Check the actual verify endpoint
+    # username = 'votfric_gen'
+    # password = 'Nrkl)CYr'
+    # merchant_id = 'NPS_000288'
+    # key = str(generate_random_key())
+    # hashed_password = md5(password.encode()).hexdigest()
+    # concat_keys = f"{username}{key}{hashed_password}"
+    # secrete = md5(concat_keys.encode()).hexdigest()
     
-    payload = {
-        'merchant_id': merchant_id,
-        'secrete': secrete,
-        'key': key,
-        'order_id': order_id
-    }
+    # payload = {
+    #     'merchant_id': merchant_id,
+    #     'secrete': secrete,
+    #     'key': key,
+    #     'order_id': order_id
+    # }
     
-    try:
-        response = requests.post(endpoint, json=payload)
-        if response.status_code == 200:
-            data = response.json()
-            return data.get('Status') == 'PAID', data
-        return False, None
-    except requests.exceptions.RequestException:
-        return False, None
+    # try:
+    #     response = requests.post(endpoint, json=payload)
+    #     if response.status_code == 200:
+    #         data = response.json()
+    #         return data.get('Status') == 'PAID', data
+    #     return False, None
+    # except requests.exceptions.RequestException:
+    #     return False, None
 #  New End
 
 
@@ -480,87 +639,137 @@ def webhook_callback(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            
             print(f'Raw callback data: {data}')
- 
-            timestamp_str = data.get('Timestamp')
-            status = data.get('Status', '').upper()  # Expecting 'success' or 'failed'
-            invoice_no = data.get('InvoiceNo')
+            
+            # New API fields
+            nalo_order_id = data.get('order_id')
+            status = data.get('status', '').upper()  # Expecting 'PAID' or 'FAILED'
             amount_str = data.get('amount')
-            order_id = data.get('Order_id')
+            extra_data = data.get('extra_data', {})
+            our_reference = extra_data.get('reference')  # This is the reference we sent in the payment request
             
-            # Validate required fields
-            if not all([order_id, status, amount_str]):
-                return JsonResponse({'status': 'error', 'message': 'Missing required fields'}, status=400)
+            if not nalo_order_id or not our_reference:
+                return JsonResponse({'status': 'error', 'message': 'Missing order_id or reference'}, status=400)
             
-            # convert amount to Decimal
+             # convert amount to Decimal
             try:
                 amount = Decimal(str(amount_str))
-            except (ValueError, TypeError):
-                return JsonResponse({'status': 'error', 'message': 'Invalid amount format'}, status=400)
+            except:
+                amount = Decimal('0')  # Default to 0 if amount is missing or invalid
             
-            # convert timestamp to datetime object
-            try:
-                if timestamp_str:
-                    timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
-                else:
-                    timestamp = timezone.now()
-                    
-            except (ValueError, TypeError):
-                timestamp = timezone.now()  # Fallback to current time if parsing fails 
-            # New start
-            # First check if this transaction already exists
-            existing_txn = PaymentTransaction.objects.filter(order_id=order_id).first()
-            if existing_txn:
-                print(f'Transaction with order_id {order_id} already exists. With status {existing_txn.status}')
-                return JsonResponse({'status': 'success', 'message': 'Transaction already processed'})
-            # New end
-            session = CustomSession.objects.filter(order_id=order_id).first()
-            
-            
+            # Find session using our own reference (stored in session.order_id)
+            session = CustomSession.objects.filter(order_id=our_reference).first()
             if not session:
-                # New Start
-                # If no session but payment succeeded, we should still verify
-                if status == 'PAID':
-                     # Verify with payment gateway
-                     is_paid, payment_data = verify_payment(order_id)
-                     
-                     if is_paid:
-                        return handle_payment_without_session(order_id, invoice_no, amount, status, timestamp, payment_data)
-                
+                # Possibly session expired but payment succeeded, we should still verify with gateway and process if valid
+                print(f"Session not found for reference {our_reference}. Verifying with gateway...")
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
-                        # Try to reconstruct what we can from the payment data
-                        # This part would need to be customized based on what data the gateway returns
-                        # For example:
-                        
-            # Check if session is expired
-            if session.is_expired:
-                print(f'Session expired for order_id {order_id}')
-                session.delete()
-                return JsonResponse({'status': 'error', 'message': 'Session expired'}, status=400)
             
-            if status == 'PAID':
-                # Use database transaction to ensure data consistency
-                try:
-                    with transaction.atomic():
-                        result = process_payment_based_on_type(session, order_id, invoice_no, amount, status, timestamp)
+            if status == 'COMPLETED':
+                with transaction.atomic():
+                    result = process_payment_based_on_type(
+                        session,
+                        order_id=nalo_order_id,
+                        invoice_no=nalo_order_id,  # Assuming invoice_no is same as order_id for
+                        amount=amount,
+                        status='PAID',
+                        timestamp=timezone.now()  # Use current time as timestamp since we don't have one from Nalo
                         
-                        if result['success']:
-                            # Only delete session after successful transaction creation
-                            session.delete()
-                            return JsonResponse({'status': 'success', 'message': result['message']})
-                        
-                        else:
-                            return JsonResponse({'status': 'error', 'message': result['message']}, status=400)
-                        
-                except Exception as e:
-                    print(f'Error processing payment without session: {str(e)}')
-                    return JsonResponse({'status': 'error', 'message': 'Internal server error'}, status=500)
-                
+                    )
+                    
+                    if result['success']:
+                        session.delete()  # Only delete session after successful processing
+                        return JsonResponse({'status': 'success', 'message': result['message']})
+                    else:
+                        return JsonResponse({'status': 'error', 'message': result['message']}, status=400)
                     
             else:
                 session.delete()
                 return JsonResponse({'status': 'error', 'message': 'Payment failed'})
+            
+            # data = json.loads(request.body.decode('utf-8'))
+            
+            # print(f'Raw callback data: {data}')
+
+            # # New API fields
+            # nalo_order_id = data.get('order_id')
+            # timestamp_str = data.get('Timestamp')
+            # status = data.get('status', '').upper()  # Expecting 'success' or 'failed'
+            # invoice_no = data.get('InvoiceNo')
+            # amount_str = data.get('amount')
+            # order_id = data.get('Order_id')
+            
+            # # Validate required fields
+            # if not all([order_id, status, amount_str]):
+            #     return JsonResponse({'status': 'error', 'message': 'Missing required fields'}, status=400)
+            
+            # # convert amount to Decimal
+            # try:
+            #     amount = Decimal(str(amount_str))
+            # except (ValueError, TypeError):
+            #     return JsonResponse({'status': 'error', 'message': 'Invalid amount format'}, status=400)
+            
+            # # convert timestamp to datetime object
+            # try:
+            #     if timestamp_str:
+            #         timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+            #     else:
+            #         timestamp = timezone.now()
+                    
+            # except (ValueError, TypeError):
+            #     timestamp = timezone.now()  # Fallback to current time if parsing fails 
+            # # New start
+            # # First check if this transaction already exists
+            # existing_txn = PaymentTransaction.objects.filter(order_id=order_id).first()
+            # if existing_txn:
+            #     print(f'Transaction with order_id {order_id} already exists. With status {existing_txn.status}')
+            #     return JsonResponse({'status': 'success', 'message': 'Transaction already processed'})
+            # # New end
+            # session = CustomSession.objects.filter(order_id=order_id).first()
+            
+            
+            # if not session:
+            #     # New Start
+            #     # If no session but payment succeeded, we should still verify
+            #     if status == 'PAID':
+            #          # Verify with payment gateway
+            #          is_paid, payment_data = verify_payment(order_id)
+                     
+            #          if is_paid:
+            #             return handle_payment_without_session(order_id, invoice_no, amount, status, timestamp, payment_data)
+                
+            #     return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
+            #             # Try to reconstruct what we can from the payment data
+            #             # This part would need to be customized based on what data the gateway returns
+            #             # For example:
+                        
+            # # Check if session is expired
+            # if session.is_expired:
+            #     print(f'Session expired for order_id {order_id}')
+            #     session.delete()
+            #     return JsonResponse({'status': 'error', 'message': 'Session expired'}, status=400)
+            
+            # if status == 'PAID':
+            #     # Use database transaction to ensure data consistency
+            #     try:
+            #         with transaction.atomic():
+            #             result = process_payment_based_on_type(session, order_id, invoice_no, amount, status, timestamp)
+                        
+            #             if result['success']:
+            #                 # Only delete session after successful transaction creation
+            #                 session.delete()
+            #                 return JsonResponse({'status': 'success', 'message': result['message']})
+                        
+            #             else:
+            #                 return JsonResponse({'status': 'error', 'message': result['message']}, status=400)
+                        
+            #     except Exception as e:
+            #         print(f'Error processing payment without session: {str(e)}')
+            #         return JsonResponse({'status': 'error', 'message': 'Internal server error'}, status=500)
+                
+                    
+            # else:
+            #     session.delete()
+            #     return JsonResponse({'status': 'error', 'message': 'Payment failed'})
             
             
               
