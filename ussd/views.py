@@ -593,7 +593,7 @@ def verify_payment(nalo_order_id):
     result = check_payment_status(nalo_order_id)
     if result.get('success'):
         data = result.get('data', {})
-        return data.get('status') == 'PAID', data
+        return data.get('Status') == 'PAID', data
     return False, None
     # """
     # Verify payment status with payment gateway for a given order_id
@@ -643,8 +643,8 @@ def webhook_callback(request):
             print(f'Raw callback data: {data}')
             
             # New API fields
-            nalo_order_id = data.get('order_id')
-            status = data.get('status', '').upper()  # Expecting 'PAID' or 'FAILED'
+            nalo_order_id = data.get('Order_id')
+            status = data.get('Status', '').upper()  # Expecting 'PAID' or 'FAILED'
             amount_str = data.get('amount')
             extra_data = data.get('extra_data', {})
             our_reference = extra_data.get('reference')  # This is the reference we sent in the payment request
