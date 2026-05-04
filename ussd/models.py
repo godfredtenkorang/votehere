@@ -11,22 +11,26 @@ class CustomSession(models.Model):
         ('TICKET', 'Ticket'),
         ('DONATION', 'Donation'),
     )
-    msisdn = models.CharField(max_length=15, null=True, blank=True)
     session_key = models.CharField(max_length=32, primary_key=True)
     user_id = models.CharField(max_length=100)
+    msisdn = models.CharField(max_length=15, null=True, blank=True)
     level = models.CharField(max_length=100, null=True, blank=True)
+    payment_type = models.CharField(max_length=10, choices=SESSION_TYPES, default='VOTE') # New
+    
+    
     candidate_id = models.CharField(max_length=100, null=True, blank=True)
-    ticket_type_id = models.CharField(max_length=100, null=True, blank=True) # New
-    event_id = models.CharField(max_length=10, null=True, blank=True) # New
-    donation_id = models.CharField(max_length=10, blank=True, null=True)
     votes = models.IntegerField(null=True, blank=True)
-    tickets = models.PositiveIntegerField(null=True, blank=True) # New
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    
+    
+    event_id = models.CharField(max_length=10, null=True, blank=True) # New
+    ticket_type_id = models.CharField(max_length=100, null=True, blank=True) # New
+    tickets = models.PositiveIntegerField(null=True, blank=True) # New
+    
+    donation_id = models.CharField(max_length=10, blank=True, null=True)
+    
     order_id = models.CharField(max_length=255, blank=True, null=True)
     nalo_order_id = models.CharField(max_length=100, blank=True, null=True)
-    reference = models.CharField(max_length=255, blank=True, null=True)
-    trans_hash = models.CharField(max_length=255, blank=True, null=True)
-    payment_type = models.CharField(max_length=10, choices=SESSION_TYPES, default='VOTE') # New
     last_activity = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     # Add any other fields you need to track
@@ -39,8 +43,6 @@ class CustomSession(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['order_id']),
-            models.Index(fields=['reference']),
-            models.Index(fields=['trans_hash']),
 
         ]
     
@@ -61,11 +63,13 @@ class PaymentTransaction(models.Model):
         ('FAILED', 'Failed'),
     )
     order_id = models.CharField(max_length=255, primary_key=True)  # Unique order ID for each transaction
-    invoice_no = models.CharField(max_length=255, null=True, blank=True)
-    transaction_id = models.CharField(max_length=20, null=True, blank=True)  # New field
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='PENDING') 
     payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES, null=True, blank=True) # new
+    
+    
+    invoice_no = models.CharField(max_length=255, null=True, blank=True)
+    transaction_id = models.CharField(max_length=20, null=True, blank=True)  # New field
     
     # Additional fields for better tracking
     trans_hash = models.CharField(max_length=255, null=True, blank=True)

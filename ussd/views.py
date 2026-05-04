@@ -593,7 +593,7 @@ def verify_payment(nalo_order_id):
     result = check_payment_status(nalo_order_id)
     if result.get('success'):
         data = result.get('data', {})
-        return data.get('status') == 'COMPLETED', data
+        return data.get('status') == 'PAID', data
     return False, None
     # """
     # Verify payment status with payment gateway for a given order_id
@@ -626,14 +626,14 @@ def verify_payment(nalo_order_id):
 
 
     
-# def update_tickets(event_code, tickets):
-#     try:
-#         ticket_type = TicketType.objects.get(event__code=event_code)
-#         ticket_type.available_tickets -= tickets
-#         ticket_type.save()
-#         return ticket_type
-#     except TicketType.DoesNotExist:
-#         return False
+def update_tickets(event_code, tickets):
+    try:
+        ticket_type = TicketType.objects.get(event__code=event_code)
+        ticket_type.available_tickets -= tickets
+        ticket_type.save()
+        return ticket_type
+    except TicketType.DoesNotExist:
+        return False
 
 @csrf_exempt
 def webhook_callback(request):
@@ -657,6 +657,13 @@ def webhook_callback(request):
                 amount = Decimal(str(amount_str))
             except:
                 amount = Decimal('0')  # Default to 0 if amount is missing or invalid
+                
+            # Check if transaction already exists
+            existing_txn = PaymentTransaction.objects.filter(order_id=nalo_order_id).first()
+            if existing_txn:
+                print(f'Transaction with order_id {nalo_order_id} already exists. With status {existing_txn.status}')
+                return JsonResponse({'status': 'success', 'message': 'Transaction already processed'})
+            
             
             # Find session using our own reference (stored in session.order_id)
             session = CustomSession.objects.filter(order_id=our_reference).first()
@@ -665,7 +672,7 @@ def webhook_callback(request):
                 print(f"Session not found for reference {our_reference}. Verifying with gateway...")
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
             
-            if status in ['COMPLETED', 'PAID', 'SUCCESS']:
+            if status in ['PAID', 'COMPLETED', 'SUCCESS']:
                 with transaction.atomic():
                     result = process_payment_based_on_type(
                         session,
@@ -787,19 +794,19 @@ def webhook_callback(request):
 
 
 
-def process_payment_based_on_type(session, order_id, invoice_no, amount, status, timestamp):
+def process_payment_based_on_type(session, order_id, amount, status, timestamp):
     """Process payment based on payment type with proper error handling"""
     
     if session.payment_type == 'VOTE':
-        return process_vote_payment(session, order_id, invoice_no, amount, status, timestamp)
+        return process_vote_payment(session, order_id, amount, status, timestamp)
     elif session.payment_type == 'TICKET':
-        return process_ticket_payment(session, order_id, invoice_no, amount, status, timestamp)
+        return process_ticket_payment(session, order_id, amount, status, timestamp)
     elif session.payment_type == 'DONATION':
-        return process_donation_payment(session, order_id, invoice_no, amount, status, timestamp)
+        return process_donation_payment(session, order_id, amount, status, timestamp)
     else:
         return {'success': False, 'message': 'Unknown payment type'}
     
-def process_vote_payment(session, order_id, invoice_no, amount, status, timestamp):
+def process_vote_payment(session, order_id, amount, status, timestamp):
     try:
         nominee_code = session.candidate_id
         votes = session.votes
@@ -815,6 +822,7 @@ def process_vote_payment(session, order_id, invoice_no, amount, status, timestam
             nominee = Nominees.objects.select_for_update().get(code__iexact=nominee_code)
         except Nominees.DoesNotExist:
             return {'success': False, 'message': 'Nominee not found'}
+        print(f"Updating votes for {nominee_code}: current votes {nominee.total_vote}, adding {votes}")
         # nominee = update_nominee_votes(nominee_code, votes)
         # if not nominee:
         #     return {'success': False, 'message': 'Nominee not found'}
@@ -826,8 +834,6 @@ def process_vote_payment(session, order_id, invoice_no, amount, status, timestam
         # Create payment transaction record
         PaymentTransaction.objects.create(
             order_id=order_id,
-            invoice_no=invoice_no,
-            transaction_id=invoice_no,
             amount=amount,
             status=status,
             payment_type='VOTE',
@@ -865,7 +871,7 @@ def process_vote_payment(session, order_id, invoice_no, amount, status, timestam
         return {'success': False, 'message': 'Error processing vote payment'}
     
 
-def process_ticket_payment(session, order_id, invoice_no, amount, status, timestamp):
+def process_ticket_payment(session, order_id, amount, status, timestamp):
     """Process ticket payment with proper error handling"""
     try:
         if not session.event_id or not session.tickets or not session.ticket_type_id:
@@ -883,8 +889,6 @@ def process_ticket_payment(session, order_id, invoice_no, amount, status, timest
         # Create payment transaction
         PaymentTransaction.objects.create(
             order_id=order_id,
-            invoice_no=invoice_no,
-            transaction_id=invoice_no,
             amount=amount,
             status=status,
             payment_type='TICKET',
@@ -907,7 +911,7 @@ def process_ticket_payment(session, order_id, invoice_no, amount, status, timest
                 ticket_count=session.tickets,
                 amount=amount,
                 event_date=ticket_type.event.end_date,
-                reference=invoice_no
+                reference=session.order_id
             )
         except Exception as sms_error:
             print(f"SMS sending failed: {sms_error}")
@@ -920,7 +924,7 @@ def process_ticket_payment(session, order_id, invoice_no, amount, status, timest
         print(f"Error processing ticket payment: {str(e)}")
         return {'success': False, 'message': f'Error processing ticket payment: {str(e)}'}
 
-def process_donation_payment(session, order_id, invoice_no, amount, status, timestamp):
+def process_donation_payment(session, order_id, amount, status, timestamp):
     """Process donation payment with proper error handling"""
     try:
         if not session.donation_id:
@@ -935,8 +939,6 @@ def process_donation_payment(session, order_id, invoice_no, amount, status, time
         # Create payment transaction
         PaymentTransaction.objects.create(
             order_id=order_id,
-            invoice_no=invoice_no,
-            transaction_id=invoice_no,
             amount=amount,
             status=status,
             payment_type='DONATION',
@@ -950,7 +952,7 @@ def process_donation_payment(session, order_id, invoice_no, amount, status, time
                 phone_number=session.msisdn,
                 cause_name=cause.name,
                 amount=amount,
-                reference=invoice_no
+                reference=session.order_id
             )
         except Exception as sms_error:
             print(f"SMS sending failed: {sms_error}")
@@ -964,7 +966,7 @@ def process_donation_payment(session, order_id, invoice_no, amount, status, time
         return {'success': False, 'message': f'Error processing donation payment: {str(e)}'}
     
     
-def handle_payment_without_session(order_id, invoice_no, amount, status, timestamp, payment_data):
+def handle_payment_without_session(order_id, amount, status, timestamp, payment_data):
     """Handle payments when session is missing but payment was successful"""
    
     """
