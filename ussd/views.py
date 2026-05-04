@@ -113,13 +113,13 @@ def create_nalo_collection(account_number, account_name, network, amount, refere
         raise Exception(f"HTTP request failed: {str(e)}") from e
 
 
-def check_payment_status(nalo_order_id):
+def check_payment_status(order_id):
     """Call /clientapi/collection-status/ to verify payment"""
     NALO_BASE_URL = 'https://api.nalopay.com'
     url = "https://api.nalopay.com/clientapi/collection-status/"
     payload = {
         'merchant_id': '2aUunThCfbEpXabAhjkJoa',
-        'order_id': nalo_order_id
+        'order_id': order_id
     }
     headers = {'Content-Type': "application/json"}
     resp = requests.post(url, json=payload, headers=headers)
@@ -589,11 +589,11 @@ def ussd_api(request):
 
 # New Start
 # Add this function to verify payments
-def verify_payment(nalo_order_id):
-    result = check_payment_status(nalo_order_id)
+def verify_payment(order_id):
+    result = check_payment_status(order_id)
     if result.get('success'):
         data = result.get('data', {})
-        return data.get('Status') == 'PAID', data
+        return data.get('status') == 'COMPLETED', data
     return False, None
     # """
     # Verify payment status with payment gateway for a given order_id
@@ -643,13 +643,13 @@ def webhook_callback(request):
             print(f'Raw callback data: {data}')
             
             # New API fields
-            nalo_order_id = data.get('Order_id')
-            status = data.get('Status', '').upper()  # Expecting 'PAID' or 'FAILED'
+            order_id = data.get('order_id')
+            status = data.get('status', '').upper()  # Expecting 'PAID' or 'FAILED'
             amount_str = data.get('amount')
             extra_data = data.get('extra_data', {})
             our_reference = extra_data.get('reference')  # This is the reference we sent in the payment request
             
-            if not nalo_order_id or not our_reference:
+            if not order_id or not our_reference:
                 return JsonResponse({'status': 'error', 'message': 'Missing order_id or reference'}, status=400)
             
              # convert amount to Decimal
@@ -659,25 +659,25 @@ def webhook_callback(request):
                 amount = Decimal('0')  # Default to 0 if amount is missing or invalid
                 
             # Check if transaction already exists
-            existing_txn = PaymentTransaction.objects.filter(order_id=nalo_order_id).first()
+            existing_txn = PaymentTransaction.objects.filter(order_id=order_id).first()
             if existing_txn:
-                print(f'Transaction with order_id {nalo_order_id} already exists. With status {existing_txn.status}')
+                print(f'Transaction with order_id {order_id} already exists. With status {existing_txn.status}')
                 return JsonResponse({'status': 'success', 'message': 'Transaction already processed'})
             
             
             # Find session using our own reference (stored in session.order_id)
-            session = CustomSession.objects.filter(order_id=our_reference).first()
+            session = CustomSession.objects.filter(order_id=order_id).first()
             if not session:
                 # Possibly session expired but payment succeeded, we should still verify with gateway and process if valid
-                print(f"Session not found for reference {our_reference}. Verifying with gateway...")
+                print(f"Session not found for reference {order_id}. Verifying with gateway...")
                 return JsonResponse({'status': 'error', 'message': 'Session not found'}, status=400)
             
-            if status in ['PAID', 'COMPLETED', 'SUCCESS']:
+            if status == 'COMPLETED':
                 with transaction.atomic():
                     result = process_payment_based_on_type(
                         session,
-                        order_id=nalo_order_id,
-                        invoice_no=nalo_order_id,  # Assuming invoice_no is same as order_id for
+                        order_id=order_id,
+                        invoice_no=order_id,  # Assuming invoice_no is same as order_id for
                         amount=amount,
                         status='PAID',
                         timestamp=timezone.now()  # Use current time as timestamp since we don't have one from Nalo
