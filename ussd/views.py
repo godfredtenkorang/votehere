@@ -677,7 +677,6 @@ def webhook_callback(request):
                     result = process_payment_based_on_type(
                         session,
                         order_id=order_id,
-                        invoice_no=order_id,  # Assuming invoice_no is same as order_id for
                         amount=amount,
                         status='PAID',
                         timestamp=timezone.now()  # Use current time as timestamp since we don't have one from Nalo
