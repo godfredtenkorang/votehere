@@ -435,7 +435,7 @@ def ussd_api(request):
                     # timestamp = datetime.now().strftime("%Y")
                     our_ref = f"REF_{datetime.now().strftime('%Y')}_{uuid.uuid4().hex[:3].upper()}"
                     # our_ref = f"REF_{timestamp}_001"
-                    session.order_id = our_ref  # Store our reference in session for tracking
+                    session.order_id = session.nalo_order_id  # Store our reference in session for tracking
                     session.msisdn = msisdn
                     session.save()
                     
