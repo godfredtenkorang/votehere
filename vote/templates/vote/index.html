@@ -62,6 +62,10 @@
 
 
 <style>
+
+
+
+
   .donation-banner {
     display: flex;
     flex-wrap: wrap;
@@ -176,7 +180,7 @@ video {
       </div>
 
       <div class="banner-img">
-        <img src="{% static 'vote/img/2.svg' %}" alt="image">
+        <img src="{% static 'vote/img/3.png' %}" alt="image">
       </div>
     </div>
   </div>
@@ -186,7 +190,7 @@ video {
 
 <br>
 
-<div class="donation-banner">
+<!-- <div class="donation-banner">
   <div class="donate-img">
      <img src="{% static 'vote/img/donate.jpg' %}" alt="image">
   </div>
@@ -195,7 +199,7 @@ video {
     <h2>VOTEAFRIC FOUNDATION</h2>
     <p><em>Building a better future together</em></p>
 
-    <!-- ❤️ Emotional Appeal -->
+  
     <p>
       Every cedi you give brings hope to someone in need. Whether it's helping a child go to school, supporting a struggling family, or empowering a community through education and opportunity — your donation creates real change.
     </p>
@@ -206,7 +210,7 @@ video {
       Together, we can build a future where no one is left behind.
     </p>
 
-    <!-- 📞 Donation Steps -->
+    
     <div class="donation-steps">
       <p><strong>Donation Process:</strong></p>
       <p>Dial <strong>*920*106#</strong></p>
@@ -218,7 +222,7 @@ video {
     </div>
   </div>
 </div>
-
+ -->
 
 
 
@@ -283,117 +287,97 @@ video {
 </div> -->
 
   <section class="how-it-works">
-    <h2>How It Works</h2>
-    <p>Simply choose your award scheme, select a category, and vote for your favorite nominee. We ensure a smooth, hassle-free voting experience from start to finish.</p>
-  
-    <div class="how-steps">
-      <div class="step">
-        <i class="fas fa-trophy fa-2x" style="color:#ff9900; margin-bottom:10px;"></i>
-        <h3>Choose Award Scheme</h3>
-        <p>Select from our available award schemes to start voting.</p>
-      </div>
-  
-      <div class="arrow"></div>
-  
-      <div class="step">
-        <i class="fas fa-list-alt fa-2x" style="color:#007bff; margin-bottom:10px;"></i>
-        <h3>Select Category</h3>
-        <p>Browse and choose from various award categories.</p>
-      </div>
-  
-      <div class="arrow"></div>
-  
-      <div class="step">
-        <i class="fas fa-user-check fa-2x" style="color:#28a745; margin-bottom:10px;"></i>
-        <h3>Pick Nominee</h3>
-        <p>Vote for your preferred nominee in the selected category.</p>
-      </div>
-  
-      <div class="arrow"></div>
-  
-      <div class="step">
-        <i class="fas fa-trophy fa-2x"  style="color:#e83e8c; margin-bottom:10px;"></i> 
-        <h3>Enjoy</h3>
-        <p>Watch your favorite nominees compete and celebrate winners.</p>
-      </div>
+  <p class="label">Simple Process</p>
+  <h2>How It Works</h2>
+  <p class="subtitle">Simply choose your award scheme, select a category, and vote for your favorite nominee. We ensure a smooth, hassle-free voting experience from start to finish.</p>
+
+  <div class="how-steps">
+    <div class="step">
+      <div class="icon-wrap"><i class="fas fa-trophy"></i></div>
+      <h3>Choose Award Scheme</h3>
+      <p>Select from our available award schemes to start voting.</p>
+      <div class="step-num">01</div>
     </div>
 
-  </section>
-  
-
-
-    <!-- About us section -->
-    <section class="about-us-container ">
-     
-    <video autoplay controls >
-  <source src="{% static 'vote/img/vote.mp4' %}" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-     
-
-
-      
-
-        <!-- <div class="play-overlay">
-          <button id="playBtn">
-            <i class="fas fa-play"></i>
-          </button>
-          <div id="transcription" class="hidden"></div>
-        </div> -->
-      
-    
-      </div>
-      
-      
-      
-      <div class="about-us-content">
-        <div class="col">
-          <h2>Empowering Voices Through Fair and Inclusive Award Voting</h2>
-          <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency, using technology and community engagement to serve both voters and organizers. Our mission is to ensure every vote counts, recognizing excellence across various industries through democratic and credible elections.</p>
-          <div class="readmore">
-           <a href="{% url 'about' %}">
-            <button>Read more</button>
-           </a>
-          </div>
-        </div>
-        
-      </div>
-  </section>
-
-
-
-  <section class="hero-section">
-    
-    <div class="hero-right">
-      <h5>VoteAfric & Ticket</h5>
-      <h1>
-        Join our <span class="highlight">platform</span> as an organiser <br />
-        and create your events for <span class="highlight">voting</span> and
-        <span class="highlight">ticketing</span>
-      </h1>
-      <p>
-        All you need to do is to create an account and verify your email.
-        That’s it. Your account is ready to be used.
-      </p>
-      <div class="buttons">
-      <a href="https://wa.link/9g6bco">
-        <button class="primary-btn">Join Now!!</button>
-      </a>
-       <a href="https://wa.link/9g6bco">
-        <button class="secondary-btn">Send a message</button>
-       </a>
-      </div>
+    <div class="step">
+      <div class="icon-wrap"><i class="fas fa-list-alt"></i></div>
+      <h3>Select Category</h3>
+      <p>Browse and choose from various award categories.</p>
+      <div class="step-num">02</div>
     </div>
-    <div class="hero-left">
-      <div class="image-wrapper">
-        <img src="{% static 'vote/img/ben.jpg' %}"  alt="">
-      </div>
-      <div class="rotating-circle">
-        
-      </div>
+
+    <div class="step">
+      <div class="icon-wrap"><i class="fas fa-user-check"></i></div>
+      <h3>Pick Nominee</h3>
+      <p>Vote for your preferred nominee in the selected category.</p>
+      <div class="step-num">03</div>
     </div>
+
+    <div class="step">
+      <div class="icon-wrap"><i class="fas fa-trophy"></i></div>
+      <h3>Enjoy</h3>
+      <p>Watch your favorite nominees compete and celebrate winners.</p>
+      <div class="step-num">04</div>
+    </div>
+  </div>
 </section>
 
+    <!-- About us section -->
+  <section class="about-us-container">
+  <div class="about-left">
+    <p class="about-label">Our Mission</p>
+    <h2>Empowering Voices Through Fair &amp; Inclusive Award Voting</h2>
+    <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency — ensuring every vote counts.</p>
+    <div class="readmore">
+      <a href="{% url 'about' %}"><button>Read More About Us</button></a>
+    </div>
+  </div>
+
+  <div class="about-right">
+    <div class="feature-row"><div class="feature-icon"><i class="fas fa-lock"></i></div><span>End-to-end secure voting with tamper-proof records</span></div>
+    <div class="feature-row"><div class="feature-icon"><i class="fas fa-bolt"></i></div><span>Real-time results updated as votes come in</span></div>
+    <div class="feature-row"><div class="feature-icon"><i class="fas fa-globe-africa"></i></div><span>Accessible across Africa via web and USSD</span></div>
+    <div class="feature-row"><div class="feature-icon"><i class="fas fa-medal"></i></div><span>Credible, democratic elections for every industry</span></div>
+    <div class="feature-row"><div class="feature-icon"><i class="fas fa-credit-card"></i></div><span>Multiple payment options including mobile money</span></div>
+  </div>
+</section>
+
+
+<section class="hero-section">
+
+  <!-- LEFT — stats card -->
+  <div class="hero-left">
+    <div class="stats-card">
+      <div class="tags">
+        <span class="tag">Voting</span>
+        <span class="tag">Ticketing</span>
+        <span class="tag">Analytics</span>
+      </div>
+      <div class="stat-number">120+</div>
+      <div class="stat-label">Events successfully hosted</div>
+      <div class="stat-bar-wrap"><div class="stat-bar"></div></div>
+      <div class="stat-desc">Join the growing network of African event organizers trusting VoteAfric.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT — content -->
+  <div class="hero-right">
+    <h5>For Organisers</h5>
+    <h1>Create <span class="highlight">Events</span> for Voting &amp; Ticketing</h1>
+    <p>Join our platform as an organiser and build your event in minutes. All you need is an account and a verified email — then you're ready to go.</p>
+
+    <!-- <div class="steps-list">
+     <p>All you need to do is to create an account and verify your email. That’s it. Your account is ready to be used. </p>
+      
+    </div> -->
+
+    <div class="buttons">
+      <a href="https://wa.link/9g6bco"><button class="primary-btn">Join Now!</button></a>
+      <a href="https://wa.link/9g6bco"><button class="secondary-btn">Send a Message</button></a>
+    </div>
+  </div>
+
+</section>
 
 <!-- 
 <div class="some-hosted-award">
