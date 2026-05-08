@@ -73,7 +73,7 @@ nav {
 
 nav {
     display: flex;
-    align-items: center;
+
     gap: 1rem;
     justify-content: space-between;
     width: 100%;
@@ -181,7 +181,7 @@ nav {
 
 #banner {
   width: 100%;
-  min-height: 100vh;
+  min-height: 70vh;
   background: radial-gradient(ellipse 80% 60% at 70% 60%, #3a0066 0%, #1a0030 50%, #0d0010 100%);
   color: white;
   padding: 60px 10%;   /* same 5% as header */
@@ -284,7 +284,7 @@ nav {
     padding-top: 3%;
     display: flex;
     justify-content: center;
- 
+
     width: 100%;
 }
 
@@ -310,6 +310,11 @@ nav {
     }
 }
 
+@media (max-width: 768px) {
+    .ongoin-event  {
+        margin: 3% 0;
+    }
+}
 /* Styling for the container of awards */
 .award-container {
     padding: 2% 3%;
@@ -1210,6 +1215,7 @@ margin: 1% 8%;
   min-height: 100vh;
   background: #0d0010;
   overflow: hidden;
+  margin: 4% 0;
 }
 
 /* ── IMAGE SIDE ── */
@@ -1394,7 +1400,7 @@ margin: 1% 8%;
 @media (max-width: 900px) {
   .about-page-container {
     flex-direction: column;
-    margin: 0 5%;
+    margin: 3% 5%;
     border-radius: 16px;
   }
 
@@ -1467,47 +1473,152 @@ margin: 1% 8%;
 
 
 
+/* ═══════════════════════════════════════════════════
+   FESAC — TERMS & POLICY SECTION
+   All original class names preserved.
+   ═══════════════════════════════════════════════════ */
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
-/* policy and terms section styling */
+/* ── PAGE BACKGROUND ── */
 .policy-container,
 .terms-conndition-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 3%;
-    gap: 1rem;
+    padding: 60px 20px 80px;
+    gap: 16px;
+    width: 100%;
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    background:
+        linear-gradient(rgba(120, 80, 220, 0.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(120, 80, 220, 0.10) 1px, transparent 1px),
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(100, 30, 200, 0.4) 0%, transparent 65%),
+        linear-gradient(160deg, #130330 0%, #0a0118 45%, #0e0228 100%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+    box-sizing: border-box;
+}
+
+/* ── PAGE TITLE (if you want to add one above the cards) ── */
+.terms-conndition-container::before,
+.policy-container::before {
+    content: 'Terms & Conditions';
+    display: block;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 12px;
+    text-shadow: 0 0 40px rgba(160, 80, 255, 0.6);
     width: 100%;
 }
 
+.policy-container::before {
+    content: 'Privacy Policy';
+}
+
+/* ── CARD ── */
 .policy-col,
 .terms-col {
     width: 100%;
-    max-width: 750px;
-    background-color: var(--whiteColor);
-    padding: 2% 4%;
-    border-radius: 10px;
-    min-height: 10vh;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-
+    max-width: 760px;
+    background: rgba(20, 6, 50, 0.80);
+    border: 1px solid rgba(100, 60, 180, 0.35);
+    padding: 28px 32px;
+    border-radius: 16px;
+    min-height: unset;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    position: relative;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+    box-sizing: border-box;
 }
 
+.policy-col:hover,
+.terms-col:hover {
+    border-color: rgba(124, 58, 237, 0.65);
+    transform: translateY(-2px);
+}
+
+/* accent left bar */
+.policy-col::before,
+.terms-col::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20px;
+    bottom: 20px;
+    width: 3px;
+    background: linear-gradient(180deg, #7c3aed, #c026d3);
+    border-radius: 0 3px 3px 0;
+}
+
+/* ── HEADINGS ── */
 .policy-col h3,
 .terms-col h3 {
-    color: var(--voiletColor);
-    padding-bottom: 2%;
+    color: #ffffff;
+    font-size: 14px;
     font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(100, 60, 180, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.policy-col p {
-    line-height: 23px;
+/* icon circle before each heading */
+.policy-col h3::before,
+.terms-col h3::before {
+    content: '';
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #c026d3);
+    flex-shrink: 0;
 }
 
-.policy-col span {
-    color: var(--orangeColor);
+/* ── PARAGRAPHS ── */
+.policy-col p,
+.terms-col p {
+    line-height: 1.8;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 400;
+    margin: 0;
 }
 
+/* ── SPAN HIGHLIGHT ── */
+.policy-col span,
+.terms-col span {
+    color: #f0a500;
+    font-weight: 600;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    .policy-container,
+    .terms-conndition-container {
+        padding: 40px 12px 60px;
+    }
+
+    .policy-col,
+    .terms-col {
+        padding: 22px 20px;
+    }
+
+    .policy-col h3,
+    .terms-col h3 {
+        font-size: 12px;
+    }
+}
 
 /* contact us page */
 .contact-us {
@@ -3367,6 +3478,9 @@ padding: 10px 0;
 
 /* media queries  */
 @media (max-width:750px) {
+  header{
+    padding: 10px 3%;
+  }
     .about-us-container {
         flex-direction: column;
        margin: 30px 5%;

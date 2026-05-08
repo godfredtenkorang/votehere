@@ -188,7 +188,38 @@ video {
   </div>
 </section>
 
-<br>
+<!-- ongoing award -->
+<div class="award-main-container">
+  <div class="ongoin-event">
+    {% if all_categories %}
+    <h2>Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
+    {% else %}
+    <h2>No Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
+    {% endif %}
+  </div>
+
+  <!-- awards -->
+  <div class="award-container">
+    <!-- Individual award items -->
+    {% for c in all_categories %}
+    <div class="award">
+      <a href="{% url 'award_by_category' c.slug %}">
+        <img src="{{ c.image.url }}" alt="image" height="250px" loading="lazy">
+        <div class="award-text">
+          <h4>{{ c.title }}</h4>
+          <h5>{{ c.award }}</h5>
+        </div>
+      </a>
+    </div>
+
+
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
 
 <!-- <div class="donation-banner">
   <div class="donate-img">
@@ -258,34 +289,6 @@ video {
 </section>
   
 
-<!-- ongoing award -->
-<div class="award-main-container">
-  <div class="ongoin-event">
-    {% if all_categories %}
-    <h2>Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
-    {% else %}
-    <h2>No Ongoing Events <i class="fa-solid fa-wifi"></i></h2>
-    {% endif %}
-  </div>
-
-  <!-- awards -->
-  <div class="award-container">
-    <!-- Individual award items -->
-    {% for c in all_categories %}
-    <div class="award">
-      <a href="{% url 'award_by_category' c.slug %}">
-        <img src="{{ c.image.url }}" alt="image" height="250px" loading="lazy">
-        <div class="award-text">
-          <h4>{{ c.title }}</h4>
-          <h5>{{ c.award }}</h5>
-        </div>
-      </a>
-    </div>
-
-
-    {% endfor %}
-  </div>
-</div>
 
 
 
