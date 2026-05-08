@@ -591,23 +591,32 @@ function downloadResults() {
 }
 </script>
     {% else %}
-    <div class="results-container">
-        <div class="result-item">
-            <div class="position">#</div>
-            <img src="{{ nominee.image.url }}" alt="{{ nominee.name }}" class="nominee-image">
-            <div class="nominee-info">
-                <div class="nominee-name">{{ nominee.name }}</div>
-                <div class="vote-count">{{ nominee.total_vote }} votes</div>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 100%;">
-                        100%
-                    </div>
-                </div>
-            </div>
+   <div class="results-container">
+  <div class="result-item">
+
+    <!-- TOP ROW -->
+    <div class="result-item-top">
+      <div class="position">1</div>
+      <img src="{{ nominee.image.url }}" alt="{{ nominee.name }}" class="nominee-image">
+      <div class="nominee-info">
+        <div class="nominee-name">
+          {{ nominee.name }}
+          <span class="winner-badge">Winner</span>
         </div>
+        <div class="vote-count">{{ nominee.total_vote }} votes</div>
+      </div>
     </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:100%;">&zwnj;</div>
+      </div>
+      <span class="progress-pct">100%</span>
+    </div>
+
+  </div>
+</div>
     {% endif %}
     {% endif %}
 </div>
