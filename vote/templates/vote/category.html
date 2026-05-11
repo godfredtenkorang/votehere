@@ -2,46 +2,7 @@
 {% load static %}
 
 {% block content %}
-<!-- <div class="dynamic-popup" id="dynamicPopup">
 
-    <div class="popup-box">
-
-        <button class="popup-close" id="closePopup">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-       
-        <div class="popup-banner" id="popupBanner">
-            <img src="/static/images/banner.jpg" alt="Popup Banner">
-        </div>
-
-        <div class="popup-content">
-
-           
-            <span class="popup-badge" id="popupBadge">
-             
-            </span>
-
-         
-            <h2 id="popupTitle">
-                Voting Is Ongoing
-            </h2>
-
-          
-            <p id="popupText">
-                Please wait for the success message after payment before refreshing or leaving the page.
-            </p>
-
-          
-            <a href="#" class="popup-btn" id="popupBtn">
-                I Understand
-            </a>
-
-        </div>
-
-    </div>
-
-</div> -->
 
 
 
@@ -50,6 +11,35 @@
 <div class="banners">
    
     <div class="banners-content">
+<div class="scrolling-bar">
+
+    <div class="scrolling-content" id="scrollingContent">
+
+        <span>Voting is ongoing</span>
+
+        <span>•</span>
+
+        <span>Please wait for success message</span>
+
+        <span>•</span>
+
+        <span>Every vote counts on VoteAfric</span>
+
+        <span>•</span>
+
+        <span>Voting ends at 12AM</span>
+
+        <span>•</span>
+
+        <span>Thank you for supporting your nominee</span>
+
+    </div>
+
+</div>
+
+
+
+
 
 
         <h1>{% if category %}{{ category.award }}{% else %}Award Name{% endif %}</h1>
@@ -101,108 +91,42 @@
         </div>
     </div>
 </div>
-<!-- <script>
 
-  
+<script>
 
-    const popup = document.getElementById("dynamicPopup");
+    const scrollingContent =
+        document.getElementById("scrollingContent");
 
-    const closePopup = document.getElementById("closePopup");
+    // Duplicate content for infinite effect
 
-    const popupBanner = document.getElementById("popupBanner");
+    scrollingContent.innerHTML +=
+        scrollingContent.innerHTML;
 
-    const popupImage = popupBanner
-        ? popupBanner.querySelector("img")
-        : null;
+    let position = 0;
 
-    const popupBadge = document.getElementById("popupBadge");
+    function animateScroll(){
 
-    const popupTitle = document.getElementById("popupTitle");
+        position -= 1;
 
-    const popupText = document.getElementById("popupText");
+        // Reset when half finished
 
-    const popupBtn = document.getElementById("popupBtn");
-
-  
-
-    if (popupImage) {
-
-        const imageSrc = popupImage.getAttribute("src");
-
-        // Hide if src empty
-
-        if (!imageSrc || imageSrc.trim() === "") {
-
-            popupBanner.style.display = "none";
+        if(
+            Math.abs(position) >=
+            scrollingContent.scrollWidth / 2
+        ){
+            position = 0;
         }
 
-        // Hide if image broken
+        scrollingContent.style.transform =
+            `translateX(${position}px)`;
 
-        popupImage.onerror = function () {
-
-            popupBanner.style.display = "none";
-        };
+        requestAnimationFrame(animateScroll);
     }
 
-   
+    animateScroll();
 
-    function hideIfEmpty(element) {
+</script>
 
-        if (!element) return;
 
-        if (element.innerText.trim() === "") {
 
-            element.style.display = "none";
-        }
-    }
-
-    hideIfEmpty(popupBadge);
-
-    hideIfEmpty(popupTitle);
-
-    hideIfEmpty(popupText);
-
-    hideIfEmpty(popupBtn);
-
-  
-    const popupStorageKey = "voteAfricPopupClosed";
-
-    // Hide popup if already closed before
-
-    if (localStorage.getItem(popupStorageKey)) {
-
-        popup.style.display = "none";
-    }
-
-   
-
-    function closeDynamicPopup() {
-
-        popup.style.display = "none";
-
-        localStorage.setItem(
-            popupStorageKey,
-            "true"
-        );
-    }
-
-   
-
-    if (closePopup) {
-
-        closePopup.addEventListener(
-            "click",
-            closeDynamicPopup
-        );
-    }
-
-    if (popupBtn) {
-
-        popupBtn.addEventListener(
-            "click",
-            closeDynamicPopup
-        );
-    }
-
-</script> -->
 {% endblock content %}

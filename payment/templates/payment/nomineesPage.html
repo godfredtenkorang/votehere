@@ -5,6 +5,32 @@
 <div class="banners">
     <!-- <img src="{% static 'vote/img/award-banner.jpg' %}" alt="image"> -->
     <div class="banners-content">
+        <div class="scrolling-bar">
+
+    <div class="scrolling-content" id="scrollingContent">
+
+        <span>Voting is ongoing</span>
+
+        <span>•</span>
+
+        <span>Please wait for success message</span>
+
+        <span>•</span>
+
+        <span>Every vote counts on VoteAfric</span>
+
+        <span>•</span>
+
+        <span>Voting ends at 12AM</span>
+
+        <span>•</span>
+
+        <span>Thank you for supporting your nominee</span>
+
+    </div>
+
+</div>
+
         <h1>{% if sub_category %}{{ sub_category.content }}{% else %}Award Name{% endif %}</h1>
         <br>
         <p>{% if sub_category %}{{ sub_category.category }}{% else %}Award Name{% endif %}</p>
@@ -167,5 +193,38 @@ it is hidden so when voters click on the vote button, the it appears -->
     <!-- </div>
 </section> -->
 
+<script>
 
+    const scrollingContent =
+        document.getElementById("scrollingContent");
+
+    // Duplicate content for infinite effect
+
+    scrollingContent.innerHTML +=
+        scrollingContent.innerHTML;
+
+    let position = 0;
+
+    function animateScroll(){
+
+        position -= 1;
+
+        // Reset when half finished
+
+        if(
+            Math.abs(position) >=
+            scrollingContent.scrollWidth / 2
+        ){
+            position = 0;
+        }
+
+        scrollingContent.style.transform =
+            `translateX(${position}px)`;
+
+        requestAnimationFrame(animateScroll);
+    }
+
+    animateScroll();
+
+</script>
 {% endblock content %}
