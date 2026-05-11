@@ -2,36 +2,41 @@
 {% load static %}
 {% block content %}
 <!-- banner -->
-
+<!-- 
     <div class="banners-content">
         <div class="button">
     
             <a href="{% url 'index' %}">Return Home</a>
     
         </div>
-    </div>
+    </div> -->
     
 </div>
-
 {% if messages %}
-<div class="alert alert-info">
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-</div>
-{% endif %}
-
-<!-- This is the form voters can use to vote.
-it is hidden so when voters click on the vote button, the it appears -->
 <section class="vote-succes-or-fail">
 
-    <div class="vote-condition">
-        <i class="fa fa-check-to-slot"></i>
+    <div class="success-card">
+
+        <div class="success-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+
         <h1>Vote Successful</h1>
 
-    </div>
-</section>
+        <p>
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </p>
 
+        <a href="/" class="back-home-btn">
+            Back Home
+        </a>
+
+    </div>
+
+</section>
+{% endif %}
 
 
 

@@ -3,17 +3,52 @@
 {% block content %}
 
 <section class="donate-section-cont">
+
     <div class="donate-secs">
-        <div class="donate-sec">
-            <h1 style="justify-content: center; text-align:center;">Cast {{ payment.vote }} votes for GH¢{{ payment.total_amount }} to <br> {{ payment.nominee.name }} - ({{ payment.content }})</h1>
-            <script src="https://js.paystack.co/v1/inline.js"></script>
+
+        <div class="payment-card">
+
+            <div class="note-box">
+                <p>
+                    Note: After completing payment on Paystack, please wait for the success message <span>"Payment verified successfully! Votes added."</span> to appear on this platform before refreshing or leaving the page. It takes few secoonds to appear
+
+
+                </p>
+            </div>
+
+            <div class="donate-sec">
+
+                <p class="vote-text">
+                    You are casting
+                    <span>{{ payment.vote }} votes</span>
+                    for
+                </p>
+
+                <h1 class="nominee-name">
+                    {{ payment.nominee.name }}
+                </h1>
+
+                <div class="category-box">
+                    {{ payment.content }}
+                </div>
+
+                <h2 class="amount">
+                    GH¢{{ payment.total_amount }}
+                </h2>
+                <script src="https://js.paystack.co/v1/inline.js"></script>
+
+                <button class="donate-btn" onclick="payWithPayStack()" id="django-paystack-button" type="submit">
+
+                    Pay Now
+
+                </button>
+
+            </div>
+
         </div>
-        <br>
-        <div>
-            <button class="donate-btn" onclick="payWithPayStack()" id="django-paystack-button" type="submit">Pay
-                Now</button>
-        </div>
+
     </div>
+
 </section>
 <script>
     function payWithPayStack() {
