@@ -2,6 +2,49 @@
 {% load static %}
 
 {% block content %}
+<!-- <div class="dynamic-popup" id="dynamicPopup">
+
+    <div class="popup-box">
+
+        <button class="popup-close" id="closePopup">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+       
+        <div class="popup-banner" id="popupBanner">
+            <img src="/static/images/banner.jpg" alt="Popup Banner">
+        </div>
+
+        <div class="popup-content">
+
+           
+            <span class="popup-badge" id="popupBadge">
+             
+            </span>
+
+         
+            <h2 id="popupTitle">
+                Voting Is Ongoing
+            </h2>
+
+          
+            <p id="popupText">
+                Please wait for the success message after payment before refreshing or leaving the page.
+            </p>
+
+          
+            <a href="#" class="popup-btn" id="popupBtn">
+                I Understand
+            </a>
+
+        </div>
+
+    </div>
+
+</div> -->
+
+
+
 
 <!-- banner -->
 <div class="banners">
@@ -58,5 +101,108 @@
         </div>
     </div>
 </div>
+<!-- <script>
 
+  
+
+    const popup = document.getElementById("dynamicPopup");
+
+    const closePopup = document.getElementById("closePopup");
+
+    const popupBanner = document.getElementById("popupBanner");
+
+    const popupImage = popupBanner
+        ? popupBanner.querySelector("img")
+        : null;
+
+    const popupBadge = document.getElementById("popupBadge");
+
+    const popupTitle = document.getElementById("popupTitle");
+
+    const popupText = document.getElementById("popupText");
+
+    const popupBtn = document.getElementById("popupBtn");
+
+  
+
+    if (popupImage) {
+
+        const imageSrc = popupImage.getAttribute("src");
+
+        // Hide if src empty
+
+        if (!imageSrc || imageSrc.trim() === "") {
+
+            popupBanner.style.display = "none";
+        }
+
+        // Hide if image broken
+
+        popupImage.onerror = function () {
+
+            popupBanner.style.display = "none";
+        };
+    }
+
+   
+
+    function hideIfEmpty(element) {
+
+        if (!element) return;
+
+        if (element.innerText.trim() === "") {
+
+            element.style.display = "none";
+        }
+    }
+
+    hideIfEmpty(popupBadge);
+
+    hideIfEmpty(popupTitle);
+
+    hideIfEmpty(popupText);
+
+    hideIfEmpty(popupBtn);
+
+  
+    const popupStorageKey = "voteAfricPopupClosed";
+
+    // Hide popup if already closed before
+
+    if (localStorage.getItem(popupStorageKey)) {
+
+        popup.style.display = "none";
+    }
+
+   
+
+    function closeDynamicPopup() {
+
+        popup.style.display = "none";
+
+        localStorage.setItem(
+            popupStorageKey,
+            "true"
+        );
+    }
+
+   
+
+    if (closePopup) {
+
+        closePopup.addEventListener(
+            "click",
+            closeDynamicPopup
+        );
+    }
+
+    if (popupBtn) {
+
+        popupBtn.addEventListener(
+            "click",
+            closeDynamicPopup
+        );
+    }
+
+</script> -->
 {% endblock content %}
