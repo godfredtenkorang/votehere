@@ -29,6 +29,8 @@ urlpatterns = [
     # path('search/<slug:category_slug>/',
     #      views.nominees_search_view, name='nom-search'),
     
+    path('api/category/<slug:category_slug>/updates/', views.get_category_updates, name='get_category_updates'),
+    
 
   
 ] 

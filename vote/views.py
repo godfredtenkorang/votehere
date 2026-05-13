@@ -12,6 +12,8 @@ import json
 from django.contrib import messages
 from .utils import receive_sms_from_event_organizer
 from django.views.generic import ListView, DetailView
+from django.views.decorators.http import require_GET
+from django.utils import timezone
 
 
 def index(request):
@@ -107,9 +109,64 @@ def category(request, category_slug=None):
     
     category = None
     award = SubCategory.objects.all()
+    category_updates = []
+    bulk_voting_data = []
+    time_remaining = None
+    dynamic_updates = []
+    
+    
+    
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         award = award.filter(category=category)
+        
+        # Get category-specific updates
+        category_updates = CategoryUpdate.objects.filter(
+            category=category,
+            is_active=True
+        )[:10]  # Limit to the latest 100 updates
+        
+        # Add dynamic updates based on category status
+        dynamic_updates = []
+        
+        # Check if voting is ending soon (e.g., within 24 hours)
+        if category.end_date and timezone.now() <= category.end_date:
+            time_remaining = category.end_date - timezone.now()
+            if time_remaining.total_seconds() <= 86400:  # 24 hours
+                dynamic_updates.append({
+                    "message": f"⚠️ Voting for {category.award} ends in {time_remaining.seconds//3600} hours! Cast your vote now!",
+                    "update_type": "deadline"
+                })
+                
+        # Check nomination period
+        if category.nomination_end_date and category.nomination_end_date > timezone.now().date():
+            days_until_nomination_end = (category.nomination_end_date - timezone.now().date()).days
+            
+            if 0 < days_until_nomination_end <= 3:
+                dynamic_updates.append({
+                    "message": f"📢 Nomination for {category.award} ends in {days_until_nomination_end} days! Nominate your favorite now!",
+                    "update_type": "warning"
+                })
+        # Add nomination ended message
+        if category.nomination_end_date and category.nomination_end_date <= timezone.now().date():
+            if category.end_date and timezone.now() <= category.end_date:
+                dynamic_updates.append({
+                    "message": f"✅ Nominations for {category.award} have closed. Voting is now in progress!",
+                    "update_type": "success"
+                })
+        
+        # Add voting ended message
+        if category.end_date and timezone.now() > category.end_date:
+            dynamic_updates.append({
+                "message": f"🏆 Voting for {category.award} has ended. Thank you for your participation!",
+                "update_type": "warning"
+            })
+                
+        # Add bulk voting options to context
+        if category.bulk_voting_options:
+            bulk_voting_data = category.bulk_voting_options
+            
+            
         
     # Add search functionality
     if search_item:
@@ -119,16 +176,74 @@ def category(request, category_slug=None):
         )
     
     now = timezone.now().date()
+    
+    # Calculate voting progress for category
+    voting_progress = None
+    if category and category.end_date:
+        total_voting_days = (category.end_date.date() - category.date_added.date()).days
+        days_elipsed = (now - category.date_added.date()).days
+        if total_voting_days > 0:
+            voting_progress = min(100, (days_elipsed / total_voting_days) * 100)
+            
+    # Merge category_updates and dynamic_updates for the context
+    # Convert category_updates queryset to list of dicts for easier merging
+    merged_updates = []
+    
+    # Add database updates
+    for update in category_updates:
+        merged_updates.append({
+            "message": update.message,
+            "update_type": update.update_type,
+            "created_at": update.created_at
+        })
+    
+    # Add dynamic updates
+    merged_updates.extend(dynamic_updates)
+    
+    # Sort by priority (you can adjust this logic)
+    # For now, keep dynamic updates at the end
+    # Or sort by created_at if available
 
     context = {
         'category': category,
         'award': award,
-        'title': 'Category Detail',
+        'title': f'Category Detail - {category.award if category else "All Categories"}',
         'search_item': search_item,  # Pass the search term back to template
-        'now': now
+        'now': now,
+        'category_updates': merged_updates,
+        'dynamic_updates': dynamic_updates,
+        'bulk_voting_data': bulk_voting_data,
+        'voting_progress': voting_progress,
+        'time_remaining': time_remaining,
     }
     return render(request, 'vote/category.html', context)
 
+@require_GET
+def get_category_updates(request, category_slug):
+    """Returns the latest updates for a given category as JSON."""
+    try:
+        category = Category.objects.get(slug=category_slug)
+        updates = CategoryUpdate.objects.filter(
+            category=category, 
+            is_active=True
+        ).values('message', 'update_type', 'created_at')[:5]  # Limit to latest 10 updates
+        
+        # Add dynamic updates
+        dynamic_msgs = []
+        if category.end_date and timezone.now() > category.end_date:
+            dynamic_msgs.append({
+                "message": f"⏰ {category.award} voting has ended! Thank you for participating.",
+                "update_type": "warning"
+            })
+            
+        return JsonResponse({
+            'success': True,
+            'updates': list(updates),
+            'dynamic_updates': dynamic_msgs
+        })
+        
+    except Category.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Category not found.'}, status=404)
 
 def category_search_view(request, category_slug=None):
     
@@ -146,7 +261,6 @@ def category_search_view(request, category_slug=None):
 def custom_404_view(request, exception):
     return render(request, 'vote/404.html', status=404)
 
-from django.views.decorators.http import require_POST
 
 # @csrf_exempt
 # def webhook_callback(request):

@@ -43,6 +43,26 @@ class Category(models.Model):
         if self.image:
             return "https://voteafric.com/" + self.image.url
         return ''
+    
+class CategoryUpdate(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='updates')
+    message = models.TextField()
+    update_type = models.CharField(max_length=50, choices=[
+        ('info', 'Information'),
+        ('warning', 'Warning'),
+        ('success', 'Success'),
+        ('deadline', 'Deadline'),
+        
+    ], default='info')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        verbose_name_plural = "category updates"
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"{self.category.award}: - {self.message[:50]}"
 
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

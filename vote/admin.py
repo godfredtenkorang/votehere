@@ -33,3 +33,13 @@ class BlogAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 admin.site.register(Blog, BlogAdmin)
+
+@admin.register(CategoryUpdate)
+class CategoryUpdateAdmin(admin.ModelAdmin):
+    list_display = ['category', 'message_preview', 'update_type', 'created_at', 'is_active']
+    list_filter = ['category', 'update_type', 'is_active', 'created_at']
+    search_fields = ['message', 'category__award']
+    
+    def message_preview(self, obj):
+        return obj.message[:50]
+    message_preview.short_description = 'Message'

@@ -448,7 +448,7 @@ nav {
 }
 
 /* grid pattern background */
-.banners-content::before {
+/* .banners-content::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -457,7 +457,33 @@ nav {
     linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
+} */
+
+.scrolling-bar{
+    width:100%;
+    overflow:hidden;
+   
+    padding:14px 0;
+    border-top:1px solid rgba(255,255,255,.08);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    position:relative;
 }
+
+.scrolling-content{
+    display:flex;
+    align-items:center;
+    gap:25px;
+    width:max-content;
+    white-space:nowrap;
+}
+
+.scrolling-content span{
+    color:white;
+    font-size:16px;
+    font-weight:700;
+}
+
+
 
 /* top accent line */
 .banners-content::after {
@@ -1910,6 +1936,7 @@ margin: 1% 8%;
 }
 
 /* ── ALERT BOXES ── */
+
 .alert {
   margin: 0;
   padding: 14px 20px;
@@ -2239,13 +2266,110 @@ input[type="hidden"] { display: none !important; }
 
 
 /* vote-succes-or-fail */
-.vote-succes-or-fail {
-    width: 100%;
-    padding: 5% 2%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.vote-succes-or-fail{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:
+    linear-gradient(rgba(0,0,0,.82), rgba(0,0,0,.82)),
+    url("/static/images/bg.jpg");
+    background-size:cover;
+    background-position:center;
+}
 
+.success-card{
+    width:100%;
+    max-width:520px;
+    background:rgba(15,15,15,.72);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(14px);
+    border-radius:30px;
+    padding:45px 30px;
+    text-align:center;
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+}
+
+.success-icon{
+    width:110px;
+    height:110px;
+    margin:0 auto 24px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,255,140,.12);
+    border:1px solid rgba(0,255,140,.25);
+}
+
+.success-icon i{
+    font-size:55px;
+    color:#36ff9c;
+}
+
+.success-card h1{
+    font-size:48px;
+    color:white;
+    margin-bottom:14px;
+    font-weight:900;
+}
+
+.success-card p{
+    font-size:18px;
+    line-height:1.6;
+    color:#d6d6d6;
+    margin-bottom:32px;
+}
+
+.back-home-btn{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    padding:16px 34px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#ff00cc,#7b2cff);
+    color:white;
+    text-decoration:none;
+    font-size:17px;
+    font-weight:800;
+    transition:.3s ease;
+    box-shadow:0 12px 30px rgba(123,44,255,.35);
+}
+
+.back-home-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 38px rgba(123,44,255,.45);
+}
+
+@media(max-width:768px){
+
+    .success-card{
+        padding:35px 20px;
+        border-radius:24px;
+    }
+
+    .success-icon{
+        width:90px;
+        height:90px;
+    }
+
+    .success-icon i{
+        font-size:42px;
+    }
+
+    .success-card h1{
+        font-size:34px;
+    }
+
+    .success-card p{
+        font-size:16px;
+    }
+
+    .back-home-btn{
+        width:100%;
+    }
 
 }
 
@@ -2863,6 +2987,20 @@ transition: 0.3s ease;
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
 
 }
+.rednote{
+   background-color: red;
+    width: 100%;
+    min-height: 5vh;
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ color: var(--white);
+    font-weight: 900;
+    padding: 10px ;
+    font-size: 15px;
+    border-radius: 20px;
+}
 
 
 .donate-btn {
@@ -2876,7 +3014,134 @@ transition: 0.3s ease;
     min-height: 6vh;
     font-size: 19px;
 }
+.donate-section-cont{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:
+    linear-gradient(rgba(0,0,0,.78), rgba(0,0,0,.78)),
+    url("/static/images/bg.jpg");
+    background-size:cover;
+    background-position:center;
+}
 
+.donate-secs{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.payment-card{
+    width:100%;
+    max-width:720px;
+    background:rgba(15,15,15,.72);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(12px);
+    border-radius:30px;
+    padding:40px 30px;
+    text-align:center;
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+}
+
+.note-box{
+    background:rgba(255, 196, 0, 0.12);
+    border:1px solid rgba(255, 196, 0, 0.3);
+    color:#ffe28a;
+    padding:14px 18px;
+    border-radius:16px;
+    margin-bottom:35px;
+}
+
+.note-box p{
+    font-size:14px;
+    line-height:1.6;
+    font-weight:500;
+}
+
+.vote-label{
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:40px;
+    background:linear-gradient(135deg,#ffd000,#ff9d00);
+    color:#111;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:1px;
+    margin-bottom:18px;
+}
+
+.amount{
+    font-size:68px;
+    font-weight:900;
+    color:white;
+    margin-bottom:10px;
+}
+
+.nominee-name{
+    font-size:44px;
+    line-height:1.2;
+    font-weight:800;
+    color:white;
+    margin-bottom:10px;
+}
+
+.category{
+    font-size:20px;
+    color:#d6d6d6;
+    margin-bottom:35px;
+    font-weight:500;
+}
+
+.donate-btn{
+    border:none;
+    outline:none;
+    padding:18px 45px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#ff00cc,#7b2cff);
+    color:white;
+    font-size:18px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.3s ease;
+    box-shadow:0 12px 28px rgba(123,44,255,.35);
+}
+
+.donate-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 35px rgba(123,44,255,.45);
+}.note-box span{
+    display:inline-block;
+    background:rgba(0, 255, 140, 0.12);
+    color:#4dffb2;
+    padding:4px 10px;
+    border-radius:8px;
+    border:1px solid rgba(0,255,140,.25);
+    font-weight:700;
+}
+
+@media(max-width:768px){
+
+    .payment-card{
+        padding:28px 18px;
+    }
+
+    .amount{
+        font-size:52px;
+    }
+
+    .nominee-name{
+        font-size:30px;
+    }
+
+    .category{
+        font-size:17px;
+    }
+
+}
 
 /* -------------blog styles start---------- */
 
