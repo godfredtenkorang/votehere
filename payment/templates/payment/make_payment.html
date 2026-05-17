@@ -62,6 +62,8 @@
             phone: "{{ payment.phone }}",
             amount: "{{ payment.amount_value }}",
             ref: ref,
+            container: 'paystack-apple-pay',
+            loadPaystackCheckoutButton: 'paystack-other-channels',
             callback: function (response) {
                 window.location.href = "{% url 'verify-payment' payment.ref %}";
             },
