@@ -22,7 +22,7 @@ def index(request):
     if search_item:
         all_categories = Category.objects.filter(Q(award__icontains=search_item))
     else:
-        all_categories = Category.objects.all()[:6]
+        all_categories = Category.objects.all()[:8]
 
     context = {
         'all_categories': all_categories,

@@ -8,24 +8,34 @@
         <div class="scrolling-bar">
 
     <div class="scrolling-content" id="scrollingContent">
-
-        <span>Voting is ongoing</span>
-
-        <span>•</span>
-
+        {% if category_updates %}
+            {% for update in category_updates %}
+                <span class="update-{{ update.update_type }}">{{ update.message }}</span>
+                {% if not forloop.last %}<span>•</span>{% endif %}
+            {% endfor %}
+         {% else %}
+        
         <span>Please wait for success message</span>
-
+        
         <span>•</span>
-
+        
         <span>Every vote counts on VoteAfric</span>
-
+        
         <span>•</span>
-
-        <span>🗳️ Voting ends on {{ sub_category.category.end_date|date:"l, F j, Y" }} at {{ sub_category.category.end_date|date:"g:i A" }}</span>
-
+        
+        {% if sub_category.category.end_date %}
+        <span>🗳️ Voting ends on {{ sub_category.category.end_date|date:"l, F j, Y" }} at {{
+            sub_category.category.end_date|date:"g:i A" }}</span>
+        {% else %}
+        <span>Voting ends at 12AM</span>
+        {% endif %}
+        
         <span>•</span>
-
+        
         <span>Thank you for supporting your nominee</span>
+        {% endif %}
+
+        
 
     </div>
 
@@ -74,14 +84,14 @@
 
     {% else %}
     <br><br>
-    <h1>Not Casting Vote At The Moment.</h1>
+    <h1>No Nominees Available At The Moment.</h1>
     {% endif %}
     </div>
 
 <!-- end of banner section -->
 <div class="spinner">
     <div class="skeleton-spinner"></div>
-    <p>Please wait! We are putting everything togethere for you</p>
+    <p>Please wait! We are putting everything together for you</p>
 </div>
 
 
@@ -227,4 +237,53 @@ it is hidden so when voters click on the vote button, the it appears -->
     animateScroll();
 
 </script>
+
+<script>
+    // Auto-refresh updates every 30 seconds
+    function refreshNomineeUpdates() {
+        {% if sub_category and sub_category.category %}
+            fetch(`/api/category/{{ sub_category.category.slug }}/updates/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const scrollingContent = document.getElementById('scrollingContent');
+                        if (scrollingContent) {
+                            let newContent = '';
+                            const allUpdates = [...data.updates, ...data.dynamic_updates];
+                            
+                            if (allUpdates.length > 0) {
+                                allUpdates.forEach((update, index) => {
+                                    newContent += `<span class="update-${update.update_type}">${update.message}</span>`;
+                                    if (index < allUpdates.length - 1) {
+                                        newContent += '<span>•</span>';
+                                    }
+                                });
+                            } else {
+                                // Fallback content
+                                newContent = `
+                                    <span>Please wait for success message</span>
+                                    <span>•</span>
+                                    <span>Every vote counts on VoteAfric</span>
+                                    <span>•</span>
+                                    <span>🗳️ Voting ends on {{ sub_category.category.end_date|date:"l, F j, Y" }} at {{ sub_category.category.end_date|date:"g:i A" }}</span>
+                                    <span>•</span>
+                                    <span>Thank you for supporting your nominee</span>
+                                `;
+                            }
+                            
+                            scrollingContent.innerHTML = newContent;
+                            // Replicate for infinite scroll
+                            scrollingContent.innerHTML += scrollingContent.innerHTML;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching updates:', error));
+        {% endif %}
+    }
+
+    // Refresh updates every 30 seconds
+    setInterval(refreshNomineeUpdates, 30000);
+</script>
+
+
 {% endblock content %}

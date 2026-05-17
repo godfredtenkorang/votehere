@@ -1,10 +1,19 @@
 from django.urls import path
 from . import views
 from .views import BlogListView, BlogDetailView
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
     path('', views.index, name='index'),
+    
+    path(
+        '.well-known/apple-developer-merchantid-domain-association',
+        TemplateView.as_view(
+            template_name='apple-developer-merchantid-domain-association', 
+            content_type='text/plain'),
+    ),
+    
     path('about/', views.about, name='about'),
     # path('blog/', views.blog, name='blog'),
     path('blog/', BlogListView.as_view(), name='blog'),

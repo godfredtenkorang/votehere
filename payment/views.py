@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from payment.models import Payment, Nominees
 from ussd.models import PaymentTransaction
-from vote.models import SubCategory, Category
+from vote.models import SubCategory, Category, CategoryUpdate
 from django.http import HttpRequest, HttpResponseForbidden, JsonResponse
 from django.contrib import messages
 from django.conf import settings
@@ -139,21 +139,89 @@ def nominees(request, nominee_slug):
     sub_category = None
     nominees = Nominees.objects.all()
     current_time = timezone.now()
+    category_updates = []
+    dynamic_updates = []
+    time_remaining = None
+    
     if nominee_slug:
         sub_category = get_object_or_404(SubCategory, slug=nominee_slug)
         nominees = nominees.filter(sub_category=sub_category)
+        
+        # Get category-specific updates from the parent category
+        if sub_category.category:
+            category_updates = CategoryUpdate.objects.filter(
+                category=sub_category.category,
+                is_active=True
+            )[:10]
+            
+            # Add dynamic updates based on category status
+            dynamic_updates = []
+            
+            # Check if voting is ending soon (within 24 hours)
+            if sub_category.category.end_date and current_time < sub_category.category.end_date:
+                time_remaining = sub_category.category.end_date - current_time
+                if time_remaining.total_seconds() <= 86400:  # 24 hours
+                    dynamic_updates.append({
+                        "message": f"⚠️ Voting for {sub_category.category.award} ends in {int(time_remaining.total_seconds()//3600)} hours! Cast your vote now!",
+                        "update_type": "deadline"
+                    })
+                    
+                
+            # Check nomination period
+            if sub_category.category.nomination_end_date and sub_category.category.nomination_end_date > current_time.date():
+                days_untile_nomination_end = (sub_category.category.nomination_end_date - current_time.date()).days
+                if 0 < days_untile_nomination_end <= 3:
+                    dynamic_updates.append({
+                        "message": f"📢 Nominations for {sub_category.category.award} end in {days_untile_nomination_end} days! Nominate your favorite now!",
+                        "update_type": "warning"
+                    })
+                    
+            # Add nomination ended message
+            if sub_category.category.nomination_end_date and sub_category.category.nomination_end_date <= current_time.date():
+                if sub_category.category.end_date and current_time <= sub_category.category.end_date:
+                    dynamic_updates.append({
+                        "message": f"✅ Nominations have closed. Voting is now in progress for {sub_category.category.award}!",
+                        "update_type": "success"
+                    })
+                    
+            # Add voting ended message
+            if sub_category.category.end_date and current_time > sub_category.category.end_date:
+                dynamic_updates.append({
+                    "message": f"🏆 Voting for {sub_category.category.award} has ended. Thank you for your participation!",
+                    "update_type": "warning"
+                })
+                    
+            
     
     # Add search functionality
     if search_item:
         nominees = nominees.filter(
             Q(name__icontains=search_item)
         )
+        
+    # Merge updates
+    merge_updates = []
+    
+    # Add database updates
+    for update in category_updates:
+        merge_updates.append({
+            "message": update.message,
+            "update_type": update.update_type,
+            "created_at": update.created_at
+        })
+    
+    # Add dynamic updates
+    merge_updates.extend(dynamic_updates)
+    
     context = {
         'sub_category': sub_category,
         'nominees': nominees,
         'current_time': current_time,
         'title': 'Nominees',
         'search_item': search_item,
+        'category_updates': merge_updates,
+        'dynamic_updates': dynamic_updates,
+        'time_remaining': time_remaining,
     }
     return render(request, 'payment/nomineesPage.html', context)
 
