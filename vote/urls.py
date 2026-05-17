@@ -10,7 +10,7 @@ urlpatterns = [
     path(
         '.well-known',
         TemplateView.as_view(
-            template_name='.well-known', 
+            template_name='vote/.well-known/apple-developer-merchantid-domain-association', 
             content_type='text/plain'),
     ),
     
