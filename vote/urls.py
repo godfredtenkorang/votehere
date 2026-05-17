@@ -8,9 +8,9 @@ urlpatterns = [
     path('', views.index, name='index'),
     
     path(
-        '.well-known/apple-developer-merchantid-domain-association',
+        '.well-known',
         TemplateView.as_view(
-            template_name='apple-developer-merchantid-domain-association', 
+            template_name='.well-known', 
             content_type='text/plain'),
     ),
     
