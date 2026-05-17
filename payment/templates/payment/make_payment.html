@@ -61,7 +61,7 @@
             phone: "{{ payment.phone }}",
             amount: "{{ payment.amount_value }}",
             ref: ref,
-            channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'apple_pay'],
+            channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'applepay'],
             callback: function (response) {
                 window.location.href = "{% url 'verify-payment' payment.ref %}";
             },
