@@ -45,6 +45,13 @@ urlpatterns = [
     path('/', include('ticket.urls')),
     path('donation/', include('donation.urls')),
     path('api/vote/', include('vote.api.urls')),
+    
+    path(
+        '.well-known/apple-developer-merchantid-domain-association',
+        TemplateView.as_view(
+            template_name='apple-developer-merchantid-domain-association', 
+            content_type='text/plain'),
+    ),
 ]
 
 
