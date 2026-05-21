@@ -62,10 +62,6 @@
 
 
 <style>
-
-
-
-
   .donation-banner {
     display: flex;
     flex-wrap: wrap;
@@ -82,7 +78,7 @@
   .donate-img img {
     width: 100%;
     height: 70vh;
-   
+
     border-radius: 10px;
   }
 
@@ -126,16 +122,16 @@
       height: auto;
     }
   }
-video {
+
+  video {
     width: 100%;
     max-width: 50%;
-  
+
     display: block;
-    
-   
+
+
 
   }
-
 </style>
 
 
@@ -154,29 +150,38 @@ video {
   <div class="container">
     <div class="row">
       <div class="banner-content">
-       <div class="text-slide">
-        <div class="text">
-          <h1>WELCOME TO THE TRUSTED ONLINE AND USSD <span>VOTING </span> PLATFORM</h1>
-          <p>Greetings from our virtual polling booth! Our goal is to completely transform the way individuals take part in awards by
-            offering an easy and convenient voting process.</p>
-        </div>
-        <div class="text">
-          <h1>MAKE YOUR VOICE HEARD WITH OUR SECURE <span>VOTING</span> SYSTEM</h1>          
-          <p>Our secure online voting platform empowers individuals to participate in the democratic process from anywhere in the world. With state-of-the-art security measures in place, your vote is safeguarded and your voice matters.</p>
-        </div>
-        <div class="text">
-          <h1>EXPERIENCE THE FUTURE OF <span>VOTING</span> TODAY</h1>
+        <div class="text-slide">
+          <div class="text">
+            <h1>WELCOME TO THE TRUSTED ONLINE AND USSD <span>VOTING </span> PLATFORM</h1>
+            <!-- <p>Greetings from our virtual polling booth! Our goal is to completely transform the way individuals take part in awards by
+            offering an easy and convenient voting process.</p> -->
+          </div>
+          <div class="text">
+            <h1>MAKE YOUR VOICE HEARD WITH OUR SECURE <span>VOTING</span> SYSTEM</h1>
+            <!-- <p>Our secure online voting platform empowers individuals to participate in the democratic process from anywhere in the world. With state-of-the-art security measures in place, your vote is safeguarded and your voice matters.</p> -->
+          </div>
+          <div class="text">
+            <h1>EXPERIENCE THE FUTURE OF <span>VOTING</span> TODAY</h1>
 
-          <p>Join us in revolutionizing the way we participate in voting. Our innovative platform ensures transparency, accessibility, and integrity, making voting easier and more reliable than ever before.</p>
-        
-        </div>
-       </div>
-       <div class="vote">
-      <a href="{% url 'award_page' %}">
-    <button>Start Voting</button>
-</a>
+            <!-- <p>Join us in revolutionizing the way we participate in voting. Our innovative platform ensures transparency, accessibility, and integrity, making voting easier and more reliable than ever before.</p> -->
 
-      </div> 
+          </div>
+        </div>
+        <!-- HTML -->
+<div class="nominee-code-search">
+  <p class="ns-label">Jack no need to scroll. Search for your nominee using his/her code and vote for am straight up</p>
+  <div class="search-row" id="searchRow">
+    <input type="text" id="nomineeInput" placeholder="Enter nominee code e.g. NOM-2024" />
+    <button class="search-btn" onclick="handleSearch()">Vote Now</button>
+  </div>
+  <div class="feedback" id="feedback"></div>
+</div>
+        <div class="vote">
+          <a href="{% url 'award_page' %}">
+            <button>Start Voting</button>
+          </a>
+
+        </div>
       </div>
 
       <div class="banner-img">
@@ -219,6 +224,60 @@ video {
 
 
 
+<!-- HTML -->
+<section class="feat-section">
+  <div class="feat-inner">
+
+    <div class="feat-left">
+      <div class="feat-badge">Amazing Feature #1</div>
+      <h2 class="feat-title">Instant <span>Percentage</span> Payouts</h2>
+      <p class="feat-desc">Gone are the days of waiting weeks or even months to receive your rewards. As you vote, share insights, or join discussions on Presto Votes — your earnings are reflected in your account instantly.</p>
+      <div class="feat-stats">
+        <div class="stat-box">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Instant payout on every action</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">0s</div>
+          <div class="stat-label">Zero wait time, ever</div>
+        </div>
+      </div>
+ 
+    </div>
+
+    <div class="feat-right">
+      <div class="current">
+        <p>Current Payout Awards Name</p>
+      </div>
+      <div class="floating-pill top">✓ Paid instantly</div>
+      <div class="floating-pill bot">⚡ Live rewards</div>
+
+      <div class="evidence-row">
+
+        <div class="evidence-col">
+          <div class="evidence-tag gold">📄 Our Transaction</div>
+          <div class="evidence-img-wrap gold">
+            <img src="{% static 'vote/img/transaction.jpeg' %}" alt="Our transaction proof" />
+          </div>
+        </div>
+
+        <div class="evidence-col">
+          <div class="evidence-tag green">✅ Client Confirmation</div>
+          <div class="evidence-img-wrap green">
+            <img src="{% static 'vote/img/client-confirmation.jpeg' %}" alt="Client confirmation" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
 
 
 <!-- <div class="donation-banner">
@@ -255,7 +314,7 @@ video {
 </div>
  -->
 
- <section class="about-page-container">
+<section class="about-page-container">
   <div class="about-page-image">
     <img src="{% static 'vote/img/ben.png' %}" alt="VoteAfric Team">
     <div class="about-page-image-overlay"></div>
@@ -266,7 +325,10 @@ video {
     <div class="about-page-block">
       <span class="about-page-label">Who We Are</span>
       <h2>About <span>VoteAfric</span></h2>
-      <p>Greetings from our virtual polling booth! Our goal is to completely transform the way individuals take part in awards by offering an easy and convenient voting process. VoteAfric is a platform where people can voice their opinions and help recognize greatness in a variety of professions. We think everyone should have this opportunity.</p>
+      <p>Greetings from our virtual polling booth! Our goal is to completely transform the way individuals take part in
+        awards by offering an easy and convenient voting process. VoteAfric is a platform where people can voice their
+        opinions and help recognize greatness in a variety of professions. We think everyone should have this
+        opportunity.</p>
     </div>
 
     <div class="about-page-divider"></div>
@@ -274,7 +336,10 @@ video {
     <div class="about-page-block">
       <span class="about-page-label">Our Team</span>
       <h2>Who We Are</h2>
-      <p>Our team of enthusiastic individuals at VoteAfric is dedicated to promoting diversity, justice, and openness in the award process. Our multidisciplinary team combines knowledge from a range of fields, such as technology, design, and community involvement, to develop a platform that meets the demands of organizers and voters alike.</p>
+      <p>Our team of enthusiastic individuals at VoteAfric is dedicated to promoting diversity, justice, and openness in
+        the award process. Our multidisciplinary team combines knowledge from a range of fields, such as technology,
+        design, and community involvement, to develop a platform that meets the demands of organizers and voters alike.
+      </p>
     </div>
 
     <div class="about-page-divider"></div>
@@ -282,12 +347,14 @@ video {
     <div class="about-page-block">
       <span class="about-page-label">Our Purpose</span>
       <h2>Our Mission</h2>
-      <p>Our goal is to democratize the award voting process by offering an approachable platform that enables people to take part in influencing the results of awards given out in a variety of industries. We work to establish fair elections where all votes are valued equally and the community's opinion is heard.</p>
+      <p>Our goal is to democratize the award voting process by offering an approachable platform that enables people to
+        take part in influencing the results of awards given out in a variety of industries. We work to establish fair
+        elections where all votes are valued equally and the community's opinion is heard.</p>
     </div>
 
   </div>
 </section>
-  
+
 
 
 
@@ -321,10 +388,11 @@ video {
   <p>Please wait! We are putting everything togethere for you</p>
 </div> -->
 
-  <section class="how-it-works">
+<section class="how-it-works">
   <p class="label">Simple Process</p>
   <h2>How It Works</h2>
-  <p class="subtitle">Simply choose your award scheme, select a category, and vote for your favorite nominee. We ensure a smooth, hassle-free voting experience from start to finish.</p>
+  <p class="subtitle">Simply choose your award scheme, select a category, and vote for your favorite nominee. We ensure
+    a smooth, hassle-free voting experience from start to finish.</p>
 
   <div class="how-steps">
     <div class="step">
@@ -357,23 +425,39 @@ video {
   </div>
 </section>
 
-    <!-- About us section -->
-  <section class="about-us-container">
+<!-- About us section -->
+<section class="about-us-container">
   <div class="about-left">
     <p class="about-label">Our Mission</p>
     <h2>Empowering Voices Through Fair &amp; Inclusive Award Voting</h2>
-    <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness, inclusivity, and transparency — ensuring every vote counts.</p>
+    <p>VoteAfric is a user-friendly platform revolutionizing the award voting process by enabling people to easily
+      participate and voice their opinions. Our passionate, multidisciplinary team is committed to fairness,
+      inclusivity, and transparency — ensuring every vote counts.</p>
     <div class="readmore">
       <a href="{% url 'about' %}"><button>Read More About Us</button></a>
     </div>
   </div>
 
   <div class="about-right">
-    <div class="feature-row"><div class="feature-icon"><i class="fas fa-lock"></i></div><span>End-to-end secure voting with tamper-proof records</span></div>
-    <div class="feature-row"><div class="feature-icon"><i class="fas fa-bolt"></i></div><span>Real-time results updated as votes come in</span></div>
-    <div class="feature-row"><div class="feature-icon"><i class="fas fa-globe-africa"></i></div><span>Accessible across Africa via web and USSD</span></div>
-    <div class="feature-row"><div class="feature-icon"><i class="fas fa-medal"></i></div><span>Credible, democratic elections for every industry</span></div>
-    <div class="feature-row"><div class="feature-icon"><i class="fas fa-credit-card"></i></div><span>Multiple payment options including mobile money</span></div>
+    <div class="feature-row">
+      <div class="feature-icon"><i class="fas fa-lock"></i></div><span>End-to-end secure voting with tamper-proof
+        records</span>
+    </div>
+    <div class="feature-row">
+      <div class="feature-icon"><i class="fas fa-bolt"></i></div><span>Real-time results updated as votes come in</span>
+    </div>
+    <div class="feature-row">
+      <div class="feature-icon"><i class="fas fa-globe-africa"></i></div><span>Accessible across Africa via web and
+        USSD</span>
+    </div>
+    <div class="feature-row">
+      <div class="feature-icon"><i class="fas fa-medal"></i></div><span>Credible, democratic elections for every
+        industry</span>
+    </div>
+    <div class="feature-row">
+      <div class="feature-icon"><i class="fas fa-credit-card"></i></div><span>Multiple payment options including mobile
+        money</span>
+    </div>
   </div>
 </section>
 
@@ -390,7 +474,9 @@ video {
       </div>
       <div class="stat-number">50+</div>
       <div class="stat-label">Events successfully hosted</div>
-      <div class="stat-bar-wrap"><div class="stat-bar"></div></div>
+      <div class="stat-bar-wrap">
+        <div class="stat-bar"></div>
+      </div>
       <div class="stat-desc">Join the growing network of African event organizers trusting VoteAfric.</div>
     </div>
   </div>
@@ -399,11 +485,13 @@ video {
   <div class="hero-right">
     <h5>For Organisers</h5>
     <h1>Create <span class="highlight">Events</span> for Voting &amp; Ticketing</h1>
-    <p>Join our platform as an organiser and build your event in minutes. All you need is an account and a verified email — then you're ready to go.</p>
+    <p>Join our platform as an organiser and build your event in minutes. All you need is an account and a verified
+      email — then you're ready to go.</p>
 
     <div class="steps-list">
-     <p>All you need to do is to create an account and verify your email. That’s it. Your account is ready to be used. </p>
-      
+      <p>All you need to do is to create an account and verify your email. That’s it. Your account is ready to be used.
+      </p>
+
     </div>
 
     <div class="buttons">
@@ -516,13 +604,13 @@ video {
   const textSlide = document.querySelector(".text-slide")
   const textElement = document.querySelectorAll(".text")
   let = currentSlide = 0
-  function showslideText (){
-    textElement.forEach((element)=>{
-      element.style.display="none"
+  function showslideText() {
+    textElement.forEach((element) => {
+      element.style.display = "none"
     })
 
-    textElement[currentSlide].style.display ='block'
-    currentSlide=(currentSlide + 1) % textElement.length
+    textElement[currentSlide].style.display = 'block'
+    currentSlide = (currentSlide + 1) % textElement.length
     setTimeout(showslideText, 5000)
   }
 

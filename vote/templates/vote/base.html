@@ -205,6 +205,53 @@
             });
         });
     </script>
+
+    <script>
+     function sanitizeCode(value) {
+  return value
+    .trim()                        // remove leading/trailing spaces
+    .toUpperCase()                 // normalize to uppercase
+    .replace(/[^A-Z0-9\-]/g, '')  // only allow letters, numbers, dashes
+    .substring(0, 20);             // max 20 characters
+}
+
+function handleSearch() {
+  var input = document.getElementById('nomineeInput');
+  var row = document.getElementById('searchRow');
+  var feedback = document.getElementById('feedback');
+
+  var code = sanitizeCode(input.value);
+
+  // Update input field with sanitized value
+  input.value = code;
+
+  if (!code) {
+    row.classList.add('shake');
+    setTimeout(function () { row.classList.remove('shake'); }, 400);
+    feedback.className = 'feedback error';
+    feedback.innerHTML = ' Please enter a nominee code first.';
+    input.focus();
+    return;
+  }
+
+  // ✅ Add your logic here when backend is ready
+  // e.g. window.location.href = 'vote.html?code=' + code;
+
+  feedback.className = 'feedback success';
+  feedback.innerHTML = ' Searching for <strong>' + code + '</strong>...';
+}
+
+// Sanitize live as user types
+document.getElementById('nomineeInput').addEventListener('input', function () {
+  var cursor = this.selectionStart;
+  this.value = sanitizeCode(this.value);
+  this.setSelectionRange(cursor, cursor);
+});
+
+document.getElementById('nomineeInput').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') handleSearch();
+});   
+    </script>
 </body>
 
 </html>
