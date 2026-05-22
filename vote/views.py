@@ -18,6 +18,16 @@ from django.utils import timezone
 
 def index(request):
     search_item = request.GET.get('search')
+    nominee_code = request.GET.get('nominee_code')
+    
+    # Hnadle nominee code search (redirect to vote page)
+    if nominee_code:
+        try:
+            nominee = Nominees.objects.get(code=nominee_code)
+            return redirect('vote-page', nominee_slug=nominee.slug)
+        except Nominees.DoesNotExist:
+            messages.error(request, 'Invalid nominee code. Please try again.')
+            return redirect('index')
     
     if search_item:
         all_categories = Category.objects.filter(Q(award__icontains=search_item))

@@ -229,16 +229,26 @@ function handleSearch() {
     row.classList.add('shake');
     setTimeout(function () { row.classList.remove('shake'); }, 400);
     feedback.className = 'feedback error';
-    feedback.innerHTML = ' Please enter a nominee code first.';
+    feedback.innerHTML = '❌ Please enter a nominee code first.';
     input.focus();
     return;
   }
+
+  // Validate code format (4 characters)
+  /*if(code.length !== 4) {
+    feedback.className = 'feedback error';
+    feedback.innerHTML = '❌ Invalid code format. Code should be 4 characters.';
+    return;
+  }*/
 
   // ✅ Add your logic here when backend is ready
   // e.g. window.location.href = 'vote.html?code=' + code;
 
   feedback.className = 'feedback success';
   feedback.innerHTML = ' Searching for <strong>' + code + '</strong>...';
+
+  // redirect to search endpoint
+  window.location.href = '?nominee_code=' + code;
 }
 
 // Sanitize live as user types
@@ -248,7 +258,7 @@ document.getElementById('nomineeInput').addEventListener('input', function () {
   this.setSelectionRange(cursor, cursor);
 });
 
-document.getElementById('nomineeInput').addEventListener('keydown', function (e) {
+document.getElementById('nomineeInput').addEventListener('keypress', function (e) {
   if (e.key === 'Enter') handleSearch();
 });   
     </script>

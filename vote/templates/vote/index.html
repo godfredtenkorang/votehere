@@ -175,6 +175,9 @@
     <button class="search-btn" onclick="handleSearch()">Vote Now</button>
   </div>
   <div class="feedback" id="feedback"></div>
+  {% if message %}
+  <div class="feedback" id="">{{message}}</div>
+  {% endif %}
 </div>
         <div class="vote">
           <a href="{% url 'award_page' %}">
