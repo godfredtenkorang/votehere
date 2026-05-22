@@ -4,29 +4,80 @@
 <style>
     /* General Reset */
 .vote-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  height: 100%;
+
+ 
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #fff;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  padding: 20px 20px;
 }
 
-/* Container */
-.container {
-  text-align: center;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  height: 100%;
-  max-width: 500px;
+.vote-body .container {
+  width: 100%;
+  max-width: 520px;
 }
+
+.vote-body .message-box {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 30px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.vote-body .message-box::before {
+  content: '';
+  position: absolute;
+  width: 300px; height: 300px;
+  background: rgba(245,166,35,0.05);
+  border-radius: 50%;
+  top: -120px; left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.ended-icon {
+  width: 72px; height: 72px;
+  background: rgba(245,166,35,0.1);
+  border: 1px solid rgba(245,166,35,0.25);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  font-size: 32px;
+}
+
+.vote-body .message-box h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.vote-body .message-box h1 span { color: #f5a623; }
+
+.vote-body .message-box p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  margin: 0 auto 36px;
+  max-width: 340px;
+}
+
+.divider {
+  width: 48px; height: 3px;
+  background: linear-gradient(90deg, #f5a623, #e07b00);
+  border-radius: 100px;
+  margin: 0 auto 36px;
+}
+
+
+
+
 
 /* Message Box */
 .message-box h1 {
@@ -52,13 +103,15 @@
 </div>
 <br><br><br><br><br>
 <div class="vote-body">
-<div class="container">
+  <div class="container">
     <div class="message-box">
-        <h1>Voting Has Ended</h1>
-        <p>Thank you for your participation. The voting session is now closed.</p>
+      <div class="ended-icon"><i class="fas fa-flag-checkered"></i></div>
+      <h1>Voting Has <span>Ended</span></h1>
+      <div class="divider"></div>
+      <p>Thank you for your participation. The voting session is now closed.</p>
+      <!-- <a class="results-btn" href="#">View Results →</a> -->
     </div>
+  </div>
 </div>
-</div>
-<br><br><br>
 
 {% endblock content %}
