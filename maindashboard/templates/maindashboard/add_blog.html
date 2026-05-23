@@ -2,71 +2,333 @@
 {% load static %}
 {% block content %}
 <style>
-    /* General form styling */
+  /* ===== FORM CARD ===== */
+  .add-nominee-form {
+    max-width: 580px;
+    margin: 24px auto;
+    padding: 32px;
+    background: #fff;
+    border-radius: 16px;
+    border: 0.5px solid #ede9f8;
+    box-sizing: border-box;
+  }
+
+  /* ===== EACH FIELD ROW ===== */
+  .add-nominee-form p {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* ===== LABELS ===== */
+  .add-nominee-form label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    display: block;
+    margin-bottom: 0;
+  }
+
+  /* ===== INPUTS, SELECTS, TEXTAREAS ===== */
+  .add-nominee-form input[type="text"],
+  .add-nominee-form input[type="email"],
+  .add-nominee-form input[type="number"],
+  .add-nominee-form input[type="url"],
+  .add-nominee-form input[type="date"],
+  .add-nominee-form input[type="datetime-local"],
+  .add-nominee-form input[type="password"],
+  .add-nominee-form input[type="file"],
+  .add-nominee-form select,
+  .add-nominee-form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: #1a1a2e;
+    background: #fff;
+    border: 0.5px solid #d1d5db;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+    font-family: inherit;
+    appearance: none;
+  }
+
+  .add-nominee-form input:focus,
+  .add-nominee-form select:focus,
+  .add-nominee-form textarea:focus {
+    border-color: #6a0dad;
+    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.1);
+  }
+
+  .add-nominee-form textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .add-nominee-form select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%236b7280' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-color: #fff;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .add-nominee-form input[type="file"] {
+    padding: 8px 14px;
+    color: #6b7280;
+    cursor: pointer;
+    background: #faf9ff;
+    border-style: dashed;
+  }
+
+  .add-nominee-form input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: #6a0dad;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+
+  /* ===== SUBMIT BUTTON ===== */
+  .add-nominee-form button[type="submit"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 20px;
+    background: #6a0dad;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 8px;
+    font-family: inherit;
+  }
+
+  .add-nominee-form button[type="submit"]:hover {
+    background: #5a0b99;
+  }
+
+  /* ===== ERROR TEXT ===== */
+  .add-nominee-form ul.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0;
+  }
+
+  .add-nominee-form ul.errorlist li {
+    font-size: 12px;
+    color: #dc2626;
+    padding: 3px 0;
+  }
+
+  /* ===== PAGE BANNER ===== */
+.page-banner {
+  background: #6a0dad;
+  border-radius: 16px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.page-banner::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: 220px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  border: 35px solid rgba(255,255,255,0.05);
+}
+
+.page-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; right: 80px;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  border: 25px solid rgba(255,255,255,0.05);
+}
+
+.page-banner-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1;
+}
+
+.page-banner-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(249,168,37,0.18);
+  border: 0.5px solid rgba(249,168,37,0.35);
+  border-radius: 20px;
+  padding: 4px 12px;
+  width: fit-content;
+}
+
+.page-banner-eyebrow i {
+  font-size: 12px;
+  color: #f9a825;
+}
+
+.page-banner-eyebrow span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #f9a825;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.page-banner-title {
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0;
+}
+
+.page-banner-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  margin: 0;
+}
+
+.page-banner-right {
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.page-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 0.5px solid rgba(255,255,255,0.25);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.page-banner-btn:hover {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+}
+
+/* ===== FLASH MESSAGES ===== */
+.flash-messages {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.flash-msg {
+  background: #1a1a2e;
+  color: #97c8b3;
+  font-size: 14px;
+  text-align: center;
+  padding: 14px 20px;
+  margin: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .page-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+
+  .page-banner-title {
+    font-size: 18px;
+  }
+
+  .page-banner-right {
+    width: 100%;
+  }
+
+  .page-banner-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-banner {
+    padding: 16px;
+  }
+
+  .page-banner-title {
+    font-size: 16px;
+  }
+
+  .page-banner-subtitle {
+    font-size: 12px;
+  }
+}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
     .add-nominee-form {
-        max-width: 400px;
-        margin: 20px auto;
-        padding: 20px;
-        background: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 100%;
+      margin: 16px;
+      padding: 20px;
+      border-radius: 14px;
     }
 
-    /* Style for form elements */
-    .add-nominee-form p {
-        margin-bottom: 15px;
-    }
-
-    .add-nominee-form label {
-        font-weight: bold;
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .add-nominee-form input,
+    .add-nominee-form input[type="text"],
     .add-nominee-form select,
     .add-nominee-form textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-        box-sizing: border-box;
+      font-size: 13px;
     }
 
-    /* Button styling */
-    .add-nominee-form button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background 0.3s ease;
+    .add-nominee-form button[type="submit"] {
+      font-size: 13.5px;
+      padding: 11px;
     }
-
-    .add-nominee-form button:hover {
-        background: #0056b3;
-    }
+  }
 </style>
 <div class="main">
-    <div class="the-team-container">
-        <div class="heading">
-            <h1>Add Blog</h1>
-        </div>
-
+   <div class="the-team-container">
+  <div class="page-banner">
+    <div class="page-banner-left">
+      <div class="page-banner-eyebrow">
+        <i class="fa-solid fa-newspaper"></i>
+        <span>Content Management</span>
+      </div>
+      <h1 class="page-banner-title">Add Blog</h1>
+      <p class="page-banner-subtitle">Create and publish a new blog post for the VoteAfric platform.</p>
     </div>
-    <div style="background-color:#000; width:100%;">
-        {% if messages %}
-        {% for message in messages %}
-        <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
-        {% endfor %}
-        {% endif %}
-    </div>
+    
+  </div>
+</div>
 
+{% if messages %}
+<div class="flash-messages">
+  {% for message in messages %}
+  <p class="flash-msg">{{ message }}</p>
+  {% endfor %}
+</div>
+{% endif %}
 
     <form class="add-nominee-form" method="POST" enctype="multipart/form-data">
 

@@ -1,33 +1,32 @@
+const darkModeButton = document.querySelector(".darkMode-button")
+const main = document.querySelector(".main")
+let isdarkMode = localStorage.getItem("isdarkMode")
+const Settings = document.querySelector(".sett-but")
 
-    const darkModeButton = document.querySelector(".darkMode-button")
-    const main = document.querySelector(".main")
-    let isdarkMode = localStorage.getItem("isdarkMode")
-    const Settings = document.querySelector(".sett-but")
+// NEW
+darkModeButton.style.display = "none"
 
 Settings.addEventListener("click",()=>{
-   if( darkModeButton.style.display===""){
-    darkModeButton.style.display="block"
+   if(darkModeButton.style.display === "none"){
+    darkModeButton.style.display = "block"
    }else{
-    darkModeButton.style.display=""
+    darkModeButton.style.display = "none"
    }
 })
 
-
-
     if(isdarkMode){
-        if(isdarkMode=== "true")
-        main.style.backgroundColor="#333333"
+        if(isdarkMode === "true")
+        document.body.classList.add("dark-mode") // UPDATED
     }
 
     darkModeButton.addEventListener("click",()=>{
         isdarkMode = !isdarkMode
 
        if(isdarkMode){
-        main.style.backgroundColor="#333333"
+        document.body.classList.add("dark-mode")    // UPDATED
        }  
        else{
-        main.style.backgroundColor=""
+        document.body.classList.remove("dark-mode") // UPDATED
        }
      localStorage.setItem("isdarkMode" , isdarkMode)
     })
-

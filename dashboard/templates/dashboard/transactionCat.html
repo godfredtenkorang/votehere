@@ -1,94 +1,486 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
-        <div class="main">
-            <div class="transaction-main">
-                <div class="heading">
-                    <h2>Transaction for each Category</h2>
-                    <p> When clicking on a specific Category, you will be able to view transactions for each
-                        nominee associated with that award. </p>
-                        <br>
-                        <a href="{% url 'request_payment' category.slug %}" class="insight">
-                            <button>Request for Payment </button>
+
+<style>
+    .tp {
+        padding: 1.75rem 2rem;
+    }
+
+    /* ── Page title row ── */
+    .tp-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.75rem;
+    }
+
+    .tp-top h1 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #2d0a6e;
+        letter-spacing: -0.02em;
+        margin-bottom: 4px;
+    }
+
+    .tp-top p {
+        font-size: 13px;
+        color: #888;
+        max-width: 460px;
+        line-height: 1.5;
+    }
+
+    .tp-pay-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #5E17A8;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 12px 22px;
+        border-radius: 11px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.15s;
+        flex-shrink: 0;
+    }
+
+    .tp-pay-btn:hover {
+        background: #4A0E8F;
+        transform: translateY(-1px);
+    }
+
+    /* ── Stat cards ── */
+    .tp-stats {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 1.75rem;
+        flex-wrap: wrap;
+    }
+
+    .tp-stat {
+        flex: 1;
+        min-width: 150px;
+        background: #fff;
+        border: 1px solid #ebebeb;
+        border-radius: 14px;
+        padding: 1.1rem 1.4rem;
+        box-shadow: 0 1px 8px rgba(94, 23, 168, 0.06);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tp-stat::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        border-radius: 14px 0 0 14px;
+        background: #5E17A8;
+    }
+
+    .tp-stat-lbl {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: #aaa;
+        margin-bottom: 6px;
+    }
+
+    .tp-stat-val {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #3D1282;
+        line-height: 1;
+    }
+
+    .tp-stat-sub {
+        font-size: 12px;
+        color: #bbb;
+        margin-top: 5px;
+    }
+
+    /* ── Quick-link buttons ── */
+    .tp-links {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 1.75rem;
+        flex-wrap: wrap;
+    }
+
+    .tp-link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.15s;
+        cursor: pointer;
+        border: none;
+    }
+
+    .tp-link-ussd {
+        background: #f0e8ff;
+        color: #5E17A8;
+        border: 1px solid #ddd0f5;
+    }
+
+    .tp-link-ussd:hover {
+        background: #e0d0ff;
+    }
+
+    .tp-link-online {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    .tp-link-online:hover {
+        background: #d0ebd1;
+    }
+
+    /* ── Section label ── */
+    .tp-section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: #aaa;
+        margin-bottom: 12px;
+    }
+
+    /* ── Table card ── */
+    .tp-card {
+        width: 100%;
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid #ebebeb;
+        overflow: hidden;
+        box-shadow: 0 2px 16px rgba(94, 23, 168, 0.07);
+    }
+
+    .tp-card table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .tp-card colgroup col:first-child {
+        width: 70%;
+    }
+
+    .tp-card colgroup col:last-child {
+        width: 30%;
+    }
+
+    .tp-card thead tr {
+        background: #3D1282;
+    }
+
+    .tp-card thead th {
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 16px 24px;
+        text-align: left;
+    }
+
+    .tp-card tbody tr {
+        border-bottom: 1px solid #f2f2f2;
+        transition: background 0.12s;
+    }
+
+    .tp-card tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .tp-card tbody tr:hover {
+        background: #faf6ff;
+    }
+
+    .tp-card tbody td {
+        padding: 18px 24px;
+        font-size: 15px;
+        color: #1a1a1a;
+        vertical-align: middle;
+    }
+
+    .tp-cat-name {
+        font-weight: 500;
+    }
+
+    .tp-action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #5E17A8;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+        padding: 8px 18px;
+        border-radius: 9px;
+        background: #f0e8ff;
+        border: 1px solid #ddd0f5;
+        transition: all 0.15s;
+    }
+
+    .tp-action-link:hover {
+        background: #e0d0ff;
+        color: #3D1282;
+    }
+
+    /* ── Mobile collapse ── */
+    @media (max-width: 640px) {
+        .tp {
+            padding: 1rem;
+        }
+
+        .tp-top {
+            flex-direction: column;
+        }
+
+        .tp-pay-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .tp-stats {
+            gap: 8px;
+        }
+
+        .tp-stat {
+            min-width: calc(50% - 4px);
+        }
+
+        .tp-links {
+            flex-direction: column;
+        }
+
+        .tp-link-btn {
+            justify-content: center;
+        }
+
+        .tp-card thead {
+            display: none;
+        }
+
+        .tp-card table,
+        .tp-card tbody,
+        .tp-card tr,
+        .tp-card td {
+            display: block;
+            width: 100%;
+        }
+
+        .tp-card tbody tr {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .tp-card tbody td {
+            padding: 3px 0;
+            border: none;
+        }
+
+        .tp-card tbody td::before {
+            content: attr(data-label);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: #bbb;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .tp-card td:last-child {
+            margin-top: 10px;
+        }
+    }
+
+    /* ── Logout overlay ── */
+    .logout-pop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(30, 10, 60, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logout-pop.active {
+        display: flex;
+    }
+
+    .logout {
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 320px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .logout p {
+        font-size: 15px;
+        color: #222;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .log-button {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .log-button>p {
+        margin: 0;
+        font-size: 13px;
+        color: #aaa;
+    }
+
+    .lo-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 22px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.15s;
+    }
+
+    .lo-btn-fill {
+        background: #5E17A8;
+        color: #fff;
+    }
+
+    .lo-btn-fill:hover {
+        background: #4A0E8F;
+    }
+
+    .lo-btn-out {
+        background: #fff;
+        color: #5E17A8;
+        border: 1.5px solid #5E17A8;
+    }
+
+    .lo-btn-out:hover {
+        background: #f0e8ff;
+    }
+</style>
+
+
+<div class="main">
+    <div class="tp">
+
+    <!-- Title + payment button -->
+    <div class="tp-top">
+        <div>
+            <h1>Transaction for each Category</h1>
+            <p>Click on a category below to view all transactions for each nominee associated with that award.</p>
+        </div>
+        <a href="{% url 'request_payment' category.slug %}" class="tp-pay-btn">
+            &#128179; Request for Payment
+        </a>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="tp-stats">
+        <div class="tp-stat">
+            <div class="tp-stat-lbl">Total Revenue</div>
+            <div class="tp-stat-val">GH¢{{ original_total_payment|floatformat:2 }}</div>
+            <div class="tp-stat-sub">All categories combined</div>
+        </div>
+        <div class="tp-stat">
+            <div class="tp-stat-lbl">Categories</div>
+            <div class="tp-stat-val">{{ award|length }}</div>
+            <div class="tp-stat-sub">Active sub-categories</div>
+        </div>
+    </div>
+
+    <!-- Quick links -->
+    <div class="tp-links">
+        <a href="{% url 'ussd_transactions' category.id %}" class="tp-link-btn tp-link-ussd">
+            &#128241; Get all USSD transactions
+        </a>
+        <a href="{% url 'online_transactions' category.id %}" class="tp-link-btn tp-link-online">
+            &#127760; Get all online transactions
+        </a>
+    </div>
+
+    <p class="tp-section-label">Categories</p>
+
+    <!-- Table -->
+    <div class="tp-card">
+        <table>
+            <colgroup>
+                <col />
+                <col />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for n in award %}
+                <tr>
+                    <td data-label="Category">
+                        <span class="tp-cat-name">{{ n.content }}</span>
+                    </td>
+                    <td data-label="Action">
+                        <a href="{% url 'transaction' n.slug %}" class="tp-action-link">
+                            &#128065; View Transactions
                         </a>
-                </div>
-                <!-- <h1 style="font-family: 'Times New Roman', Times, serif;">Total Online Payments: GH¢{{ original_online_total|floatformat:2 }}</h1>
-                <h1 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payments: GH¢{{ original_ussd_total|floatformat:2 }}</h1> -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-                <!-- The total payment without charges -->
-                <!-- <h1 style="font-family: 'Times New Roman', Times, serif;">Total Payments: GH¢{{ sum_total|floatformat:2 }}</h1> -->
-                <h1 style="font-family: 'Times New Roman', Times, serif;">Total Revenue: GH¢{{ original_total_payment|floatformat:2 }}</h1>
+</div>
+</div>
 
-                <br>
-                <!-- <h4 style="font-family: 'Times New Roman', Times, serif;">Total Online Payment After Charges (2%): GH¢{{ total_online_payments|floatformat:2 }}</h4>
-                <h4 style="font-family: 'Times New Roman', Times, serif;">Total USSD Payment After Charges (3%): GH¢{{ total_ussd_payments|floatformat:2 }}</h4> -->
-                <!-- The total payment after charges -->
-                <!-- <h2 style="font-family: 'Times New Roman', Times, serif;">Total Payment After Charges (3%): GH¢{{ original_total_payment|floatformat:2 }}</h2> -->
-                <br>
-                <h4><a href="{% url 'ussd_transactions' category.id  %}">CLICK HERE</a> TO GET ALL USSD TRANSACTIONS</h4>
-                <h4><a href="{% url 'online_transactions' category.id  %}">CLICK HERE</a> TO GET ALL ONLINE TRANSACTIONS</h4>
-                <br>
-                <div class="table-responsive">
-                    <table class="revenue-table">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Action</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for n in award %}
-                            <tr>
-                                <td>{{ n.content }}</td>
-                                <td><a href="{% url 'transaction' n.slug %}">click</a></td>
-                                
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>  
-                </div>
-                
-                <!-- <div class="transaction-for-awards">
-                    {% for n in award %}
-                    <a href="{% url 'transaction' n.slug %}">
-                        <div class="awards-transaction-container">
-                            
-                            <div class="awards-img">
-                                <img src="{{ n.category.image.url }}" alt="geima">
-                            </div>
-                            
-                            <div class="awards-name">
-                                <h2>{{ n.content }}</h2>
 
-                            </div>
-                        </div>
-                    </a>
-                    {% endfor %}
-                </div> -->
-                <!-- <div class="back-button">
-                    <a class="active" href="{% url 'TransactionMain' %}">
-                        <button>Go Back</button>
-                    </a>
 
-                </div> -->
-            </div>
 
+
+<!-- Logout modal -->
+<div class="logout-pop" id="logoutModal">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin panel?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}" class="lo-btn lo-btn-fill">Log Out</a>
+            <p>or</p>
+            <button class="lo-btn lo-btn-out DontLogout"
+                onclick="document.getElementById('logoutModal').classList.remove('active')">
+                Cancel
+            </button>
         </div>
     </div>
-    <div class="logout-pop">
-        <div class="logout">
-            <p>Are you sure you want to log out from the admin pannel ?</p>
-            <div class="log-button">
-                <a href="{% url 'logout' %}">
-                    <button>Log Out</button>
-                </a>
+</div>
 
-                <p>Or</p>
-
-                <button class="DontLogout">No</button>
-            </div>
-        </div>
-
-    </div>
 {% endblock %}

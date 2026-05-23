@@ -377,3 +377,18 @@ def delete_blog(request, blog_id):
 def receipt(request):
     
     return render(request, 'maindashboard/receipt.html') 
+
+def sendsms(request):
+    
+    return render(request, 'maindashboard/sendSMS.html') 
+
+def transactions(request):
+    
+    return render(request, 'maindashboard/transactions.html') 
+
+def addAward(request):
+    
+    return render(request, 'maindashboard/addAward.html') 
+def sendMessage(request):
+    
+    return render(request, 'maindashboard/sendMessage.html') 

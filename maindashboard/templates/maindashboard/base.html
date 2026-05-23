@@ -12,7 +12,7 @@
     <link rel="icon" href="{% static 'vote/img/our-logo.jpg' %}" type="image/jpeg">
     <title>Admin Page</title>
     <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
-
+ <link rel="stylesheet" href="{% static 'vote/darkmode.css' %}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -21,20 +21,31 @@
 
 <body>
     <!-- for header part -->
-    <header>
+     <header>
 
-        <div class="logosec">
+       <div class="logo-and-date-greetings">
+         <div class="logosec">
             <div class="logo">
                 <a href="{% url 'index' %}"><img src="{% static 'vote/img/voteafric-logo.png' %}" alt="geima"></a>
             </div>
-            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
-                class="icn menuicn" id="menuicn" alt="menu-icon">
+           
         </div>
+        <!-- <div class="greetings-date">
+            <div class="greeting">
+                <h3 id="greet">Good Morning, {{ user.first_name }}</h3>
+            </div>
+            <div class="date">
+                <p id="date"></p>
+            </div>
+        </div> -->
+       </div>
 
 
 
         <div class="message">
-            <h1>Admin Dashboard</h1>
+            <!-- <h1>Admin Dashboard</h1> -->
+             <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+                class="icn menuicn" id="menuicn" alt="menu-icon">
         </div>
 
     </header>
@@ -86,7 +97,13 @@
                             <h3> <i class="fa-solid fa-money-bill"></i> Events</h3>
                         </div>
                     </a> -->
-                    <a href="{% url 'send_sms' %}">
+                    <a href="{% url 'sendsms' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> Send SMS</h3>
+                        </div>
+                    </a>
+                    <!-- <a href="{% url 'send_sms' %}">
                     
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> New Nominee SMS</h3>
@@ -101,7 +118,7 @@
                         <div class="nav-option option1 button">
                             <h3> <i class="fa-solid fa-money-bill"></i> Send Access Code</h3>
                         </div>
-                    </a>
+                    </a> -->
                     <a href="{% url 'add_nominee' %}">
                     
                         <div class="nav-option option1 button ">
@@ -115,13 +132,30 @@
                             <h3> <i class="fa-solid fa-cash-register"></i> All Categories</h3>
                         </div>
                     </a>
+
+ <a href="{% url 'transactions' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i>Transactions</h3>
+                        </div>
+                    </a>
+
+
+
+
                     <a href="{% url 'blog_list' %}">
                     
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> Blogs</h3>
                         </div>
                     </a>
-                    <a href="{% url 'payment_transactions' %}">
+
+
+
+
+
+                    
+                    <!-- <a href="{% url 'payment_transactions' %}">
                     
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> USSD Transactions</h3>
@@ -138,7 +172,7 @@
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> Verify Transaction</h3>
                         </div>
-                    </a>
+                    </a> -->
 
 
                     <!-- team button -->
@@ -177,7 +211,24 @@
         <script defer src="{% static 'vote/adminScript.js' %}"></script>
         <script defer src="{% static 'vote/adminScript2.js' %}"></script>
 
+  <script>
+  function updateDateTime() {
+    const now = new Date();
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    };
+    document.getElementById('date').textContent = now.toLocaleDateString('en-GB', options);
+  }
 
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+</script>
 </body>
 
 </html>

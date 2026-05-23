@@ -2,11 +2,36 @@
 {% load static %}
 {% block content %}
 <div class="main">
+<div class="heading">
+  <div class="heading-accent-ring"></div>
+  <!-- <div class="heading-icon-bg" aria-hidden="true">🗳️</div> -->
+  <div class="heading-ticker"></div>
 
-    <div class="admin-main-page">
-        <div class="heading">
-            <h1>Welcome to the admin dashboard, {{ user }}</h1>
-        </div>
+  <div class="heading-left">
+    <!-- <div class="badge">
+      <span class="dot"></span>
+      Live voting platform
+    </div> -->
+    <h1>Welcome to the admin dashboard, <span>{{ user }}</span></h1>
+    <p>Here's an overview of all your awards and activities.</p>
+  </div>
+
+  <div class="heading-stats">
+    <a href="{% url 'sendMessage' %}">
+      <button class="tbl-add-btn">
+        <i class="fa-solid fa-plus"></i> Send Message
+      </button>
+    <a href="{% url 'addAward' %}">
+      <button class="tbl-add-btn">
+        <i class="fa-solid fa-plus"></i> Add Award
+      </button>
+    </a>
+  </div>
+</div>
+   <div class="main-2">
+
+     <div class="admin-main-page">
+      
         <div style="background-color:#000; width:100%;">
             {% if messages %}
             {% for message in messages %}
@@ -14,56 +39,117 @@
             {% endfor %}
             {% endif %}
         </div>
-
-        <div class="statistics-container">
-            <div class="stat-row">
-                <h4>Total Awards organized so far</h4>
-
-                <p>{{ award_count }}</p>
-
-            </div>
-            <div class="stat-row">
-                <h4>Total categories for all awards organized</h4>
-
-                <p>{{ category_count }}</p>
-
-            </div>
-            <div class="stat-row">
-                <h4>Total number of nominees across all categories</h4>
-
-                <p>{{ nominee_count }}</p>
-
-            </div>
+ <!-- Stat Cards -->
+    <div class="statistics-container">
+      <div class="stat-row">
+        <div class="stat-top">
+          <div class="stat-icon-wrap">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <span class="stat-chip">All time</span>
         </div>
+        <h4>Total Awards organized so far</h4>
+        <p>{{ award_count }}</p>
+        <div class="stat-divider"></div>
+        <div class="stat-footer">
+          <i class="fa-solid fa-arrow-trend-up"></i> Running strong
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-top">
+          <div class="stat-icon-wrap">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <span class="stat-chip">All awards</span>
+        </div>
+        <h4>Total categories for all awards organized</h4>
+        <p>{{ category_count }}</p>
+        <div class="stat-divider"></div>
+        <div class="stat-footer">
+          <i class="fa-solid fa-arrow-trend-up"></i> Across all awards
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-top">
+          <div class="stat-icon-wrap">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <span class="stat-chip">All categories</span>
+        </div>
+        <h4>Total number of nominees across all categories</h4>
+        <p>{{ nominee_count }}</p>
+        <div class="stat-divider"></div>
+        <div class="stat-footer">
+          <i class="fa-solid fa-arrow-trend-up"></i> Across all categories
+        </div>
+      </div>
+    </div>
     </div>
 
-    <div class="recent-project">
-        <h3>Recent Project</h3>
-
-        <div class="tables">
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Awards Name</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for a in awards %}
-                    <tr>
-                        <td>{{ a.award }}</td>
-                        <td>
-                            {% if current_time < a.end_date %} In Progress {% else %} Ended {% endif %} </td>
-
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+  <!-- Recent Projects Table -->
+  <div class="recent-project">
+    <div class="recent-project-header">
+      <h3>Recent Projects</h3>
+      <div class="recent-project-actions">
+        <!-- <span class="tbl-count-badge">
+          {% with awards|length as total %}{{ total }} award{{ total|pluralize }}{% endwith %}
+        </span>
+        <a href="{% url 'access_award_by_code' %}">
+          <button class="tbl-add-btn">
+            <i class="fa-solid fa-plus"></i> Add Award
+          </button>
+        </a> -->
+      </div>
     </div>
 
+    <!-- <div class="tbl-tabs">
+      <div class="tbl-tab active">All</div>
+      <div class="tbl-tab">In Progress</div>
+      <div class="tbl-tab">Ended</div>
+    </div> -->
+
+    <div class="tables">
+      <table>
+        <thead>
+          <tr>
+            <th>Award Name</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+      <tbody>
+  {% for a in awards %}
+  <tr>
+    <td data-label="Award Name">
+      <div class="award-cell">
+        <!-- <div class="award-avatar {% cycle 'purple' 'orange' 'teal' %}">
+          {{ a.award|slice:":2"|upper }}
+        </div> -->
+        <div>
+          <div class="award-name">{{ a.award }}</div>
+          <!-- <div class="award-id">#AWD-{{ forloop.counter|stringformat:"03d" }}</div> -->
+        </div>
+      </div>
+    </td>
+    <td data-label="Status">
+      {% if current_time < a.end_date %}
+        <span class="status-pill active">
+          <span class="status-dot"></span> In Progress
+        </span>
+      {% else %}
+        <span class="status-pill ended">
+          <span class="status-dot"></span> Ended
+        </span>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+      </table>
+    </div>
+  </div>
+   </div>
 
 </div>
 
