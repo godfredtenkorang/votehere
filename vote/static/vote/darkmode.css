@@ -91,7 +91,10 @@ body.dark-mode .stat-row::after {
 }
 
 /* ── NO WHITE in dark mode ── */
-
+/* fix award names in dark mode */
+body.dark-mode .award-name {
+    color: #e8e6f0;
+}
 body.dark-mode .recent-project {
     background: #13152a;
     border-color: #1e2140;
@@ -733,4 +736,528 @@ body.dark-mode .awards-empty i {
 
 body.dark-mode .awards-empty p {
     color: #7b7d9d;
+}
+
+
+/* ── DARK MODE: nominees ranking page ── */
+
+body.dark-mode .np {
+    background: #0d0f1e;
+}
+
+/* hero */
+body.dark-mode .np-hero {
+    background: #13152a;
+    border: 1px solid #1e2140;
+    box-shadow: none;
+}
+
+body.dark-mode .np-hero::after {
+    background: rgba(192,132,252,0.05);
+}
+
+body.dark-mode .np-hero::before {
+    background: rgba(192,132,252,0.04);
+}
+
+body.dark-mode .np-hero-left h2 {
+    color: #c084fc;
+}
+
+body.dark-mode .np-hero-left h1 {
+    color: #e8e6f0;
+}
+
+/* stat cards */
+body.dark-mode .np-stat {
+    background: #1a1d2e;
+    border-color: #1e2140;
+    animation: npStatGlow 3s ease-in-out infinite;
+}
+
+body.dark-mode .np-stat-val {
+    color: #ffffff;
+}
+
+body.dark-mode .np-stat-lbl {
+    color: #c084fc;
+}
+
+@keyframes npStatGlow {
+    0%,100% {
+        border-color: rgba(106,13,173,0.2);
+        box-shadow:
+            0 0 8px rgba(106,13,173,0.12),
+            inset 0 0 8px rgba(106,13,173,0.03);
+    }
+
+    50% {
+        border-color: rgba(192,132,252,0.6);
+        box-shadow:
+            0 0 20px rgba(192,132,252,0.18),
+            inset 0 0 10px rgba(192,132,252,0.06);
+    }
+}
+
+/* section label */
+body.dark-mode .np-section-label {
+    color: #7b7d9d;
+}
+
+/* table card */
+body.dark-mode .np-card {
+    background: #13152a;
+    border-color: #1e2140;
+    box-shadow: none;
+    animation: npCardGlow 3s ease-in-out infinite;
+}
+
+@keyframes npCardGlow {
+    0%,100% {
+        border-color: rgba(106,13,173,0.2);
+        box-shadow:
+            0 0 8px rgba(106,13,173,0.12),
+            inset 0 0 8px rgba(106,13,173,0.03);
+    }
+
+    50% {
+        border-color: rgba(192,132,252,0.65);
+        box-shadow:
+            0 0 22px rgba(192,132,252,0.22),
+            inset 0 0 12px rgba(192,132,252,0.06);
+    }
+}
+
+/* table header */
+body.dark-mode .np-card thead tr {
+    background: #0f1117;
+}
+
+body.dark-mode .np-card thead th {
+    color: #e8e6f0;
+    border-bottom: 1px solid #1e2140;
+}
+
+/* rows */
+body.dark-mode .np-card tbody tr {
+    border-bottom-color: #1e2140;
+    background: #13152a;
+}
+
+body.dark-mode .np-card tbody tr:hover {
+    background: #1a1d2e;
+}
+
+/* td */
+body.dark-mode .np-card tbody td {
+    color: #c8c6d8;
+}
+
+/* rank badges */
+body.dark-mode .rank-1 {
+    background: #2a1800;
+    color: #fbbf24;
+    border-color: rgba(251,191,36,0.3);
+}
+
+body.dark-mode .rank-2 {
+    background: #1a1d2e;
+    color: #d1d5db;
+    border-color: #374151;
+}
+
+body.dark-mode .rank-3 {
+    background: #2a1500;
+    color: #fb923c;
+    border-color: rgba(251,146,60,0.3);
+}
+
+body.dark-mode .rank-n {
+    background: #1a1d2e;
+    color: #7b7d9d;
+    border-color: #1e2140;
+}
+
+/* vote bars */
+body.dark-mode .vote-bar-bg {
+    background: #1e2140;
+}
+
+body.dark-mode .vote-bar-fill {
+    background: linear-gradient(90deg, #7c3aed, #c084fc);
+}
+
+body.dark-mode .vote-num {
+    color: #c084fc;
+}
+
+/* image button */
+body.dark-mode .np-img-link {
+    background: #1e0a40;
+    color: #c084fc;
+    border-color: rgba(192,132,252,0.25);
+}
+
+body.dark-mode .np-img-link:hover {
+    background: #2a1152;
+}
+
+/* code tag */
+body.dark-mode .np-code {
+    background: #1e0a40;
+    color: #c084fc;
+    border: 1px solid rgba(192,132,252,0.18);
+}
+
+/* mobile */
+@media (max-width: 640px) {
+
+    body.dark-mode .np-card tbody tr {
+        background: #13152a;
+        border-bottom-color: #1e2140;
+    }
+
+    body.dark-mode .np-card tbody td::before {
+        color: #c084fc;
+    }
+}
+
+/* logout modal */
+body.dark-mode .logout {
+    background: #13152a;
+    border: 1px solid #1e2140;
+}
+
+body.dark-mode .logout p {
+    color: #e8e6f0;
+}
+
+body.dark-mode .log-button > p {
+    color: #7b7d9d;
+}
+
+body.dark-mode .lo-btn-fill {
+    background: #5c0fa3;
+}
+
+body.dark-mode .lo-btn-fill:hover {
+    background: #4a0080;
+}
+
+body.dark-mode .lo-btn-out {
+    background: transparent;
+    color: #c084fc;
+    border-color: #1e2140;
+}
+
+body.dark-mode .lo-btn-out:hover {
+    background: #1a1d2e;
+}
+
+
+/* ───────────────── DARK MODE : CATEGORY PAGE ───────────────── */
+
+body.dark-mode .cat-page-title {
+    color: #f3f0ff;
+}
+
+body.dark-mode .cat-page-title em {
+    color: #c084fc;
+}
+
+/* action buttons */
+body.dark-mode .cat-btn-primary {
+    background: #5b21b6;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(192,132,252,0.15);
+}
+
+body.dark-mode .cat-btn-primary:hover {
+    background: #6d28d9;
+}
+
+body.dark-mode .cat-btn-outline {
+    background: #13152a;
+    color: #c084fc;
+    border-color: #2b2f55;
+}
+
+body.dark-mode .cat-btn-outline:hover {
+    background: #1a1d2e;
+}
+
+/* section label */
+body.dark-mode .cat-section-label {
+    color: #7b7d9d;
+}
+
+/* table card */
+body.dark-mode .cat-table-card {
+    background: #13152a;
+    border-color: #1e2140;
+    box-shadow: none;
+    animation: catGlowPurple 3s ease-in-out infinite;
+}
+
+/* animated glow */
+@keyframes catGlowPurple {
+    0%,100% {
+        border-color: rgba(106,13,173,0.2);
+        box-shadow:
+            0 0 8px rgba(106,13,173,0.15),
+            inset 0 0 8px rgba(106,13,173,0.04);
+    }
+
+    50% {
+        border-color: rgba(192,132,252,0.7);
+        box-shadow:
+            0 0 22px rgba(192,132,252,0.3),
+            inset 0 0 12px rgba(192,132,252,0.08);
+    }
+}
+
+/* table head */
+body.dark-mode .cat-table-card thead tr {
+    background: #0f1117;
+}
+
+body.dark-mode .cat-table-card thead th {
+    color: #f3f0ff;
+    border-color: #1e2140;
+}
+
+/* rows */
+body.dark-mode .cat-table-card tbody tr {
+    background: #13152a;
+    border-bottom-color: #1e2140;
+}
+
+body.dark-mode .cat-table-card tbody tr:hover {
+    background: #1a1d2e;
+}
+
+/* cells */
+body.dark-mode .cat-table-card tbody td {
+    color: #e5e7eb;
+}
+
+/* force remove white bleed */
+body.dark-mode .cat-table-card table,
+body.dark-mode .cat-table-card tbody,
+body.dark-mode .cat-table-card thead,
+body.dark-mode .cat-table-card tr,
+body.dark-mode .cat-table-card td,
+body.dark-mode .cat-table-card th {
+    background-color: inherit;
+    border-color: #1e2140;
+}
+
+/* view result button */
+body.dark-mode .cat-view-btn {
+    background: #22113d;
+    border-color: #3b1f6e;
+    color: #c084fc;
+}
+
+body.dark-mode .cat-view-btn:hover {
+    background: #2c1650;
+    color: #e9d5ff;
+}
+
+/* mobile labels */
+@media (max-width: 640px) {
+    body.dark-mode .cat-table-card tbody td::before {
+        color: #a78bfa;
+    }
+
+    body.dark-mode .cat-table-card tbody tr {
+        background: #13152a;
+        border-color: #1e2140;
+    }
+}
+
+/* logout modal */
+body.dark-mode .logout {
+    background: #13152a;
+    border: 1px solid #1e2140;
+    box-shadow: 0 0 30px rgba(0,0,0,0.45);
+}
+
+body.dark-mode .logout p {
+    color: #f3f0ff;
+}
+
+body.dark-mode .log-button > p {
+    color: #7b7d9d;
+}
+
+/* ───────────────── DARK MODE : NOMINEE INTERFACE ───────────────── */
+
+body.dark-mode .nominee-interface-container {
+    background: transparent;
+}
+
+/* heading */
+body.dark-mode .heading h2 {
+    color: #f3f0ff;
+}
+
+body.dark-mode .total {
+    background: #13152a;
+    border: 1px solid #1e2140;
+    box-shadow: 0 0 18px rgba(0,0,0,0.2);
+}
+
+body.dark-mode .total p:first-child {
+    color: #9ca3af;
+}
+
+body.dark-mode .total-votes {
+    color: #c084fc;
+}
+
+/* table wrapper */
+body.dark-mode .table-container {
+    background: #13152a;
+    border: 1px solid #1e2140;
+    border-radius: 18px;
+    overflow: hidden;
+    animation: nomineeGlow 3s ease-in-out infinite;
+}
+
+/* animated glow */
+@keyframes nomineeGlow {
+    0%,100% {
+        border-color: rgba(106,13,173,0.2);
+        box-shadow:
+            0 0 8px rgba(106,13,173,0.15),
+            inset 0 0 8px rgba(106,13,173,0.04);
+    }
+
+    50% {
+        border-color: rgba(192,132,252,0.7);
+        box-shadow:
+            0 0 22px rgba(192,132,252,0.3),
+            inset 0 0 12px rgba(192,132,252,0.08);
+    }
+}
+
+/* table */
+body.dark-mode #nominees-table {
+    background: #13152a;
+}
+
+/* table head */
+body.dark-mode #nominees-table thead tr {
+    background: #0f1117;
+}
+
+body.dark-mode #nominees-table th {
+    color: #f3f0ff;
+    border-color: #1e2140;
+}
+
+/* rows */
+body.dark-mode #nominees-table tbody tr {
+    background: #13152a;
+    border-bottom: 1px solid #1e2140;
+    transition: 0.2s ease;
+}
+
+body.dark-mode #nominees-table tbody tr:hover {
+    background: #1a1d2e;
+}
+
+/* cells */
+body.dark-mode #nominees-table td {
+    color: #e5e7eb;
+}
+
+/* nominee images */
+body.dark-mode #nominees-table td img {
+    border: 2px solid #2b2f55;
+    box-shadow: 0 0 12px rgba(192,132,252,0.12);
+}
+
+/* chart container */
+body.dark-mode .chart {
+    background: #13152a;
+    border: 1px solid #1e2140;
+    border-radius: 18px;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    animation: nomineeGlow 3s ease-in-out infinite;
+}
+
+body.dark-mode .chart h3 {
+    color: #f3f0ff;
+}
+
+/* back button */
+body.dark-mode .back-button button {
+    background: #5b21b6;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 14px rgba(192,132,252,0.15);
+}
+
+body.dark-mode .back-button button:hover {
+    background: #6d28d9;
+}
+
+/* logout modal */
+body.dark-mode .logout {
+    background: #13152a;
+    border: 1px solid #1e2140;
+    box-shadow: 0 0 30px rgba(0,0,0,0.45);
+}
+
+body.dark-mode .logout p {
+    color: #f3f0ff;
+}
+
+body.dark-mode .logout button,
+body.dark-mode .logout a button {
+    background: #5b21b6;
+    color: #fff;
+    border: none;
+}
+
+body.dark-mode .logout .DontLogout {
+    background: transparent;
+    color: #c084fc;
+    border: 1px solid #2b2f55;
+}
+
+/* remove white bleed */
+body.dark-mode table,
+body.dark-mode thead,
+body.dark-mode tbody,
+body.dark-mode tr,
+body.dark-mode th,
+body.dark-mode td {
+    border-color: #1e2140;
+}
+
+/* mobile */
+@media (max-width: 640px) {
+
+    body.dark-mode .table-container {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
+    body.dark-mode #nominees-table tbody tr {
+        background: #13152a;
+        border: 1px solid #1e2140;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        padding: 14px;
+        display: block;
+    }
+
+    body.dark-mode #nominees-table td::before {
+        color: #a78bfa;
+    }
 }

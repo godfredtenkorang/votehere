@@ -17,11 +17,11 @@
   </div>
 
   <div class="heading-stats">
-    <button class="send-msg-btn">
-      <i class="fa-solid fa-paper-plane"></i>
-      Send Message
-    </button>
-    <a href="{% url 'access_award_by_code' %}">
+    <a href="{% url 'sendMessage' %}">
+      <button class="tbl-add-btn">
+        <i class="fa-solid fa-plus"></i> Send Message
+      </button>
+    <a href="{% url 'addAward' %}">
       <button class="tbl-add-btn">
         <i class="fa-solid fa-plus"></i> Add Award
       </button>

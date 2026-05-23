@@ -1,0 +1,408 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+body{
+    background:#0b1120;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.award-form-wrapper{
+    width:100%;
+    padding:40px;
+    display:flex;
+    justify-content:center;
+    box-sizing:border-box;
+}
+
+.award-form-card{
+    width:100%;
+    max-width:1100px;
+    background:#111827;
+    border-radius:24px;
+    padding:35px;
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.form-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+    gap:20px;
+}
+
+.form-header h1{
+    color:#fff;
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.form-header p{
+    color:#9ca3af;
+    font-size:15px;
+}
+
+.trophy-icon{
+    width:75px;
+    height:75px;
+    border-radius:20px;
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:30px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:24px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    color:#f3f4f6;
+    margin-bottom:10px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.form-group input,
+.form-group textarea{
+    width:100%;
+    background:#1f2937;
+    border:1px solid #374151;
+    border-radius:14px;
+    padding:15px;
+    color:#fff;
+    font-size:15px;
+    outline:none;
+    transition:0.3s ease;
+    box-sizing:border-box;
+}
+
+.form-group textarea{
+    min-height:140px;
+    resize:none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus{
+    border-color:#3b82f6;
+    box-shadow:0 0 0 4px rgba(59,130,246,0.15);
+}
+
+.form-group small{
+    color:#9ca3af;
+    margin-top:8px;
+    font-size:12px;
+}
+
+.full-width{
+    grid-column:1/-1;
+}
+
+.upload-box{
+    width:100%;
+    background:#1f2937;
+    border:2px dashed #374151;
+    border-radius:18px;
+    padding:35px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    transition:0.3s ease;
+    box-sizing:border-box;
+}
+
+.upload-box:hover{
+    border-color:#3b82f6;
+}
+
+.upload-box i{
+    font-size:35px;
+    color:#3b82f6;
+    margin-bottom:12px;
+}
+
+.upload-box p{
+    color:#d1d5db;
+    font-size:15px;
+}
+
+.upload-box input{
+    position:absolute;
+    width:100%;
+    height:100%;
+    opacity:0;
+    left:0;
+    top:0;
+    cursor:pointer;
+}
+
+.checkbox-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+.checkbox-area span{
+    color:#fff;
+    font-size:15px;
+}
+
+.checkbox-area input{
+    width:18px;
+    height:18px;
+    accent-color:#3b82f6;
+}
+
+.form-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:35px;
+    flex-wrap:wrap;
+}
+
+.save-btn,
+.cancel-btn{
+    border:none;
+    padding:15px 28px;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+.save-btn{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+}
+
+.save-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(37,99,235,0.35);
+}
+
+.cancel-btn{
+    background:#1f2937;
+    color:#fff;
+    border:1px solid #374151;
+}
+
+.cancel-btn:hover{
+    background:#374151;
+}
+
+@media(max-width:768px){
+
+    .award-form-wrapper{
+        padding:20px;
+    }
+
+    .award-form-card{
+        padding:25px;
+    }
+
+    .form-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .form-header h1{
+        font-size:25px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+
+
+<div class="main">
+   <div class="the-team-container">
+  <div class="page-banner">
+    <div class="page-banner-left">
+      <div class="page-banner-eyebrow">
+        <i class="fa-solid fa-newspaper"></i>
+        <span>ADD AWARD</span>
+      </div>
+      <h1 class="page-banner-title">Add Award</h1>
+      <p class="page-banner-subtitle">Create and publish a new award for the VoteAfric platform.</p>
+    </div>
+    
+  </div>
+</div>
+
+{% if messages %}
+<div class="flash-messages">
+  {% for message in messages %}
+  <p class="flash-msg">{{ message }}</p>
+  {% endfor %}
+</div>
+{% endif %}
+
+   <div class="main-2">
+    <div class="award-form-wrapper">
+
+    <div class="award-form-card">
+
+        <div class="form-header">
+
+            <div>
+                <h1>Create Award</h1>
+                <p>Create and publish a new award event for VoteAfric.</p>
+            </div>
+
+            <div class="trophy-icon">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+
+        </div>
+
+        <form class="modern-award-form">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Award Name</label>
+                    <input type="text" placeholder="Enter award name">
+                </div>
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" placeholder="Enter title">
+                </div>
+
+                <div class="form-group">
+                    <label>Slug</label>
+                    <input type="text" placeholder="award-slug">
+                </div>
+
+                <div class="form-group">
+                    <label>Access Code</label>
+                    <input type="text" placeholder="Access code">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Event Link</label>
+                    <input type="text" placeholder="https://">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Upload Image</label>
+
+                    <div class="upload-box">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p>Click to upload image</p>
+                        <input type="file">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Date Added</label>
+                    <input type="datetime-local">
+                </div>
+
+                <div class="form-group">
+                    <label>Voting End Date</label>
+                    <input type="datetime-local">
+                </div>
+
+                <div class="form-group">
+                    <label>Nomination End Date</label>
+                    <input type="date">
+                </div>
+
+                <div class="form-group">
+                    <label>Percentage Earned</label>
+                    <input type="number" placeholder="80">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Bulk Voting Options</label>
+
+                    <textarea placeholder='[{"amount":"5","votes":"10"}]'></textarea>
+
+                    <small>
+                        Example: [{"amount":"5","votes":"10"}]
+                    </small>
+                </div>
+
+                <div class="checkbox-area">
+                    <input type="checkbox">
+                    <span>Close Result</span>
+                </div>
+
+            </div>
+
+            <div class="form-buttons">
+                <button class="save-btn">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save Award
+                </button>
+
+                <button class="cancel-btn">
+                    Reset
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+   </div>
+
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#id_category').change(function () {
+            var categoryId = $(this).val();
+            if (categoryId) {
+                $.ajax({
+                    url: '/maindashboard/get_subcategories/',
+                    data: {
+                        'category_id': categoryId
+                    },
+                    success: function (data) {
+                        $('#id_sub_category').html(data);
+                    }
+                });
+            } else {
+                $('#id_sub_category').html('<option value="">---------</option>');
+            }
+        });
+    });
+</script>
+{% endblock %}
