@@ -2,95 +2,241 @@
 {% load static %}
 {% block content %}
 
+<style>
+  .cat-page { padding: 2rem 2.5rem; }
 
-        <div class="main">
+  .cat-page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #2d0a6e;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cat-page-title em { font-style: italic; color: #5E17A8; }
 
-            <!-- category interface: the inter face of list of category when an award is clicked -->
-            <div class="category-interface-container">
-                <div class="heading">
-                    <h2>List of Category for awards {{category}}</h2>
+  .cat-action-bar {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
 
-                </div>
-                <br>
+  .cat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 26px;
+    border-radius: 11px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  .cat-btn-primary { background: #5E17A8; color: #fff; }
+  .cat-btn-primary:hover { background: #4A0E8F; transform: translateY(-1px); }
+  .cat-btn-outline { background: #fff; color: #5E17A8; border: 1.5px solid #5E17A8; }
+  .cat-btn-outline:hover { background: #f0e8ff; }
 
-                <a href="{% url 'access_transaction_by_code' %}"class="insight">
-                <button>Access Transactions </button>
-                </a>
-                <a href="{% url 'vote_in_order_by_category' category.slug %}"class="insight">
-                <button>Votes In Order </button>
-                </a>
-                <br>
-                <br>
+  .cat-section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 12px;
+  }
 
-                <div class="table-responsive">
-                    <table class="revenue-table">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Action (check results)</th>
-                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for n in award %}
-                            <tr>
-                                <td>{{ n.content }}</td>
-                                <td><a href="{% url 'activity_nominee' n.slug %}">click</a></td>
-                
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+  .cat-table-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(94,23,168,0.08);
+  }
 
-                <!-- <div class="categories-container">
-                    {% for n in award %}
+  .cat-table-card table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .cat-table-card colgroup col:first-child  { width: 65%; }
+  .cat-table-card colgroup col:last-child   { width: 35%; }
+
+  .cat-table-card thead tr { background: #3D1282; }
+
+  .cat-table-card thead th {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 18px 28px;
+    text-align: left;
+  }
+
+  .cat-table-card tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.1s;
+  }
+  .cat-table-card tbody tr:last-child { border-bottom: none; }
+  .cat-table-card tbody tr:hover { background: #faf6ff; }
+
+  .cat-table-card tbody td {
+    padding: 20px 28px;
+    font-size: 15px;
+    color: #1a1a1a;
+    vertical-align: middle;
+  }
+
+  .cat-view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #5E17A8;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 9px 20px;
+    border-radius: 9px;
+    background: #f0e8ff;
+    transition: all 0.15s;
+    border: 1px solid #ddd0f5;
+  }
+  .cat-view-btn:hover { background: #e0d0ff; color: #3D1282; }
+
+  /* ── Mobile collapse ── */
+  @media (max-width: 640px) {
+    .cat-page { padding: 1rem; }
+    .cat-action-bar { flex-direction: column; }
+    .cat-btn { justify-content: center; }
+
+    .cat-table-card thead { display: none; }
+    .cat-table-card table,
+    .cat-table-card tbody,
+    .cat-table-card tr,
+    .cat-table-card td { display: block; width: 100%; }
+
+    .cat-table-card tbody tr {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cat-table-card tbody td { padding: 4px 0; border: none; }
+    .cat-table-card tbody td::before {
+      content: attr(data-label);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #bbb;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .cat-table-card td:last-child { margin-top: 12px; }
+  }
+
+  /* Logout overlay */
+  .logout-pop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(30,10,60,0.5);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  .logout-pop.active { display: flex; }
+  .logout {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 340px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  }
+  .logout p { font-size: 16px; color: #222; margin-bottom: 1.5rem; line-height: 1.6; }
+  .log-button {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .log-button > p { margin: 0; font-size: 13px; color: #aaa; }
+</style>
+
+<div class="main">
+<div class="cat-page">
+
+  <h2 class="cat-page-title">
+    List of Categories &mdash; <em>{{ category }}</em>
+  </h2>
+
+  <div class="cat-action-bar">
+    <a href="{% url 'access_transaction_by_code' %}" class="cat-btn cat-btn-primary">
+      💳 Access Transactions
+    </a>
+    <a href="{% url 'vote_in_order_by_category' category.slug %}" class="cat-btn cat-btn-outline">
+      ↕ Votes In Order
+    </a>
+  </div>
+
+  <p class="cat-section-label">Categories</p>
+
+  <div class="cat-table-card">
+    <table>
+      <colgroup>
+        <col />
+        <col />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Action (Check Results)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for n in award %}
+        <tr>
+          <td data-label="Category">{{ n.content }}</td>
+          <td data-label="Action">
+            <a href="{% url 'activity_nominee' n.slug %}" class="cat-view-btn">
+              👁 View Results
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
 
 
-                    <a href="{% url 'activity_nominee' n.slug %}">
-                        <div class="category">
-                           
-                            <div class="cat-img">
-                                <img src="{{ n.category.image.url }}" alt="geima">
-                            </div>
-                            
-                            <div class="cat-name">
-                                <h2>{{ n.content }}</h2>
-                            </div>
 
-                        </div>
-                    </a>
-                    {% endfor %}
-                </div> -->
-
-                <!-- <div class="back-button">
-                    <a class="active" href="{% url 'adminPage' %}">
-                        <button>Go Back</button>
-                    </a>
-
-                </div> -->
-
-
-
-            </div>
-
-
-
-        </div>
+</div>
+<!-- Logout modal -->
+<div class="logout-pop" id="logoutModal">
+  <div class="logout">
+    <p>Are you sure you want to log out from the admin panel?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}" class="cat-btn cat-btn-primary">Log Out</a>
+      <p>or</p>
+      <button
+        class="cat-btn cat-btn-outline DontLogout"
+        onclick="document.getElementById('logoutModal').classList.remove('active')">
+        Cancel
+      </button>
     </div>
-    <div class="logout-pop">
-        <div class="logout">
-            <p>Are you sure you want to log out from the admin pannel ?</p>
-            <div class="log-button">
-                <a href="{% url 'logout' %}">
-                    <button>Log Out</button>
-                </a>
+  </div>
+</div>
 
-                <p>Or</p>
-
-                <button class="DontLogout">No</button>
-            </div>
-        </div>
-
-    </div>
 {% endblock %}

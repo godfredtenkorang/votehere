@@ -1,72 +1,467 @@
 {% extends 'maindashboard/base.html' %}
 {% load static %}
 {% block content %}
+<style>
+/* ========================================
+   BLOG PAGE
+   ======================================== */
+
+.transation-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Eyebrow label inside heading */
+.heading-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(249, 168, 37, 0.18);
+  border: 0.5px solid rgba(249, 168, 37, 0.35);
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+}
+
+.heading-eyebrow i {
+  font-size: 12px;
+  color: #f9a825;
+}
+
+.heading-eyebrow span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #f9a825;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.heading-left h1 {
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.heading-left p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Gold CTA button */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #f9a825;
+  color: #4a148c;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+  z-index: 1;
+}
+
+.btn-gold:hover {
+  background: #f0a000;
+  color: #4a148c;
+}
+
+/* ========== TABLE CARD ========== */
+.recent-project {
+  background: #fff;
+  border-radius: 16px;
+  border: 0.5px solid #ede9f8;
+  overflow: hidden;
+}
+
+.recent-project-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 0.5px solid #f3f4f6;
+}
+
+.recent-project h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.tbl-count-badge {
+  font-size: 11px;
+  background: #f5f0fe;
+  color: #6a0dad;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 0.5px solid #e9d5ff;
+}
+
+/* ========== TABLE ========== */
+.tables table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tables thead tr {
+  background: #faf9ff;
+}
+
+.tables th {
+  padding: 11px 22px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tables tbody tr {
+  border-bottom: 0.5px solid #f3f4f6;
+  transition: background 0.1s;
+}
+
+.tables tbody tr:last-child {
+  border-bottom: none;
+}
+
+.tables tbody tr:hover {
+  background: #faf9ff;
+}
+
+.tables td {
+  padding: 14px 22px;
+  font-size: 13px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+/* Blog title cell with avatar */
+.blog-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.blog-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f5f0fe;
+  color: #6a0dad;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.award-name {
+  font-weight: 500;
+  color: #1a1a2e;
+  font-size: 13px;
+}
+
+.award-id {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 1px;
+}
+
+/* Date */
+.date-cell {
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+/* Status pills */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status-pill.active {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 0.5px solid #bbf7d0;
+}
+
+.status-pill.ended {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 0.5px solid #fecaca;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.edit-btn {
+  background: #f5f0fe;
+  color: #6a0dad;
+  border: 0.5px solid #e9d5ff;
+}
+
+.edit-btn:hover {
+  background: #ede4fd;
+  color: #6a0dad;
+}
+
+.delete-btn {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 0.5px solid #fecaca;
+}
+
+.delete-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ========================================
+   MOBILE COLLAPSE — card style like image 2
+   ======================================== */
+@media (max-width: 768px) {
+
+  .tables thead {
+    display: none;
+  }
+
+  .tables table {
+    width: 100%;
+  }
+
+  /* Each row → card */
+  .tables tbody tr {
+    display: block;
+    background: #fff;
+    border: 0.5px solid #ede9f8;
+    border-radius: 12px;
+    margin: 0 16px 12px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .tables tbody tr:hover {
+    background: #faf9ff;
+  }
+
+  /* Each cell → label + value row */
+  .tables td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 0.5px solid #f3f4f6;
+    font-size: 13px;
+  }
+
+  .tables td:last-child {
+    border-bottom: none;
+  }
+
+  /* Hide author column on mobile (it's already inside the title cell) */
+  .tables td:nth-child(2) {
+    display: none;
+  }
+
+  /* data-label shown as left side */
+  .tables td::before {
+    content: attr(data-label);
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  /* Title cell full width on mobile */
+  .tables td:first-child {
+    border-bottom: 0.5px solid #f3f4f6;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+  }
+
+  .tables td:first-child::before {
+    display: none;
+  }
+
+  .blog-title-cell {
+    width: 100%;
+  }
+
+  /* Action buttons stack */
+  .action-buttons {
+    justify-content: flex-end;
+  }
+
+  /* Table wrapper padding */
+  .tables {
+    padding: 12px 0;
+  }
+
+  /* Heading stacks on mobile */
+  .heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+</style>
+
+
+
+
 <div class="main">
-    <div class="transation-details-container">
-        <div class="heading">
+  <div class="transation-details-container">
 
-
-            <h3>Blogs </h3>
-            
-
+    <!-- Page heading banner -->
+    <div class="heading">
+      <div class="heading-left">
+        <div class="heading-eyebrow">
+          <i class="fa-solid fa-newspaper"></i>
+          <span>Content Management</span>
         </div>
-        <div style="background-color:#000; width:100%;">
-            {% if messages %}
-            {% for message in messages %}
-            <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
+        <h1>Blogs</h1>
+        <p>Manage and publish blog posts for the VoteAfric platform.</p>
+      </div>
+      <a href="{% url 'add_blog' %}" class="btn-gold">
+        <i class="fa-solid fa-plus"></i> Add Blog
+      </a>
+    </div>
+<div class="main-2">
+
+    <!-- Flash messages -->
+    {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+      <p class="flash-msg">{{ message }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Table card -->
+    <div class="recent-project">
+      <div class="recent-project-header">
+        <h3>All Blog Posts</h3>
+        <span class="tbl-count-badge">{{ blogs|length }} post{{ blogs|length|pluralize }}</span>
+      </div>
+
+      <div class="tables">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Recommended</th>
+              <th>Date Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for blog in blogs %}
+            <tr>
+              <td data-label="Title">
+                <div class="blog-title-cell">
+                  <div class="blog-avatar">
+                    {{ blog.title|slice:":1"|upper }}
+                  </div>
+                  <div>
+                    <div class="award-name">{{ blog.title }}</div>
+                    <div class="award-id">by {{ blog.author }}</div>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Author">{{ blog.author }}</td>
+              <td data-label="Recommended">
+                {% if blog.blog_recommended %}
+                  <span class="status-pill active">
+                    <span class="status-dot"></span> Yes
+                  </span>
+                {% else %}
+                  <span class="status-pill ended">
+                    <span class="status-dot"></span> No
+                  </span>
+                {% endif %}
+              </td>
+              <td data-label="Date Added">
+                <span class="date-cell">{{ blog.date_added }}</span>
+              </td>
+              <td data-label="Actions">
+                <div class="action-buttons">
+                  <a href="{% url 'update_blog' blog.id %}" class="action-btn edit-btn">
+                    <i class="fa-solid fa-pen"></i> Edit
+                  </a>
+                  <a href="{% url 'delete_blog' blog.id %}" class="action-btn delete-btn">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </a>
+                </div>
+              </td>
+            </tr>
             {% endfor %}
-            {% endif %}
-            </div>
-
-        <br>
-        <h2><a href="{% url 'add_blog' %}">Add Blog</a></h2>
-
-        <br>
-        <div class="table-responsive">
-            <table class="revenue-table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Blog Recommended</th>
-                        <th>Date Added</th>
-                        <th>Update</th>
-                        <th>Delete</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for blog in blogs %}
-                    <tr>
-                        <td>{{ blog.title }}</td>
-                        <td>{{ blog.author }}</td>
-                        <td>{{ blog.blog_recommended }}</td>
-                        <td>{{ blog.date_added }}</td>
-                        
-                        <td><a href="{% url 'update_blog' blog.id %}">update</a></td>
-                        <td><a href="{% url 'delete_blog' blog.id %}">delete</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
+
 
 </div>
+  </div>
+</div>
+
+<!-- Logout modal -->
 <div class="logout-pop">
-    <div class="logout">
-        <p>Are you sure you want to log out from the admin pannel ?</p>
-        <div class="log-button">
-            <a href="{% url 'logout' %}">
-                <button>Log Out</button>
-            </a>
-
-            <p>Or</p>
-
-            <button class="DontLogout">No</button>
-        </div>
+  <div class="logout">
+    <div class="logout-icon">
+      <i class="fa-solid fa-right-from-bracket"></i>
     </div>
-
+    <p>Are you sure you want to log out from the admin panel?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button class="logout-confirm-btn">Log Out</button>
+      </a>
+      <button class="DontLogout logout-cancel-btn">Cancel</button>
+    </div>
+  </div>
 </div>
 {% endblock %}

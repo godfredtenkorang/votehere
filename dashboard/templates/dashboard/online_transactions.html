@@ -1,63 +1,344 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
+<style>
+
+/* ── HEADING ─────────────────────────────── */
+.heading {
+    background: linear-gradient(135deg, #4a0080 0%, #6a0dad 60%, #8b00cc 100%);
+
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+.heading::before {
+    content: '';
+    position: absolute;
+    right: 60px; top: -50px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.07);
+}
+.heading::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -40px;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+}
+.heading h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 1;
+}
+.heading h1 span { color: #ffd54f; }
+.heading h3 {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+}
+.heading h4 {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffd54f;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── FILTER FORM ─────────────────────────── */
+.filter-form {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #ede8f5;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(92,15,163,0.06);
+}
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+.filter-row select,
+.filter-row input[type="text"],
+.filter-row input[type="date"] {
+    padding: 9px 14px;
+    border: 1.5px solid #ddd0f0;
+    border-radius: 9px;
+    font-size: 13px;
+    color: #1a1a2e;
+    background: #faf8ff;
+    outline: none;
+    min-width: 140px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.filter-row select:focus,
+.filter-row input:focus {
+    border-color: #6a0dad;
+    box-shadow: 0 0 0 3px rgba(106,13,173,0.08);
+    background: #fff;
+}
+.filter-row select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 12 12'%3E%3Cpath fill='%236a0dad' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-color: #faf8ff;
+    padding-right: 32px;
+    cursor: pointer;
+}
+.btn {
+    padding: 9px 20px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+    font-family: inherit;
+}
+.btn-primary { background: #6a0dad; color: #fff; }
+.btn-primary:hover { background: #5c0fa3; transform: translateY(-1px); }
+.btn-secondary {
+    background: transparent;
+    color: #6a0dad;
+    border: 1.5px solid #ddd0f0;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+.btn-secondary:hover { background: #f5f0ff; }
+
+/* ── TABLE ───────────────────────────────── */
+.table-responsive {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #ede8f5;
+    box-shadow: 0 2px 12px rgba(92,15,163,0.06);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.revenue-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    font-size: 13.5px;
+}
+
+.revenue-table thead tr { background: #6a0dad; }
+
+.revenue-table thead th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.revenue-table thead th:first-child { border-radius: 14px 0 0 0; }
+.revenue-table thead th:last-child  { border-radius: 0 14px 0 0; }
+
+.revenue-table tbody tr {
+    border-bottom: 1px solid #f0eaf8;
+    transition: background 0.15s;
+}
+.revenue-table tbody tr:last-child { border-bottom: none; }
+.revenue-table tbody tr:hover { background: #faf6ff; }
+
+.revenue-table tbody td {
+    padding: 13px 16px;
+    color: #2d1a4a;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* Reference — monospace truncated */
+.revenue-table tbody td:nth-child(2) {
+    font-family: 'Courier New', monospace;
+    font-size: 11.5px;
+    color: #666;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Amount — green bold */
+.revenue-table tbody td:nth-child(3) {
+    font-weight: 700;
+    color: #0f8c5a;
+}
+
+/* Votes — purple */
+.revenue-table tbody td:nth-child(4) {
+    font-weight: 600;
+    color: #6a0dad;
+}
+
+/* Verification badge */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+.badge-true  { background: #e6f9f1; color: #0f8c5a; }
+.badge-false { background: #fdecea; color: #c0392b; }
+
+/* ── RESPONSIVE ──────────────────────────── */
+@media (max-width: 768px) {
+    .heading { padding: 20px; flex-direction: column; align-items: flex-start; }
+    .heading h1 { font-size: 16px; }
+    .filter-row { flex-direction: column; align-items: stretch; }
+    .filter-row select,
+    .filter-row input,
+    .filter-row .btn { width: 100%; }
+}
+/* mobile card layout */
+@media (max-width: 640px) {
+    .table-responsive {
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        overflow: visible;
+    }
+
+    .revenue-table { min-width: unset; width: 100%; }
+    .revenue-table thead { display: none; }
+    .revenue-table tbody,
+    .revenue-table tr { display: block; width: 100%; }
+
+    .revenue-table tr {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #ede8f5;
+        margin-bottom: 12px;
+        padding: 14px 16px;
+        box-shadow: 0 2px 10px rgba(92,15,163,0.06);
+    }
+
+    body.dark-mode .revenue-table tr {
+        background: #13152a;
+        border-color: #1e2140;
+        box-shadow: none;
+    }
+
+    .revenue-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px 0;
+        border-bottom: 1px solid #f0eaf8;
+        font-size: 13px;
+        white-space: normal;
+        max-width: 100%;
+        overflow: visible;
+        text-overflow: unset;
+    }
+
+    body.dark-mode .revenue-table td {
+        border-bottom-color: #1e2140;
+    }
+
+    .revenue-table td:last-child { border-bottom: none; }
+
+    .revenue-table td::before {
+        content: attr(data-label);
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #9b59b6;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+        margin-right: 12px;
+    }
+
+    body.dark-mode .revenue-table td::before {
+        color: #c084fc;
+    }
+}
+
+</style>
+
 <div class="main">
     <div class="transation-details-container">
+
         <div class="heading">
             {% if category %}
-            <h1>Total ONLINE Revenue for <span>{{ category.award }} </span></h1>
-            <h3>Total Revenue made for each category</h3>
+            <div>
+                <h1>Total ONLINE Revenue for <span>{{ category.award }}</span></h1>
+                <h3>Total Revenue made for each category</h3>
+            </div>
             <h4>Total Amount: GH¢{{ total_amount }}</h4>
-            <!-- <h4>Total Amount After Charges (2%): GH¢{{ total_amount_after_charge }}</h4> -->
-
             {% endif %}
         </div>
-        <form method="get" class="filter-form">
+
+     <div class="main-2">
+           <form method="get" class="filter-form">
             <div class="filter-row">
-                <!-- Nominee dropdown -->
                 <select name="nominee">
                     <option value="">All Nominees</option>
                     {% for nominee in nominees %}
-                    <option value="{{ nominee.id }}" {% if filter_params.nominee == nominee.id|stringformat:"s"%}selected{% endif %}>
+                    <option value="{{ nominee.id }}" {% if filter_params.nominee == nominee.id|stringformat:"s" %}selected{% endif %}>
                         {{ nominee.name }}
                     </option>
                     {% endfor %}
                 </select>
 
-                <!-- Content dropdown -->
                 <select name="content">
                     <option value="">All Contents</option>
                     {% for content in contents %}
-                    <option value="{{ content.id }}" {% if filter_params.content == content.id|stringformat:"s"%}selected{% endif %}>
+                    <option value="{{ content.id }}" {% if filter_params.content == content.id|stringformat:"s" %}selected{% endif %}>
                         {{ content.content }}
                     </option>
                     {% endfor %}
                 </select>
 
-                <!-- Phone filter -->
                 <input type="text" name="phone" placeholder="Phone number" value="{{ filter_params.phone }}">
-
-                <!-- Reference filter -->
                 <input type="text" name="ref" placeholder="Reference" value="{{ filter_params.ref }}">
 
-                <!-- Verified filter -->
                 <select name="verified">
                     <option value="">All Statuses</option>
-                    <option value="true" {% if filter_params.verified == 'true' %}selected{% endif %}>Verified</option>
-                    <option value="false" {% if filter_params.verified == 'false' %}selected{% endif %}>Not Verified
-                    </option>
+                    <option value="true"  {% if filter_params.verified == 'true'  %}selected{% endif %}>Verified</option>
+                    <option value="false" {% if filter_params.verified == 'false' %}selected{% endif %}>Not Verified</option>
                 </select>
 
-                <!-- Date created filter -->
                 <input type="date" name="date_created" value="{{ filter_params.date_created }}">
 
                 <button type="submit" class="btn btn-primary">Filter</button>
-                <a href="?" class="btn btn-secondary">Clear Filters</a>
+                <a href="?" class="btn btn-secondary">Clear</a>
             </div>
         </form>
-        <br>
+
         <div class="table-responsive">
-            <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
+            <table class="revenue-table">
                 <thead>
                     <tr>
                         <th>Category</th>
@@ -69,34 +350,32 @@
                         <th>Date & Time</th>
                     </tr>
                 </thead>
-                {% for p in payments %}
                 <tbody>
+                    {% for p in payments %}
                     <tr>
                         <td>{{ p.content }}</td>
                         <td>{{ p.ref }}</td>
                         <td>GH¢{{ p.total_amount }}</td>
                         <td>{{ p.vote }}</td>
                         <td>{{ p.nominee.code }}</td>
-                        <td>{{ p.verified }}</td>
+                        <td>
+                            {% if p.verified %}
+                            <span class="badge badge-true">✓ Verified</span>
+                            {% else %}
+                            <span class="badge badge-false">✕ Unverified</span>
+                            {% endif %}
+                        </td>
                         <td>{{ p.date_created }}</td>
                     </tr>
-
-                    <!-- Add more rows as needed -->
+                    {% endfor %}
                 </tbody>
-                {% endfor %}
             </table>
         </div>
+     </div>
+
     </div>
-    <!-- <div class="back-button">
-        <a href="{% url 'TransactionMain' %}">
-            <button>Go Back</button>
-        </a>
-
-    </div> -->
-</div>
 </div>
 
-</div>
 <div class="logout-pop">
     <div class="logout">
         <p>Are you sure you want to log out from the admin pannel ?</p>
@@ -104,12 +383,9 @@
             <a href="{% url 'logout' %}">
                 <button>Log Out</button>
             </a>
-
             <p>Or</p>
-
             <button class="DontLogout">No</button>
         </div>
     </div>
-
 </div>
 {% endblock %}

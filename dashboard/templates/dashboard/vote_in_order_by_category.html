@@ -1,63 +1,259 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
+
+<style>
+  .np { padding: 1.75rem 2rem; }
+
+  .np-hero {
+    background: #3D1282;
+    border-radius: 18px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .np-hero::after {
+    content: '';
+    position: absolute; right: -50px; top: -60px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.05); pointer-events: none;
+  }
+  .np-hero::before {
+    content: '';
+    position: absolute; right: 80px; bottom: -80px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.04); pointer-events: none;
+  }
+  .np-hero-left h2 {
+    color: #c9a0ff; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .np-hero-left h1 {
+    color: #fff; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .np-hero-stats { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  .np-stat {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 110px;
+  }
+  .np-stat-val { color: #fff; font-size: 1.4rem; font-weight: 800; line-height: 1; }
+  .np-stat-lbl {
+    color: #c9a0ff; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; margin-top: 4px;
+  }
+
+  .np-section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: #aaa; margin-bottom: 12px;
+  }
+
+  .np-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #ebebeb;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(94,23,168,0.07);
+  }
+  .np-card table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .np-card colgroup col:nth-child(1) { width: 28%; }
+  .np-card colgroup col:nth-child(2) { width: 28%; }
+  .np-card colgroup col:nth-child(3) { width: 14%; }
+  .np-card colgroup col:nth-child(4) { width: 15%; }
+  .np-card colgroup col:nth-child(5) { width: 15%; }
+
+  .np-card thead tr { background: #3D1282; }
+  .np-card thead th {
+    color: #fff; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 16px 20px; text-align: left;
+  }
+  .np-card tbody tr { border-bottom: 1px solid #f2f2f2; transition: background 0.1s; }
+  .np-card tbody tr:last-child { border-bottom: none; }
+  .np-card tbody tr:hover { background: #faf6ff; }
+  .np-card tbody td { padding: 16px 20px; font-size: 14px; color: #1a1a1a; vertical-align: middle; }
+
+  .rank-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    font-size: 12px; font-weight: 800; margin-right: 10px; flex-shrink: 0;
+  }
+  .rank-1 { background: #fff8e1; color: #c47f00; border: 1.5px solid #f5c842; }
+  .rank-2 { background: #f3f3f3; color: #666;    border: 1.5px solid #ccc; }
+  .rank-3 { background: #fff0e8; color: #c45c00; border: 1.5px solid #f5a042; }
+  .rank-n { background: #f5f5f5; color: #aaa;    border: 1.5px solid #e0e0e0; font-size: 11px; }
+
+  .np-name { display: flex; align-items: center; }
+
+  .vote-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .vote-bar-bg {
+    flex: 1; height: 6px; background: #f0e8ff;
+    border-radius: 99px; overflow: hidden; max-width: 70px;
+  }
+  .vote-bar-fill { height: 100%; border-radius: 99px; background: #5E17A8; }
+  .vote-num { font-weight: 700; color: #3D1282; font-size: 14px; min-width: 36px; }
+
+  .np-img-link {
+    color: #5E17A8; font-weight: 600; font-size: 13px; text-decoration: none;
+    padding: 5px 12px; background: #f0e8ff; border-radius: 7px;
+    border: 1px solid #ddd0f5; display: inline-block;
+  }
+  .np-img-link:hover { background: #e0d0ff; }
+
+  .np-code {
+    font-family: monospace; font-size: 13px; font-weight: 700;
+    color: #5E17A8; background: #f0e8ff; padding: 4px 10px;
+    border-radius: 7px; letter-spacing: 0.04em; display: inline-block;
+  }
+
+  /* ── Mobile collapse ── */
+  @media (max-width: 640px) {
+    .np { padding: 1rem; }
+    .np-hero { flex-direction: column; padding: 1.25rem; border-radius: 14px; }
+    .np-hero-stats { width: 100%; }
+    .np-stat { flex: 1; min-width: 80px; padding: 10px 12px; }
+    .np-stat-val { font-size: 1.1rem; }
+    .np-hero-left h1 { font-size: 1.2rem; }
+
+    .np-card thead { display: none; }
+    .np-card table, .np-card tbody,
+    .np-card tr, .np-card td { display: block; width: 100%; }
+    .np-card tbody tr { padding: 14px 16px; border-bottom: 1px solid #f2f2f2; }
+    .np-card tbody td { padding: 3px 0; border: none; }
+    .np-card tbody td::before {
+      content: attr(data-label);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: #bbb; display: block; margin-bottom: 4px;
+    }
+    .np-card td:not(:first-child) { margin-top: 8px; }
+    .vote-bar-bg { max-width: 120px; }
+  }
+
+  /* Logout overlay */
+  .logout-pop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(30,10,60,0.5); z-index: 9999;
+    align-items: center; justify-content: center;
+  }
+  .logout-pop.active { display: flex; }
+  .logout {
+    background: #fff; border-radius: 16px; padding: 2rem;
+    max-width: 320px; width: 90%; text-align: center;
+  }
+  .logout p { font-size: 15px; color: #222; margin-bottom: 1.5rem; line-height: 1.6; }
+  .log-button { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .log-button > p { margin: 0; font-size: 13px; color: #aaa; }
+  .lo-btn {
+    display: inline-flex; align-items: center; padding: 10px 22px;
+    border-radius: 10px; font-size: 14px; font-weight: 600;
+    text-decoration: none; cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .lo-btn-fill { background: #5E17A8; color: #fff; }
+  .lo-btn-fill:hover { background: #4A0E8F; }
+  .lo-btn-out { background: #fff; color: #5E17A8; border: 1.5px solid #5E17A8; }
+  .lo-btn-out:hover { background: #f0e8ff; }
+</style>
+
 <div class="main">
-    <div class="transation-details-container">
-        <div class="heading">
-            <h1>{{category}}</h1>
-            <h1>Nominees in Order by Category</h1>
-            <h3>Total Nominees: {{ nominee_count }}</h3>
-            <h3>Total Votes: {{ total_votes }}</h3>
-        </div>
-        <div class="table-responsive">
-            <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Image</th>
-                        <th>Votes</th>
-                        <th>Code</th>
-                        
-                        
-                        
-                    </tr>
-                </thead>
-                {% for p in nominees %}
-                <tbody>
-                    <tr>
-                        <td>{{ p.name }}</td>
-                        <td>{{ p.sub_category }}</td>
-                        <td><a href="{{ p.image.url }}">image</a></td>
-                        <td>{{ p.total_vote }}</td>
-                        <td>{{ p.code }}</td>
-                        
-                        
-                    </tr>
+<div class="np">
 
-                    <!-- Add more rows as needed -->
-                </tbody>
-                {% endfor %}
-            </table>
-        </div>
-
+  <!-- Hero stats banner -->
+  <div class="np-hero">
+    <div class="np-hero-left">
+      <h2>{{ category }}</h2>
+      <h1>Nominees in Order by Category</h1>
     </div>
-</div>
-
-</div>
-<div class="logout-pop">
-    <div class="logout">
-        <p>Are you sure you want to log out from the admin pannel ?</p>
-        <div class="log-button">
-            <a href="{% url 'logout' %}">
-                <button>Log Out</button>
-            </a>
-
-            <p>Or</p>
-
-            <button class="DontLogout">No</button>
-        </div>
+    <div class="np-hero-stats">
+      <div class="np-stat">
+        <div class="np-stat-val">{{ nominee_count }}</div>
+        <div class="np-stat-lbl">Nominees</div>
+      </div>
+      <div class="np-stat">
+        <div class="np-stat-val">{{ total_votes }}</div>
+        <div class="np-stat-lbl">Total Votes</div>
+      </div>
     </div>
+  </div>
+
+  <p class="np-section-label">Rankings</p>
+
+  <!-- Table -->
+  <div class="np-card">
+    <table>
+      <colgroup>
+        <col /><col /><col /><col /><col />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Image</th>
+          <th>Votes</th>
+          <th>Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in nominees %}
+        <tr>
+          <td data-label="Name">
+            <div class="np-name">
+              <span class="rank-badge {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% else %}rank-n{% endif %}">
+                {{ forloop.counter }}
+              </span>
+              {{ p.name }}
+            </div>
+          </td>
+          <td data-label="Category">{{ p.sub_category }}</td>
+          <td data-label="Image">
+            <a href="{{ p.image.url }}" class="np-img-link" target="_blank">image</a>
+          </td>
+          <td data-label="Votes">
+            <div class="vote-bar-wrap">
+              <div class="vote-bar-bg">
+                {% if total_votes > 0 %}
+                <div class="vote-bar-fill" style="width: {% widthratio p.total_vote total_votes 100 %}%"></div>
+                {% else %}
+                <div class="vote-bar-fill" style="width: 0%"></div>
+                {% endif %}
+              </div>
+              <span class="vote-num">{{ p.total_vote }}</span>
+            </div>
+          </td>
+          <td data-label="Code"><span class="np-code">{{ p.code }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
 </div>
+
+
+</div>
+
+<!-- Logout modal -->
+<div class="logout-pop" id="logoutModal">
+  <div class="logout">
+    <p>Are you sure you want to log out from the admin panel?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}" class="lo-btn lo-btn-fill">Log Out</a>
+      <p>or</p>
+      <button class="lo-btn lo-btn-out DontLogout"
+        onclick="document.getElementById('logoutModal').classList.remove('active')">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

@@ -12,7 +12,7 @@
     <link rel="icon" href="{% static 'vote/img/our-logo.jpg' %}" type="image/jpeg">
     <title>Admin Page</title>
     <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
-
+ <link rel="stylesheet" href="{% static 'vote/darkmode.css' %}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -30,14 +30,14 @@
             </div>
            
         </div>
-        <div class="greetings-date">
+        <!-- <div class="greetings-date">
             <div class="greeting">
                 <h3 id="greet">Good Morning, {{ user.first_name }}</h3>
             </div>
             <div class="date">
                 <p id="date"></p>
             </div>
-        </div>
+        </div> -->
        </div>
 
 
@@ -97,7 +97,13 @@
                             <h3> <i class="fa-solid fa-money-bill"></i> Events</h3>
                         </div>
                     </a> -->
-                    <a href="{% url 'send_sms' %}">
+                    <a href="{% url 'sendsms' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i> Send SMS</h3>
+                        </div>
+                    </a>
+                    <!-- <a href="{% url 'send_sms' %}">
                     
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> New Nominee SMS</h3>
@@ -112,7 +118,7 @@
                         <div class="nav-option option1 button">
                             <h3> <i class="fa-solid fa-money-bill"></i> Send Access Code</h3>
                         </div>
-                    </a>
+                    </a> -->
                     <a href="{% url 'add_nominee' %}">
                     
                         <div class="nav-option option1 button ">
@@ -126,13 +132,30 @@
                             <h3> <i class="fa-solid fa-cash-register"></i> All Categories</h3>
                         </div>
                     </a>
+
+ <a href="{% url 'transactions' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i>Transactions</h3>
+                        </div>
+                    </a>
+
+
+
+
                     <a href="{% url 'blog_list' %}">
                     
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> Blogs</h3>
                         </div>
                     </a>
-                    <a href="{% url 'payment_transactions' %}">
+
+
+
+
+
+                    
+                    <!-- <a href="{% url 'payment_transactions' %}">
                     
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> USSD Transactions</h3>
@@ -149,7 +172,7 @@
                         <div class="nav-option option1 button ">
                             <h3> <i class="fa-solid fa-cash-register"></i> Verify Transaction</h3>
                         </div>
-                    </a>
+                    </a> -->
 
 
                     <!-- team button -->

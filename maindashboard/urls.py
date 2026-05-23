@@ -9,7 +9,8 @@ urlpatterns = [
     path('sms/', views.send_sms, name='send_sms'),
     path('send-category-sms/', views.send_sms_to_nominees, name='send_category_sms'),
     path('send-access-code/', views.send_access_code_to_nominee, name='send_access_code'),
-    
+      path('sendsms/', views.sendsms, name='sendsms'),
+      path('transactions/', views.transactions, name='transactions'),
     path('get_all_categories/', views.get_all_categories, name='get_all_categories'),
     path('get_all_nominees/<slug:category_slug>/', views.get_nominee_by_category, name='get_nominee_by_category'),
     path('update_nominee/<slug:nominee_slug>/', views.update_nominee_by_category, name='update_nominee'),

@@ -12,7 +12,11 @@
             <div class="nominee-interface-container">
                 <div class="heading">
                     <h2>List of Nominees</h2>
-                    <p>List of nominees and the votes so far</p>
+                
+                        <div class="total">
+                               <p>Total Votes Cast</p>
+                            <p class="total-votes">{{ total_votes }}</p>
+                        </div>
                 </div>
                 <div class="nominees-interface">
 
@@ -37,16 +41,13 @@
                         </table>
                     </div>
 
-                    <!-- total number of vote -->
-                    <div class="total-number-of-vote-cast">
-                        <!-- <img src="{% static 'vote/img/illustration.jpg' %}" alt="geima"> -->
+                 
+                    <!-- <div class="total-number-of-vote-cast">
+                       
 
 
-                        <p>Total Votes Cast</p>
-                        <div class="total">
-                            <p>{{ total_votes }}</p>
-                        </div>
-                    </div>
+                       
+                    </div> -->
                 </div>
 
 
@@ -90,51 +91,80 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            function updateChart() {
-                const nominees = [];
-                const votes = [];
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const nominees = [];
+    const votes = [];
 
-                const rows = document.querySelectorAll('#nominees-table tbody tr');
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('td');
-                    nominees.push(cells[1].innerText);
-                    votes.push(parseInt(cells[2].innerText));
-                });
+    document.querySelectorAll('#nominees-table tbody tr').forEach(row => {
+      const cells = row.querySelectorAll('td');
+      nominees.push(cells[1].innerText.trim());
+      votes.push(parseInt(cells[2].innerText.trim()) || 0);
+    });
 
-                const maxVotes = Math.max(...votes);
+    const maxVotes = Math.max(...votes) || 1;
+    const percentages = votes.map(v => parseFloat(((v / maxVotes) * 100).toFixed(1)));
 
-                const percentages = votes.map(vote => (vote / maxVotes) * 100);
-
-                const ctx = document.getElementById('revenue-chart').getContext('2d');
-                const chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: nominees,
-                        datasets: [{
-                            label: 'Number of Votes',
-                            data: percentages,
-                            backgroundColor: '#fb812b',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                }
-                            }]
-                        }
-                    }
-                });
+    const ctx = document.getElementById('revenue-chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: nominees,
+        datasets: [{
+          label: 'Votes',
+          data: percentages,
+          backgroundColor: 'rgba(106,13,173,0.8)',
+          borderRadius: 8,
+          borderSkipped: false,
+          hoverBackgroundColor: '#f9a825',
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              /* Show actual vote count, not percentage */
+              label: function(context) {
+                const idx = context.dataIndex;
+                return `  ${votes[idx].toLocaleString()} votes`;
+              }
+            },
+            backgroundColor: '#1a1a2e',
+            titleColor: '#f9a825',
+            bodyColor: '#fff',
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: false,
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              font: { size: 11 },
+              color: '#9ca3af',
+              maxRotation: 30,
             }
-
-            updateChart();
-        });
-    </script>
-
+          },
+          y: {
+            beginAtZero: true,
+            max: 100,
+            grid: {
+              color: 'rgba(0,0,0,0.05)',
+            },
+            ticks: {
+              font: { size: 11 },
+              color: '#9ca3af',
+              callback: val => val + '%'
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
 
 {% endblock %}

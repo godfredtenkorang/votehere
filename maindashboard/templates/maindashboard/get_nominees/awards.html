@@ -2,81 +2,88 @@
 {% load static %}
 {% block content %}
 
-
-<!-- interface that will show when a button is clicked the main conntainer -->
 <div class="main">
-    <div class=" awards-ongoing">
-        <div class="heading">
-            <h1>List of Awards ongoing</h1>
-            <p> The listed awards are currently in the midst of ongoing voting processes.</p>
+  <div class="awards-ongoing">
+
+    <!-- Page heading -->
+    <div class="heading">
+      <div class="heading-left">
+        <div class="heading-eyebrow">
+          <i class="fa-solid fa-trophy"></i>
+          <span>Live Voting</span>
         </div>
-
-        <!-- THE INTERFACE FOR THE ACTIVITY BUTTON -->
-        <!-- ongoing awards -->
-
-
-
-        <div class="ongoin-awards-container">
-            {% for a in awards %}
-            <a href="{% url 'get_nominee_by_category' a.slug %}">
-
-                <div class="awards-container">
-                    <!-- awards img -->
-                    <div class="awards-img">
-                        <img src="{{ a.image.url }}" alt="geima">
-                    </div>
-                    <!-- awards name -->
-                    <div class="awards-name">
-                        <h2>{{ a.award }}</h2>
-
-                    </div>
-
-                    <div class="duration">
-                        <div class="start-date column">
-                            <div class="start-col">
-                                <p>Start Date</p>
-
-                            </div>
-                            <div class="start-col">
-
-                                <p>{{ a.date_added|date:"N j, o" }}</p>
-                            </div>
-                        </div>
-
-                        <div class="endDate column">
-                            <div class="start-col">
-                                <p>End Date</p>
-
-                            </div>
-                            <div class="start-col">
-
-                                <p>{{ a.end_date|date:"N j, o" }}</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </a>
-            {% endfor %}
-        </div>
+        <h1>Awards Ongoing</h1>
+        <p>The listed awards are currently in the midst of ongoing voting processes.</p>
+      </div>
+      <div class="heading-live-badge">
+        <span class="live-dot"></span> Live Now
+      </div>
     </div>
-</div>
+
+    <div class="main-2">
+<!-- Awards grid -->
+    <div class="awards-grid">
+      {% for a in awards %}
+      <a href="{% url 'get_nominee_by_category' a.slug %}" class="award-card-link">
+        <div class="award-card">
+
+          <div class="award-card-img-wrap">
+            <img src="{{ a.image.url }}" alt="{{ a.award }}" class="award-card-img">
+            <div class="award-card-img-overlay">
+              <span class="award-card-view-btn">
+                <i class="fa-solid fa-arrow-right"></i> View nominees
+              </span>
+            </div>
+          </div>
+
+          <div class="award-card-body">
+            <h2 class="award-card-title">{{ a.award }}</h2>
+
+            <div class="award-card-dates">
+              <div class="award-date-row start">
+                <span class="award-date-label">
+                  <i class="fa-solid fa-calendar-day"></i> Start Date
+                </span>
+                <span class="award-date-value">{{ a.date_added|date:"M j, Y" }}</span>
+              </div>
+              <div class="award-date-row end">
+                <span class="award-date-label">
+                  <i class="fa-solid fa-calendar-xmark"></i> End Date
+                </span>
+                <span class="award-date-value">{{ a.end_date|date:"M j, Y" }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </a>
+      {% empty %}
+      <div class="awards-empty">
+        <i class="fa-solid fa-trophy"></i>
+        <p>No ongoing awards at the moment.</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    </div>
+
+  </div>
 </div>
 
+<!-- Logout modal -->
 <div class="logout-pop">
-    <div class="logout">
-        <p>Are you sure you want to log out from the admin pannel ?</p>
-        <div class="log-button">
-            <a href="{% url 'logout' %}">
-                <button>Log Out</button>
-            </a>
-
-            <p>Or</p>
-
-            <button class="DontLogout">No</button>
-        </div>
+  <div class="logout">
+    <div class="logout-icon">
+      <i class="fa-solid fa-right-from-bracket"></i>
     </div>
-
+    <p>Are you sure you want to log out from the admin panel?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button class="logout-confirm-btn">Log Out</button>
+      </a>
+      <button class="DontLogout logout-cancel-btn">Cancel</button>
+    </div>
+  </div>
 </div>
+
 {% endblock %}

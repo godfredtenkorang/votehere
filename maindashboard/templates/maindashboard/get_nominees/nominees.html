@@ -2,64 +2,120 @@
 {% load static %}
 {% block content %}
 <div class="main">
-    <div class="transation-details-container">
-        <div class="heading">
-            <h1>{{ category }}</h1>
-            <h3>Total Votes: {{ total_votes }}</h3>
-            <a href="{% url 'bulk_voting_transactions' category.slug %}">Check Bulk Payment</a>
-        </div>
-        <div class="table-responsive">
-        <table class="revenue-table"> <!-- Add class="revenue-table" to the table element -->
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Image</th>
-                    <th>Votes</th>
-                    <th>Code</th>
-                    <th>Access Code</th>
-                    <th>Date date</th>
-                    <th>End date</th>
-                    <th>Update</th>
-                </tr>
-            </thead>
+  <div class="transation-details-container">
+
+    <!-- Page heading -->
+    <div class="page-banner">
+  <div class="page-banner-left">
+    <div class="page-banner-eyebrow">
+      <i class="fa-solid fa-trophy"></i>
+      <span>Category Overview</span>
+    </div>
+    <h1 class="page-banner-title">{{ category }}</h1>
+    <p class="page-banner-subtitle">Manage nominees and track votes for this category.</p>
+  </div>
+
+  <div class="page-banner-right">
+    <div class="page-banner-stat">
+      <div class="page-banner-stat-num">{{ total_votes }}</div>
+      <div class="page-banner-stat-lbl">Total Votes</div>
+    </div>
+    <div class="page-banner-divider"></div>
+    <a href="{% url 'bulk_voting_transactions' category.slug %}" class="page-banner-btn">
+      <i class="fa-solid fa-receipt"></i> Bulk Payments
+    </a>
+  </div>
+</div>
+
+    <!-- Table card -->
+    <div class="recent-project">
+      <div class="recent-project-header">
+        <h3>Nominees</h3>
+        <span class="tbl-count-badge">{{ award|length }} nominee{{ award|length|pluralize }}</span>
+      </div>
+
+      <div class="tables">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Votes</th>
+              <th>Code</th>
+              <th>Access Code</th>
+              <th>Image</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for p in award %}
-            <tbody>
-                <tr>
-                    <td>{{ p.name }}</td>
-                    <td>{{ p.sub_category }}</td>
-                    <td><a href="{{ p.image.url }}">image</a></td>
-                    <td>{{ p.total_vote }}</td>
-                    <td>{{ p.code }}</td>
-                    <td>{{ p.access_code }}</td>
-                    <td>{{ p.date_added }}</td>
-                    <td>{{ p.end_date }}</td>
-                    <td><a href="{% url 'update_nominee' p.slug %}">update</a></td>
-                </tr>
-
-                <!-- Add more rows as needed -->
-            </tbody>
+            <tr>
+              <td data-label="Name">
+                <div class="award-cell">
+                  <div class="award-avatar purple">
+                    {{ p.name|slice:":2"|upper }}
+                  </div>
+                  <div>
+                    <div class="award-name">{{ p.name }}</div>
+                  </div>
+                </div>
+              </td>
+              <td data-label="Category">
+                <span class="cat-badge">{{ p.sub_category }}</span>
+              </td>
+              <td data-label="Votes">
+                <span class="votes-pill">
+                  <i class="fa-solid fa-arrow-up-right-dots"></i>
+                  {{ p.total_vote }}
+                </span>
+              </td>
+              <td data-label="Code">
+                <code class="code-tag">{{ p.code }}</code>
+              </td>
+              <td data-label="Access Code">
+                <code class="code-tag accent">{{ p.access_code }}</code>
+              </td>
+              <td data-label="Image">
+                <a href="{{ p.image.url }}" target="_blank" class="img-link">
+                  <i class="fa-solid fa-image"></i> View
+                </a>
+              </td>
+              <td data-label="Start Date">
+                <span class="date-cell">{{ p.date_added|date:"M j, Y" }}</span>
+              </td>
+              <td data-label="End Date">
+                <span class="date-cell">{{ p.end_date|date:"M j, Y" }}</span>
+              </td>
+              <td data-label="Action">
+                <a href="{% url 'update_nominee' p.slug %}" class="action-btn edit-btn">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </a>
+              </td>
+            </tr>
             {% endfor %}
+          </tbody>
         </table>
-        </div>
-        
+      </div>
     </div>
+
+  </div>
 </div>
 
-</div>
+<!-- Logout modal -->
 <div class="logout-pop">
-    <div class="logout">
-        <p>Are you sure you want to log out from the admin pannel ?</p>
-        <div class="log-button">
-            <a href="{% url 'logout' %}">
-                <button>Log Out</button>
-            </a>
-
-            <p>Or</p>
-
-            <button class="DontLogout">No</button>
-        </div>
+  <div class="logout">
+    <div class="logout-icon">
+      <i class="fa-solid fa-right-from-bracket"></i>
     </div>
-
+    <p>Are you sure you want to log out from the admin panel?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button class="logout-confirm-btn">Log Out</button>
+      </a>
+      <button class="DontLogout logout-cancel-btn">Cancel</button>
+    </div>
+  </div>
 </div>
 {% endblock %}
