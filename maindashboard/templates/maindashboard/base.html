@@ -13,6 +13,7 @@
     <title>Admin Page</title>
     <link rel="stylesheet" href="{% static 'vote/admin.css' %}">
  <link rel="stylesheet" href="{% static 'vote/darkmode.css' %}">
+ <link rel="stylesheet" href="{% static 'vote/admin2.css' %}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -69,6 +70,15 @@
                             <h3><i class="fa-solid fa-chart-simple"></i> Activities</h3>
                         </div>
                     </a> -->
+ <a href="{% url 'bookings' %}">
+                    
+                        <div class="nav-option option1 button ">
+                            <h3> <i class="fa-solid fa-cash-register"></i>Bookings</h3>
+                        </div>
+                    </a>
+
+
+
                    <a href="{% url 'receipt' %}">
 
                         <div class="nav-option option1 button">
@@ -139,6 +149,8 @@
                             <h3> <i class="fa-solid fa-cash-register"></i>Transactions</h3>
                         </div>
                     </a>
+
+
 
 
 

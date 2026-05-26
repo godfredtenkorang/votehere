@@ -392,3 +392,12 @@ def addAward(request):
 def sendMessage(request):
     
     return render(request, 'maindashboard/sendMessage.html') 
+def bookings(request):
+    
+    return render(request, 'maindashboard/bookings.html') 
+def requested_payment(request):
+    
+    return render(request, 'maindashboard/requestedPayement.html') 
+def election(request):
+    
+    return render(request, 'maindashboard/election.html') 

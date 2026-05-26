@@ -135,25 +135,5 @@
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#id_category').change(function () {
-            var categoryId = $(this).val();
-            if (categoryId) {
-                $.ajax({
-                    url: '/maindashboard/get_subcategories/',
-                    data: {
-                        'category_id': categoryId
-                    },
-                    success: function (data) {
-                        $('#id_sub_category').html(data);
-                    }
-                });
-            } else {
-                $('#id_sub_category').html('<option value="">---------</option>');
-            }
-        });
-    });
-</script>
+
 {% endblock %}

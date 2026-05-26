@@ -2,98 +2,123 @@
 {% load static %}
 {% block content %}
 <div class="main">
-<div class="heading">
-  <div class="heading-accent-ring"></div>
-  <!-- <div class="heading-icon-bg" aria-hidden="true">🗳️</div> -->
-  <div class="heading-ticker"></div>
+  <div class="heading">
+    <div class="heading-accent-ring"></div>
+    <!-- <div class="heading-icon-bg" aria-hidden="true">🗳️</div> -->
+    <div class="heading-ticker"></div>
 
-  <div class="heading-left">
-    <!-- <div class="badge">
+    <div class="heading-left">
+      <!-- <div class="badge">
       <span class="dot"></span>
       Live voting platform
     </div> -->
-    <h1>Welcome to the admin dashboard, <span>{{ user }}</span></h1>
-    <p>Here's an overview of all your awards and activities.</p>
+      <h1>Welcome to the admin dashboard, <span>{{ user }}</span></h1>
+      <p>Here's an overview of all your awards and activities.</p>
+    </div>
+
+    <div class="heading-stats">
+      <a href="{% url 'sendMessage' %}">
+        <button class="tbl-add-btn">
+          <i class="fa-solid fa-plus"></i> Send Message
+        </button>
+        <a href="{% url 'addAward' %}">
+          <button class="tbl-add-btn">
+            <i class="fa-solid fa-plus"></i> Add Award
+          </button>
+        </a>
+        <a href="{% url 'election' %}">
+          <button class="tbl-add-btn">
+            <i class="fa-solid fa-plus"></i> Add Election
+          </button>
+        </a>
+    </div>
   </div>
+  <div class="main-2">
 
-  <div class="heading-stats">
-    <a href="{% url 'sendMessage' %}">
-      <button class="tbl-add-btn">
-        <i class="fa-solid fa-plus"></i> Send Message
-      </button>
-    <a href="{% url 'addAward' %}">
-      <button class="tbl-add-btn">
-        <i class="fa-solid fa-plus"></i> Add Award
-      </button>
-    </a>
-  </div>
-</div>
-   <div class="main-2">
+    <div class="admin-main-page">
 
-     <div class="admin-main-page">
-      
-        <div style="background-color:#000; width:100%;">
-            {% if messages %}
-            {% for message in messages %}
-            <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
-            {% endfor %}
-            {% endif %}
-        </div>
- <!-- Stat Cards -->
-    <div class="statistics-container">
-      <div class="stat-row">
-        <div class="stat-top">
-          <div class="stat-icon-wrap">
-            <i class="fa-solid fa-trophy"></i>
-          </div>
-          <span class="stat-chip">All time</span>
-        </div>
-        <h4>Total Awards organized so far</h4>
-        <p>{{ award_count }}</p>
-        <div class="stat-divider"></div>
-        <div class="stat-footer">
-          <i class="fa-solid fa-arrow-trend-up"></i> Running strong
-        </div>
+      <div style="background-color:#000; width:100%;">
+        {% if messages %}
+        {% for message in messages %}
+        <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
       </div>
-
-      <div class="stat-row">
-        <div class="stat-top">
-          <div class="stat-icon-wrap">
-            <i class="fa-solid fa-layer-group"></i>
+      <!-- Stat Cards -->
+      <div class="statistics-container">
+        <div class="stat-row">
+          <div class="stat-top">
+            <div class="stat-icon-wrap">
+              <i class="fa-solid fa-trophy"></i>
+            </div>
+            <span class="stat-chip">All time</span>
           </div>
-          <span class="stat-chip">All awards</span>
-        </div>
-        <h4>Total categories for all awards organized</h4>
-        <p>{{ category_count }}</p>
-        <div class="stat-divider"></div>
-        <div class="stat-footer">
-          <i class="fa-solid fa-arrow-trend-up"></i> Across all awards
-        </div>
-      </div>
-
-      <div class="stat-row">
-        <div class="stat-top">
-          <div class="stat-icon-wrap">
-            <i class="fa-solid fa-users"></i>
+          <h4>Total Awards organized so far</h4>
+          <p>{{ award_count }}</p>
+          <div class="stat-divider"></div>
+          <div class="stat-footer">
+            <i class="fa-solid fa-arrow-trend-up"></i> Running strong
           </div>
-          <span class="stat-chip">All categories</span>
         </div>
-        <h4>Total number of nominees across all categories</h4>
-        <p>{{ nominee_count }}</p>
-        <div class="stat-divider"></div>
-        <div class="stat-footer">
-          <i class="fa-solid fa-arrow-trend-up"></i> Across all categories
+
+        <div class="stat-row">
+          <div class="stat-top">
+            <div class="stat-icon-wrap">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <span class="stat-chip">All awards</span>
+          </div>
+          <h4>Total categories for all awards organized</h4>
+          <p>{{ category_count }}</p>
+          <div class="stat-divider"></div>
+          <div class="stat-footer">
+            <i class="fa-solid fa-arrow-trend-up"></i> Across all awards
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-top">
+            <div class="stat-icon-wrap">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <span class="stat-chip">All categories</span>
+          </div>
+          <h4>Total number of nominees across all categories</h4>
+          <p>{{ nominee_count }}</p>
+          <div class="stat-divider"></div>
+          <div class="stat-footer">
+            <i class="fa-solid fa-arrow-trend-up"></i> Across all categories
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-top">
+            <div class="stat-icon-wrap">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <span class="stat-chip">Total Events Booked</span>
+          </div>
+          <h4>Total number of events booked</h4>
+          <p>80</p>
+          <div class="stat-divider"></div>
+          <div class="stat-footer">
+            <a href="{% url 'bookings' %}">
+              <i class="fa-solid fa-arrow-trend-up"></i> View Bookings
+            </a>
+          </div>
         </div>
       </div>
     </div>
-    </div>
 
-  <!-- Recent Projects Table -->
-  <div class="recent-project">
-    <div class="recent-project-header">
-      <h3>Recent Projects</h3>
-      <div class="recent-project-actions">
-        <!-- <span class="tbl-count-badge">
+
+
+    <div class="requested-and-recent-table">
+
+      <!-- Recent Projects Table — backend untouched -->
+      <div class="recent-project">
+        <div class="recent-project-header">
+          <h3>Recent Projects</h3>
+          <div class="recent-project-actions">
+            <!-- <span class="tbl-count-badge">
           {% with awards|length as total %}{{ total }} award{{ total|pluralize }}{% endwith %}
         </span>
         <a href="{% url 'access_award_by_code' %}">
@@ -101,74 +126,159 @@
             <i class="fa-solid fa-plus"></i> Add Award
           </button>
         </a> -->
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <!-- <div class="tbl-tabs">
+        <!-- <div class="tbl-tabs">
       <div class="tbl-tab active">All</div>
       <div class="tbl-tab">In Progress</div>
       <div class="tbl-tab">Ended</div>
     </div> -->
 
-    <div class="tables">
-      <table>
-        <thead>
-          <tr>
-            <th>Award Name</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-      <tbody>
-  {% for a in awards %}
-  <tr>
-    <td data-label="Award Name">
-      <div class="award-cell">
-        <!-- <div class="award-avatar {% cycle 'purple' 'orange' 'teal' %}">
-          {{ a.award|slice:":2"|upper }}
-        </div> -->
-        <div>
-          <div class="award-name">{{ a.award }}</div>
-          <!-- <div class="award-id">#AWD-{{ forloop.counter|stringformat:"03d" }}</div> -->
+        <div class="tables">
+          <table>
+            <thead>
+              <tr>
+                <th>Award Name</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in awards %}
+              <tr>
+                <td data-label="Award Name">
+                  <div class="award-cell">
+                    <!-- <div class="award-avatar {% cycle 'purple' 'orange' 'teal' %}">
+                  {{ a.award|slice:":2"|upper }}
+                </div> -->
+                    <div>
+                      <div class="award-name">{{ a.award }}</div>
+                      <!-- <div class="award-id">#AWD-{{ forloop.counter|stringformat:"03d" }}</div> -->
+                    </div>
+                  </div>
+                </td>
+                <td data-label="Status">
+                  {% if current_time < a.end_date %} <span class="status-pill active">
+                    <span class="status-dot"></span> In Progress
+                    </span>
+                    {% else %}
+                    <span class="status-pill ended">
+                      <span class="status-dot"></span> Ended
+                    </span>
+                    {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
-    </td>
-    <td data-label="Status">
-      {% if current_time < a.end_date %}
-        <span class="status-pill active">
-          <span class="status-dot"></span> In Progress
-        </span>
-      {% else %}
-        <span class="status-pill ended">
-          <span class="status-dot"></span> Ended
-        </span>
-      {% endif %}
-    </td>
-  </tr>
-  {% endfor %}
-</tbody>
-      </table>
-    </div>
-  </div>
-   </div>
 
-</div>
+      <!-- Requested Payments — hardcoded -->
+      <div class="requested-payment">
+
+        <div class="notif-panel-header">
+          <div class="notif-panel-title-wrap">
+            <h3 class="notif-panel-title">Requested Payments</h3>
+            <span class="notif-count-badge">3 requests</span>
+          </div>
+          <span class="notif-live-dot-wrap">
+            <span class="notif-live-dot"></span> Live
+          </span>
+        </div>
+
+        <div class="notif-list">
+
+          <div class="notif-item">
+            <div class="notif-avatar notif-purple">BA</div>
+            <div class="notif-body">
+              <div class="notif-name">Benjamin Asare</div>
+              <div class="notif-award">
+                <i class="fa-solid fa-trophy"></i> ben asare
+              </div>
+              <div class="notif-phone">
+                <i class="fa-solid fa-phone"></i> +233 244 000 001
+              </div>
+            </div>
+            <div class="notif-actions">
+              <span class="notif-time">2m ago</span>
+              <a href="#" class="notif-view-btn">
+                View <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="notif-item">
+            <div class="notif-avatar notif-orange">JM</div>
+            <div class="notif-body">
+              <div class="notif-name">Jabisi Mponignan</div>
+              <div class="notif-award">
+                <i class="fa-solid fa-trophy"></i> ben asare
+              </div>
+              <div class="notif-phone">
+                <i class="fa-solid fa-phone"></i> +233 244 000 002
+              </div>
+            </div>
+            <div class="notif-actions">
+              <span class="notif-time">15m ago</span>
+              <a href="#" class="notif-view-btn">
+                View <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="notif-item">
+            <div class="notif-avatar notif-teal">NM</div>
+            <div class="notif-body">
+              <div class="notif-name">Normenyo Michael</div>
+              <div class="notif-award">
+                <i class="fa-solid fa-trophy"></i> ben asare
+              </div>
+              <div class="notif-phone">
+                <i class="fa-solid fa-phone"></i> +233 244 000 003
+              </div>
+            </div>
+            <div class="notif-actions">
+              <span class="notif-time">1h ago</span>
+              <a href="#" class="notif-view-btn">
+                View <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="notif-footer">
+          <a href="{% url 'requested_payment' %}" class="notif-view-all">
+            View all requests <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
 
 
 
 </div>
 <div class="logout-pop">
-    <div class="logout">
-        <p>Are you sure you want to log out from the admin pannel ?</p>
-        <div class="log-button">
-            <a href="{% url 'logout' %}">
-                <button>Log Out</button>
-            </a>
+  <div class="logout">
+    <p>Are you sure you want to log out from the admin pannel ?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button>Log Out</button>
+      </a>
 
-            <p>Or</p>
+      <p>Or</p>
 
-            <button class="DontLogout">No</button>
-        </div>
+      <button class="DontLogout">No</button>
     </div>
+  </div>
 
 </div>
 

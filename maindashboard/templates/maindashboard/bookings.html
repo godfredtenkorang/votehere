@@ -1,0 +1,203 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<div class="main">
+
+  <!-- TOP -->
+  <div class="ev-topbar">
+    <div class="ev-chip">
+      <i class="fa-solid fa-calendar-check"></i>
+      Event Management
+    </div>
+    <h1 class="ev-heading">Event Details Dashboard</h1>
+    <p class="ev-subheading">Review submitted event information, manage approval status, and take action from one clean interface.</p>
+  </div>
+
+  <!-- CARD -->
+  <div class="ev-card">
+
+    <!-- HEADER -->
+    <div class="ev-card-head">
+
+      <div class="ev-head-left">
+        <div class="ev-icon-wrap">
+          <i class="fa-solid fa-calendar-days"></i>
+        </div>
+        <div>
+          <h2 class="ev-title">Event Record</h2>
+          <p class="ev-desc">Full details and approval information for this event.</p>
+        </div>
+      </div>
+
+      
+    </div>
+
+   
+
+    <!-- TABLE -->
+    <div class="ev-table-wrap">
+      <table class="ev-table">
+
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Organization</th>
+            <th>Contact</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr id="event-row-1">
+
+            <td data-label="Event">
+              <div class="ev-cell-title">GH Music Awards 2026</div>
+            </td>
+
+            <td data-label="Organization">
+              <div class="ev-company">VoteAfric Media Group</div>
+            </td>
+
+            <td data-label="Contact">
+              <div class="ev-contact">
+                <strong>Benjamin Asare</strong>
+                <span>Event Coordinator</span>
+              </div>
+            </td>
+
+            <td data-label="Phone">
+              <div class="ev-phone">+233 244 000 000</div>
+            </td>
+
+            <td data-label="Email">
+              <a href="mailto:contact@voteafric.com" class="ev-link">contact@voteafric.com</a>
+            </td>
+
+            <td data-label="Description">
+              <div class="ev-description">
+                The GH Music Awards 2026 celebrates Ghana's best musical talents across highlife, afrobeats, gospel and hiplife categories with nationwide public voting and recognition.
+              </div>
+            </td>
+
+            <td data-label="Type">
+              <span class="ev-badge ev-badge-purple">Awards</span>
+            </td>
+
+            <td data-label="Status">
+              <span class="ev-badge ev-badge-red" id="status-badge-1">Not Approved</span>
+            </td>
+
+            <td data-label="Actions">
+              <div class="ev-actions">
+
+                <button
+                  class="ev-btn ev-btn-approve"
+                  data-tip="Approve"
+                  onclick="openApproveModal(1)"
+                  title="Approve event"
+                >
+                  <i class="fa-solid fa-circle-check"></i>
+                </button>
+
+                <button
+                  class="ev-btn ev-btn-edit"
+                  data-tip="Edit"
+                  onclick="handleEdit(1)"
+                  title="Edit event"
+                >
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+
+                <button
+                  class="ev-btn ev-btn-delete"
+                  data-tip="Delete"
+                  onclick="openDeleteModal(1)"
+                  title="Delete event"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+    
+
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="ev-modal-overlay" id="delete-modal">
+  <div class="ev-modal">
+    <div class="ev-modal-icon ev-modal-icon-delete">
+      <i class="fa-solid fa-trash-can"></i>
+    </div>
+    <h3>Delete Event?</h3>
+    <p>
+      You are about to permanently delete <strong>GH Music Awards 2026</strong>.
+      This action cannot be undone and all associated data will be removed.
+    </p>
+    <div class="ev-modal-actions">
+      <button class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="ev-modal-btn ev-modal-btn-confirm-delete" onclick="confirmDelete(1)">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- APPROVE MODAL -->
+<div class="ev-modal-overlay" id="approve-modal">
+  <div class="ev-modal">
+    <div class="ev-modal-icon ev-modal-icon-approve">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <h3>Approve Event?</h3>
+    <p>
+      You are about to approve <strong>GH Music Awards 2026</strong> by VoteAfric Media Group.
+      This will make the event visible and active on the platform.
+    </p>
+    <div class="ev-modal-actions">
+      <button class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="ev-modal-btn ev-modal-btn-confirm-approve" onclick="confirmApprove(1)">Yes, Approve</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openDeleteModal(id){
+    document.getElementById('delete-modal').classList.add('open');
+  }
+
+  function openApproveModal(id){
+    document.getElementById('approve-modal').classList.add('open');
+  }
+
+  function closeModals(){
+    document.querySelectorAll('.ev-modal-overlay').forEach(m => m.classList.remove('open'));
+  }
+
+  function handleEdit(id){
+    // Connect to your edit URL or modal
+  }
+
+  // Close modal on overlay click
+  document.querySelectorAll('.ev-modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e){
+      if(e.target === this) closeModals();
+    });
+  });
+</script>
+
+{% endblock %}

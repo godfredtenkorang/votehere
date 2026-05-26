@@ -1,0 +1,633 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+ /* ========== PAGE INTRO ========== */
+.transaction-page-intro {
+  background: #6a0dad;
+ color: #fff;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.transaction-page-intro::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: 200px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  border: 35px solid rgba(255,255,255,0.05);
+}
+
+.transaction-page-intro::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; right: 80px;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  border: 25px solid rgba(255,255,255,0.05);
+}
+
+  .detail-card {
+    background: var(--color-background-primary);
+    border-radius: var(--border-radius-lg);
+    border: 0.5px solid #ede9f8;
+    overflow: hidden;
+    margin: 1.5rem 0
+  }
+
+  .detail-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    border-bottom: 0.5px solid #f3f4f6;
+    background: #faf9ff
+  }
+
+  .detail-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #f5f0fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #6a0dad;
+    flex-shrink: 0
+  }
+
+  .detail-card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0 0 2px
+  }
+
+  .detail-card-sub {
+    font-size: 11.5px;
+    color: #9ca3af;
+    margin: 0
+  }
+
+  /* Desktop table */
+  .scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px
+  }
+
+  thead tr {
+    background: #6a0dad
+  }
+
+  th {
+    padding: 11px 12px;
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border-right: 0.5px solid rgba(255, 255, 255, 0.15)
+  }
+
+  th:last-child {
+    border-right: none
+  }
+
+  td {
+    padding: 11px 12px;
+    font-size: 12px;
+    color: var(--color-text-primary);
+    border-bottom: 0.5px solid #f3f4f6;
+    border-right: 0.5px solid #f3f4f6;
+    vertical-align: middle
+  }
+
+  td:last-child {
+    border-right: none
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none
+  }
+
+  tbody tr:hover {
+    background: #faf9ff
+  }
+
+  .amt {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #6a0dad
+  }
+
+  .amt.teal {
+    color: #00897b
+  }
+
+  .amt.orange {
+    color: #f57c00
+  }
+
+  .detail-link {
+    color: #6a0dad;
+    text-decoration: none;
+    font-size: 11.5px
+  }
+
+  .detail-link:hover {
+    text-decoration: underline
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap
+  }
+
+  .badge.purple {
+    background: #f5f0fe;
+    color: #6a0dad;
+    border: 0.5px solid #e9d5ff
+  }
+
+  .badge.green {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 0.5px solid #bbf7d0
+  }
+
+  .badge.red {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 0.5px solid #fecaca
+  }
+
+  .bdot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+    flex-shrink: 0
+  }
+
+  .actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px
+  }
+
+  .btn-approve {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 0.5px solid #6a0dad;
+    background: #6a0dad;
+    color: #fff;
+    white-space: nowrap;
+    transition: opacity 0.15s
+  }
+
+  .btn-approve:hover {
+    opacity: 0.85
+  }
+
+  .btn-revoke {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 0.5px solid #fed7aa;
+    background: #fff3e0;
+    color: #c2410c;
+    white-space: nowrap;
+    transition: opacity 0.15s
+  }
+
+  .btn-revoke:hover {
+    opacity: 0.85
+  }
+
+  .btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 0.5px solid #e9d5ff;
+    background: #f5f0fe;
+    color: #6a0dad;
+    white-space: nowrap;
+    transition: opacity 0.15s
+  }
+
+  .btn-edit:hover {
+    background: #ede4fd
+  }
+
+  .btn-del {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 9px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 0.5px solid #fecaca;
+    background: #fef2f2;
+    color: #dc2626;
+    white-space: nowrap;
+    transition: opacity 0.15s
+  }
+
+  .btn-del:hover {
+    background: #fee2e2
+  }
+
+  /* Mobile cards */
+  .mobile-cards {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px
+  }
+
+  .m-card {
+    border: 0.5px solid #ede9f8;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--color-background-primary)
+  }
+
+  .m-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    border-bottom: 0.5px solid #f3f4f6;
+    min-height: 42px
+  }
+
+  .m-row:last-child {
+    border-bottom: none
+  }
+
+  .m-label {
+    padding: 10px 12px;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #6a0dad;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    background: #faf9ff;
+    border-right: 0.5px solid #f3f4f6;
+    display: flex;
+    align-items: center
+  }
+
+  .m-value {
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    word-break: break-word
+  }
+
+  .m-actions {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px;
+    background: #faf9ff;
+    border-top: 0.5px solid #f3f4f6;
+    flex-wrap: wrap
+  }
+
+  .m-actions .btn-approve,
+  .m-actions .btn-revoke,
+  .m-actions .btn-edit,
+  .m-actions .btn-del {
+    font-size: 11.5px;
+    padding: 6px 12px
+  }
+
+  @media(max-width:680px) {
+    .scroll {
+      display: none
+    }
+
+    .mobile-cards {
+      display: flex
+    }
+  }
+</style>
+
+
+<div class="main">
+    <!-- <div class="the-team-container">
+        <div class="sms-page-intro">
+            <h1>Send SMS</h1>
+        </div>
+    </div> -->
+    <div class="transaction-page-intro">
+        <div class="sms-intro-text">
+            <h2>Transaction Management</h2>
+            <p>Manage and view transaction records for nominees or voters.</p>
+        </div>
+
+    </div>
+<h2 class="sr-only">Payment request details — collapses to cards on mobile</h2>
+
+<div class="detail-card">
+  <div class="detail-card-header">
+    <div class="detail-card-icon"><i class="ti ti-file-invoice" aria-hidden="true"></i></div>
+    <div>
+      <h2 class="detail-card-title">Request record</h2>
+      <p class="detail-card-sub">Full details for this payment request entry.</p>
+    </div>
+  </div>
+
+  <!-- DESKTOP TABLE -->
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Amount</th>
+          <th>Account</th>
+          <th>Approval</th>
+          <th>Total</th>
+          <th>Cat. earned</th>
+          <th>Client earned</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge purple">ben asare</span></td>
+          <td style="white-space:nowrap">Benjamin Asare</td>
+          <td style="white-space:nowrap;font-size:11.5px">+233 244 000 001</td>
+          <td><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></td>
+          <td><span class="amt">GHS 500.00</span></td>
+          <td style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap">MoMo — 0244000001 — MTN</td>
+          <td><span class="badge red t-status"><span class="bdot"></span> Not approved</span></td>
+          <td><span class="amt">GHS 1,200.00</span></td>
+          <td><span class="amt teal">GHS 300.00</span></td>
+          <td><span class="amt orange">GHS 900.00</span></td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-approve t-approve" onclick="toggleApprove(this)"><i class="ti ti-circle-check"
+                  aria-hidden="true"></i> Approve</button>
+              <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
+              <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge purple">ben asare</span></td>
+          <td style="white-space:nowrap">Benjamin Asare</td>
+          <td style="white-space:nowrap;font-size:11.5px">+233 244 000 001</td>
+          <td><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></td>
+          <td><span class="amt">GHS 300.00</span></td>
+          <td style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap">MoMo — 0244000001 — MTN</td>
+          <td><span class="badge red t-status"><span class="bdot"></span> Not approved</span></td>
+          <td><span class="amt">GHS 800.00</span></td>
+          <td><span class="amt teal">GHS 150.00</span></td>
+          <td><span class="amt orange">GHS 650.00</span></td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-approve t-approve" onclick="toggleApprove(this)"><i class="ti ti-circle-check"
+                  aria-hidden="true"></i> Approve</button>
+              <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
+              <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge purple">ben asare</span></td>
+          <td style="white-space:nowrap">Benjamin Asare</td>
+          <td style="white-space:nowrap;font-size:11.5px">+233 244 000 001</td>
+          <td><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></td>
+          <td><span class="amt">GHS 750.00</span></td>
+          <td style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap">MoMo — 0244000001 — MTN</td>
+          <td><span class="badge red t-status"><span class="bdot"></span> Not approved</span></td>
+          <td><span class="amt">GHS 2,000.00</span></td>
+          <td><span class="amt teal">GHS 500.00</span></td>
+          <td><span class="amt orange">GHS 1,500.00</span></td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-approve t-approve" onclick="toggleApprove(this)"><i class="ti ti-circle-check"
+                  aria-hidden="true"></i> Approve</button>
+              <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
+              <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MOBILE CARDS -->
+  <div class="mobile-cards">
+
+    <div class="m-card">
+      <div class="m-row">
+        <div class="m-label">Category</div>
+        <div class="m-value"><span class="badge purple">ben asare</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Name</div>
+        <div class="m-value">Benjamin Asare</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Phone</div>
+        <div class="m-value">+233 244 000 001</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Email</div>
+        <div class="m-value"><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Amount</div>
+        <div class="m-value"><span class="amt">GHS 500.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Account</div>
+        <div class="m-value" style="font-size:11.5px;color:var(--color-text-secondary)">MoMo — 0244000001 — MTN</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Approval</div>
+        <div class="m-value"><span class="badge red m-status"><span class="bdot"></span> Not approved</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Total</div>
+        <div class="m-value"><span class="amt">GHS 1,200.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Cat. earned</div>
+        <div class="m-value"><span class="amt teal">GHS 300.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Client earned</div>
+        <div class="m-value"><span class="amt orange">GHS 900.00</span></div>
+      </div>
+      <div class="m-actions">
+        <button class="btn-approve m-approve" onclick="toggleApproveM(this)"><i class="ti ti-circle-check"
+            aria-hidden="true"></i> Approve</button>
+        <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
+        <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i> Delete</button>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div class="m-row">
+        <div class="m-label">Category</div>
+        <div class="m-value"><span class="badge purple">ben asare</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Name</div>
+        <div class="m-value">Benjamin Asare</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Phone</div>
+        <div class="m-value">+233 244 000 001</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Email</div>
+        <div class="m-value"><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Amount</div>
+        <div class="m-value"><span class="amt">GHS 300.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Account</div>
+        <div class="m-value" style="font-size:11.5px;color:var(--color-text-secondary)">MoMo — 0244000001 — MTN</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Approval</div>
+        <div class="m-value"><span class="badge red m-status"><span class="bdot"></span> Not approved</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Total</div>
+        <div class="m-value"><span class="amt">GHS 800.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Cat. earned</div>
+        <div class="m-value"><span class="amt teal">GHS 150.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Client earned</div>
+        <div class="m-value"><span class="amt orange">GHS 650.00</span></div>
+      </div>
+      <div class="m-actions">
+        <button class="btn-approve m-approve" onclick="toggleApproveM(this)"><i class="ti ti-circle-check"
+            aria-hidden="true"></i> Approve</button>
+        <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
+        <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i> Delete</button>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div class="m-row">
+        <div class="m-label">Category</div>
+        <div class="m-value"><span class="badge purple">ben asare</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Name</div>
+        <div class="m-value">Benjamin Asare</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Phone</div>
+        <div class="m-value">+233 244 000 001</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Email</div>
+        <div class="m-value"><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Amount</div>
+        <div class="m-value"><span class="amt">GHS 750.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Account</div>
+        <div class="m-value" style="font-size:11.5px;color:var(--color-text-secondary)">MoMo — 0244000001 — MTN</div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Approval</div>
+        <div class="m-value"><span class="badge red m-status"><span class="bdot"></span> Not approved</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Total</div>
+        <div class="m-value"><span class="amt">GHS 2,000.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Cat. earned</div>
+        <div class="m-value"><span class="amt teal">GHS 500.00</span></div>
+      </div>
+      <div class="m-row">
+        <div class="m-label">Client earned</div>
+        <div class="m-value"><span class="amt orange">GHS 1,500.00</span></div>
+      </div>
+      <div class="m-actions">
+        <button class="btn-approve m-approve" onclick="toggleApproveM(this)"><i class="ti ti-circle-check"
+            aria-hidden="true"></i> Approve</button>
+        <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
+        <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i> Delete</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+            <p>Or</p>
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
