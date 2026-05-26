@@ -27,94 +27,184 @@
 {% endif %}
 
    <div class="main-2">
-  <div class="message-form-wrapper">
+  <div class="election-wrapper">
 
-    <div class="message-form-card">
+  <div class="election-card">
 
-        <!-- Header -->
-        <div class="message-form-header">
+    <!-- HEADER -->
+    <div class="election-topbar">
 
-            <div>
-                <h1>Send Message</h1>
-                <p>Create and send announcements or updates to users.</p>
+      <div class="election-badge">
+        <i class="fa-solid fa-box-ballot"></i>
+      </div>
+
+      <div>
+        <h1 class="election-heading">Add Election</h1>
+        <p class="election-subtitle">
+          Create a new election and schedule voting dates.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- TITLE -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-solid fa-pen"></i>
+        </div>
+
+        <div class="election-label">
+          Title
+        </div>
+
+        <div class="election-control">
+          <input type="text" placeholder="Enter election title">
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-solid fa-align-left"></i>
+        </div>
+
+        <div class="election-label">
+          Description
+        </div>
+
+        <div class="election-control">
+          <textarea placeholder="Enter election description..."></textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- START DATE -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-regular fa-calendar"></i>
+        </div>
+
+        <div class="election-label">
+          Start Date
+        </div>
+
+        <div class="election-date-layout">
+
+          <div class="election-field">
+
+            <label>Date</label>
+
+            <div class="election-input-wrap">
+              <input type="date">
+              <i class="fa-regular fa-calendar"></i>
             </div>
 
-            <div class="message-icon">
-                <i class="fa-solid fa-paper-plane"></i>
+          </div>
+
+          <div class="election-field">
+
+            <label>Time</label>
+
+            <div class="election-input-wrap">
+              <input type="time">
+              <i class="fa-regular fa-clock"></i>
             </div>
+
+          </div>
 
         </div>
 
-        <!-- Form -->
-        <form class="modern-message-form">
-
-            <div class="message-form-grid">
-
-                <!-- Category -->
-                <div class="form-group">
-                    <label>Select Category</label>
-
-                    <div class="select-wrapper">
-                        <select>
-                            <option>Choose category</option>
-                            <option>Entertainment</option>
-                            <option>Sports</option>
-                            <option>Music</option>
-                            <option>Education</option>
-                        </select>
-
-                        <div class="select-icons">
-                            <i class="fa-solid fa-pen"></i>
-                            <i class="fa-solid fa-plus"></i>
-                            <i class="fa-solid fa-eye"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Update Type -->
-                <div class="form-group">
-                    <label>Update Type</label>
-
-                    <select>
-                        <option>Information</option>
-                        <option>Warning</option>
-                        <option>Announcement</option>
-                        <option>Important</option>
-                    </select>
-                </div>
-
-                <!-- Message -->
-                <div class="form-group full-width">
-                    <label>Message</label>
-
-                    <textarea placeholder="Write your message here..."></textarea>
-                </div>
-
-                <!-- Active -->
-                <div class="checkbox-wrapper">
-                    <input type="checkbox" checked>
-                    <span>Is Active</span>
-                </div>
-
-            </div>
-
-            <!-- Buttons -->
-            <div class="message-form-buttons">
-
-                <button class="send-btn">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    Send Message
-                </button>
-
-                <button class="draft-btn">
-                    Save Draft
-                </button>
-
-            </div>
-
-        </form>
+      </div>
 
     </div>
+
+    <!-- END DATE -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-regular fa-calendar-check"></i>
+        </div>
+
+        <div class="election-label">
+          End Date
+        </div>
+
+        <div class="election-date-layout">
+
+          <div class="election-field">
+
+            <label>Date</label>
+
+            <div class="election-input-wrap">
+              <input type="date">
+              <i class="fa-regular fa-calendar"></i>
+            </div>
+
+          </div>
+
+          <div class="election-field">
+
+            <label>Time</label>
+
+            <div class="election-input-wrap">
+              <input type="time">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="election-footer">
+
+      <div class="election-status">
+
+        <input type="checkbox" checked>
+
+        <div>
+          <h4>Election Active</h4>
+          <p>This election will be visible to voters.</p>
+        </div>
+
+      </div>
+
+      <div class="election-actions">
+
+        <button class="election-btn election-btn-light">
+          Cancel
+        </button>
+
+        <button class="election-btn election-btn-primary">
+          <i class="fa-solid fa-plus"></i>
+          Add Election
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 </div>

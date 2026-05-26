@@ -401,3 +401,18 @@ def requested_payment(request):
 def election(request):
     
     return render(request, 'maindashboard/election.html') 
+def addAwards(request):
+    
+    return render(request, 'maindashboard/addAwards.html') 
+def AddCategory(request):
+    
+    return render(request, 'maindashboard/AddCategory.html') 
+def manageElection(request):
+    
+    return render(request, 'maindashboard/manageElection.html') 
+def AddElectionCategory(request):
+    
+    return render(request, 'maindashboard/AddElectionCategory.html') 
+def AddCandidate(request):
+    
+    return render(request, 'maindashboard/AddCandidate.html') 

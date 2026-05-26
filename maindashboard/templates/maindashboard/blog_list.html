@@ -432,9 +432,11 @@
                   <a href="{% url 'update_blog' blog.id %}" class="action-btn edit-btn">
                     <i class="fa-solid fa-pen"></i> Edit
                   </a>
-                  <a href="{% url 'delete_blog' blog.id %}" class="action-btn delete-btn">
-                    <i class="fa-solid fa-trash"></i> Delete
-                  </a>
+                <a href="#"
+   onclick="document.getElementById('confirm-delete-url').href='{% url 'delete_blog' blog.id %}'; document.getElementById('delete-modal').style.display='flex'; return false;"
+   class="action-btn delete-btn">
+  <i class="fa-solid fa-trash"></i> Delete
+</a>
                 </div>
               </td>
             </tr>
@@ -464,4 +466,35 @@
     </div>
   </div>
 </div>
+<div id="delete-modal" class="delete-modal">
+  <div class="delete-modal-content">
+
+    <!-- Icon badge -->
+    <div class="delete-icon">
+      <i class="fa-solid fa-trash"></i>
+    </div>
+
+    <!-- Text -->
+    <div>
+      <p class="delete-title">Delete Blog Post?</p>
+      <p class="delete-text">
+        You are about to permanently delete <strong id="delete-blog-title">this post</strong>. This action cannot be undone.
+      </p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="delete-actions">
+      <button onclick="document.getElementById('delete-modal').style.display='none'">
+        Cancel
+      </button>
+
+      <a id="confirm-delete-url" href="#">
+        Yes, Delete
+      </a>
+    </div>
+
+  </div>
+</div>
+
+
 {% endblock %}

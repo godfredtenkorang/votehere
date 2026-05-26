@@ -1,0 +1,277 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+.add-nominee-form {
+   
+    margin: 24px 24px;
+    padding: 36px 40px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #ede8f5;
+    box-shadow: 0 4px 32px rgba(92, 15, 163, 0.07);
+}
+.heading {
+    color: #ffff;
+    text-align: center;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    margin-bottom: 28px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #4a0080;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    display: block;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #ddd0f0;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #1a1a2e;
+    background: #faf8ff;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    font-family: inherit;
+    margin-bottom: 10px;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus
+.form-field :checked:focus {
+    border-color: #6a0dad;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.1);
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: #bbb; }
+
+.form-field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-field select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236a0dad' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-color: #faf8ff;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.form-field input[type="file"] { padding: 8px 12px; cursor: pointer; }
+.form-field input[type="date"] { cursor: pointer; }
+
+/* Checkbox field */
+.form-field-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border: 1.5px solid #ddd0f0;
+    border-radius: 10px;
+    background: #faf8ff;
+    cursor: pointer;
+}
+
+.form-field-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #6a0dad;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+.form-field-checkbox label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a2e;
+    text-transform: none;
+    letter-spacing: 0;
+    cursor: pointer;
+    margin: 0;
+}
+
+.form-field .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.form-field .errorlist li {
+    font-size: 11.5px;
+    color: #c0392b;
+    background: #fdecea;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+    padding: 4px 10px;
+}
+
+.add-nominee-form button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 13px 20px;
+    background: #6a0dad;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+    box-shadow: 0 4px 14px rgba(106, 13, 173, 0.25);
+    font-family: inherit;
+    margin-top: 8px;
+}
+
+.add-nominee-form button[type="submit"]:hover {
+    background: #5c0fa3;
+    box-shadow: 0 6px 20px rgba(106, 13, 173, 0.35);
+    transform: translateY(-1px);
+}
+
+.add-nominee-form button[type="submit"]:active { transform: scale(0.98); }
+
+@media (max-width: 600px) {
+    .add-nominee-form { padding: 24px 18px; margin: 16px; border-radius: 14px; }
+    .form-grid { grid-template-columns: 1fr; gap: 16px; }
+}
+.btns-p{
+   
+    display: block;
+    width: 100%;
+    padding: 13px 20px;
+    background: #6a0dad;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+    box-shadow: 0 4px 14px rgba(106, 13, 173, 0.25);
+    font-family: inherit;
+    margin-top: 8px;
+
+}
+</style>
+
+<div class="main">
+    <div class="the-team-container">
+        <div class="heading">
+            <h1>Add Election Category</h1>
+        </div>
+    </div>
+
+    <div style="background-color:#000; width:100%;">
+        {% if messages %}
+        {% for message in messages %}
+        <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+ <div class="main-2">
+    <form class="add-election-category-form" method="POST">
+
+    <!-- ELECTION -->
+    <div class="form-field">
+        <label>Election</label>
+        <select name="election" required>
+            <option value="">Select Election</option>
+            <option value="1">Student Elections 2026</option>
+            <option value="2">Entertainment Awards 2026</option>
+            <option value="3">Business Awards 2026</option>
+        </select>
+    </div>
+
+    <!-- NAME -->
+    <div class="form-field">
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Enter category name" required>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-field">
+        <label>Description</label>
+        <textarea name="description" placeholder="Enter category description..." rows="4"></textarea>
+    </div>
+
+    <!-- ORDER -->
+    <div class="form-field">
+        <label>Order</label>
+        <input type="number" name="order" placeholder="e.g 1" min="1">
+    </div>
+
+    <!-- SUBMIT -->
+    <button type="submit" class="btns-p">Save Category</button>
+
+</form>
+
+ </div>
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+            <p>Or</p>
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#id_category').change(function () {
+            var categoryId = $(this).val();
+            if (categoryId) {
+                $.ajax({
+                    url: '/maindashboard/get_subcategories/',
+                    data: { 'category_id': categoryId },
+                    success: function (data) {
+                        $('#id_sub_category').html(data);
+                    }
+                });
+            } else {
+                $('#id_sub_category').html('<option value="">---------</option>');
+            }
+        });
+    });
+</script>
+{% endblock %}

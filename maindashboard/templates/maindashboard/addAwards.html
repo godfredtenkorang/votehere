@@ -1,0 +1,334 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    /* ========================================
+   TRANSACTION PAGE
+   ======================================== */
+
+
+
+    .sms-page-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    /* ========== PAGE INTRO ========== */
+    .transaction-page-intro {
+        background: #6a0dad;
+
+        padding: 28px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .transaction-page-intro::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: 200px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 35px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .transaction-page-intro::after {
+        content: '';
+        position: absolute;
+        bottom: -40px;
+        right: 80px;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        border: 25px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sms-intro-text h2 {
+        font-size: 22px;
+        font-weight: 500;
+        color: #fff;
+        margin-bottom: 6px;
+    }
+
+    .sms-intro-text p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+    }
+
+    .sms-intro-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 0.5px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 8px 18px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #fff;
+        z-index: 1;
+    }
+
+    .sms-intro-badge-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4ade80;
+        box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
+        }
+
+        50% {
+            box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.1);
+        }
+    }
+
+    /* ========== DIVIDER ========== */
+    .sms-divider {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .sms-divider span {
+        font-size: 12px;
+        font-weight: 500;
+        color: #9ca3af;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .sms-divider-line {
+        flex: 1;
+        height: 0.5px;
+        background: #e5e7eb;
+    }
+
+    /* ========== CARDS GRID ========== */
+    .transactions-BOXEX {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+    }
+
+    /* ========== INDIVIDUAL CARD ========== */
+    /* 
+  Apply .transaction-card to each card div.
+  Usage in your HTML:
+  <div class="transaction-card">
+    <div class="transaction-card-icon purple">
+      <i class="fa-solid fa-money-bill-transfer"></i>
+    </div>
+    <h3>Online Transactions</h3>
+    <p>View and manage all online payment transactions.</p>
+    <a href="#" class="transaction-card-link">View now →</a>
+  </div>
+*/
+
+    .transaction-card {
+        background: #fff;
+        border-radius: 16px;
+        border: 0.5px solid #ede9f8;
+        padding: 28px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        transition: box-shadow 0.2s, transform 0.2s;
+        cursor: pointer;
+    }
+
+    .transaction-card:hover {
+        box-shadow: 0 8px 30px rgba(106, 13, 173, 0.1);
+        transform: translateY(-2px);
+    }
+
+    /* Icon bubble */
+    .transaction-card-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .transaction-card-icon.purple {
+        background: #f5f0fe;
+        color: #6a0dad;
+    }
+
+    .transaction-card-icon.orange {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+
+    .transaction-card-icon.teal {
+        background: #e0f7f4;
+        color: #00897b;
+    }
+
+    .transaction-card-icon.amber {
+        background: #fef9c3;
+        color: #b45309;
+    }
+
+    /* Card text */
+    .transaction-card h3 {
+        font-size: 15px;
+        font-weight: 500;
+        color: #1a1a2e;
+        margin: 0;
+    }
+
+    .transaction-card p {
+        font-size: 13px;
+        color: #6b7280;
+        line-height: 1.6;
+        margin: 0;
+        flex: 1;
+    }
+
+    /* Link */
+    .transaction-card-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #6a0dad;
+        text-decoration: none;
+        margin-top: 4px;
+        transition: gap 0.15s;
+    }
+
+    .transaction-card-link:hover {
+        gap: 10px;
+    }
+
+    /* ========================================
+   RESPONSIVE
+   ======================================== */
+    @media (max-width: 768px) {
+        .main {
+            padding: 16px;
+        }
+
+        .transaction-page-intro {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .transactions-BOXEX {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="main">
+    <!-- <div class="the-team-container">
+        <div class="sms-page-intro">
+            <h1>Send SMS</h1>
+        </div>
+    </div> -->
+    <div class="transaction-page-intro">
+        <div class="sms-intro-text">
+            <h2>Transaction Management</h2>
+            <p>Manage and view transaction records for nominees or voters.</p>
+        </div>
+        <!-- <div class="sms-intro-badge">
+                <span class="sms-intro-badge-dot"></span>
+               
+            </div> -->
+    </div>
+    <div class="main-2">
+        <div class="sms-page-wrap">
+
+
+
+            <div class="sms-divider">
+                <span>Available actions</span>
+                <div class="sms-divider-line"></div>
+            </div>
+
+           <div class="transactions-BOXEX">
+
+    <a href="{% url 'get_all_categories' %}" class="transaction-card-link-wrap">
+        <div class="transaction-card">
+            <div class="transaction-card-icon purple">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <h3>Ongoing Awards</h3>
+            <p>Create and manage award events, titles, and voting activities.</p>
+            <span class="transaction-card-link">Add now →</span>
+        </div>
+    </a>
+    <a href="{% url 'addAward' %}" class="transaction-card-link-wrap">
+        <div class="transaction-card">
+            <div class="transaction-card-icon purple">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <h3>Add Award</h3>
+            <p>Create and manage award events, titles, and voting activities.</p>
+            <span class="transaction-card-link">Add now →</span>
+        </div>
+    </a>
+
+    <a href="{% url 'AddCategory' %}" class="transaction-card-link-wrap">
+        <div class="transaction-card">
+            <div class="transaction-card-icon orange">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h3>Award Categories</h3>
+            <p>Create and organize different categories for your award scheme.</p>
+            <span class="transaction-card-link">Manage now →</span>
+        </div>
+    </a>
+
+    <a href="{% url 'add_nominee' %}" class="transaction-card-link-wrap">
+        <div class="transaction-card">
+            <div class="transaction-card-icon teal">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h3>Add Nominee</h3>
+            <p>Add and manage nominees participating in various award categories.</p>
+            <span class="transaction-card-link">Add now →</span>
+        </div>
+    </a>
+
+  
+
+</div>
+        </div>
+    </div>
+
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+            <p>Or</p>
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

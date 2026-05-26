@@ -1014,6 +1014,7 @@ table tbody tr:hover {
   border-radius: 16px;
   border: 0.5px solid #ede9f8;
   overflow: hidden;
+    margin: 3% 0;
 
 }
 
