@@ -416,3 +416,6 @@ def AddElectionCategory(request):
 def AddCandidate(request):
     
     return render(request, 'maindashboard/AddCandidate.html') 
+def LiveVoting(request):
+    
+    return render(request, 'maindashboard/LiveVoting.html') 

@@ -21,6 +21,7 @@ urlpatterns = [
       path('manageElection/', views.manageElection, name='manageElection'),
       path('AddElectionCategory/', views.AddElectionCategory, name='AddElectionCategory'),
       path('AddCandidate/', views.AddCandidate, name='AddCandidate'),
+      path('LiveVoting/', views.LiveVoting, name='LiveVoting'),
     path('get_all_categories/', views.get_all_categories, name='get_all_categories'),
     path('get_all_nominees/<slug:category_slug>/', views.get_nominee_by_category, name='get_nominee_by_category'),
     path('update_nominee/<slug:nominee_slug>/', views.update_nominee_by_category, name='update_nominee'),
