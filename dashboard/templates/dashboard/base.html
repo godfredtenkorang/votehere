@@ -47,6 +47,18 @@
             <!-- <h1>Admin Dashboard</h1> -->
              <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
                 class="icn menuicn" id="menuicn" alt="menu-icon">
+                <label class="dark-toggle" title="Toggle dark mode">
+  <input type="checkbox" id="darkModeToggle">
+  <span class="dark-toggle-track">
+    <span class="dark-toggle-thumb">
+      <i class="fa-solid fa-sun dark-toggle-icon sun"></i>
+      <i class="fa-solid fa-moon dark-toggle-icon moon"></i>
+    </span>
+  </span>
+</label>
+<button class="fullscreen-btn" id="fullscreenBtn" title="Toggle fullscreen">
+  <i class="fa-solid fa-expand" id="fullscreenIcon"></i>
+</button>
         </div>
 
     </header>
@@ -117,14 +129,14 @@
                         </div>
                     </a> -->
 
-                    <div class="nav-option option1 button Settings">
+                    <!-- <div class="nav-option option1 button Settings">
                         <div class="sett-but">
                             <h3><i class="fa-solid fa-sliders"></i> Settings </h3>
                             <i class="fa-solid fa-caret-down"></i>
                         </div>
 
                         <button class="darkMode-button">Change background Mode</button>
-                    </div>
+                    </div> -->
 
                     <!-- logout button -->
 
@@ -182,6 +194,126 @@
   setInterval(updateDateTime, 1000);
 </script>
 
+<script>
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+const fullscreenIcon = document.getElementById("fullscreenIcon");
+
+// helper to enter fullscreen
+function enterFullscreen() {
+  document.documentElement.requestFullscreen().catch(() => {});
+}
+
+function exitFullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen();
+}
+
+function updateIcon(isFullscreen) {
+  if (isFullscreen) {
+    fullscreenIcon.classList.replace("fa-expand", "fa-compress");
+    fullscreenBtn.title = "Exit fullscreen";
+  } else {
+    fullscreenIcon.classList.replace("fa-compress", "fa-expand");
+    fullscreenBtn.title = "Enter fullscreen";
+  }
+}
+
+// button click
+fullscreenBtn.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    enterFullscreen();
+    localStorage.setItem("isFullscreen", "true");
+  } else {
+    exitFullscreen();
+    localStorage.setItem("isFullscreen", "false");
+  }
+});
+
+// icon sync on any fullscreen change (e.g. Esc key)
+document.addEventListener("fullscreenchange", () => {
+  const isFs = !!document.fullscreenElement;
+  updateIcon(isFs);
+  if (!isFs) localStorage.setItem("isFullscreen", "false");
+});
+
+// on page load — show restore toast if fullscreen was active
+if (localStorage.getItem("isFullscreen") === "true") {
+  showFullscreenToast();
+}
+
+function showFullscreenToast() {
+  const toast = document.createElement("div");
+  toast.id = "fs-toast";
+  toast.innerHTML = `
+    <i class="fa-solid fa-expand"></i>
+    <span>Click to restore fullscreen</span>
+    <button id="fs-toast-yes">Restore</button>
+    <button id="fs-toast-no"><i class="fa-solid fa-xmark"></i></button>
+  `;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a2e;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 9999;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    animation: slideUp 0.3s ease;
+  `;
+
+  document.body.appendChild(toast);
+
+  // inject animation
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    #fs-toast-yes {
+      background: #fff;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #fs-toast-no {
+      background: transparent;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 0 4px;
+    }
+    #fs-toast-no:hover { color: #fff; }
+  `;
+  document.head.appendChild(style);
+
+  document.getElementById("fs-toast-yes").addEventListener("click", () => {
+    enterFullscreen();
+    localStorage.setItem("isFullscreen", "true");
+    toast.remove();
+  });
+
+  document.getElementById("fs-toast-no").addEventListener("click", () => {
+    localStorage.setItem("isFullscreen", "false");
+    toast.remove();
+  });
+
+  // auto-dismiss after 6 seconds
+  setTimeout(() => toast?.remove(), 6000);
+}
+</script>
 </body>
 
 </html>

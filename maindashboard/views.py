@@ -392,3 +392,30 @@ def addAward(request):
 def sendMessage(request):
     
     return render(request, 'maindashboard/sendMessage.html') 
+def bookings(request):
+    
+    return render(request, 'maindashboard/bookings.html') 
+def requested_payment(request):
+    
+    return render(request, 'maindashboard/requestedPayement.html') 
+def election(request):
+    
+    return render(request, 'maindashboard/election.html') 
+def addAwards(request):
+    
+    return render(request, 'maindashboard/addAwards.html') 
+def AddCategory(request):
+    
+    return render(request, 'maindashboard/AddCategory.html') 
+def manageElection(request):
+    
+    return render(request, 'maindashboard/manageElection.html') 
+def AddElectionCategory(request):
+    
+    return render(request, 'maindashboard/AddElectionCategory.html') 
+def AddCandidate(request):
+    
+    return render(request, 'maindashboard/AddCandidate.html') 
+def LiveVoting(request):
+    
+    return render(request, 'maindashboard/LiveVoting.html') 

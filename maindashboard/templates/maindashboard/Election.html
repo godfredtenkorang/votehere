@@ -1,0 +1,229 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="main">
+   <div class="the-team-container">
+  <div class="page-banner">
+    <div class="page-banner-left">
+      <div class="page-banner-eyebrow">
+        <i class="fa-solid fa-newspaper"></i>
+        <span>Send Message</span>
+      </div>
+      <h1 class="page-banner-title">Send Message</h1>
+      <p class="page-banner-subtitle">Compose and send a new message to users.</p>
+    </div>
+    
+  </div>
+</div>
+
+{% if messages %}
+<div class="flash-messages">
+  {% for message in messages %}
+  <p class="flash-msg">{{ message }}</p>
+  {% endfor %}
+</div>
+{% endif %}
+
+   <div class="main-2">
+  <div class="election-wrapper">
+
+  <div class="election-card">
+
+    <!-- HEADER -->
+    <div class="election-topbar">
+
+      <div class="election-badge">
+        <i class="fa-solid fa-box-ballot"></i>
+      </div>
+
+      <div>
+        <h1 class="election-heading">Add Election</h1>
+        <p class="election-subtitle">
+          Create a new election and schedule voting dates.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- TITLE -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-solid fa-pen"></i>
+        </div>
+
+        <div class="election-label">
+          Title
+        </div>
+
+        <div class="election-control">
+          <input type="text" placeholder="Enter election title">
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-solid fa-align-left"></i>
+        </div>
+
+        <div class="election-label">
+          Description
+        </div>
+
+        <div class="election-control">
+          <textarea placeholder="Enter election description..."></textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- START DATE -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-regular fa-calendar"></i>
+        </div>
+
+        <div class="election-label">
+          Start Date
+        </div>
+
+        <div class="election-date-layout">
+
+          <div class="election-field">
+
+            <label>Date</label>
+
+            <div class="election-input-wrap">
+              <input type="date">
+              <i class="fa-regular fa-calendar"></i>
+            </div>
+
+          </div>
+
+          <div class="election-field">
+
+            <label>Time</label>
+
+            <div class="election-input-wrap">
+              <input type="time">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- END DATE -->
+    <div class="election-section">
+
+      <div class="election-grid">
+
+        <div class="election-icon">
+          <i class="fa-regular fa-calendar-check"></i>
+        </div>
+
+        <div class="election-label">
+          End Date
+        </div>
+
+        <div class="election-date-layout">
+
+          <div class="election-field">
+
+            <label>Date</label>
+
+            <div class="election-input-wrap">
+              <input type="date">
+              <i class="fa-regular fa-calendar"></i>
+            </div>
+
+          </div>
+
+          <div class="election-field">
+
+            <label>Time</label>
+
+            <div class="election-input-wrap">
+              <input type="time">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="election-footer">
+
+      <div class="election-status">
+
+        <input type="checkbox" checked>
+
+        <div>
+          <h4>Election Active</h4>
+          <p>This election will be visible to voters.</p>
+        </div>
+
+      </div>
+
+      <div class="election-actions">
+
+        <button class="election-btn election-btn-light">
+          Cancel
+        </button>
+
+        <button class="election-btn election-btn-primary">
+          <i class="fa-solid fa-plus"></i>
+          Add Election
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

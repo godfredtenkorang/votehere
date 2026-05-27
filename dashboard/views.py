@@ -836,3 +836,4 @@ def request_for_payment(request, category_slug):
     else:
         form = RequestForPaymentForm()
     return render(request, 'dashboard/request_payment.html', {'form': form, 'category': category, 'title': 'Request for Payment', 'percentage_earned': category.percentage_earned, 'original_total_payment': original_total_payment, 'category_earnings': category_earnings})
+

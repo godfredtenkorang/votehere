@@ -2,254 +2,346 @@
 {% load static %}
 {% block content %}
 <style>
-
-/* ── HEADING ── */
-.heading {
-    background: linear-gradient(135deg, #4a0080 0%, #6a0dad 60%, #8b00cc 100%);
-   
-    padding: 28px 32px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    position: relative;
-    overflow: hidden;
-}
-.heading::before {
-    content: '';
-    position: absolute;
-    right: 60px; top: -50px;
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.07);
-}
-.heading::after {
-    content: '';
-    position: absolute;
-    right: -20px; bottom: -40px;
-    width: 130px; height: 130px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-}
-.heading h1 {
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 4px;
-    position: relative;
-    z-index: 1;
-}
-.heading h1 span { color: #ffd54f; }
-.heading h4 {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 12px;
-    padding: 10px 20px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffd54f;
-    white-space: nowrap;
-    position: relative;
-    z-index: 1;
-}
-
-/* ── FILTER ── */
-.filter-form {
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid #ede8f5;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 12px rgba(92,15,163,0.06);
-}
-.filter-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-}
-.filter-row input[type="text"],
-.filter-row input[type="date"],
-.filter-row select {
-    padding: 9px 14px;
-    border: 1.5px solid #ddd0f0;
-    border-radius: 9px;
-    font-size: 13px;
-    color: #1a1a2e;
-    background: #faf8ff;
-    outline: none;
-    min-width: 160px;
-    font-family: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-.filter-row input:focus,
-.filter-row select:focus {
-    border-color: #6a0dad;
-    box-shadow: 0 0 0 3px rgba(106,13,173,0.08);
-    background: #fff;
-}
-.btn {
-    padding: 9px 20px;
-    border-radius: 9px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: background 0.15s, transform 0.1s;
-    white-space: nowrap;
-    font-family: inherit;
-}
-.btn-primary { background: #6a0dad; color: #fff; }
-.btn-primary:hover { background: #5c0fa3; transform: translateY(-1px); }
-.btn-secondary {
-    background: transparent;
-    color: #6a0dad;
-    border: 1.5px solid #ddd0f0;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-}
-.btn-secondary:hover { background: #f5f0ff; }
-
-/* ── TABLE ── */
-.table-responsive {
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid #ede8f5;
-    box-shadow: 0 2px 12px rgba(92,15,163,0.06);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.revenue-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 700px;
-    font-size: 13.5px;
-}
-
-.revenue-table thead tr { background: #6a0dad; }
-
-.revenue-table thead th {
-    padding: 14px 16px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.85);
-    letter-spacing: 0.7px;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-.revenue-table thead th:first-child { border-radius: 14px 0 0 0; }
-.revenue-table thead th:last-child  { border-radius: 0 14px 0 0; }
-
-.revenue-table tbody tr {
-    border-bottom: 1px solid #f0eaf8;
-    transition: background 0.15s;
-}
-.revenue-table tbody tr:last-child { border-bottom: none; }
-.revenue-table tbody tr:hover { background: #faf6ff; }
-
-.revenue-table tbody td {
-    padding: 13px 16px;
-    color: #2d1a4a;
-    vertical-align: middle;
-    white-space: nowrap;
-}
-
-.revenue-table tbody td:nth-child(2) {
-    font-family: 'Courier New', monospace;
-    font-size: 11.5px;
-    color: #666;
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.revenue-table tbody td:nth-child(4) {
-    font-weight: 700;
-    color: #0f8c5a;
-}
-
-.revenue-table tbody td:nth-child(5) {
-    font-weight: 600;
-    color: #6a0dad;
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 11.5px;
-    font-weight: 600;
-}
-.badge-true  { background: #e6f9f1; color: #0f8c5a; }
-.badge-false { background: #fdecea; color: #c0392b; }
-
-
-/* ── MOBILE: card layout ── */
-@media (max-width: 640px) {
-    .heading { padding: 20px; flex-direction: column; align-items: flex-start; }
-    .heading h1 { font-size: 16px; }
-    .filter-row { flex-direction: column; align-items: stretch; }
-    .filter-row input, .filter-row .btn { width: 100%; }
-
-    .table-responsive { border: none; box-shadow: none; background: transparent; overflow: visible; }
-
-    .revenue-table { min-width: unset; width: 100%; }
-    .revenue-table thead { display: none; }
-    .revenue-table tbody, .revenue-table tr { display: block; width: 100%; }
-
-    .revenue-table tr {
-        background: #fff;
-        border-radius: 14px;
-        border: 1px solid #ede8f5;
-        margin-bottom: 12px;
-        padding: 14px 16px;
-        box-shadow: 0 2px 10px rgba(92,15,163,0.06);
-    }
-
-    body.dark-mode .revenue-table tr {
-        background: #13152a;
-        border-color: #1e2140;
-    }
-
-    .revenue-table td {
+    .action-flex {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 7px 0;
-        border-bottom: 1px solid #f0eaf8;
-        font-size: 13px;
-        white-space: normal;
-        max-width: 100%;
-        overflow: visible;
-        text-overflow: unset;
+        flex-wrap: wrap;
+        gap: 12px;
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #ede8f5;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 12px rgba(92, 15, 163, 0.06);
     }
 
-    body.dark-mode .revenue-table td { border-bottom-color: #1e2140; }
+    /* ── HEADING ── */
+    .heading {
+        background: linear-gradient(135deg, #4a0080 0%, #6a0dad 60%, #8b00cc 100%);
 
-    .revenue-table td:last-child { border-bottom: none; }
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+    }
 
-    /* label from data-label attribute */
-    .revenue-table td::before {
-        content: attr(data-label);
-        font-size: 10.5px;
+    .heading::before {
+        content: '';
+        position: absolute;
+        right: 60px;
+        top: -50px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .heading::after {
+        content: '';
+        position: absolute;
+        right: -20px;
+        bottom: -40px;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .heading h1 {
+        font-size: 20px;
         font-weight: 700;
-        color: #9b59b6;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-        margin-right: 12px;
+        color: #fff;
+        margin-bottom: 4px;
+        position: relative;
+        z-index: 1;
     }
 
-    body.dark-mode .revenue-table td::before { color: #c084fc; }
-}
+    .heading h1 span {
+        color: #ffd54f;
+    }
+
+    .heading h4 {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffd54f;
+        white-space: nowrap;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ── FILTER ── */
+
+
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .filter-row input[type="text"],
+    .filter-row input[type="date"],
+    .filter-row select {
+        padding: 9px 14px;
+        border: 1.5px solid #ddd0f0;
+        border-radius: 9px;
+        font-size: 13px;
+        color: #1a1a2e;
+        background: #faf8ff;
+        outline: none;
+        min-width: 160px;
+        font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .filter-row input:focus,
+    .filter-row select:focus {
+        border-color: #6a0dad;
+        box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.08);
+        background: #fff;
+    }
+
+    .btn {
+        padding: 9px 20px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: background 0.15s, transform 0.1s;
+        white-space: nowrap;
+        font-family: inherit;
+    }
+
+    .btn-primary {
+        background: #6a0dad;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: #5c0fa3;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: #6a0dad;
+        border: 1.5px solid #ddd0f0;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .btn-secondary:hover {
+        background: #f5f0ff;
+    }
+
+    /* ── TABLE ── */
+    .table-responsive {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #ede8f5;
+        box-shadow: 0 2px 12px rgba(92, 15, 163, 0.06);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .revenue-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 700px;
+        font-size: 13.5px;
+    }
+
+    .revenue-table thead tr {
+        background: #6a0dad;
+    }
+
+    .revenue-table thead th {
+        padding: 14px 16px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.85);
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .revenue-table thead th:first-child {
+        border-radius: 14px 0 0 0;
+    }
+
+    .revenue-table thead th:last-child {
+        border-radius: 0 14px 0 0;
+    }
+
+    .revenue-table tbody tr {
+        border-bottom: 1px solid #f0eaf8;
+        transition: background 0.15s;
+    }
+
+    .revenue-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .revenue-table tbody tr:hover {
+        background: #faf6ff;
+    }
+
+    .revenue-table tbody td {
+        padding: 13px 16px;
+        color: #2d1a4a;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .revenue-table tbody td:nth-child(2) {
+        font-family: 'Courier New', monospace;
+        font-size: 11.5px;
+        color: #666;
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .revenue-table tbody td:nth-child(4) {
+        font-weight: 700;
+        color: #0f8c5a;
+    }
+
+    .revenue-table tbody td:nth-child(5) {
+        font-weight: 600;
+        color: #6a0dad;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 11.5px;
+        font-weight: 600;
+    }
+
+    .badge-true {
+        background: #e6f9f1;
+        color: #0f8c5a;
+    }
+
+    .badge-false {
+        background: #fdecea;
+        color: #c0392b;
+    }
+
+
+    /* ── MOBILE: card layout ── */
+    @media (max-width: 640px) {
+        .heading {
+            padding: 20px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .heading h1 {
+            font-size: 16px;
+        }
+
+        .filter-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-row input,
+        .filter-row .btn {
+            width: 100%;
+        }
+
+        .table-responsive {
+            border: none;
+            box-shadow: none;
+            background: transparent;
+            overflow: visible;
+        }
+
+        .revenue-table {
+            min-width: unset;
+            width: 100%;
+        }
+
+        .revenue-table thead {
+            display: none;
+        }
+
+        .revenue-table tbody,
+        .revenue-table tr {
+            display: block;
+            width: 100%;
+        }
+
+        .revenue-table tr {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #ede8f5;
+            margin-bottom: 12px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 10px rgba(92, 15, 163, 0.06);
+        }
+
+        body.dark-mode .revenue-table tr {
+            background: #13152a;
+            border-color: #1e2140;
+        }
+
+        .revenue-table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 0;
+            border-bottom: 1px solid #f0eaf8;
+            font-size: 13px;
+            white-space: normal;
+            max-width: 100%;
+            overflow: visible;
+            text-overflow: unset;
+        }
+
+        body.dark-mode .revenue-table td {
+            border-bottom-color: #1e2140;
+        }
+
+        .revenue-table td:last-child {
+            border-bottom: none;
+        }
+
+        /* label from data-label attribute */
+        .revenue-table td::before {
+            content: attr(data-label);
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #9b59b6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+
+        body.dark-mode .revenue-table td::before {
+            color: #c084fc;
+        }
+    }
 </style>
 
 <div class="main">
@@ -260,52 +352,139 @@
             <h4>Total Amount: GH¢{{ total_amount }}</h4>
         </div>
 
-    <div class="main-2">
-            <form method="get" class="filter-form">
-            <div class="filter-row">
-                <input type="text" name="phone_number" placeholder="Phone number" value="{{ filter_params.phone }}">
-                <button type="submit" class="btn btn-primary">Filter</button>
-                <a href="?" class="btn btn-secondary">Clear Filters</a>
-            </div>
-        </form>
+        <div class="main-2">
 
-        <div class="table-responsive">
-            <table class="revenue-table">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Reference</th>
-                        <th>Phone</th>
-                        <th>Amount</th>
-                        <th>Votes</th>
-                        <th>Code</th>
-                        <th>Verification</th>
-                        <th>Date & Time</th>
-                    </tr>
-                </thead>
-                {% for p in transactions %}
-                <tbody>
-                    <tr>
-                        <td data-label="Category">{{ p.content }}</td>
-                        <td data-label="Reference">{{ p.ref }}</td>
-                        <td data-label="Phone">{{ p.phone }}</td>
-                        <td data-label="Amount">GH¢{{ p.total_amount }}</td>
-                        <td data-label="Votes">{{ p.vote }}</td>
-                        <td data-label="Code">{{ p.nominee.code }}</td>
-                        <td data-label="Verification">
-                            {% if p.verified %}
-                            <span class="badge badge-true">✓ Verified</span>
-                            {% else %}
-                            <span class="badge badge-false">✕ Unverified</span>
-                            {% endif %}
-                        </td>
-                        <td data-label="Date & Time">{{ p.date_created }}</td>
-                    </tr>
-                </tbody>
-                {% endfor %}
-            </table>
+            <!-- SUMMARY CARDS -->
+            <div class="summary-cards" id="summaryCards">
+                <div class="summary-card">
+                    <div class="summary-card-label"><i class="fa-solid fa-receipt"></i> Total Payments</div>
+                    <div class="summary-card-value" id="statTotal">1</div>
+                    <div class="summary-card-sub">all records</div>
+                </div>
+                <div class="summary-card card-verified">
+                    <div class="summary-card-label"><i class="fa-solid fa-circle-check"></i> Verified</div>
+                    <div class="summary-card-value" id="statVerified">2</div>
+                    <div class="summary-card-sub">confirmed payments</div>
+                </div>
+                <div class="summary-card card-pending">
+                    <div class="summary-card-label"><i class="fa-solid fa-clock"></i> Not Verified</div>
+                    <div class="summary-card-value" id="statPending">3</div>
+                    <div class="summary-card-sub">awaiting confirmation</div>
+                </div>
+                <div class="summary-card card-bulk">
+                    <div class="summary-card-label"><i class="fa-solid fa-layer-group"></i> Bulk Votes</div>
+                    <div class="summary-card-value" id="statBulk">4</div>
+                    <div class="summary-card-sub">multi-vote transactions</div>
+                </div>
+            </div>
+
+
+
+
+            <div class="action-flex">
+                <form method="get" class="filter-form">
+                    <div class="filter-row">
+                        <input type="text" name="phone_number" placeholder="Phone number"
+                            value="{{ filter_params.phone }}">
+                        <input type="text" name="reference" placeholder="Reference" value="">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="?" class="btn btn-secondary">Clear Filters</a>
+                    </div>
+                </form>
+                <div class="payatsack">
+                    <a href="https://dashboard.paystack.com/#/dashboard" target="_blank" rel="noopener noreferrer">
+                        <button class="btn btn-secondary">
+                            View Paystack Transactions
+                        </button>
+                    </a>
+                </div>
+                <button id="openReferenceCheckerButton" class="open-reference-checker-button">
+                    Compare References
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="revenue-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Reference</th>
+                            <th>Phone</th>
+                            <th>Amount</th>
+                            <th>Votes</th>
+                            <th>Code</th>
+                            <th>Verification</th>
+                            <th>Date & Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    {% for p in transactions %}
+                    <tbody>
+                        <tr>
+                            <td data-label="Category">{{ p.content }}</td>
+                            <td data-label="Reference">{{ p.ref }}</td>
+                            <td data-label="Phone">{{ p.phone }}</td>
+                            <td data-label="Amount">GH¢{{ p.total_amount }}</td>
+                            <td data-label="Votes">{{ p.vote }}</td>
+                            <td data-label="Code">{{ p.nominee.code }}</td>
+                            <td data-label="Verification">
+                                {% if p.verified %}
+                                <span class="badge badge-true">✓ Verified</span>
+                                {% else %}
+                                <span class="badge badge-false">✕ Unverified</span>
+                                {% endif %}
+                            </td>
+                            <td data-label="Date & Time">{{ p.date_created }}</td>
+                            <td data-label="Action">
+                                <a href="" class="btn btn-sm btn-primary">verify</a>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
+
     </div>
+</div>
+<div id="referenceCheckerModalBackground" class="reference-checker-modal-background">
+    <div class="reference-checker-modal-box">
+
+        <div class="reference-checker-modal-header">
+            <div>
+                <h3>Compare Transaction References</h3>
+                <p>Manual check only. No payment or vote update.</p>
+            </div>
+
+            <button id="closeReferenceCheckerButton" class="close-reference-checker-button">
+                ×
+            </button>
+        </div>
+
+        <div class="reference-checker-modal-body">
+            <div class="reference-field-group">
+                <label for="voteAfricReferenceField">VoteAfric Reference</label>
+                <input id="voteAfricReferenceField" type="text" placeholder="Enter VoteAfric reference" />
+            </div>
+
+            <div class="reference-divider">VS</div>
+
+            <div class="reference-field-group">
+                <label for="paystackReferenceField">Paystack Reference</label>
+                <input id="paystackReferenceField" type="text" placeholder="Enter Paystack reference" />
+            </div>
+
+            <button id="checkReferencesButton" class="check-references-button">
+                Compare References
+            </button>
+
+            <div id="referenceCheckLoading" class="reference-check-loading">
+                Checking references...
+            </div>
+
+            <div id="referenceCheckResult" class="reference-check-result"></div>
+        </div>
 
     </div>
 </div>
@@ -322,4 +501,85 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    const openReferenceCheckerButton = document.getElementById("openReferenceCheckerButton");
+    const closeReferenceCheckerButton = document.getElementById("closeReferenceCheckerButton");
+    const referenceCheckerModalBackground = document.getElementById("referenceCheckerModalBackground");
+
+    const voteAfricReferenceField = document.getElementById("voteAfricReferenceField");
+    const paystackReferenceField = document.getElementById("paystackReferenceField");
+
+    const checkReferencesButton = document.getElementById("checkReferencesButton");
+    const referenceCheckLoading = document.getElementById("referenceCheckLoading");
+    const referenceCheckResult = document.getElementById("referenceCheckResult");
+
+    openReferenceCheckerButton.addEventListener("click", () => {
+        referenceCheckerModalBackground.classList.add("show-modal");
+    });
+
+    closeReferenceCheckerButton.addEventListener("click", closeReferenceCheckerModal);
+
+    referenceCheckerModalBackground.addEventListener("click", (event) => {
+        if (event.target === referenceCheckerModalBackground) {
+            closeReferenceCheckerModal();
+        }
+    });
+
+    function closeReferenceCheckerModal() {
+        referenceCheckerModalBackground.classList.remove("show-modal");
+        voteAfricReferenceField.value = "";
+        paystackReferenceField.value = "";
+        referenceCheckLoading.style.display = "none";
+        referenceCheckResult.innerHTML = "";
+        checkReferencesButton.disabled = false;
+        checkReferencesButton.textContent = "Compare References";
+    }
+
+    checkReferencesButton.addEventListener("click", () => {
+        const voteAfricReference = voteAfricReferenceField.value.trim().toLowerCase();
+        const paystackReference = paystackReferenceField.value.trim().toLowerCase();
+
+        referenceCheckResult.innerHTML = "";
+
+        if (!voteAfricReference || !paystackReference) {
+            referenceCheckResult.innerHTML = `
+      <div class="reference-result-box references-empty-warning">
+        Please enter both VoteAfric and Paystack references.
+      </div>
+    `;
+            return;
+        }
+
+        referenceCheckLoading.style.display = "block";
+        checkReferencesButton.disabled = true;
+        checkReferencesButton.textContent = "Checking...";
+
+        setTimeout(() => {
+            referenceCheckLoading.style.display = "none";
+            checkReferencesButton.disabled = false;
+            checkReferencesButton.textContent = "Compare References";
+
+            if (voteAfricReference === paystackReference) {
+                referenceCheckResult.innerHTML = `
+        <div class="reference-result-box references-match">
+          <strong>References Match</strong><br />
+          The VoteAfric and Paystack references are the same.
+        </div>
+      `;
+            } else {
+                referenceCheckResult.innerHTML = `
+        <div class="reference-result-box references-do-not-match">
+          <strong>References Do Not Match</strong><br />
+          The two references are different.
+        </div>
+      `;
+            }
+        }, 1000);
+    });
+
+</script>
+
+
 {% endblock %}

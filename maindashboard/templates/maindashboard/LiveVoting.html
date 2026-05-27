@@ -1,0 +1,276 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<div class="main">
+
+ <div class="main-2">
+ <!-- TOP -->
+  <div class="ev-topbar">
+    <div class="ev-chip">
+      <i class="fa-solid fa-calendar-check"></i>
+      LIV VOTING
+    </div>
+
+
+<div class="live-vote-monitor-page">
+
+  <!-- HEADER -->
+  <div class="monitor-header">
+    <div class="monitor-header-top">
+      <div>
+        <div class="monitor-eyebrow">
+          <span class="live-dot"></span>
+          Live Monitoring
+        </div>
+        <h1>Vote Payment Monitor</h1>
+        <p>Monitor voter payments, contestants, references, verification status, and bulk votes in real time.</p>
+      </div>
+      <div class="last-updated">
+        <i class="fa-regular fa-clock"></i>
+        Updated just now
+      </div>
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <div class="summary-cards" id="summaryCards">
+      <div class="summary-card">
+        <div class="summary-card-label"><i class="fa-solid fa-receipt"></i> Total Payments</div>
+        <div class="summary-card-value" id="statTotal">6</div>
+        <div class="summary-card-sub">all records</div>
+      </div>
+      <div class="summary-card card-verified">
+        <div class="summary-card-label"><i class="fa-solid fa-circle-check"></i> Verified</div>
+        <div class="summary-card-value" id="statVerified">8</div>
+        <div class="summary-card-sub">confirmed payments</div>
+      </div>
+      <div class="summary-card card-pending">
+        <div class="summary-card-label"><i class="fa-solid fa-clock"></i> Not Verified</div>
+        <div class="summary-card-value" id="statPending">1</div>
+        <div class="summary-card-sub">awaiting confirmation</div>
+      </div>
+      <div class="summary-card card-bulk">
+        <div class="summary-card-label"><i class="fa-solid fa-layer-group"></i> Bulk Votes</div>
+        <div class="summary-card-value" id="statBulk">3</div>
+        <div class="summary-card-sub">multi-vote transactions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="monitor-controls">
+    <div class="search-bar-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="text"
+        class="search-bar"
+        id="searchInput"
+        placeholder="Search by phone, contestant, reference, amount, or status..."
+        autocomplete="off"
+      >
+    </div>
+    <select class="filter-select" id="statusFilter">
+      <option value="">All Statuses</option>
+      <option value="Verified">Verified</option>
+      <option value="Not Verified">Not Verified</option>
+      <option value="Failed">Failed</option>
+    </select>
+    <select class="filter-select" id="bulkFilter">
+      <option value="">All Vote Types</option>
+      <option value="bulk">Bulk Vote</option>
+      <option value="single">Single Vote</option>
+    </select>
+    <div class="results-count" id="resultsCount"><span>0</span> records</div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrapper">
+    <table class="payment-table" id="paymentTable">
+      <thead>
+        <tr>
+          <th>Voter Phone</th>
+          <th>Contestant</th>
+          <th>Amount</th>
+          <th>Reference</th>
+          <th>Verified Status</th>
+          <th>Bulk Vote</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <p>No records match your search.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const votePayments = [
+  { voterPhone: "0241234567", contestantName: "Ama Serwaa",      amountPaid: 20,  paymentReference: "VTA-2026-001", verifiedStatus: "Verified",     isBulkVote: true  },
+  { voterPhone: "0557890123", contestantName: "Kofi Mensah",     amountPaid: 5,   paymentReference: "VTA-2026-002", verifiedStatus: "Not Verified", isBulkVote: false },
+  { voterPhone: "0201122334", contestantName: "Efua Asante",     amountPaid: 50,  paymentReference: "VTA-2026-003", verifiedStatus: "Verified",     isBulkVote: true  },
+  { voterPhone: "0244556677", contestantName: "Yaw Darko",       amountPaid: 5,   paymentReference: "VTA-2026-004", verifiedStatus: "Failed",       isBulkVote: false },
+  { voterPhone: "0263344556", contestantName: "Abena Osei",      amountPaid: 10,  paymentReference: "VTA-2026-005", verifiedStatus: "Verified",     isBulkVote: false },
+  { voterPhone: "0501234567", contestantName: "Kwame Boateng",   amountPaid: 100, paymentReference: "VTA-2026-006", verifiedStatus: "Verified",     isBulkVote: true  },
+  { voterPhone: "0277889900", contestantName: "Ama Serwaa",      amountPaid: 20,  paymentReference: "VTA-2026-007", verifiedStatus: "Not Verified", isBulkVote: false },
+  { voterPhone: "0246001122", contestantName: "Nana Adjoa",      amountPaid: 5,   paymentReference: "VTA-2026-008", verifiedStatus: "Verified",     isBulkVote: false },
+  { voterPhone: "0599887766", contestantName: "Kofi Mensah",     amountPaid: 50,  paymentReference: "VTA-2026-009", verifiedStatus: "Failed",       isBulkVote: true  },
+  { voterPhone: "0209988776", contestantName: "Efua Asante",     amountPaid: 10,  paymentReference: "VTA-2026-010", verifiedStatus: "Verified",     isBulkVote: false },
+  { voterPhone: "0541230987", contestantName: "Abena Osei",      amountPaid: 20,  paymentReference: "VTA-2026-011", verifiedStatus: "Not Verified", isBulkVote: true  },
+  { voterPhone: "0261112233", contestantName: "Kwame Boateng",   amountPaid: 5,   paymentReference: "VTA-2026-012", verifiedStatus: "Verified",     isBulkVote: false },
+  { voterPhone: "0244778899", contestantName: "Yaw Darko",       amountPaid: 100, paymentReference: "VTA-2026-013", verifiedStatus: "Verified",     isBulkVote: true  },
+  { voterPhone: "0507654321", contestantName: "Nana Adjoa",      amountPaid: 5,   paymentReference: "VTA-2026-014", verifiedStatus: "Not Verified", isBulkVote: false },
+  { voterPhone: "0242345678", contestantName: "Ama Serwaa",      amountPaid: 50,  paymentReference: "VTA-2026-015", verifiedStatus: "Verified",     isBulkVote: true  },
+];
+
+function statusClass(s) {
+  if (s === "Verified")     return "verified";
+  if (s === "Not Verified") return "not-verified";
+  return "failed";
+}
+
+function avatarLetters(phone) {
+  return phone.slice(-3, -1);
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById("tableBody");
+  const empty = document.getElementById("emptyState");
+  const count = document.getElementById("resultsCount");
+
+  if (data.length === 0) {
+    tbody.innerHTML = "";
+    empty.style.display = "block";
+    count.innerHTML = `<span>0</span> records`;
+    return;
+  }
+
+  empty.style.display = "none";
+  count.innerHTML = `<span>${data.length}</span> record${data.length !== 1 ? "s" : ""}`;
+
+  tbody.innerHTML = data.map(p => `
+    <tr>
+      <td data-label="Voter Phone">
+        <div class="voter-phone">
+          <div class="phone-avatar">${avatarLetters(p.voterPhone)}</div>
+          ${p.voterPhone}
+        </div>
+      </td>
+      <td data-label="Contestant">
+        <span class="contestant-name">${p.contestantName}</span>
+      </td>
+      <td data-label="Amount">
+        <div class="amount-cell">
+          <span class="amount-currency">GHS</span>
+          ${p.amountPaid.toFixed(2)}
+        </div>
+      </td>
+      <td data-label="Reference">
+        <span class="ref-code">${p.paymentReference}</span>
+      </td>
+      <td data-label="Verified Status">
+        <span class="payment-status ${statusClass(p.verifiedStatus)}">
+          <span class="status-dot"></span>
+          ${p.verifiedStatus}
+        </span>
+      </td>
+      <td data-label="Bulk Vote">
+        <span class="bulk-vote-badge ${p.isBulkVote ? 'bulk' : 'single'}">
+          <i class="fa-solid ${p.isBulkVote ? 'fa-layer-group' : 'fa-circle-dot'}" style="font-size:10px;"></i>
+          ${p.isBulkVote ? 'Bulk Vote' : 'Single Vote'}
+        </span>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function updateStats(data) {
+  document.getElementById("statTotal").textContent    = votePayments.length;
+  document.getElementById("statVerified").textContent = votePayments.filter(p => p.verifiedStatus === "Verified").length;
+  document.getElementById("statPending").textContent  = votePayments.filter(p => p.verifiedStatus === "Not Verified").length;
+  document.getElementById("statBulk").textContent     = votePayments.filter(p => p.isBulkVote).length;
+}
+
+function applyFilters() {
+  const q      = document.getElementById("searchInput").value.toLowerCase().trim();
+  const status = document.getElementById("statusFilter").value;
+  const bulk   = document.getElementById("bulkFilter").value;
+
+  const filtered = votePayments.filter(p => {
+    const matchSearch = !q ||
+      p.voterPhone.includes(q) ||
+      p.contestantName.toLowerCase().includes(q) ||
+      p.paymentReference.toLowerCase().includes(q) ||
+      String(p.amountPaid).includes(q) ||
+      p.verifiedStatus.toLowerCase().includes(q) ||
+      (p.isBulkVote ? "bulk" : "single").includes(q);
+
+    const matchStatus = !status || p.verifiedStatus === status;
+    const matchBulk   = !bulk   || (bulk === "bulk" ? p.isBulkVote : !p.isBulkVote);
+
+    return matchSearch && matchStatus && matchBulk;
+  });
+
+  renderTable(filtered);
+}
+
+document.getElementById("searchInput").addEventListener("input", applyFilters);
+document.getElementById("statusFilter").addEventListener("change", applyFilters);
+document.getElementById("bulkFilter").addEventListener("change", applyFilters);
+
+updateStats();
+renderTable(votePayments);
+</script>
+</body>
+</html> 
+  </div>
+
+  
+</div>
+
+
+ </div>
+
+<!-- DELETE MODAL -->
+<div class="ev-modal-overlay" id="delete-modal">
+  <div class="ev-modal">
+    <div class="ev-modal-icon ev-modal-icon-delete">
+      <i class="fa-solid fa-trash-can"></i>
+    </div>
+    <h3>Delete Event?</h3>
+    <p>
+      You are about to permanently delete <strong>GH Music Awards 2026</strong>.
+      This action cannot be undone and all associated data will be removed.
+    </p>
+    <div class="ev-modal-actions">
+      <button class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="ev-modal-btn ev-modal-btn-confirm-delete" onclick="confirmDelete(1)">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- APPROVE MODAL -->
+<div class="ev-modal-overlay" id="approve-modal">
+  <div class="ev-modal">
+    <div class="ev-modal-icon ev-modal-icon-approve">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <h3>Approve Event?</h3>
+    <p>
+      You are about to approve <strong>GH Music Awards 2026</strong> by VoteAfric Media Group.
+      This will make the event visible and active on the platform.
+    </p>
+    <div class="ev-modal-actions">
+      <button class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="ev-modal-btn ev-modal-btn-confirm-approve" onclick="confirmApprove(1)">Yes, Approve</button>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

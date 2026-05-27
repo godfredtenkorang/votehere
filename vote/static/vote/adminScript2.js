@@ -1,32 +1,22 @@
-const darkModeButton = document.querySelector(".darkMode-button")
-const main = document.querySelector(".main")
-let isdarkMode = localStorage.getItem("isdarkMode")
-const Settings = document.querySelector(".sett-but")
+const toggle = document.getElementById("darkModeToggle");
+const Settings = document.querySelector(".sett-but");
 
-// NEW
-darkModeButton.style.display = "none"
+// restore saved preference
+const savedMode = localStorage.getItem("isdarkMode");
+if (savedMode === "true") {
+  document.body.classList.add("dark-mode");
+  toggle.checked = true;
+}
 
-Settings.addEventListener("click",()=>{
-   if(darkModeButton.style.display === "none"){
-    darkModeButton.style.display = "block"
-   }else{
-    darkModeButton.style.display = "none"
-   }
-})
+// toggle on change
+toggle.addEventListener("change", () => {
+  const isDark = toggle.checked;
+  document.body.classList.toggle("dark-mode", isDark);
+  localStorage.setItem("isdarkMode", isDark);
+});
 
-    if(isdarkMode){
-        if(isdarkMode === "true")
-        document.body.classList.add("dark-mode") // UPDATED
-    }
-
-    darkModeButton.addEventListener("click",()=>{
-        isdarkMode = !isdarkMode
-
-       if(isdarkMode){
-        document.body.classList.add("dark-mode")    // UPDATED
-       }  
-       else{
-        document.body.classList.remove("dark-mode") // UPDATED
-       }
-     localStorage.setItem("isdarkMode" , isdarkMode)
-    })
+// if you still want settings button to show/hide the toggle wrapper
+Settings.addEventListener("click", () => {
+  const wrapper = document.querySelector(".dark-toggle");
+  wrapper.style.display = wrapper.style.display === "none" ? "flex" : "none";
+});
