@@ -57,39 +57,40 @@
         </thead>
 
         <tbody>
+          {% for event in events %}
           <tr id="event-row-1">
 
             <td data-label="Event">
-              <div class="ev-cell-title">GH Music Awards 2026</div>
+              <div class="ev-cell-title">{{ event.event_name }}</div>
             </td>
 
             <td data-label="Organization">
-              <div class="ev-company">VoteAfric Media Group</div>
+              <div class="ev-company">{{ event.organization_name }}</div>
             </td>
 
             <td data-label="Contact">
               <div class="ev-contact">
-                <strong>Benjamin Asare</strong>
+                <strong>{{ event.contact_name }}</strong>
                 <span>Event Coordinator</span>
               </div>
             </td>
 
             <td data-label="Phone">
-              <div class="ev-phone">+233 244 000 000</div>
+              <div class="ev-phone">{{ event.phone_number }}</div>
             </td>
 
             <td data-label="Email">
-              <a href="mailto:contact@voteafric.com" class="ev-link">contact@voteafric.com</a>
+              <a href="mailto:{{ event.email }}" class="ev-link">{{ event.email }}</a>
             </td>
 
             <td data-label="Description">
               <div class="ev-description">
-                The GH Music Awards 2026 celebrates Ghana's best musical talents across highlife, afrobeats, gospel and hiplife categories with nationwide public voting and recognition.
+                {{ event.event_description|truncatechars:100 }}
               </div>
             </td>
 
             <td data-label="Type">
-              <span class="ev-badge ev-badge-purple">Awards</span>
+              <span class="ev-badge ev-badge-purple">{{ event.event_type }}</span>
             </td>
 
             <td data-label="Status">
@@ -117,12 +118,14 @@
                   <i class="fa-solid fa-pen-to-square"></i>
                 </button>
 
+                
                 <button
                   class="ev-btn ev-btn-delete"
                   data-tip="Delete"
                   onclick="openDeleteModal(1)"
                   title="Delete event"
                 >
+                
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
 
@@ -130,6 +133,7 @@
             </td>
 
           </tr>
+          {% endfor %}
         </tbody>
 
       </table>

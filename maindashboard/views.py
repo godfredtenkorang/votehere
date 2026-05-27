@@ -12,6 +12,8 @@ from django.utils import timezone
 from django.db.models import Sum
 from .forms import NomineeForm, BlogForm
 
+from register.models import EventOrganizer
+
 
 # Create your views here.
 def dashboard(request):
@@ -392,9 +394,15 @@ def addAward(request):
 def sendMessage(request):
     
     return render(request, 'maindashboard/sendMessage.html') 
+
 def bookings(request):
-    
-    return render(request, 'maindashboard/bookings.html') 
+    events = EventOrganizer.objects.all()
+    context = {
+        'events': events,
+        'title': 'Bookings'
+    }
+    return render(request, 'maindashboard/bookings.html', context)
+
 def requested_payment(request):
     
     return render(request, 'maindashboard/requestedPayement.html') 
