@@ -13,6 +13,7 @@ from django.db.models import Sum
 from .forms import NomineeForm, BlogForm
 
 from register.models import EventOrganizer
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
@@ -402,6 +403,21 @@ def bookings(request):
         'title': 'Bookings'
     }
     return render(request, 'maindashboard/bookings.html', context)
+
+@require_POST
+def approve_booking(request, event_id):
+    event = get_object_or_404(EventOrganizer, id=event_id)
+    event.is_approved = True
+    event.save()
+    messages.success(request, f'Event "{event.event_name}" approved successfully.')
+    return redirect('bookings')
+
+@require_POST
+def delete_booking(request, event_id):
+    event = get_object_or_404(EventOrganizer, id=event_id)
+    event.delete()
+    messages.success(request, f'Event "{event.event_name}" deleted successfully.')
+    return redirect('bookings')
 
 def requested_payment(request):
     

@@ -13,7 +13,10 @@ urlpatterns = [
       path('transactions/', views.transactions, name='transactions'),
       path('addAward/', views.addAward, name='addAward'),
       path('sendMessage/', views.sendMessage, name='sendMessage'),
+      # Bookings and Event Organizer URLs
       path('bookings/', views.bookings, name='bookings'),
+      path('booking/<int:event_id>/approve/', views.approve_booking, name='approve_booking'),
+      path('booking/<int:event_id>/delete/', views.delete_booking, name='delete_booking'),
       path('requestedPayment/', views.requested_payment, name='requested_payment'),
       path('election/', views.election, name='election'),
       path('addAwards/', views.addAwards, name='addAwards'),

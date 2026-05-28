@@ -17,6 +17,15 @@
     <p class="ev-subheading">Review submitted event information, manage approval status, and take action from one clean interface.</p>
   </div>
 
+  <!-- FLASH MESSAGES -->
+  {% if messages %}
+  {% for message in messages %}
+  <div class="ev-alert ev-alert-{{ message.tags }}">
+    <i class="fa-solid fa-circle-info"></i> {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
+
   <!-- CARD -->
   <div class="ev-card">
 
@@ -93,26 +102,46 @@
               <span class="ev-badge ev-badge-purple">{{ event.event_type }}</span>
             </td>
 
+            <!-- Status now reflects the actual is_approved field -->
+
             <td data-label="Status">
-              <span class="ev-badge ev-badge-red" id="status-badge-1">Not Approved</span>
+              {% if event.is_approved %}
+                <span class="ev-badge ev-badge-green" id="status-badge-{{ event.id }}">Approved</span>
+              {% else %}
+                <span class="ev-badge ev-badge-red" id="status-badge-{{ event.id }}">Not Approved</span>
+              {% endif %}
             </td>
 
             <td data-label="Actions">
               <div class="ev-actions">
 
+                <!-- Approve button disabled if already approved -->
+
+                {% if not event.is_approved %}
+
                 <button
                   class="ev-btn ev-btn-approve"
                   data-tip="Approve"
-                  onclick="openApproveModal(1)"
+                  onclick="openApproveModal(
+                    {{ event.id }},
+                     `{{ event.event_name|escapejs }}`,
+                     `{{ event.organization_name|escapejs }}`
+                  )"
                   title="Approve event"
                 >
                   <i class="fa-solid fa-circle-check"></i>
                 </button>
+                {% else %}
+                <button class="ev-btn ev-btn-approve ev-btn-disabled" data-tip="Already Approved" title="Event already approved"
+                  disabled>
+                  <i class="fa-solid fa-circle-check"></i>
+                </button>
+                {% endif %}
 
                 <button
                   class="ev-btn ev-btn-edit"
                   data-tip="Edit"
-                  onclick="handleEdit(1)"
+                  onclick="handleEdit({{ event.id }})"
                   title="Edit event"
                 >
                   <i class="fa-solid fa-pen-to-square"></i>
@@ -122,7 +151,11 @@
                 <button
                   class="ev-btn ev-btn-delete"
                   data-tip="Delete"
-                  onclick="openDeleteModal(1)"
+                  onclick="openDeleteModal(
+                    {{ event.id }},
+                     `{{ event.event_name|escapejs }}`,
+                     
+                  )"
                   title="Delete event"
                 >
                 
@@ -132,6 +165,12 @@
               </div>
             </td>
 
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="9" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+              No events submitted yet.
+            </td>
           </tr>
           {% endfor %}
         </tbody>
@@ -155,13 +194,17 @@
     </div>
     <h3>Delete Event?</h3>
     <p>
-      You are about to permanently delete <strong>GH Music Awards 2026</strong>.
+      You are about to permanently delete <strong id="delete-modal-name"></strong>.
       This action cannot be undone and all associated data will be removed.
     </p>
-    <div class="ev-modal-actions">
-      <button class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
-      <button class="ev-modal-btn ev-modal-btn-confirm-delete" onclick="confirmDelete(1)">Yes, Delete</button>
-    </div>
+
+    <form id="delete-form" method="POST" action="">
+      {% csrf_token %}
+      <div class="ev-modal-actions">
+        <button type="button" class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
+        <button type="submit" class="ev-modal-btn ev-modal-btn-confirm-delete">Yes, Delete</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -173,22 +216,36 @@
     </div>
     <h3>Approve Event?</h3>
     <p>
-      You are about to approve <strong>GH Music Awards 2026</strong> by VoteAfric Media Group.
+      You are about to approve <strong id="approve-modal-name"></strong> by
+      <span id="approve-modal-org"></span>.
       This will make the event visible and active on the platform.
     </p>
-    <div class="ev-modal-actions">
-      <button class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
-      <button class="ev-modal-btn ev-modal-btn-confirm-approve" onclick="confirmApprove(1)">Yes, Approve</button>
-    </div>
+    <form id="approve-form" method="POST" action="">
+      {% csrf_token %}
+    
+      <div class="ev-modal-actions">
+        <button type="button" class="ev-modal-btn ev-modal-btn-cancel" onclick="closeModals()">Cancel</button>
+        <button type="submit" class="ev-modal-btn ev-modal-btn-confirm-approve">Yes, Approve</button>
+      </div>
+    </form>
   </div>
 </div>
 
 <script>
-  function openDeleteModal(id){
+  // Build URL templates for modals
+  const APPROVE_URL_TEMPLATE = "{% url 'approve_booking' 0 %}".replace('/0/', '/{id}/');
+  const DELETE_URL_TEMPLATE = "{% url 'delete_booking' 0 %}".replace('/0/', '/{id}/');
+
+  function openDeleteModal(id, name){
+    document.getElementById('delete-modal-name').textContent = name;
+    document.getElementById('delete-form').action = DELETE_URL_TEMPLATE.replace('{id}', id);
     document.getElementById('delete-modal').classList.add('open');
   }
 
-  function openApproveModal(id){
+  function openApproveModal(id, name, org){
+    document.getElementById('approve-modal-name').textContent = name;
+    document.getElementById('approve-modal-org').textContent = org;
+    document.getElementById('approve-form').action = APPROVE_URL_TEMPLATE.replace('{id}', id);
     document.getElementById('approve-modal').classList.add('open');
   }
 
