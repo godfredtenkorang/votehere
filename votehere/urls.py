@@ -52,10 +52,7 @@ urlpatterns = [
             template_name='vote/.well-known/apple-developer-merchantid-domain-association', 
             content_type='text/plain'),
     ),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'vote.views.custom_404_view'

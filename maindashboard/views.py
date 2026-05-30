@@ -14,6 +14,8 @@ from .forms import NomineeForm, BlogForm
 
 from register.models import EventOrganizer
 from django.views.decorators.http import require_POST
+import json
+from django.utils.text import slugify
 
 
 # Create your views here.
@@ -425,9 +427,91 @@ def requested_payment(request):
 def election(request):
     
     return render(request, 'maindashboard/election.html') 
+
+import json
+
 def addAwards(request):
     
+    if request.method == 'POST':
+        award = request.POST.get('award', '').strip()
+        title = request.POST.get('title', '').strip()
+        image = request.FILES.get('image')
+        slug = request.POST.get('slug', '').strip()
+        date_added = request.POST.get('date_added') or None
+        end_date = request.POST.get('end_date') or None
+        access_code = request.POST.get('access_code', '').strip() or None
+        link = request.POST.get('link', '').strip() or None
+        nomination_end_date = request.POST.get('nomination_end_date') or None
+        bulk_raw = request.POST.get('bulk_voting_options', '').strip()
+        close_result = request.POST.get('close_result') == 'on'
+        percentage_earned = request.POST.get('percentage_earned', '80').strip() or '80'
+        
+        # --- validate required fields ---
+        errors = []
+        if not award:
+            errors.append("Award name is required.")
+        if not slug:
+            errors.append("Slug is required.")
+        if not image:
+            errors.append("Award image is required.")
+        if not date_added:
+            errors.append("Date added is required.")
+        if not end_date:
+            errors.append("End date is required.")
+            
+        # --- validate JSON ---
+        bulk_voting_options = []
+        if bulk_raw:
+            try:
+                bulk_voting_options = json.loads(bulk_raw)
+                if not isinstance(bulk_voting_options, list):
+                    errors.append("Bulk voting options must be a JSON array.")
+            except json.JSONDecodeError as e:
+                errors.append(f"Bulk voting options - invalid JSON: {e}")
+                
+        # --- check slug uniqueness ---
+        if slug and Category.objects.filter(slug=slug).exists():
+            errors.append(f'The slug "{slug}" is already in use. Please choose a different slug.')
+            
+        if errors:
+            for err in errors:
+                messages.error(request, err)
+                
+            # Return to form with existing data
+            return render(request, 'maindashboard/addAwards.html', {
+                'request': request
+            })
+        else:
+            try:
+                category = Category(
+                    award=award,
+                    title=title or None,
+                    slug=slug,
+                    image=image,
+                    date_added=date_added,
+                    end_date=end_date,
+                    access_code=access_code,
+                    link=link,
+                    nomination_end_date=nomination_end_date or None,
+                    percentage_earned=percentage_earned,
+                    bulk_voting_options=bulk_voting_options,
+                    close_result=close_result,
+                )
+                category.save()
+                messages.success(request, f'Award "{category.award}" created successfully.')
+                return redirect('addAward')
+                
+            except Exception as e:
+                
+                messages.error(request, f'An error occurred while creating the award: {str(e)}')
+                
+                return render(request, 'maindashboard/addAwards.html', {
+                    'request': request
+                })
+            
+            
     return render(request, 'maindashboard/addAwards.html') 
+
 def AddCategory(request):
     
     return render(request, 'maindashboard/AddCategory.html') 
