@@ -16,6 +16,9 @@ from register.models import EventOrganizer
 from django.views.decorators.http import require_POST
 import json
 from django.utils.text import slugify
+import random
+import string
+
 
 
 # Create your views here.
@@ -392,46 +395,6 @@ def transactions(request):
     return render(request, 'maindashboard/transactions.html') 
 
 def addAward(request):
-    
-    return render(request, 'maindashboard/addAward.html') 
-def sendMessage(request):
-    
-    return render(request, 'maindashboard/sendMessage.html') 
-
-def bookings(request):
-    events = EventOrganizer.objects.all()
-    context = {
-        'events': events,
-        'title': 'Bookings'
-    }
-    return render(request, 'maindashboard/bookings.html', context)
-
-@require_POST
-def approve_booking(request, event_id):
-    event = get_object_or_404(EventOrganizer, id=event_id)
-    event.is_approved = True
-    event.save()
-    messages.success(request, f'Event "{event.event_name}" approved successfully.')
-    return redirect('bookings')
-
-@require_POST
-def delete_booking(request, event_id):
-    event = get_object_or_404(EventOrganizer, id=event_id)
-    event.delete()
-    messages.success(request, f'Event "{event.event_name}" deleted successfully.')
-    return redirect('bookings')
-
-def requested_payment(request):
-    
-    return render(request, 'maindashboard/requestedPayement.html') 
-def election(request):
-    
-    return render(request, 'maindashboard/election.html') 
-
-import json
-
-def addAwards(request):
-    
     if request.method == 'POST':
         award = request.POST.get('award', '').strip()
         title = request.POST.get('title', '').strip()
@@ -478,7 +441,7 @@ def addAwards(request):
                 messages.error(request, err)
                 
             # Return to form with existing data
-            return render(request, 'maindashboard/addAwards.html', {
+            return render(request, 'maindashboard/addAward.html', {
                 'request': request
             })
         else:
@@ -505,25 +468,133 @@ def addAwards(request):
                 
                 messages.error(request, f'An error occurred while creating the award: {str(e)}')
                 
-                return render(request, 'maindashboard/addAwards.html', {
+                return render(request, 'maindashboard/addAward.html', {
                     'request': request
                 })
-            
+    return render(request, 'maindashboard/addAward.html') 
+
+def sendMessage(request):
+    
+    return render(request, 'maindashboard/sendMessage.html') 
+
+def bookings(request):
+    events = EventOrganizer.objects.all()
+    context = {
+        'events': events,
+        'title': 'Bookings'
+    }
+    return render(request, 'maindashboard/bookings.html', context)
+
+@require_POST
+def approve_booking(request, event_id):
+    event = get_object_or_404(EventOrganizer, id=event_id)
+    event.is_approved = True
+    event.save()
+    messages.success(request, f'Event "{event.event_name}" approved successfully.')
+    return redirect('bookings')
+
+@require_POST
+def delete_booking(request, event_id):
+    event = get_object_or_404(EventOrganizer, id=event_id)
+    event.delete()
+    messages.success(request, f'Event "{event.event_name}" deleted successfully.')
+    return redirect('bookings')
+
+def requested_payment(request):
+    
+    return render(request, 'maindashboard/requestedPayement.html') 
+def election(request):
+    
+    return render(request, 'maindashboard/election.html') 
+
+import json
+
+def addAwards(request):
             
     return render(request, 'maindashboard/addAwards.html') 
 
-def AddCategory(request):
+import datetime
+
+def AddSubCategory(request):
+    if request.method == 'POST':
+        # Get form data
+        category_name = request.POST.get('category')
+        content = request.POST.get('content')
+        slug = request.POST.get('slug')
+        date_str = request.POST.get('date')
+        time_str = request.POST.get('time')
+        
+        # Handle the checkbox - it will be 'on' if checked, None if not
+        can_view_result = request.POST.get('can_view_result') == 'on'
+        
+        # Validate required fields
+        if not category_name or not content or not slug:
+            messages.error(request, 'Category, Content, and Slug are required fields!')
+            return redirect('AddCategory')
+        
+        # Check if slug already exists
+        if SubCategory.objects.filter(slug=slug).exists():
+            messages.error(request, 'A subcategory with this slug already exists!')
+            return redirect('AddCategory')
+        
+        # Get category instance
+        try:
+            category = Category.objects.get(award=category_name)
+        except Category.DoesNotExist:
+            messages.error(request, 'Selected category does not exist!')
+            return redirect('AddCategory')
+        
+        # Combine date and time if both are provided
+        if date_str and time_str:
+            try:
+                combine_datetime = datetime.datetime.strptime(
+                    f"{date_str} {time_str}",
+                    "%Y-%m-%d %H:%M"
+                )
+                date = timezone.make_aware(combine_datetime)
+            except ValueError:
+                date = timezone.now()
+                
+        elif date_str:
+            try:
+                date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+                date = timezone.make_aware(date)
+            except ValueError:
+                date = timezone.now()
+        else:
+            date = timezone.now()
+            
+        # Create the subcategory
+        subcategory = SubCategory.objects.create(
+            category=category,
+            content=content,
+            slug=slug,
+            date=date,
+            can_check_result=can_view_result
+        )
+        
+        messages.success(request, f'Subcategory "{content}" has been added successfully!')
+        return redirect('AddCategory')
     
-    return render(request, 'maindashboard/AddCategory.html') 
+    # Get all categories for the dropdown
+    categories = Category.objects.all()
+    context = {
+        'categories': categories
+    }
+        
+    return render(request, 'maindashboard/AddCategory.html', context) 
+
+# Election
 def manageElection(request):
     
     return render(request, 'maindashboard/manageElection.html') 
 def AddElectionCategory(request):
     
     return render(request, 'maindashboard/AddElectionCategory.html') 
+
 def AddCandidate(request):
-    
     return render(request, 'maindashboard/AddCandidate.html') 
+
 def LiveVoting(request):
     
     return render(request, 'maindashboard/LiveVoting.html') 

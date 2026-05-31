@@ -184,28 +184,30 @@
     </div>
 
     <form class="add-nominee-form" method="POST">
+        {% csrf_token %}
 
     <!-- CATEGORY -->
     <div class="form-field">
-        <label>Category</label>
-        <select name="category">
+        <label>Category *</label>
+        <select name="category" required>
             <option value="">Select Category</option>
-            <option value="music">Music Awards</option>
-            <option value="entertainment">Entertainment Awards</option>
-            <option value="business">Business Awards</option>
+            {% for category in categories %}
+            <option value="{{ category.award }}">{{ category.award }}</option>
+            {% endfor %}
         </select>
     </div>
 
     <!-- CONTENT -->
     <div class="form-field">
-        <label>Content</label>
-        <textarea name="content" placeholder="Enter content..."></textarea>
+        <label>Content *</label>
+        <textarea name="content" placeholder="Enter content..." required></textarea>
     </div>
 
     <!-- SLUG -->
     <div class="form-field">
-        <label>Slug</label>
-        <input type="text" name="slug" placeholder="e.g john-doe">
+        <label>Slug *</label>
+        <input type="text" name="slug" placeholder="e.g music-awards-2026" required>
+        <small style="color:#666; font-size:11px">Unique identifier (no spaces, use hyphens)</small>
     </div>
 
     <!-- DATE -->
@@ -225,12 +227,12 @@
 
         <input type="checkbox" name="can_view_result" id="can_view_result">
 
-        <label for="can_view_result">Can see result</label>
+        <label for="can_view_result">Can check result</label>
 
     </div>
 </div>
 
-    <button type="submit">Save</button>
+    <button type="submit">Save Subcategory</button>
 </form>
 
 
@@ -265,6 +267,15 @@
             } else {
                 $('#id_sub_category').html('<option value="">---------</option>');
             }
+        });
+        // Optional: Auto-generate slug from content
+        $('textarea[name="content"]').on('input', function () {
+            var slug = $(this).val()
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '')  // Remove special characters
+                .replace(/\s+/g, '-')       // Replace spaces with hyphens
+                .replace(/-+/g, '-');       // Replace multiple hyphens
+            $('input[name="slug"]').val(slug);
         });
     });
 </script>
