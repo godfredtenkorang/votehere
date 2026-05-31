@@ -114,7 +114,7 @@ WSGI_APPLICATION = 'votehere.wsgi.application'
 # }
 
 # DATABASES = {
-#     'default': {
+    # 'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': os.environ.get('DB_TABLE'),
 #         'USER': os.environ.get('DB_USER'),

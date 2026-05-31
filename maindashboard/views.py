@@ -387,9 +387,9 @@ def receipt(request):
     
     return render(request, 'maindashboard/receipt.html') 
 
-def sendsms(request):
+def send_all_sms(request):
     
-    return render(request, 'maindashboard/sendSMS.html') 
+    return render(request, 'maindashboard/send_all_sms.html') 
 
 def transactions(request):
     
