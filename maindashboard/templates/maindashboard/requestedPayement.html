@@ -2,35 +2,39 @@
 {% load static %}
 {% block content %}
 <style>
- /* ========== PAGE INTRO ========== */
-.transaction-page-intro {
-  background: #6a0dad;
- color: #fff;
-  padding: 28px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-}
+  /* ========== PAGE INTRO ========== */
+  .transaction-page-intro {
+    background: #6a0dad;
+    color: #fff;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
 
-.transaction-page-intro::before {
-  content: '';
-  position: absolute;
-  top: -50px; right: 200px;
-  width: 180px; height: 180px;
-  border-radius: 50%;
-  border: 35px solid rgba(255,255,255,0.05);
-}
+  .transaction-page-intro::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: 200px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 35px solid rgba(255, 255, 255, 0.05);
+  }
 
-.transaction-page-intro::after {
-  content: '';
-  position: absolute;
-  bottom: -40px; right: 80px;
-  width: 130px; height: 130px;
-  border-radius: 50%;
-  border: 25px solid rgba(255,255,255,0.05);
-}
+  .transaction-page-intro::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: 80px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 25px solid rgba(255, 255, 255, 0.05);
+  }
 
   .detail-card {
     background: var(--color-background-primary);
@@ -216,6 +220,11 @@
     opacity: 0.85
   }
 
+  .btn-approve:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   .btn-revoke {
     display: inline-flex;
     align-items: center;
@@ -350,284 +359,407 @@
       display: flex
     }
   }
+
+  /* Notification toast */
+  .toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 </style>
 
-
 <div class="main">
-    <!-- <div class="the-team-container">
-        <div class="sms-page-intro">
-            <h1>Send SMS</h1>
+  <div class="transaction-page-intro">
+    <div class="sms-intro-text">
+      <h2>Transaction Management</h2>
+      <p>Manage and view transaction records for nominees or voters.</p>
+    </div>
+  </div>
+
+  <h2 class="sr-only">Payment request details — collapses to cards on mobile</h2>
+
+  <div class="detail-card">
+    <div class="detail-card-header">
+      <div class="detail-card-icon"><i class="ti ti-file-invoice" aria-hidden="true"></i></div>
+      <div>
+        <h2 class="detail-card-title">Request record</h2>
+        <p class="detail-card-sub">Full details for this payment request entry.</p>
+      </div>
+    </div>
+
+    <!-- DESKTOP TABLE -->
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Amount</th>
+            <th>Account</th>
+            <th>Approval</th>
+            <th>Total</th>
+            <th>Cat. earned</th>
+            <th>Client earned</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for payment in payment_requests %}
+          <tr id="payment-row-{{ payment.id }}">
+            <td><span class="badge purple">{{ payment.category.name|default:"ben asare" }}</span></td>
+            <td style="white-space:nowrap">{{ payment.name }}</td>
+            <td style="white-space:nowrap;font-size:11.5px">{{ payment.phone }}</td>
+            <td>
+              {% if payment.email %}
+              <a href="mailto:{{ payment.email }}" class="detail-link">{{ payment.email }}</a>
+              {% else %}
+              —
+              {% endif %}
+            </td>
+            <td><span class="amt">GHS {{ payment.amount }}</span></td>
+            <td style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap">{{payment.account_details|truncatechars:30 }}</td>
+            <td>
+              {% if payment.is_approved %}
+              <span class="badge green t-status-{{ payment.id }}"><span class="bdot"></span> Approved</span>
+              {% else %}
+              <span class="badge red t-status-{{ payment.id }}"><span class="bdot"></span> Not approved</span>
+              {% endif %}
+            </td>
+            <td><span class="amt">GHS {{ payment.total_amount|default:"0.00" }}</span></td>
+            <td><span class="amt teal">GHS {{ payment.category_earned|default:"0.00" }}</span></td>
+            <td><span class="amt orange">GHS {{ payment.client_earned|default:"0.00" }}</span></td>
+            <td>
+              <div class="actions-cell">
+                {% if not payment.is_approved %}
+                <button class="btn-approve" onclick="approvePayment({{ payment.id }}, this)">
+                  <i class="ti ti-circle-check" aria-hidden="true"></i> Approve
+                </button>
+                {% endif %}
+                <button class="btn-edit" onclick="editPayment({{ payment.id }})">
+                  <i class="ti ti-pencil" aria-hidden="true"></i> Edit
+                </button>
+                <button class="btn-del" onclick="deletePayment({{ payment.id }}, this)">
+                  <i class="ti ti-trash" aria-hidden="true"></i> Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="11" style="text-align: center; padding: 40px;">
+              No payment requests found.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MOBILE CARDS -->
+    <div class="mobile-cards">
+      {% for payment in payment_requests %}
+      <div class="m-card" id="mobile-card-{{ payment.id }}">
+        <div class="m-row">
+          <div class="m-label">Category</div>
+          <div class="m-value"><span class="badge purple">{{ payment.category.name|default:"ben asare" }}</span></div>
         </div>
-    </div> -->
-    <div class="transaction-page-intro">
-        <div class="sms-intro-text">
-            <h2>Transaction Management</h2>
-            <p>Manage and view transaction records for nominees or voters.</p>
+        <div class="m-row">
+          <div class="m-label">Name</div>
+          <div class="m-value">{{ payment.name }}</div>
         </div>
-
-    </div>
-<h2 class="sr-only">Payment request details — collapses to cards on mobile</h2>
-
-<div class="detail-card">
-  <div class="detail-card-header">
-    <div class="detail-card-icon"><i class="ti ti-file-invoice" aria-hidden="true"></i></div>
-    <div>
-      <h2 class="detail-card-title">Request record</h2>
-      <p class="detail-card-sub">Full details for this payment request entry.</p>
+        <div class="m-row">
+          <div class="m-label">Phone</div>
+          <div class="m-value">{{ payment.phone }}</div>
+        </div>
+        <div class="m-row">
+          <div class="m-label">Email</div>
+          <div class="m-value">
+            {% if payment.email %}
+            <a href="mailto:{{ payment.email }}" class="detail-link">{{ payment.email }}</a>
+            {% else %}
+            —
+            {% endif %}
+          </div>
+        </div>
+        <div class="m-row">
+          <div class="m-label">Amount</div>
+          <div class="m-value"><span class="amt">GHS {{ payment.amount }}</span></div>
+        </div>
+        <div class="m-row">
+          <div class="m-label">Account</div>
+          <div class="m-value" style="font-size:11.5px;color:var(--color-text-secondary)">{{ payment.account_details|truncatechars:30 }}</div>
+        </div>
+        <div class="m-row">
+          <div class="m-label">Approval</div>
+          <div class="m-value">
+            {% if payment.is_approved %}
+            <span class="badge green m-status-{{ payment.id }}"><span class="bdot"></span> Approved</span>
+            {% else %}
+            <span class="badge red m-status-{{ payment.id }}"><span class="bdot"></span> Not approved</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="m-row">
+          <div class="m-label">Total</div>
+          <div class="m-value"><span class="amt">GHS {{ payment.total_amount|default:"0.00" }}</span></div>
+        </div>
+        <div class="m-row">
+          <div class="m-label">Cat. earned</div>
+          <div class="m-value"><span class="amt teal">GHS {{ payment.category_earned|default:"0.00" }}</span></div>
+        </div>
+        <div class="m-row">
+          <div class="m-label">Client earned</div>
+          <div class="m-value"><span class="amt orange">GHS {{ payment.client_earned|default:"0.00" }}</span></div>
+        </div>
+        <div class="m-actions">
+          {% if not payment.is_approved %}
+          <button class="btn-approve" onclick="approvePayment({{ payment.id }}, this)">
+            <i class="ti ti-circle-check" aria-hidden="true"></i> Approve
+          </button>
+          {% endif %}
+          <button class="btn-edit" onclick="editPayment({{ payment.id }})">
+            <i class="ti ti-pencil" aria-hidden="true"></i> Edit
+          </button>
+          <button class="btn-del" onclick="deletePayment({{ payment.id }}, this)">
+            <i class="ti ti-trash" aria-hidden="true"></i> Delete
+          </button>
+        </div>
+      </div>
+      {% empty %}
+      <div style="text-align: center; padding: 40px;">
+        No payment requests found.
+      </div>
+      {% endfor %}
     </div>
   </div>
-
-  <!-- DESKTOP TABLE -->
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th>Amount</th>
-          <th>Account</th>
-          <th>Approval</th>
-          <th>Total</th>
-          <th>Cat. earned</th>
-          <th>Client earned</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="badge purple">ben asare</span></td>
-          <td style="white-space:nowrap">Benjamin Asare</td>
-          <td style="white-space:nowrap;font-size:11.5px">+233 244 000 001</td>
-          <td><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></td>
-          <td><span class="amt">GHS 500.00</span></td>
-          <td style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap">MoMo — 0244000001 — MTN</td>
-          <td><span class="badge red t-status"><span class="bdot"></span> Not approved</span></td>
-          <td><span class="amt">GHS 1,200.00</span></td>
-          <td><span class="amt teal">GHS 300.00</span></td>
-          <td><span class="amt orange">GHS 900.00</span></td>
-          <td>
-            <div class="actions-cell">
-              <button class="btn-approve t-approve" onclick="toggleApprove(this)"><i class="ti ti-circle-check"
-                  aria-hidden="true"></i> Approve</button>
-              <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
-              <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i></button>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><span class="badge purple">ben asare</span></td>
-          <td style="white-space:nowrap">Benjamin Asare</td>
-          <td style="white-space:nowrap;font-size:11.5px">+233 244 000 001</td>
-          <td><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></td>
-          <td><span class="amt">GHS 300.00</span></td>
-          <td style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap">MoMo — 0244000001 — MTN</td>
-          <td><span class="badge red t-status"><span class="bdot"></span> Not approved</span></td>
-          <td><span class="amt">GHS 800.00</span></td>
-          <td><span class="amt teal">GHS 150.00</span></td>
-          <td><span class="amt orange">GHS 650.00</span></td>
-          <td>
-            <div class="actions-cell">
-              <button class="btn-approve t-approve" onclick="toggleApprove(this)"><i class="ti ti-circle-check"
-                  aria-hidden="true"></i> Approve</button>
-              <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
-              <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i></button>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><span class="badge purple">ben asare</span></td>
-          <td style="white-space:nowrap">Benjamin Asare</td>
-          <td style="white-space:nowrap;font-size:11.5px">+233 244 000 001</td>
-          <td><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></td>
-          <td><span class="amt">GHS 750.00</span></td>
-          <td style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap">MoMo — 0244000001 — MTN</td>
-          <td><span class="badge red t-status"><span class="bdot"></span> Not approved</span></td>
-          <td><span class="amt">GHS 2,000.00</span></td>
-          <td><span class="amt teal">GHS 500.00</span></td>
-          <td><span class="amt orange">GHS 1,500.00</span></td>
-          <td>
-            <div class="actions-cell">
-              <button class="btn-approve t-approve" onclick="toggleApprove(this)"><i class="ti ti-circle-check"
-                  aria-hidden="true"></i> Approve</button>
-              <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
-              <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i></button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- MOBILE CARDS -->
-  <div class="mobile-cards">
-
-    <div class="m-card">
-      <div class="m-row">
-        <div class="m-label">Category</div>
-        <div class="m-value"><span class="badge purple">ben asare</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Name</div>
-        <div class="m-value">Benjamin Asare</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Phone</div>
-        <div class="m-value">+233 244 000 001</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Email</div>
-        <div class="m-value"><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Amount</div>
-        <div class="m-value"><span class="amt">GHS 500.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Account</div>
-        <div class="m-value" style="font-size:11.5px;color:var(--color-text-secondary)">MoMo — 0244000001 — MTN</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Approval</div>
-        <div class="m-value"><span class="badge red m-status"><span class="bdot"></span> Not approved</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Total</div>
-        <div class="m-value"><span class="amt">GHS 1,200.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Cat. earned</div>
-        <div class="m-value"><span class="amt teal">GHS 300.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Client earned</div>
-        <div class="m-value"><span class="amt orange">GHS 900.00</span></div>
-      </div>
-      <div class="m-actions">
-        <button class="btn-approve m-approve" onclick="toggleApproveM(this)"><i class="ti ti-circle-check"
-            aria-hidden="true"></i> Approve</button>
-        <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
-        <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i> Delete</button>
-      </div>
-    </div>
-
-    <div class="m-card">
-      <div class="m-row">
-        <div class="m-label">Category</div>
-        <div class="m-value"><span class="badge purple">ben asare</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Name</div>
-        <div class="m-value">Benjamin Asare</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Phone</div>
-        <div class="m-value">+233 244 000 001</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Email</div>
-        <div class="m-value"><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Amount</div>
-        <div class="m-value"><span class="amt">GHS 300.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Account</div>
-        <div class="m-value" style="font-size:11.5px;color:var(--color-text-secondary)">MoMo — 0244000001 — MTN</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Approval</div>
-        <div class="m-value"><span class="badge red m-status"><span class="bdot"></span> Not approved</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Total</div>
-        <div class="m-value"><span class="amt">GHS 800.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Cat. earned</div>
-        <div class="m-value"><span class="amt teal">GHS 150.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Client earned</div>
-        <div class="m-value"><span class="amt orange">GHS 650.00</span></div>
-      </div>
-      <div class="m-actions">
-        <button class="btn-approve m-approve" onclick="toggleApproveM(this)"><i class="ti ti-circle-check"
-            aria-hidden="true"></i> Approve</button>
-        <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
-        <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i> Delete</button>
-      </div>
-    </div>
-
-    <div class="m-card">
-      <div class="m-row">
-        <div class="m-label">Category</div>
-        <div class="m-value"><span class="badge purple">ben asare</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Name</div>
-        <div class="m-value">Benjamin Asare</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Phone</div>
-        <div class="m-value">+233 244 000 001</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Email</div>
-        <div class="m-value"><a href="mailto:benjamin@example.com" class="detail-link">benjamin@example.com</a></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Amount</div>
-        <div class="m-value"><span class="amt">GHS 750.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Account</div>
-        <div class="m-value" style="font-size:11.5px;color:var(--color-text-secondary)">MoMo — 0244000001 — MTN</div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Approval</div>
-        <div class="m-value"><span class="badge red m-status"><span class="bdot"></span> Not approved</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Total</div>
-        <div class="m-value"><span class="amt">GHS 2,000.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Cat. earned</div>
-        <div class="m-value"><span class="amt teal">GHS 500.00</span></div>
-      </div>
-      <div class="m-row">
-        <div class="m-label">Client earned</div>
-        <div class="m-value"><span class="amt orange">GHS 1,500.00</span></div>
-      </div>
-      <div class="m-actions">
-        <button class="btn-approve m-approve" onclick="toggleApproveM(this)"><i class="ti ti-circle-check"
-            aria-hidden="true"></i> Approve</button>
-        <button class="btn-edit"><i class="ti ti-pencil" aria-hidden="true"></i> Edit</button>
-        <button class="btn-del"><i class="ti ti-trash" aria-hidden="true"></i> Delete</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-</div>
-</div>
-
 </div>
 
 <div class="logout-pop">
-    <div class="logout">
-        <p>Are you sure you want to log out from the admin pannel ?</p>
-        <div class="log-button">
-            <a href="{% url 'logout' %}">
-                <button>Log Out</button>
-            </a>
-            <p>Or</p>
-            <button class="DontLogout">No</button>
-        </div>
+  <div class="logout">
+    <p>Are you sure you want to log out from the admin panel?</p>
+    <div class="log-button">
+      <a href="{% url 'logout' %}">
+        <button>Log Out</button>
+      </a>
+      <p>Or</p>
+      <button class="DontLogout">No</button>
     </div>
+  </div>
 </div>
+
+<script>
+  // Get CSRF token from cookies
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie('csrftoken');
+
+  // Show notification toast
+  function showNotification(message, isSuccess = true) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.style.cssText = `
+    background: ${isSuccess ? '#10b981' : '#ef4444'};
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+  `;
+    toast.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <i class="ti ${isSuccess ? 'ti-check-circle' : 'ti-alert-circle'}"></i>
+      <span>${message}</span>
+    </div>
+  `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.animation = 'slideIn 0.3s ease-out reverse';
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 300);
+    }, 3000);
+  }
+
+  // Approve payment function
+  function approvePayment(paymentId, buttonElement) {
+    if (!confirm('Are you sure you want to approve this payment request?')) {
+      return;
+    }
+
+    // Disable button and show loading state
+    const originalText = buttonElement.innerHTML;
+    buttonElement.innerHTML = '<i class="ti ti-loader" aria-hidden="true"></i> Approving...';
+    buttonElement.disabled = true;
+
+    fetch(`/maindashboard/approve-payment/${paymentId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': csrftoken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showNotification(data.message, true);
+
+          // Update UI for both desktop and mobile
+          // Update desktop status badge
+          const desktopStatus = document.querySelector(`.t-status-${paymentId}`);
+          if (desktopStatus) {
+            desktopStatus.className = 'badge green t-status-' + paymentId;
+            desktopStatus.innerHTML = '<span class="bdot"></span> Approved';
+          }
+
+          // Update mobile status badge
+          const mobileStatus = document.querySelector(`.m-status-${paymentId}`);
+          if (mobileStatus) {
+            mobileStatus.className = 'badge green m-status-' + paymentId;
+            mobileStatus.innerHTML = '<span class="bdot"></span> Approved';
+          }
+
+          // Disable or remove approve button
+          const approveButtons = document.querySelectorAll(`button[onclick*="approvePayment(${paymentId}"]`);
+          approveButtons.forEach(btn => {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            btn.innerHTML = '<i class="ti ti-circle-check" aria-hidden="true"></i> Approved';
+          });
+        } else {
+          showNotification(data.message || 'Failed to approve payment', false);
+          // Reset button
+          buttonElement.innerHTML = originalText;
+          buttonElement.disabled = false;
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred while approving the payment', false);
+        // Reset button
+        buttonElement.innerHTML = originalText;
+        buttonElement.disabled = false;
+      });
+  }
+
+  // Delete payment function
+  function deletePayment(paymentId, buttonElement) {
+    if (!confirm('Are you sure you want to delete this payment request? This action cannot be undone.')) {
+      return;
+    }
+
+    // Disable button and show loading state
+    const originalText = buttonElement.innerHTML;
+    buttonElement.innerHTML = '<i class="ti ti-loader" aria-hidden="true"></i>';
+    buttonElement.disabled = true;
+
+    fetch(`/maindashboard/delete-payment/${paymentId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': csrftoken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showNotification(data.message, true);
+
+          // Remove the row from desktop view
+          const desktopRow = document.getElementById(`payment-row-${paymentId}`);
+          if (desktopRow) {
+            desktopRow.remove();
+          }
+
+          // Remove the mobile card
+          const mobileCard = document.getElementById(`mobile-card-${paymentId}`);
+          if (mobileCard) {
+            mobileCard.remove();
+          }
+
+          // Check if table is empty and show message
+          const tbody = document.querySelector('tbody');
+          if (tbody && tbody.children.length === 0) {
+            tbody.innerHTML = `
+          <tr>
+            <td colspan="11" style="text-align: center; padding: 40px;">
+              No payment requests found.
+            </td>
+          </tr>
+        `;
+          }
+
+          // Check if mobile cards container is empty
+          const mobileCards = document.querySelector('.mobile-cards');
+          if (mobileCards && mobileCards.children.length === 0) {
+            mobileCards.innerHTML = `
+          <div style="text-align: center; padding: 40px;">
+            No payment requests found.
+          </div>
+        `;
+          }
+        } else {
+          showNotification(data.message || 'Failed to delete payment', false);
+          // Reset button
+          buttonElement.innerHTML = originalText;
+          buttonElement.disabled = false;
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred while deleting the payment', false);
+        // Reset button
+        buttonElement.innerHTML = originalText;
+        buttonElement.disabled = false;
+      });
+  }
+
+  // Edit payment function (placeholder - you can implement edit functionality)
+  function editPayment(paymentId) {
+    // You can implement edit functionality here
+    // For example, redirect to an edit page or open a modal
+    showNotification('Edit functionality coming soon!', false);
+    // window.location.href = `/edit-payment/${paymentId}/`;
+  }
+
+  // Logout functionality
+  document.querySelector('.DontLogout')?.addEventListener('click', function () {
+    document.querySelector('.logout-pop').style.display = 'none';
+  });
+</script>
+
 {% endblock %}

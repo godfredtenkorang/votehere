@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from dashboard.forms import CategorySMSForm, PaymentTransactionForm, SendSmsForm
 from dashboard.utils import send_access_code_to_new_nominee, send_mnotify_sms, send_sms_to_new_nominee
-from payment.models import Nominees, Payment
+from payment.models import Nominees, Payment, RequestForPayment
 from ussd.models import PaymentTransaction
 from vote.models import Blog, Category, SubCategory
 from django.utils import timezone
@@ -18,6 +18,8 @@ import json
 from django.utils.text import slugify
 import random
 import string
+from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -502,8 +504,59 @@ def delete_booking(request, event_id):
     return redirect('bookings')
 
 def requested_payment(request):
+    payment_requests = RequestForPayment.objects.all()
+    return render(request, 'maindashboard/requestedPayement.html', {'payment_requests': payment_requests})
+
+@csrf_exempt
+@staff_member_required
+def approve_payment(request, payment_id):
+    """Approve a payment request via AJAX"""
+    if request.method == 'POST':
+        try:
+            payment = get_object_or_404(RequestForPayment, id=payment_id)
+            payment.is_approved = True
+            payment.save()
+            return JsonResponse({
+                'success': True,
+                'message': f'Payment request "{payment.name}" approved successfully.'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'An error occurred: {str(e)}'
+            }, status=400)
+            
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request method.'
+    }, status=405)
     
-    return render(request, 'maindashboard/requestedPayement.html') 
+
+@csrf_exempt
+@staff_member_required
+def delete_payment(request, payment_id):
+    """Delete a payment request via AJAX"""
+    if request.method == 'POST':
+        try:
+            payment = get_object_or_404(RequestForPayment, id=payment_id)
+            payment_name = payment.name  # Store name before deletion
+            payment.delete()
+            return JsonResponse({
+                'success': True,
+                'message': f'Payment request "{payment_name}" deleted successfully.'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'An error occurred: {str(e)}'
+            }, status=400)
+            
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request method.'
+    }, status=405)
+
+
 def election(request):
     
     return render(request, 'maindashboard/election.html') 
