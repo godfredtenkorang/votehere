@@ -274,7 +274,7 @@ def search_transaction(request):
     
     if transaction_id:
         try:
-            payment = Payment.objects.get(transaction_id=transaction_id)
+            payment = Payment.objects.get(ref=transaction_id)
         except Payment.DoesNotExist:
             pass
     

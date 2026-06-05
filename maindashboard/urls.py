@@ -37,6 +37,7 @@ urlpatterns = [
     path('payment-transactions/<int:invoice_id>/', views.payment_transactions_detail, name='update_transaction'),
     
     path('filter_online_transactions/', views.filter_online_transactions, name='filter_online_transactions'),
+    path('verify-transaction/<int:payment_id>/', views.verify_payment, name='verify_transaction'),
     
     path('blog_list/', views.blog_list, name='blog_list'),
     path('add_blog/', views.add_blog, name='add_blog'),

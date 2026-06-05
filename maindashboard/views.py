@@ -9,7 +9,8 @@ from payment.models import Nominees, Payment, RequestForPayment
 from ussd.models import PaymentTransaction
 from vote.models import Blog, Category, SubCategory
 from django.utils import timezone
-from django.db.models import Sum
+from django.db.models import Sum, Q, Count, Case, When, IntegerField
+from django.db import transaction
 from .forms import NomineeForm, BlogForm
 
 from register.models import EventOrganizer
@@ -278,20 +279,90 @@ def filter_online_transactions(request):
         messages.error(request, "You don't have permission to view transactions.")
         return redirect('adminHome')
     
+    # Ger filter parameters
     phone_number = request.GET.get('phone_number', '').strip()
-    transactions = Payment.objects.all().order_by('-date_created')
+    reference = request.GET.get('reference', '').strip()
+    category_filter = request.GET.get('category', '').strip()
+    
+    # Base queryset
+    transactions = Payment.objects.select_related('category', 'content', 'nominee').all().order_by('-date_created')
     
     if phone_number:
         transactions = transactions.filter(phone__icontains=phone_number)
+    
+    if reference:
+        transactions = transactions.filter(ref__icontains=reference)
         
+    if category_filter:
+        transactions = transactions.filter(category__award__icontains=category_filter)
+        
+    # Calculate statictics
+    total_count = transactions.count()
+    verified_count = transactions.filter(verified=True).count()
+    not_verified_count = transactions.filter(verified=False).count()
+    bulk_count = transactions.filter(is_bulk=True).count()
     total_amount = transactions.aggregate(total=Sum('total_amount'))['total'] or 0
+    
+    # Get unique categories for filter dropdown
+    categories = Category.objects.filter(payment__isnull=False).distinct()
     
     context = {
         'transactions': transactions,
         'total_amount': total_amount,
+        'total_count': total_count,
+        'verified_count': verified_count,
+        'not_verified_count': not_verified_count,
+        'bulk_count': bulk_count,
+        'categories': categories,
+        'filter_params': {
+            'phone_number': phone_number,
+            'reference': reference,
+            'category': category_filter,
+        },
         'title': 'Online Transactions'
     }
     return render(request, 'maindashboard/online_transactions.html', context)
+
+@transaction.atomic
+def verify_payment(request, payment_id):
+    """Verify a specific transaction and update votes"""
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to verify transactions.")
+        return redirect('adminHome')
+    
+    try:
+        payment = Payment.objects.select_for_update().get(id=payment_id)
+        
+        if payment.verified:
+            messages.warning(request, f'Transaction {payment.ref} is already verified.')
+            return redirect('filter_online_transactions')
+        
+        # Mark as verified and save to update the status before adding votes
+        payment.verified = True
+        payment.save()
+        
+        # Add votes to nominee if payment is verified
+        nominee = payment.nominee
+        if nominee:
+            nominee.total_vote += payment.vote
+            nominee.save()
+            
+            # Update category vote count if needed
+            category = payment.category
+            if category:
+                category.total_vote = Nominees.objects.filter(category=category).aggregate(total=Sum('total_vote'))['total'] or 0
+                category.save()
+            messages.success(request, f'Transaction {payment.ref} verified successfully! Added {payment.vote} votes to {nominee.name}.')
+        else:
+            messages.warning(request, f'Transaction {payment.ref} verified but no nominee found to add votes.')
+        
+    except Payment.DoesNotExist:
+        messages.error(request, 'Payment not found.')
+        
+    except Exception as e:
+        messages.error(request, f'An unexpected error occurred: {str(e)}')
+        
+    return redirect('filter_online_transactions')
 
 def send_access_code_to_nominee(request):
     if not request.user.is_staff:

@@ -91,7 +91,7 @@
     </form>
     <div style="text-align: center; padding:20px;">
     {% if payment %}
-    <h2>Transaction Details: {{ payment.transaction_id }}</h2>
+    <h2>Transaction Details: {{ payment.ref }}</h2>
     <br>
     <!-- <p>ID: {{ payment.transaction_id }}</p> -->
     <h3>Event: {{ payment.category }}</h3>
