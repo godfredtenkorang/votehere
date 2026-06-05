@@ -723,3 +723,6 @@ def AddCandidate(request):
 def LiveVoting(request):
     
     return render(request, 'maindashboard/LiveVoting.html') 
+def create_ussd_transactions(request):
+    
+    return render(request, 'maindashboard/create_ussd_transactions.html') 

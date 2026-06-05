@@ -3,14 +3,36 @@
 {% block content %}
 <div class="main">
     <div class="transation-details-container">
-        <div class="heading">
+        <!-- <div class="heading">
 
 
             <h3>Total Transactions: {{ payment_count }}</h3>
             <h3>Total Transactions: GH¢{{ total_payments }}</h3>
 
-        </div>
+        </div> -->
+ <div class="heading">
+    <div class="heading-accent-ring"></div>
+    <!-- <div class="heading-icon-bg" aria-hidden="true">🗳️</div> -->
+    <div class="heading-ticker"></div>
 
+    <div class="heading-left">
+      <!-- <div class="badge">
+      <span class="dot"></span>
+      Live voting platform
+    </div> -->
+      <h1>Welcome to the admin dashboard, <span>{{ user }}</span></h1>
+      <p>Here's an overview of all your awards and activities.</p>
+    </div>
+
+    <div class="heading-stats">
+      <a href="{% url 'create_ussd_transactions' %}">
+        <button class="tbl-add-btn">
+          <i class="fa-solid fa-plus"></i> Creat Transaction
+        </button>
+        
+        </a>
+    </div>
+  </div>
         <br>
 
         <div class="table-responsive">
