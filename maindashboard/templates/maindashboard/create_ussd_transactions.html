@@ -1,0 +1,366 @@
+{% extends 'maindashboard/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+.add-nominee-form {
+   
+    margin: 24px 24px;
+    padding: 36px 40px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #ede8f5;
+    box-shadow: 0 4px 32px rgba(92, 15, 163, 0.07);
+}
+.heading {
+    color: #ffff;
+    text-align: center;
+}
+.transaction-form{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:40px;
+    background:#ffffff;
+    border:1px solid #ebeef5;
+    border-radius:24px;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.04),
+        0 2px 10px rgba(124,58,237,0.04);
+}
+
+/* TITLE */
+.transaction-form .form-title{
+    font-size:42px;
+    font-weight:800;
+    color:#0f172a;
+    margin-bottom:35px;
+    padding-bottom:20px;
+    border-bottom:1px solid #eef2f7;
+}
+
+/* GRID */
+.transaction-form .form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:28px;
+}
+
+/* FORM GROUP */
+.transaction-form .form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+/* LABEL */
+.transaction-form label{
+    font-size:15px;
+    font-weight:700;
+    color:#334155;
+    margin-bottom:10px;
+}
+
+/* INPUTS */
+.transaction-form input,
+.transaction-form select,
+.transaction-form textarea{
+    width:100%;
+    height:60px;
+    padding:0 18px;
+    border:1.5px solid #dbe3ee;
+    border-radius:16px;
+    background:#ffffff;
+    font-size:15px;
+    color:#0f172a;
+    transition:all .25s ease;
+    outline:none;
+}
+
+/* TEXTAREA */
+.transaction-form textarea{
+    height:140px;
+    padding-top:18px;
+    resize:none;
+}
+
+/* PLACEHOLDER */
+.transaction-form input::placeholder,
+.transaction-form textarea::placeholder{
+    color:#94a3b8;
+}
+
+/* FOCUS */
+.transaction-form input:focus,
+.transaction-form select:focus,
+.transaction-form textarea:focus{
+    border-color:#7c3aed;
+    box-shadow:0 0 0 5px rgba(124,58,237,0.10);
+}
+
+/* DATE + TIME */
+.transaction-form .date-time{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+/* FULL WIDTH */
+.transaction-form .full-width{
+    grid-column:span 2;
+}
+
+/* BUTTONS */
+.transaction-form .button-group{
+    margin-top:40px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.transaction-form button{
+    height:55px;
+    padding:0 26px;
+    border:none;
+    border-radius:14px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.25s ease;
+}
+
+/* PRIMARY BUTTON */
+.transaction-form .btn-primary{
+    background:linear-gradient(
+        135deg,
+        #7c3aed 0%,
+        #9333ea 100%
+    );
+    color:white;
+    box-shadow:0 8px 20px rgba(124,58,237,0.20);
+}
+
+.transaction-form .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 25px rgba(124,58,237,0.28);
+}
+
+/* SECONDARY */
+.transaction-form .btn-secondary{
+    background:#f8fafc;
+    color:#475569;
+    border:1px solid #e2e8f0;
+}
+
+.transaction-form .btn-secondary:hover{
+    background:#f1f5f9;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+    .transaction-form{
+        padding:22px;
+        border-radius:18px;
+    }
+
+    .transaction-form .form-title{
+        font-size:30px;
+    }
+
+    .transaction-form .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .transaction-form .full-width{
+        grid-column:span 1;
+    }
+
+    .transaction-form .date-time{
+        grid-template-columns:1fr;
+    }
+
+    .transaction-form .button-group{
+        flex-direction:column;
+    }
+
+    .transaction-form button{
+        width:100%;
+    }
+}
+
+</style>
+
+<div class="main">
+    <div class="the-team-container">
+        <div class="heading">
+            <h1>Add Candidate</h1>
+        </div>
+    </div>
+
+    <div style="background-color:#000; width:100%;">
+        {% if messages %}
+        {% for message in messages %}
+        <p style="color: #97c8b3; font-size:30px; text-align:center;">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+ <div class="main-2">
+
+ <form class="transaction-form">
+
+  <h2 class="form-title">Add Payment Transaction</h2>
+
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label>Order ID</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Amount</label>
+      <input type="number">
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+      <select>
+        <option>Pending</option>
+        <option>Successful</option>
+        <option>Failed</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Payment Type</label>
+      <select>
+        <option>MTN</option>
+        <option>Vodafone</option>
+        <option>AirtelTigo</option>
+        <option>Card</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Invoice No</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Transaction ID</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Transaction Hash</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Account Number</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Account Name</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Nominee Code</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Votes</label>
+      <input type="number">
+    </div>
+
+    <div class="form-group">
+      <label>Category</label>
+      <select>
+        <option>Select Category</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Event Code</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Tickets</label>
+      <input type="number">
+    </div>
+
+    <div class="form-group">
+      <label>Ticket Type</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Event Category</label>
+      <select>
+        <option>Select Event Category</option>
+      </select>
+    </div>
+
+    <div class="form-group full-width">
+      <label>Donation Code</label>
+      <input type="text">
+    </div>
+
+    <div class="form-group full-width">
+      <label>Timestamp</label>
+
+      <div class="date-time">
+        <input type="date">
+        <input type="time">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="button-group">
+    <button class="btn-primary">Save</button>
+    <!-- <button type="button" class="btn-secondary">Save & Add Another</button>
+    <button type="button" class="btn-secondary">Save & Continue Editing</button> -->
+  </div>
+
+</form>
+ </div>
+</div>
+
+<div class="logout-pop">
+    <div class="logout">
+        <p>Are you sure you want to log out from the admin pannel ?</p>
+        <div class="log-button">
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+            <p>Or</p>
+            <button class="DontLogout">No</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#id_category').change(function () {
+            var categoryId = $(this).val();
+            if (categoryId) {
+                $.ajax({
+                    url: '/maindashboard/get_subcategories/',
+                    data: { 'category_id': categoryId },
+                    success: function (data) {
+                        $('#id_sub_category').html(data);
+                    }
+                });
+            } else {
+                $('#id_sub_category').html('<option value="">---------</option>');
+            }
+        });
+    });
+</script>
+{% endblock %}

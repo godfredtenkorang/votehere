@@ -22,6 +22,7 @@ urlpatterns = [
       path('delete-payment/<int:payment_id>/', views.delete_payment, name='reject_payment'),
       path('election/', views.election, name='election'),
       path('addAwards/', views.addAwards, name='addAwards'),
+      path('create_ussd_transactions/', views.create_ussd_transactions, name='create_ussd_transactions'),
       path('add_subcategory/', views.AddSubCategory, name='AddCategory'),
       path('manageElection/', views.manageElection, name='manageElection'),
       path('AddElectionCategory/', views.AddElectionCategory, name='AddElectionCategory'),
