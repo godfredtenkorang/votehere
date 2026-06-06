@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
@@ -21,6 +23,7 @@ import random
 import string
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
+from ticket.models import Event
 
 
 
@@ -723,6 +726,133 @@ def AddCandidate(request):
 def LiveVoting(request):
     
     return render(request, 'maindashboard/LiveVoting.html') 
+
+
 def create_ussd_transactions(request):
-    
-    return render(request, 'maindashboard/create_ussd_transactions.html') 
+    if request.method == 'POST':
+        try:
+            # Get from data
+            order_id = request.POST.get('order_id')
+            amount = Decimal(request.POST.get('amount', '0'))
+            status = request.POST.get('status')
+            payment_type = request.POST.get('payment_type')
+            invoice_no = request.POST.get('invoice_no')
+            transaction_id = request.POST.get('transaction_id', '')
+            trans_hash = request.POST.get('trans_hash', '')
+            account_number = request.POST.get('account_number', '')
+            account_name = request.POST.get('account_name', '')
+            nominee_code = request.POST.get('nominee_code', '')
+            votes = request.POST.get('votes', '0')
+            category_id = request.POST.get('category')
+            event_code = request.POST.get('event_code', '')
+            tickets = request.POST.get('tickets', '0')
+            ticket_type = request.POST.get('ticket_type', '')
+            event_category_id = request.POST.get('event_category')
+            donation_code = request.POST.get('donation_code', '')
+            
+            # Handle timestamp if provided
+            date_str = request.POST.get('date', '')
+            time_str = request.POST.get('time', '')
+            timestamp = None
+            if date_str and time_str:
+                try:
+                    timestamp = datetime.strptime(
+                        f"{date_str} {time_str}",
+                        "%Y-%m-%d %H:%M"
+                    )
+                    
+                except:
+                    timestamp = timezone.now()
+            else:
+                timestamp = timezone.now()
+                
+            # Validate required fields
+            if not order_id:
+                messages.error(request, 'Order ID is required!')
+                return redirect('create_ussd_transactions')
+            
+            # Check if transaction with the same order_id already exists
+            if PaymentTransaction.objects.filter(order_id=order_id).exists():
+                messages.error(request, f'Transaction with Order ID "{order_id}" already exists!')
+                return redirect('create_ussd_transactions')
+            
+            # Process vote transaction
+            nominee = None
+            if payment_type == 'VOTE' and nominee_code:
+                try:
+                    nominee = Nominees.objects.get(code=nominee_code)
+                    
+                    # Validate votes count
+                    if votes and int(votes) > 0:
+                        # Calculate expected amount matches expected (can be disabled if not needed)
+                        expected_amount = int(votes) * nominee.price_per_vote
+                        
+                        # Optional: Verify amount matches expected (can be disabled if not needed)
+                        # if amount != expected_amount:
+                        #     messages.warning(request, f'Amount does not match votes count. Expected: {expected_amount}, Received: {amount}')
+                        
+                    # Add votes to nominee's total_vote
+                    nominee.total_vote += int(votes) if votes else 0
+                    nominee.save()
+                except Nominees.DoesNotExist:
+                    messages.warning(request, f'No nominee found with code "{nominee_code}". Transaction will be created without linking to a nominee.')
+                    
+            # Get category object if provided
+            category = None
+            if category_id:
+                try:
+                    category = Category.objects.get(id=category_id)
+                except Category.DoesNotExist:
+                    messages.warning(request, f'No category found with ID "{category_id}". Transaction will be created without linking to a category.')
+                    
+            # Get event category object if provided
+            event_category = None
+            if event_category_id:
+                try:
+                    
+                    event_category = Event.objects.get(id=event_category_id)
+                except Event.DoesNotExist:
+                    messages.warning(request, f'No event found with ID "{event_category_id}". Transaction will be created without linking to an event.')
+                    
+            # Create the transaction
+            transaction = PaymentTransaction.objects.create(
+                order_id=order_id,
+                amount=amount,
+                status=status,
+                payment_type=payment_type,
+                invoice_no=invoice_no,
+                transaction_id=transaction_id,
+                trans_hash=trans_hash,
+                account_number=account_number,
+                account_name=account_name,
+                nominee_code=nominee_code,
+                votes=int(votes) if votes else None,
+                category=category,
+                event_code=event_code,
+                tickets=int(tickets) if tickets else None,
+                ticket_type=ticket_type,
+                event_category=event_category,
+                donation_code=donation_code,
+                timestamp=timestamp,
+            )
+            
+            # Success message
+            if payment_type == 'VOTE' and nominee:
+                messages.success(request, f'Vote transaction created successfully! Added {votes} votes to nominee "{nominee.name}".')
+            elif payment_type == 'VOTE':
+                messages.success(request, f'Vote transaction created successfully! No nominee linked.')
+            else:
+                messages.success(request, f'Transaction created successfully!')
+                
+            return redirect('payment_transactions')
+        
+        except Exception as e:
+            messages.error(request, f'An error occurred while creating the transaction: {str(e)}')
+            return redirect('create_ussd_transactions')
+        
+    context = {
+        'title': 'Create USSD Transaction',
+        'categories': Category.objects.all(),
+        'events': Event.objects.all(),
+    }
+    return render(request, 'maindashboard/create_ussd_transactions.html', context) 

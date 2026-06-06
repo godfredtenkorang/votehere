@@ -206,123 +206,129 @@
 
  <div class="main-2">
 
- <form class="transaction-form">
+ <form method="POST" class="transaction-form" action="{% url 'create_ussd_transactions' %}">
+    {% csrf_token %}
 
   <h2 class="form-title">Add Payment Transaction</h2>
 
   <div class="form-grid">
 
     <div class="form-group">
-      <label>Order ID</label>
-      <input type="text">
+      <label>Order ID *</label>
+      <input type="text" name="order_id" required>
     </div>
 
     <div class="form-group">
-      <label>Amount</label>
-      <input type="number">
+      <label>Amount *</label>
+      <input type="number" name="amount" required>
     </div>
 
     <div class="form-group">
       <label>Status</label>
-      <select>
-        <option>Pending</option>
-        <option>Successful</option>
-        <option>Failed</option>
+      <select name="status">
+        <option>PAID</option>
+        <option>FAILED</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Payment Type</label>
-      <select>
-        <option>MTN</option>
-        <option>Vodafone</option>
-        <option>AirtelTigo</option>
-        <option>Card</option>
+      <label>Payment Type *</label>
+      <select name="payment_type" required>
+        <option value="VOTE">Vote</option>
+        <option value="TICKET">Ticket</option>
+        <option value="DONATION">Donation</option>
+        
       </select>
     </div>
 
     <div class="form-group">
       <label>Invoice No</label>
-      <input type="text">
+      <input type="text" name="invoice_no">
     </div>
 
     <div class="form-group">
       <label>Transaction ID</label>
-      <input type="text">
+      <input type="text" name="transaction_id">
     </div>
 
     <div class="form-group">
       <label>Transaction Hash</label>
-      <input type="text">
+      <input type="text" name="trans_hash">
     </div>
 
     <div class="form-group">
       <label>Account Number</label>
-      <input type="text">
+      <input type="text" name="account_number">
     </div>
 
     <div class="form-group">
       <label>Account Name</label>
-      <input type="text">
+      <input type="text" name="account_name">
     </div>
 
     <div class="form-group">
       <label>Nominee Code</label>
-      <input type="text">
+      <input type="text" name="nominee_code">
     </div>
 
     <div class="form-group">
       <label>Votes</label>
-      <input type="number">
+      <input type="number" name="votes">
     </div>
 
     <div class="form-group">
       <label>Category</label>
-      <select>
-        <option>Select Category</option>
+      <select name="category">
+         <option value="">Select Category</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.award }}</option>
+        {% endfor %}
       </select>
     </div>
 
     <div class="form-group">
       <label>Event Code</label>
-      <input type="text">
+      <input type="text" name="event_code">
     </div>
 
     <div class="form-group">
       <label>Tickets</label>
-      <input type="number">
+      <input type="number" name="tickets">
     </div>
 
     <div class="form-group">
       <label>Ticket Type</label>
-      <input type="text">
+      <input type="text" name="ticket_type">
     </div>
 
     <div class="form-group">
       <label>Event Category</label>
-      <select>
-        <option>Select Event Category</option>
+      <select name="event_category">
+        <option value="">Select Event Category</option>
+        {% for event in events %}
+        <option value="{{ event.id }}">{{ event.name }}</option>
+        {% endfor %}
       </select>
     </div>
 
     <div class="form-group full-width">
       <label>Donation Code</label>
-      <input type="text">
+      <input type="text" name="donation_code">
     </div>
 
     <div class="form-group full-width">
       <label>Timestamp</label>
 
       <div class="date-time">
-        <input type="date">
-        <input type="time">
+        <input type="date" name="date">
+        <input type="time" name="time">
       </div>
     </div>
 
   </div>
 
   <div class="button-group">
-    <button class="btn-primary">Save</button>
+    <button  type="submit" class="btn-primary">Save Transaction</button>
     <!-- <button type="button" class="btn-secondary">Save & Add Another</button>
     <button type="button" class="btn-secondary">Save & Continue Editing</button> -->
   </div>
