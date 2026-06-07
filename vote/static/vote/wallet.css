@@ -633,3 +633,29 @@ body{
     }
 
 }
+
+.wallet-logout{
+    max-width: 620px;
+    margin: 18px auto 0;
+}
+
+.wallet-logout a{
+    width: 100%;
+    height: 54px;
+    border-radius: 14px;
+    border: 1px solid rgba(239,68,68,0.25);
+    background: rgba(239,68,68,0.08);
+    color: #f87171;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.3s ease;
+}
+
+.wallet-logout a:hover{
+    background: rgba(239,68,68,0.15);
+}
