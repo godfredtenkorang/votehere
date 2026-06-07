@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!--
+  VoteAfric Wallet Top Up Page
+
+  This page allows users to:
+  - Enter a wallet top-up amount
+  - Quickly select preset amounts
+ 
+  - Proceed to pay and fund their wallet for faster voting
+-->
+
+
+
+
+<div class="mini-header">
+
+    <div class="mini-header-container">
+
+        <!-- logo -->
+         <div class="logo">
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="voteafric">
+
+
+                    </a>
+
+                </div>
+
+        <!-- right side -->
+        <div class="mini-header-right">
+
+            <!-- <a href="">
+                <i class="fa-solid fa-wallet"></i>
+            </a> -->
+
+            <a  href="{% url 'main_wallet' %}">
+                <i class="fa-regular fa-user"></i>
+            </a>
+
+            <!-- <button>
+                <i class="fa-solid fa-bars"></i>
+            </button> -->
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<section class="topup-section wallet-guide-page ">
+  <div class="topup-card">
+
+    <label for="amount">Amount (GH₵)</label>
+
+    <input
+      type="number"
+      id="amount"
+      name="amount"
+      min="10"
+      placeholder="Min GH₵10"
+    >
+
+    <div class="amount-options">
+      <button type="button" data-amount="10">₵10</button>
+      <button type="button" data-amount="20">₵20</button>
+      <button type="button" data-amount="30">₵30</button>
+      <button type="button" data-amount="50">₵50</button>
+      <button type="button" data-amount="100">₵100</button>
+      <button type="button" data-amount="200">₵200</button>
+    </div>
+
+    <button type="submit" class="pay-btn">
+      Pay GH₵ <span id="payAmount">0.00</span>
+    </button>
+
+    <!-- <p class="fee-text">3% processing fee applies</p> -->
+
+  </div>
+</section>
+
+
+<!-- Gets the amount input field and preset amount buttons.
+Updates the payment button amount dynamically.
+Supports both manual typing and quick amount selection. -->
+<script>
+  const amountInput = document.getElementById("amount");
+  const payAmount = document.getElementById("payAmount");
+  const amountButtons = document.querySelectorAll(".amount-options button");
+
+  function updatePayAmount(value) {
+    const amount = parseFloat(value) || 0;
+    payAmount.textContent = amount.toFixed(2);
+  }
+
+  amountInput.addEventListener("input", function () {
+    updatePayAmount(this.value);
+  });
+
+  amountButtons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const amount = this.dataset.amount;
+      amountInput.value = amount;
+      updatePayAmount(amount);
+    });
+  });
+</script>
+
+{% endblock content %}

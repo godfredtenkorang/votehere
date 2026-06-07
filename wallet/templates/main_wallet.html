@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!--
+  VoteAfric Wallet Dashboard
+
+  This page displays the user's wallet overview for voting.
+  
+  Features:
+  - Shows wallet balance
+  - Displays nominee/user information
+  - Shows total deposits made
+  - Displays remaining days before voting ends
+  - Allows users to top up wallet
+  - Allows users to proceed directly to voting
+
+  The wallet system helps users vote faster
+  without repeating the payment process each time.
+-->
+
+
+
+<!-- header -->
+<div class="mini-header">
+
+    <div class="mini-header-container">
+
+        <!-- logo -->
+         <div class="logo">
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="voteafric">
+
+
+                    </a>
+
+                </div>
+
+        <!-- right side -->
+        <div class="mini-header-right">
+
+            <!-- <a href="">
+                <i class="fa-solid fa-wallet"></i>
+            </a> -->
+
+            <a  href="{% url 'main_wallet' %}">
+                <i class="fa-regular fa-user"></i>
+            </a>
+
+            <!-- <button>
+                <i class="fa-solid fa-bars"></i>
+            </button> -->
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<section class="wallet-page">
+
+  <div class="wallet-card">
+
+    <div class="wallet-user">
+      <div class="user-avatar">B</div>
+
+      <div>
+        <!-- name -->
+        <h3 >Benjamin Michael</h3>
+        <!-- nominee code -->
+        <p>FE30</p>
+      </div>
+    </div>
+
+    <div class="wallet-balance">
+      <span>Wallet Balance</span>
+      <h1>GH₵0.00</h1>
+    </div>
+
+    <!-- <div class="wallet-code-box">
+      <div>
+        <span>Wallet Code</span>
+        <h4>DHTVSG29</h4>
+      </div>
+
+      <i class="fa-solid fa-angle-right"></i>
+    </div> -->
+
+  </div>
+
+  <div class="wallet-stats">
+
+    <div class="wallet-stat-box">
+      <i class="fa-solid fa-money-bill-transfer"></i>
+      <span>Total Deposit</span>
+      <h3>GH₵0.00</h3>
+      <p>0 deposits made</p>
+    </div>
+
+    <div class="wallet-stat-box">
+      <i class="fa-solid fa-calendar-days"></i>
+      <span>Days Left</span>
+      <h3>7 Days</h3>
+      <p>Wallet expires when voting ends</p>
+    </div>
+
+  </div>
+
+  <div class="wallet-action">
+    <a href="{% url 'top_up' %}"  class="topup-btn">
+      <i class="fa-solid fa-plus"></i>
+      Top Up Wallet
+    </a>
+
+    <a href="" class="vote-btn">
+      <i class="fa-solid fa-check-to-slot"></i>
+      Vote Now
+    </a>
+  </div>
+
+</section>
+
+
+
+{% endblock content %}

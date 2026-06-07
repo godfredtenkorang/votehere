@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- this page is for the login into the wallet -->
+<!-- header -->
+<div class="mini-header">
+
+    <div class="mini-header-container">
+
+        <!-- logo -->
+         <div class="logo">
+                    <a href="{% url 'index' %}">
+                        <img src="{% static 'vote/img/voteafric-logo.png' %}" alt="voteafric">
+
+
+                    </a>
+
+                </div>
+
+        <!-- right side -->
+        <div class="mini-header-right">
+
+            <!-- <a href="">
+                <i class="fa-solid fa-wallet"></i>
+            </a> -->
+
+            <a  href="{% url 'main_wallet' %}">
+                <i class="fa-regular fa-user"></i>
+            </a>
+
+            <!-- <button>
+                <i class="fa-solid fa-bars"></i>
+            </button> -->
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<!-- wallet login page -->
+
+<section class="wallet_login">
+
+    <div class="wallet_login_container">
+
+        <div class="wallet_login_header">
+
+            <div class="wallet_login_icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <h2>Wallet Login</h2>
+
+            <p>
+                Login with your phone number and access code
+                to continue to your VoteAfric wallet.
+            </p>
+
+        </div>
+
+
+        <form action="" method="POST">
+
+    
+
+            <!-- phone number -->
+            <div class="wallet_login_input">
+
+                <label>
+                    <i class="fa-solid fa-phone"></i>
+                    Phone Number
+                </label>
+
+                <input
+                    type="number"
+                    name="phone"
+                    placeholder="Enter phone number"
+                    required
+                >
+
+            </div>
+
+
+            <!-- access code -->
+            <div class="wallet_login_input">
+
+                <label>
+                    <i class="fa-solid fa-lock"></i>
+                    Access Code
+                </label>
+
+                <input
+                    type="password"
+                    name="access_code"
+                    placeholder="Enter access code"
+                    required
+                >
+
+            </div>
+
+
+            <!-- submit -->
+            <button type="submit" class="wallet_login_btn">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Login Wallet
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+{% endblock content %}
