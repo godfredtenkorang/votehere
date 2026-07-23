@@ -831,6 +831,13 @@ def process_vote_payment(session, order_id, amount, status, timestamp):
         nominee.total_vote = (nominee.total_vote or 0) + votes
         nominee.save(update_fields=['total_vote'])
         
+        # Generate random 8-digit invoice number
+        invoice_no = str(random.randint(10000000, 99999999))
+        
+        # Ensure uniqueness (optional but recommended)
+        while PaymentTransaction.objects.filter(invoice_no=invoice_no).exists():
+            invoice_no = str(random.randint(10000000, 99999999))
+        
         # Create payment transaction record
         PaymentTransaction.objects.create(
             order_id=order_id,
