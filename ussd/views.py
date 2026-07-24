@@ -844,7 +844,7 @@ def process_vote_payment(session, order_id, amount, status, timestamp):
             amount=amount,
             status=status,
             payment_type='VOTE',
-            invoice_no=order_id,
+            invoice_no=invoice_no,
             nominee_code=nominee_code,
             votes=votes,
             category=nominee.category,
