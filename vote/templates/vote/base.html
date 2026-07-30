@@ -111,7 +111,11 @@
                 <a href="{% url 'award_page' %}">Ongoing Events</a>
                 <a href="{% url 'ticketing' %}">Tickets</a>
                 <a href="{% url 'donation_page' %}">Donation</a>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'adminPage' %}">Dashboard</a>
+                {% else %}
                 <a href="{% url 'login' %}">Login as Organizer</a>
+                {% endif %}
             </div>
 
             <!-- Company -->
