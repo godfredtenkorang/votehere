@@ -25,6 +25,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
 from ticket.models import Event
 
+from .utils import send_approved_sms
+
 
 
 
@@ -590,9 +592,20 @@ def approve_payment(request, payment_id):
             payment = get_object_or_404(RequestForPayment, id=payment_id)
             payment.is_approved = True
             payment.save()
+            
+            # Send SMS notification to the user
+            sms_response = send_approved_sms(payment.phone, payment.name, payment.category.award, payment.amount)
+            
+            # Optional: Log SMS response for debugging
+            if sms_response:
+                print(f"SMS sent successfully: {sms_response}")
+            else:
+                print(f"Failed to send SMS for payment {payment_id}")
+            
             return JsonResponse({
                 'success': True,
-                'message': f'Payment request "{payment.name}" approved successfully.'
+                'message': f'Payment request "{payment.name}" approved successfully.',
+                'sms_sent': sms_response is not None
             })
         except Exception as e:
             return JsonResponse({
