@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
-from .models import CustomSession, PaymentTransaction
+from .models import CustomSession, PaymentTransaction, Faculty, Department, LevelDues, StudentDuesPayment
 import json
 from hashlib import md5
 import uuid
@@ -175,7 +175,7 @@ def ussd_api(request):
             if msgtype:  # Initial request
                 session.level = 'start'
                 session.save()
-                message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\n3. Donation\n4. Contact Details"
+                message = "Welcome to VoteAfric.\n1. Voting\n2. Ticketing\n3. Donation\n4. Pay Dues\n5. Contact Details"
                 return JsonResponse(send_response(message, True))
             else:
                 session.last_activity = timezone.now() # Follow-up request
@@ -200,7 +200,13 @@ def ussd_api(request):
                         session.save()
                         message = "Enter Donation cause code"
                         return JsonResponse(send_response(message, True))
-                    elif user_data == '4': # Donation
+                    elif user_data == '4': # Pay Dues - NEW
+                        session.payment_type = 'DUES'
+                        session.level = 'dues_faculty_code'
+                        session.save()
+                        message = f"Enter Faculty code (e.g., FAS, PASSAG, FENG)"
+                        return JsonResponse(send_response(message, True))
+                    elif user_data == '5': # Contact Details
                         session.level = 'contact_start'
                         session.save()
                         message = "Welcome to VoteAfric\n\n0553912334 or 0558156844"
@@ -209,6 +215,280 @@ def ussd_api(request):
                         session.delete()
                         return JsonResponse(send_response("Invalid option. Please try again.", False))
                     
+                # Pay dues flow
+                elif level == 'dues_faculty_code':
+                    try:
+                        faculty_code = user_data.strip().upper()
+                        
+                        # Trye to find the faculty based on the entered code
+                        try:
+                            faculty = Faculty.objects.get(code__iexact=faculty_code)
+                        except Faculty.DoesNotExist:
+                            # Show available faculties
+                            faculties = Faculty.objects.all()
+                            if faculties.exists():
+                                faculty_list = "\n".join([f"{f.code} - {f.name}" for f in faculties])
+                                return JsonResponse(send_response(f"Invalid faculty code. Available faculties:\n{faculty_list}\n\Enter valid Faculty code.", True))
+                            else:
+                                return JsonResponse(send_response("No faculties available. Please contact support", False))
+                        
+                        # Check if faculty has departments
+                        departments = Department.objects.filter(faculty=faculty)
+                        if not departments.exists():
+                            session.delete()
+                            return JsonResponse(send_response(f"No departments found for {faculty.name}. Please contact support.", False))
+                        
+                        # Store faculty code and list departments
+                        session.faculty_code = faculty.code
+                        
+                        # Create a numbered list of departments for selection
+                        dept_list = []
+                        dept_display = []
+                        for idx, dept in enumerate(departments, 1):
+                            dept_list.append({
+                                'number': idx,
+                                'code': dept.code,
+                                'name': dept.name
+                            })
+                            dept_display.append(f"{idx}. {dept.name}")
+                            
+                        # Store the department list in session for later validation
+                        session.department_list = dept_list
+                        session.level = 'dues_department_select'
+                        session.save()
+                        
+                        
+                        message = (
+                            f"Faculty: {faculty.name}\n"
+                            f"Select your Department:\n"
+                            f"{chr(10).join(dept_display)}\n\n"
+                            f"Enter the number (1-{len(dept_list)}):"
+                        )
+                        return JsonResponse(send_response(message, True))
+                        
+                    except Exception as e:
+                        session.delete()
+                        print(f"Error in dues_faculty_code: {str(e)}")
+                        return JsonResponse(send_response(f"An error occurred: {str(e)}", False))
+                        
+                       
+                       
+                       
+                elif level == 'dues_department_select':
+                    try:
+                        selection = user_data.strip()
+                        
+                        # Validate that input is a number
+                        if not selection.isdigit():
+                            return JsonResponse(send_response("Please enter a valid number.", True))
+                        
+                        dept_index = int(selection) - 1
+                        
+                        # Get the department list from session
+                        dept_list = session.department_list
+                        
+                        # Get the department list from session
+                        dept_list = session.department_list
+                        
+                        # Check if selection is valid
+                        if dept_index < 0 or dept_index >= len(dept_list):
+                            # Show departments again
+                            dept_display = []
+                            for idx, dept in enumerate(dept_list, 1):
+                                dept_display.append(f"{idx}. {dept['name']}")
+                            
+                            return JsonResponse(send_response(
+                                f"Invalid selection. Please choose a number between 1 and {len(dept_list)}:\n"
+                                f"{chr(10).join(dept_display)}\n\n"
+                                f"Enter the number:", 
+                                True
+                            ))
+                        
+                        # Get selected department
+                        selected_dept = dept_list[dept_index]
+                        session.department_code = selected_dept['code']
+                        session.department_name = selected_dept['name']
+                        session.level = 'dues_first_name'
+                        session.save()
+                        
+                        message = f"Department: {selected_dept['name']}\n\nEnter your First Name:"
+                        return JsonResponse(send_response(message, True))
+                        
+                    except Exception as e:
+                        session.delete()
+                        print(f"Error in dues_department_select: {str(e)}")
+                        return JsonResponse(send_response("An error occurred. Please try again.", False))
+                                
+                                
+                elif level == 'dues_first_name':
+                    try:
+                        first_name = user_data.strip()
+                        
+                        # Validate name (should contain only letters and spaces)
+                        if not first_name or len(first_name) < 2:
+                            return JsonResponse(send_response("Please enter a valid first name (at least 2 characters).", True))
+                        
+                        # Additional validation - only letters, spaces, and hyphens
+                        if not all(c.isalpha() or c.isspace() or c == '-' for c in first_name):
+                            return JsonResponse(send_response("First name can only contain letters, spaces, and hyphens.", True))
+                        
+                        session.first_name = first_name
+                        session.level = 'dues_last_name'
+                        session.save()
+                        
+                        message = f"First Name: {first_name}\n\nEnter your Last Name:"
+                        return JsonResponse(send_response(message, True))
+                    except Exception as e:
+                        session.delete()
+                        print(f"Error in dues_first_name: {str(e)}")
+                        return JsonResponse(send_response("An error occurred. Please try again.", False))
+                    
+                elif level == 'dues_last_name':
+                    try:
+                        last_name = user_data.strip()
+                        # Validate name (should contain only letters and spaces)
+                        if not last_name or len(last_name) < 2:
+                            return JsonResponse(send_response("Please enter a valid last name (at least 2 characters).", True))
+                        
+                        # Additional validation - only letters, spaces, and hyphens
+                        if not all(c.isalpha() or c.isspace() or c == '-' for c in last_name):
+                            return JsonResponse(send_response("Last name can only contain letters, spaces, and hyphens.", True))
+                        
+                        session.last_name = last_name
+                        session.level = 'dues_student_number'
+                        session.save()
+                        
+                        message = f"Last Name: {last_name}\n\nEnter your Student Number:"
+                        return JsonResponse(send_response(message, True))
+                    
+                    except Exception as e:
+                        session.delete()
+                        print(f"Error in dues_last_name: {str(e)}")
+                        return JsonResponse(send_response("An error occurred. Please try again.", False))
+                
+                elif level == 'dues_student_number':
+                    try:
+                        student_number = user_data.strip().upper()
+                        
+                        # Validate student number (adjust regex as needed)
+                        if not student_number or len(student_number) < 3:
+                            return JsonResponse(send_response("Please enter a valid student number (at least 3 characters).", True))
+                        
+                        # You can add more specific validation here
+                        # Example: if your student numbers are like "STU2024001"
+                        # import re
+                        # if not re.match(r'^[A-Z]{3}\d{7}$', student_number):
+                        #     return JsonResponse(send_response("Please enter a valid student number (e.g., STU2024001):", True))
+                        
+                        session.student_number = student_number
+                        session.level = 'dues_level_select'
+                        session.save()
+                        
+                        # Get available levels with their amounts
+                        levels = LevelDues.objects.filter(
+                            department__code__iexact=session.department_code,
+                        ).order_by('level')
+                        
+                        if not levels.exists():
+                            session.delete()
+                            return JsonResponse(send_response("No dues levels found for your department. Please contact support.", False))
+                        
+                        # Build level options with numbers for selection
+                        level_options = []
+                        for idx, level in enumerate(levels, 1):
+                            level_options.append(f"{idx}. {level.level} - GH¢{float(level.amount):.2f}")
+                        
+                        # Store level option for validation
+                        session.level_data = []
+                        for level in levels:
+                            session.level_data.append({
+                                'level': level.level,
+                                'amount': float(level.amount),
+                            })
+                        
+                        session.save()
+                        
+                        message = (
+                            f"Student Number: {student_number}\n\n"
+                            f"Select your Level:\n"
+                            f"{chr(10).join(level_options)}\n\n"
+                            f"Enter the number (1-{len(level_options)}):"
+                        )
+                        return JsonResponse(send_response(message, True))
+                    
+                    
+                    except Exception as e:
+                        session.delete()
+                        print(f"Error in dues_student_number: {str(e)}")
+                        return JsonResponse(send_response("An error occurred. Please try again.", False))
+                    
+                    
+                elif level == 'dues_level_select':
+                    try:
+                        selection = user_data.strip()
+                        
+                        # Validate that input is a number
+                        if not selection.isdigit():
+                            return JsonResponse(send_response("Please enter a valid number.", True))
+                        
+                        level_index = int(selection) - 1
+                        
+                        # Get the level data from session
+                        level_data = session.level_data
+                        
+                        # Check if selection is valid
+                        if level_index < 0 or level_index >= len(level_data):
+                            # Show levels again
+                            level_display = []
+                            for idx, lvl in enumerate(level_data, 1):
+                                level_display.append(f"{idx}. {lvl['level']} - GH¢{float(lvl['amount']):.2f}")
+                            
+                            return JsonResponse(send_response(
+                                f"Invalid selection. Please choose a number between 1 and {len(level_data)}:\n"
+                                f"{chr(10).join(level_display)}\n\n"
+                                f"Enter the number:", 
+                                True
+                            ))
+                        
+                        # Get selected level
+                        selected_level = level_data[level_index]
+                        session.dues_level = selected_level['level']
+                        session.amount = Decimal(selected_level['amount'])
+                        session.payment_type = 'DUES'
+                        session.level = 'dues_confirmation'
+                        session.save()
+                        
+                        message = (
+                            f"Confirm Dues Payment\n\n"
+                            f"Name: {session.first_name} {session.last_name}\n"
+                            f"Student Number: {session.student_number}\n"
+                            f"Department: {session.department_name}\n"
+                            f"Level: {selected_level['level']}\n"
+                            f"Amount: GH¢{float(selected_level['amount']):.2f}\n\n"
+                            f"Press 1 to confirm and proceed to payment or 2 to cancel."
+                        )
+                        return JsonResponse(send_response(message, True))
+                    
+                    except Exception as e:
+                        session.delete()
+                        print(f"Error in dues_level_select: {str(e)}")
+                        return JsonResponse(send_response("An error occurred. Please try again.", False))
+                    
+                
+                elif level == 'dues_confirmation':
+                    if user_data == '1':
+                        # Proceed to payment
+                        session.level = 'dues_payment'
+                        session.save()
+                        message = f"You are about to pay GH¢{float(session.amount):.2f} for your dues.\n\nPress 1 to proceed to payment or 2 to cancel."
+                        return JsonResponse(send_response(message, True))
+                    elif user_data == '2':
+                        session.delete()
+                        return JsonResponse(send_response("You have cancelled the dues payment process.", False))
+                    else:
+                        session.delete()
+                        return JsonResponse(send_response("Invalid input. Please try again.", False))
+
                 # Voting flow
                 elif level == 'vote_start':
                     try:
@@ -445,6 +725,8 @@ def ussd_api(request):
                         desc = f"Votes for {session.candidate_id}"
                     elif session.payment_type == 'TICKET':
                         desc = f"Tickets for {session.event_id}"
+                    elif session.payment_type == 'DUES':
+                        desc = f"Student dues for {session.student_number}"
                     else:
                         desc = f"Donation for {session.donation_id}"
                         
@@ -803,6 +1085,8 @@ def process_payment_based_on_type(session, order_id, amount, status, timestamp):
         return process_ticket_payment(session, order_id, amount, status, timestamp)
     elif session.payment_type == 'DONATION':
         return process_donation_payment(session, order_id, amount, status, timestamp)
+    elif session.payment_type == 'DUES':
+        return process_dues_payment(session, order_id, amount, status, timestamp)
     else:
         return {'success': False, 'message': 'Unknown payment type'}
     
@@ -972,6 +1256,79 @@ def process_donation_payment(session, order_id, amount, status, timestamp):
     except Exception as e:
         print(f"Error processing donation payment: {str(e)}")
         return {'success': False, 'message': f'Error processing donation payment: {str(e)}'}
+    
+
+def process_dues_payment(session, order_id, amount, status, timestamp):
+    try:
+        student_number = session.student_number
+        dues_amount = session.amount
+
+        if not student_number or not dues_amount:
+            return {'success': False, 'message': 'Incomplete session data for dues payment'}
+        
+        # Check for duplicate transaction before doing anything
+        if PaymentTransaction.objects.filter(order_id=order_id).exists():
+            return {'success': True, 'message': 'Transaction already processed'}
+        
+        # try:
+        #     nominee = Nominees.objects.select_for_update().get(code__iexact=nominee_code)
+        # except Nominees.DoesNotExist:
+        #     return {'success': False, 'message': 'Nominee not found'}
+        # print(f"Updating votes for {nominee_code}: current votes {nominee.total_vote}, adding {votes}")
+        # # nominee = update_nominee_votes(nominee_code, votes)
+        # # if not nominee:
+        # #     return {'success': False, 'message': 'Nominee not found'}
+        
+        # # Update vote count
+        # nominee.total_vote = (nominee.total_vote or 0) + votes
+        # nominee.save(update_fields=['total_vote'])
+        
+        # Generate random 8-digit invoice number
+        invoice_no = str(random.randint(10000000, 99999999))
+        
+        # Ensure uniqueness (optional but recommended)
+        while PaymentTransaction.objects.filter(invoice_no=invoice_no).exists():
+            invoice_no = str(random.randint(10000000, 99999999))
+        
+        # Create payment transaction record
+        PaymentTransaction.objects.create(
+            order_id=order_id,
+            amount=amount,
+            status=status,
+            payment_type='DUES',
+            invoice_no=invoice_no,
+            # nominee_code=nominee_code,
+            # votes=votes,
+            # category=nominee.category,
+            timestamp=timestamp
+        )
+        
+        # Send SMS notifications
+        # try:
+        #     send_sms_to_voter(
+        #         phone_number=session.msisdn, 
+        #         nominee_code=nominee_code, 
+        #         category=nominee.category, 
+        #         amount=amount, 
+        #         transaction_id=invoice_no
+        #     )
+        #     send_sms_to_nominee_for_vote(
+        #         phone_number=nominee.phone_number, 
+        #         nominee_code=nominee_code, 
+        #         vote=votes, 
+        #         phone=session.msisdn, 
+        #         transaction_id=invoice_no
+        #     )
+        # except Exception as sms_error:
+        #     print(f"SMS sending failed: {sms_error}")
+        #     # Don't fail the transaction if SMS fails
+        
+        return {'success': True, 'message': 'Votes updated successfully'}
+        
+    
+    except Exception as e:
+        print(f'Error processing vote payment: {str(e)}')
+        return {'success': False, 'message': 'Error processing vote payment'}
     
     
 def handle_payment_without_session(order_id, amount, status, timestamp, payment_data):
