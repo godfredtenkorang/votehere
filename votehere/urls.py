@@ -34,7 +34,6 @@ urlpatterns = [
     path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt/', TemplateView.as_view(template_name="vote/robots.txt", content_type="text/plain")),
     path('voteafric_admin/', admin.site.urls),
-    path('', include('vote.urls')),
     path('voting/', include('voting.urls')),
     path('payment/', include('payment.urls')),
     path('register/', include('register.urls')),
@@ -46,13 +45,16 @@ urlpatterns = [
     path('/', include('ticket.urls')),
     path('donation/', include('donation.urls')),
     path('api/vote/', include('vote.api.urls')),
-    
+   path("dues-dashboard/", include("dues_dashboard.urls")),
     path(
         '.well-known/apple-developer-merchantid-domain-association',
         TemplateView.as_view(
             template_name='vote/.well-known/apple-developer-merchantid-domain-association', 
             content_type='text/plain'),
     ),
+    
+     path('', include('vote.urls')),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

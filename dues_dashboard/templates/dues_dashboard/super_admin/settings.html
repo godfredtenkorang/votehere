@@ -1,0 +1,798 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+    <div class="heading">
+
+        <div class="heading-left">
+            <h1>Settings</h1>
+            <p>Manage dues collection settings and academic session.</p>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACADEMIC SESSION
+    ====================================================== -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>Academic Session</h2>
+                <p>Set the current academic year and semester.</p>
+            </div>
+        </div>
+
+
+        <div class="settings-grid">
+
+            <div class="settings-field">
+
+                <label>Academic Year</label>
+
+                <select>
+                    <option selected>2026/2027</option>
+                    <option>2027/2028</option>
+                    <option>2028/2029</option>
+                </select>
+
+            </div>
+
+
+            <div class="settings-field">
+
+                <label>Semester</label>
+
+                <select>
+                    <option selected>First Semester</option>
+                    <option>Second Semester</option>
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DUES AMOUNT CONFIGURATION
+    ====================================================== -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Dues Amount Configuration</h2>
+
+                <p>
+                    Set the amount payable by students based on
+                    faculty, department and level.
+                </p>
+            </div>
+
+
+            <!-- Backend: create configuration later -->
+            <button
+                type="button"
+                class="tbl-add-btn"
+                id="addConfigurationBtn"
+            >
+                <i class="fa-solid fa-plus"></i>
+                Add Configuration
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             FILTERS
+        ================================================== -->
+        <div class="dashboard-filter">
+
+            <select>
+                <option>Academic Year</option>
+                <option selected>2026/2027</option>
+            </select>
+
+
+            <select>
+                <option>Semester</option>
+                <option selected>First Semester</option>
+                <option>Second Semester</option>
+            </select>
+
+
+            <select>
+                <option>All Faculties</option>
+                <option>Faculty of Computing</option>
+                <option>Faculty of Business</option>
+                <option>Faculty of Engineering</option>
+                <option>Faculty of Science</option>
+            </select>
+
+        </div>
+
+
+        <!-- =================================================
+             CONFIGURATION TABLE
+        ================================================== -->
+        <div class="table-responsive">
+
+            <table class="dashboard-table" id="duesConfigurationTable">
+
+                <thead>
+
+                    <tr>
+                        <th>Faculty</th>
+                        <th>Department</th>
+                        <th>Level 100</th>
+                        <th>Level 200</th>
+                        <th>Level 300</th>
+                        <th>Level 400</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <!-- SAMPLE FRONTEND DATA -->
+                    <!-- Backend will replace later -->
+
+
+                    <!-- COMPUTER SCIENCE -->
+                    <tr>
+
+                        <td>Faculty of Computing</td>
+
+                        <td>Computer Science</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵80.00</td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="table-action-btn edit-dues-btn"
+                            >
+                                Edit
+                            </button>
+                        </td>
+
+                    </tr>
+
+
+                    <!-- INFORMATION TECHNOLOGY -->
+                    <tr>
+
+                        <td>Faculty of Computing</td>
+
+                        <td>Information Technology</td>
+
+                        <td>GH₵150.00</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>GH₵110.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="table-action-btn edit-dues-btn"
+                            >
+                                Edit
+                            </button>
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ACCOUNTING -->
+                    <tr>
+
+                        <td>Faculty of Business</td>
+
+                        <td>Accounting</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵90.00</td>
+
+                        <td>GH₵90.00</td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="table-action-btn edit-dues-btn"
+                            >
+                                Edit
+                            </button>
+                        </td>
+
+                    </tr>
+
+
+                    <!-- MECHANICAL ENGINEERING -->
+                    <tr>
+
+                        <td>Faculty of Engineering</td>
+
+                        <td>Mechanical Engineering</td>
+
+                        <td>GH₵150.00</td>
+
+                        <td>GH₵150.00</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="table-action-btn edit-dues-btn"
+                            >
+                                Edit
+                            </button>
+                        </td>
+
+                    </tr>
+
+
+                    <!-- BIOLOGICAL SCIENCE -->
+                    <tr>
+
+                        <td>Faculty of Science</td>
+
+                        <td>Biological Science</td>
+
+                        <td>GH₵110.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵90.00</td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="table-action-btn edit-dues-btn"
+                            >
+                                Edit
+                            </button>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         EDIT DUES CONFIGURATION MODAL
+    ====================================================== -->
+
+    <div class="dues-edit-modal" id="duesEditModal">
+
+        <div class="dues-edit-box">
+
+            <div class="dues-edit-header">
+
+                <div>
+                    <h2>Edit Dues Amount</h2>
+                    <p>Update the payable amount for each level.</p>
+                </div>
+
+
+                <button
+                    type="button"
+                    class="dues-modal-close"
+                    id="closeDuesModal"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+
+                <!-- FACULTY -->
+                <div class="settings-field">
+
+                    <label>Faculty</label>
+
+                    <input
+                        type="text"
+                        id="editFaculty"
+                        readonly
+                    >
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+                <div class="settings-field">
+
+                    <label>Department</label>
+
+                    <input
+                        type="text"
+                        id="editDepartment"
+                        readonly
+                    >
+
+                </div>
+
+
+                <!-- LEVEL 100 -->
+                <div class="settings-field">
+
+                    <label>Level 100 Amount</label>
+
+                    <input
+                        type="number"
+                        id="editLevel100"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- LEVEL 200 -->
+                <div class="settings-field">
+
+                    <label>Level 200 Amount</label>
+
+                    <input
+                        type="number"
+                        id="editLevel200"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- LEVEL 300 -->
+                <div class="settings-field">
+
+                    <label>Level 300 Amount</label>
+
+                    <input
+                        type="number"
+                        id="editLevel300"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- LEVEL 400 -->
+                <div class="settings-field">
+
+                    <label>Level 400 Amount</label>
+
+                    <input
+                        type="number"
+                        id="editLevel400"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- MODAL BUTTONS -->
+            <div class="dues-modal-actions">
+
+                <button
+                    type="button"
+                    class="dues-cancel-btn"
+                    id="cancelDuesEdit"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="tbl-add-btn"
+                    id="saveDuesEdit"
+                >
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save Changes
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PAYMENT SETTINGS
+    ====================================================== -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Payment Settings</h2>
+                <p>Basic dues payment configuration.</p>
+            </div>
+
+        </div>
+
+
+        <div class="settings-grid">
+
+
+            <!-- COLLECTION STATUS -->
+            <div class="settings-field">
+
+                <label>Collection Status</label>
+
+                <select>
+                    <option selected>Open</option>
+                    <option>Closed</option>
+                </select>
+
+            </div>
+
+
+            <!-- PAYMENT CHANNEL -->
+            <div class="settings-field">
+
+                <label>Payment Channel</label>
+
+                <select>
+                    <option selected>USSD</option>
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="settings-actions">
+
+            <!-- Backend will save later -->
+            <button
+                type="button"
+                class="tbl-add-btn"
+            >
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Settings
+            </button>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* =====================================================
+       ELEMENTS
+    ====================================================== */
+
+    const modal =
+        document.getElementById("duesEditModal");
+
+    const closeBtn =
+        document.getElementById("closeDuesModal");
+
+    const cancelBtn =
+        document.getElementById("cancelDuesEdit");
+
+    const saveBtn =
+        document.getElementById("saveDuesEdit");
+
+
+    const facultyInput =
+        document.getElementById("editFaculty");
+
+    const departmentInput =
+        document.getElementById("editDepartment");
+
+    const level100Input =
+        document.getElementById("editLevel100");
+
+    const level200Input =
+        document.getElementById("editLevel200");
+
+    const level300Input =
+        document.getElementById("editLevel300");
+
+    const level400Input =
+        document.getElementById("editLevel400");
+
+
+    let activeRow = null;
+
+
+
+    /* =====================================================
+       CONVERT MONEY TO NUMBER
+
+       Example:
+       GH₵120.00
+       becomes
+       120
+    ====================================================== */
+
+    function getAmount(text) {
+
+        return parseFloat(
+
+            text
+                .replace("GH₵", "")
+                .replace("GHC", "")
+                .replace("GH¢", "")
+                .replace(/,/g, "")
+                .trim()
+
+        ) || 0;
+
+    }
+
+
+
+    /* =====================================================
+       FORMAT MONEY
+    ====================================================== */
+
+    function formatAmount(amount) {
+
+        return "GH₵" +
+
+            Number(amount).toLocaleString(
+
+                undefined,
+
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+
+            );
+
+    }
+
+
+
+    /* =====================================================
+       OPEN EDIT MODAL
+    ====================================================== */
+
+    document
+        .querySelectorAll(".edit-dues-btn")
+        .forEach(function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+
+                    activeRow =
+                        button.closest("tr");
+
+
+                    const cells =
+                        activeRow.querySelectorAll("td");
+
+
+                    /* Faculty */
+                    facultyInput.value =
+                        cells[0].textContent.trim();
+
+
+                    /* Department */
+                    departmentInput.value =
+                        cells[1].textContent.trim();
+
+
+                    /* Level 100 */
+                    level100Input.value =
+                        getAmount(
+                            cells[2].textContent
+                        );
+
+
+                    /* Level 200 */
+                    level200Input.value =
+                        getAmount(
+                            cells[3].textContent
+                        );
+
+
+                    /* Level 300 */
+                    level300Input.value =
+                        getAmount(
+                            cells[4].textContent
+                        );
+
+
+                    /* Level 400 */
+                    level400Input.value =
+                        getAmount(
+                            cells[5].textContent
+                        );
+
+
+                    modal.classList.add("show");
+
+                }
+            );
+
+        });
+
+
+
+    /* =====================================================
+       CLOSE MODAL
+    ====================================================== */
+
+    function closeModal() {
+
+        modal.classList.remove("show");
+
+        activeRow = null;
+
+    }
+
+
+
+    closeBtn.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    cancelBtn.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+
+    /* Click outside box */
+
+    modal.addEventListener(
+        "click",
+        function (event) {
+
+            if (event.target === modal) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+
+    /* ESCAPE KEY */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                modal.classList.contains("show")
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+
+    /* =====================================================
+       SAVE CHANGES
+    ====================================================== */
+
+    saveBtn.addEventListener(
+        "click",
+        function () {
+
+
+            if (!activeRow) {
+
+                return;
+
+            }
+
+
+            const cells =
+                activeRow.querySelectorAll("td");
+
+
+            /* Level 100 */
+            cells[2].textContent =
+                formatAmount(
+                    level100Input.value
+                );
+
+
+            /* Level 200 */
+            cells[3].textContent =
+                formatAmount(
+                    level200Input.value
+                );
+
+
+            /* Level 300 */
+            cells[4].textContent =
+                formatAmount(
+                    level300Input.value
+                );
+
+
+            /* Level 400 */
+            cells[5].textContent =
+                formatAmount(
+                    level400Input.value
+                );
+
+
+            closeModal();
+
+        }
+    );
+
+
+});
+
+</script>
+
+{% endblock %}

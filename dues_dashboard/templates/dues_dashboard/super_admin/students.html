@@ -1,0 +1,953 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Students | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Students</h1>
+
+            <p>
+                View and monitor students across all faculties and departments.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- FILTERS -->
+    <div class="dashboard-filter">
+
+        <div class="payment-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="superStudentSearch"
+                placeholder="Search Student ID or Name"
+            >
+
+        </div>
+
+
+        <select id="superStudentAcademicYear">
+
+            <option value="2026/2027" selected>
+                2026/2027
+            </option>
+
+        </select>
+
+
+        <select id="superStudentSemester">
+
+            <option value="">
+                All Semesters
+            </option>
+
+            <option value="First Semester">
+                First Semester
+            </option>
+
+            <option value="Second Semester">
+                Second Semester
+            </option>
+
+        </select>
+
+
+        <select id="superStudentFaculty">
+
+            <option value="">
+                All Faculties
+            </option>
+
+            <option value="Faculty of Computing">
+                Faculty of Computing
+            </option>
+
+            <option value="Faculty of Business">
+                Faculty of Business
+            </option>
+
+            <option value="Faculty of Engineering">
+                Faculty of Engineering
+            </option>
+
+            <option value="Faculty of Science">
+                Faculty of Science
+            </option>
+
+        </select>
+
+
+        <select id="superStudentDepartment">
+
+            <option value="">
+                All Departments
+            </option>
+
+            <option value="Computer Science">
+                Computer Science
+            </option>
+
+            <option value="Information Technology">
+                Information Technology
+            </option>
+
+            <option value="Accounting">
+                Accounting
+            </option>
+
+            <option value="Mechanical Engineering">
+                Mechanical Engineering
+            </option>
+
+            <option value="Biological Science">
+                Biological Science
+            </option>
+
+        </select>
+
+
+        <select id="superStudentLevel">
+
+            <option value="">
+                All Levels
+            </option>
+
+            <option value="100">
+                Level 100
+            </option>
+
+            <option value="200">
+                Level 200
+            </option>
+
+            <option value="300">
+                Level 300
+            </option>
+
+            <option value="400">
+                Level 400
+            </option>
+
+        </select>
+
+
+        <select id="superStudentStatus">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="Paid">
+                Paid
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="Failed">
+                Failed
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- STUDENTS -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>All Students</h2>
+
+                <p id="superStudentResultText">
+                    Students registered across the institution.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="table-action-btn"
+                id="exportSuperStudentsBtn"
+            >
+
+                <i class="fa-solid fa-file-excel"></i>
+                Export Excel
+
+            </button>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table
+                class="dashboard-table"
+                id="superStudentsTable"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>Student ID</th>
+
+                        <th>Student</th>
+
+                        <th>Faculty</th>
+
+                        <th>Department</th>
+
+                        <th>Level</th>
+
+                        <th>Academic Year</th>
+
+                        <th>Semester</th>
+
+                        <th>Amount Due</th>
+
+                        <th>Amount Paid</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Computing"
+                        data-department="Computer Science"
+                        data-level="300"
+                        data-status="Paid"
+                    >
+
+                        <td>CS2026001</td>
+                        <td>Michael Owusu</td>
+                        <td>Faculty of Computing</td>
+                        <td>Computer Science</td>
+                        <td>300</td>
+                        <td>2026/2027</td>
+                        <td>First Semester</td>
+                        <td>GH₵100.00</td>
+                        <td>GH₵100.00</td>
+
+                        <td>
+                            <span class="status-paid">
+                                Paid
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'dues_student_detail' 'CS2026001' %}">
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Computing"
+                        data-department="Information Technology"
+                        data-level="100"
+                        data-status="Paid"
+                    >
+
+                        <td>IT2026072</td>
+                        <td>Priscilla Asare</td>
+                        <td>Faculty of Computing</td>
+                        <td>Information Technology</td>
+                        <td>100</td>
+                        <td>2026/2027</td>
+                        <td>First Semester</td>
+                        <td>GH₵150.00</td>
+                        <td>GH₵150.00</td>
+
+                        <td>
+                            <span class="status-paid">
+                                Paid
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'dues_student_detail' 'IT2026072' %}">
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Business"
+                        data-department="Accounting"
+                        data-level="200"
+                        data-status="Paid"
+                    >
+
+                        <td>BA2026014</td>
+                        <td>Akosua Mensah</td>
+                        <td>Faculty of Business</td>
+                        <td>Accounting</td>
+                        <td>200</td>
+                        <td>2026/2027</td>
+                        <td>First Semester</td>
+                        <td>GH₵100.00</td>
+                        <td>GH₵100.00</td>
+
+                        <td>
+                            <span class="status-paid">
+                                Paid
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'dues_student_detail' 'BA2026014' %}">
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Engineering"
+                        data-department="Mechanical Engineering"
+                        data-level="400"
+                        data-status="Pending"
+                    >
+
+                        <td>EN2026042</td>
+                        <td>Kwame Asante</td>
+                        <td>Faculty of Engineering</td>
+                        <td>Mechanical Engineering</td>
+                        <td>400</td>
+                        <td>2026/2027</td>
+                        <td>First Semester</td>
+                        <td>GH₵100.00</td>
+                        <td>GH₵0.00</td>
+
+                        <td>
+                            <span class="status-pending">
+                                Pending
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'dues_student_detail' 'EN2026042' %}">
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Science"
+                        data-department="Biological Science"
+                        data-level="100"
+                        data-status="Failed"
+                    >
+
+                        <td>SC2026028</td>
+                        <td>Abena Boateng</td>
+                        <td>Faculty of Science</td>
+                        <td>Biological Science</td>
+                        <td>100</td>
+                        <td>2026/2027</td>
+                        <td>First Semester</td>
+                        <td>GH₵110.00</td>
+                        <td>GH₵0.00</td>
+
+                        <td>
+                            <span class="status-failed">
+                                Failed
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'dues_student_detail' 'SC2026028' %}">
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"
+></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const searchInput =
+            document.getElementById(
+                "superStudentSearch"
+            );
+
+
+        const academicYearFilter =
+            document.getElementById(
+                "superStudentAcademicYear"
+            );
+
+
+        const semesterFilter =
+            document.getElementById(
+                "superStudentSemester"
+            );
+
+
+        const facultyFilter =
+            document.getElementById(
+                "superStudentFaculty"
+            );
+
+
+        const departmentFilter =
+            document.getElementById(
+                "superStudentDepartment"
+            );
+
+
+        const levelFilter =
+            document.getElementById(
+                "superStudentLevel"
+            );
+
+
+        const statusFilter =
+            document.getElementById(
+                "superStudentStatus"
+            );
+
+
+        const resultText =
+            document.getElementById(
+                "superStudentResultText"
+            );
+
+
+        const table =
+            document.getElementById(
+                "superStudentsTable"
+            );
+
+
+        const exportButton =
+            document.getElementById(
+                "exportSuperStudentsBtn"
+            );
+
+
+        const rows = Array.from(
+            table.querySelectorAll(
+                "tbody tr"
+            )
+        );
+
+
+
+        /* =====================================================
+           FILTER
+        ====================================================== */
+
+        function filterStudents() {
+
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const academicYear =
+                academicYearFilter.value;
+
+
+            const semester =
+                semesterFilter.value;
+
+
+            const faculty =
+                facultyFilter.value;
+
+
+            const department =
+                departmentFilter.value;
+
+
+            const level =
+                levelFilter.value;
+
+
+            const status =
+                statusFilter.value;
+
+
+            let visibleCount = 0;
+
+
+
+            rows.forEach(
+                function (row) {
+
+
+                    const studentId =
+                        row.cells[0]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    const studentName =
+                        row.cells[1]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+
+
+                    const matchesSearch =
+                        !search ||
+                        studentId.includes(search) ||
+                        studentName.includes(search);
+
+
+
+                    const matchesAcademicYear =
+                        !academicYear ||
+                        row.dataset.academicYear === academicYear;
+
+
+
+                    const matchesSemester =
+                        !semester ||
+                        row.dataset.semester === semester;
+
+
+
+                    const matchesFaculty =
+                        !faculty ||
+                        row.dataset.faculty === faculty;
+
+
+
+                    const matchesDepartment =
+                        !department ||
+                        row.dataset.department === department;
+
+
+
+                    const matchesLevel =
+                        !level ||
+                        row.dataset.level === level;
+
+
+
+                    const matchesStatus =
+                        !status ||
+                        row.dataset.status === status;
+
+
+
+                    const showRow =
+                        matchesSearch &&
+                        matchesAcademicYear &&
+                        matchesSemester &&
+                        matchesFaculty &&
+                        matchesDepartment &&
+                        matchesLevel &&
+                        matchesStatus;
+
+
+
+                    row.style.display =
+                        showRow ? "" : "none";
+
+
+                    if (showRow) {
+                        visibleCount++;
+                    }
+
+                }
+            );
+
+
+            resultText.textContent =
+                visibleCount +
+                " student" +
+                (visibleCount === 1 ? "" : "s") +
+                " found.";
+
+        }
+
+
+
+        /* FILTER EVENTS */
+
+        searchInput.addEventListener(
+            "input",
+            filterStudents
+        );
+
+
+        academicYearFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        semesterFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        facultyFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        departmentFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        levelFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+
+        /* =====================================================
+           EXPORT FILTERED STUDENTS
+        ====================================================== */
+
+        exportButton.addEventListener(
+            "click",
+            function () {
+
+
+                const visibleRows =
+                    rows.filter(
+                        function (row) {
+
+                            return (
+                                row.style.display !== "none"
+                            );
+
+                        }
+                    );
+
+
+                if (visibleRows.length === 0) {
+
+                    alert(
+                        "There are no student records to export."
+                    );
+
+                    return;
+
+                }
+
+
+
+                /*
+                    Remove Action column.
+                */
+
+                const headers =
+                    Array.from(
+                        table.querySelectorAll(
+                            "thead th"
+                        )
+                    )
+                    .slice(0, -1)
+                    .map(
+                        function (header) {
+
+                            return header
+                                .textContent
+                                .trim();
+
+                        }
+                    );
+
+
+
+                const studentData =
+                    visibleRows.map(
+                        function (row) {
+
+                            return Array.from(
+                                row.cells
+                            )
+                            .slice(0, -1)
+                            .map(
+                                function (cell) {
+
+                                    return cell
+                                        .textContent
+                                        .trim();
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+
+                /* STUDENT WORKSHEET */
+
+                const studentWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        [
+                            headers,
+                            ...studentData
+                        ]
+                    );
+
+
+                studentWorksheet["!cols"] = [
+
+                    { wch: 16 },
+                    { wch: 24 },
+                    { wch: 28 },
+                    { wch: 28 },
+                    { wch: 10 },
+                    { wch: 16 },
+                    { wch: 20 },
+                    { wch: 16 },
+                    { wch: 16 },
+                    { wch: 12 }
+
+                ];
+
+
+
+                /* REPORT INFO */
+
+                const infoData = [
+
+                    [
+                        "VoteAfric Institution Student Report"
+                    ],
+
+                    [],
+
+                    [
+                        "Academic Year",
+                        academicYearFilter.value
+                        || "All Academic Years"
+                    ],
+
+                    [
+                        "Semester",
+                        semesterFilter.value
+                        || "All Semesters"
+                    ],
+
+                    [
+                        "Faculty",
+                        facultyFilter.value
+                        || "All Faculties"
+                    ],
+
+                    [
+                        "Department",
+                        departmentFilter.value
+                        || "All Departments"
+                    ],
+
+                    [
+                        "Level",
+                        levelFilter.value
+                            ? "Level " + levelFilter.value
+                            : "All Levels"
+                    ],
+
+                    [
+                        "Status",
+                        statusFilter.value
+                        || "All Status"
+                    ],
+
+                    [
+                        "Records Exported",
+                        visibleRows.length
+                    ]
+
+                ];
+
+
+
+                const infoWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        infoData
+                    );
+
+
+                infoWorksheet["!cols"] = [
+
+                    { wch: 22 },
+                    { wch: 32 }
+
+                ];
+
+
+
+                /* WORKBOOK */
+
+                const workbook =
+                    XLSX.utils.book_new();
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    studentWorksheet,
+                    "Students"
+                );
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    infoWorksheet,
+                    "Report Info"
+                );
+
+
+                XLSX.writeFile(
+                    workbook,
+                    "VoteAfric_All_Students.xlsx"
+                );
+
+            }
+        );
+
+
+
+        /* INITIAL */
+
+        filterStudents();
+
+    }
+);
+
+</script>
+
+{% endblock %}

@@ -162,6 +162,39 @@
   .lo-btn-fill:hover { background: #4A0E8F; }
   .lo-btn-out { background: #fff; color: #5E17A8; border: 1.5px solid #5E17A8; }
   .lo-btn-out:hover { background: #f0e8ff; }
+
+/* Excel export */
+.np-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.np-section-head .np-section-label {
+    margin-bottom: 0;
+}
+
+.np-export-btn {
+    background: #5E17A8;
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    padding: 9px 15px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.np-export-btn:hover {
+    background: #4A0E8F;
+}
+
+
 </style>
 
 <div class="main">
@@ -185,11 +218,26 @@
     </div>
   </div>
 
-  <p class="np-section-label">Rankings</p>
+<div class="np-section-head">
+
+    <p class="np-section-label">
+        Rankings
+    </p>
+
+    <button
+        type="button"
+        class="np-export-btn"
+        id="exportNomineesExcel"
+    >
+        <i class="fa-solid fa-file-excel"></i>
+        Export Excel
+    </button>
+
+</div>
 
   <!-- Table -->
   <div class="np-card">
-    <table>
+<table id="nomineesTable">
       <colgroup>
         <col /><col /><col /><col /><col />
       </colgroup>
@@ -255,5 +303,223 @@
     </div>
   </div>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const exportButton =
+        document.getElementById("exportNomineesExcel");
+
+    const table =
+        document.getElementById("nomineesTable");
+
+
+    if (!exportButton || !table) {
+
+        console.error(
+            "Export button or nominees table was not found."
+        );
+
+        return;
+    }
+
+
+    exportButton.addEventListener("click", function () {
+
+        if (typeof XLSX === "undefined") {
+
+            alert(
+                "Excel export library did not load. Please refresh the page and try again."
+            );
+
+            return;
+        }
+
+
+        const rows =
+            Array.from(
+                table.querySelectorAll("tbody tr")
+            );
+
+
+        if (rows.length === 0) {
+
+            alert(
+                "There are no nominees to export."
+            );
+
+            return;
+        }
+
+
+        const excelData = [
+
+            [
+                "Rank",
+                "Name",
+                "Category",
+                "Image",
+                "Votes",
+                "Code"
+            ]
+
+        ];
+
+
+        rows.forEach(function (row, index) {
+
+            const nameElement =
+                row.querySelector(".np-name");
+
+            let nomineeName = "";
+
+
+            if (nameElement) {
+
+                const clone =
+                    nameElement.cloneNode(true);
+
+                const rankBadge =
+                    clone.querySelector(".rank-badge");
+
+
+                if (rankBadge) {
+                    rankBadge.remove();
+                }
+
+
+                nomineeName =
+                    clone.textContent.trim();
+
+            }
+
+
+            const category =
+                row.cells[1]
+                    .textContent
+                    .trim();
+
+
+            const imageLink =
+                row.querySelector(".np-img-link");
+
+
+            const imageUrl =
+                imageLink
+                    ? imageLink.href
+                    : "";
+
+
+            const voteElement =
+                row.querySelector(".vote-num");
+
+
+            const votes =
+                voteElement
+                    ? Number(
+                        voteElement
+                            .textContent
+                            .trim()
+                    ) || 0
+                    : 0;
+
+
+            const codeElement =
+                row.querySelector(".np-code");
+
+
+            const code =
+                codeElement
+                    ? codeElement
+                        .textContent
+                        .trim()
+                    : "";
+
+
+            excelData.push([
+
+                index + 1,
+                nomineeName,
+                category,
+                imageUrl,
+                votes,
+                code
+
+            ]);
+
+        });
+
+
+        const worksheet =
+            XLSX.utils.aoa_to_sheet(
+                excelData
+            );
+
+
+        worksheet["!cols"] = [
+
+            { wch: 8 },
+            { wch: 30 },
+            { wch: 30 },
+            { wch: 55 },
+            { wch: 12 },
+            { wch: 18 }
+
+        ];
+
+
+        const workbook =
+            XLSX.utils.book_new();
+
+
+        XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            "Nominee Rankings"
+        );
+
+
+        let categoryName =
+            "{{ category|escapejs }}";
+
+
+        categoryName =
+            categoryName
+                .replace(
+                    /[^a-zA-Z0-9_-]+/g,
+                    "_"
+                )
+                .replace(
+                    /^_+|_+$/g,
+                    ""
+                );
+
+
+        if (!categoryName) {
+
+            categoryName =
+                "VoteAfric";
+
+        }
+
+
+        XLSX.writeFile(
+            workbook,
+            categoryName +
+            "_Nominee_Rankings.xlsx"
+        );
+
+    });
+
+});
+
+</script>
+
+
+
 
 {% endblock %}

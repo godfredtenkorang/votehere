@@ -1,0 +1,172 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="heading">
+
+        <div class="heading-left">
+            <h1>Departments</h1>
+            <p>View dues collections across all departments.</p>
+        </div>
+
+    </div>
+
+
+    <!-- FILTER -->
+    <div class="dashboard-filter">
+
+        <input
+            type="text"
+            class="payment-search"
+            placeholder="Search department..."
+        >
+
+        <select>
+            <option>All Faculties</option>
+            <option>Faculty of Computing</option>
+            <option>Faculty of Business</option>
+            <option>Faculty of Engineering</option>
+            <option>Faculty of Science</option>
+        </select>
+
+    </div>
+
+
+    <!-- DEPARTMENT TABLE -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>All Departments</h2>
+                <p>Department dues collection summary.</p>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Faculty</th>
+                        <th>Total Collected</th>
+                        <th>Faculty Share</th>
+                        <th>Department Share</th>
+                        <th>Students Paid</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    <!-- SAMPLE DATA - Backend will replace later -->
+
+                    <tr>
+                        <td>Computer Science</td>
+                        <td>Faculty of Computing</td>
+                        <td>GH₵ 8,500.00</td>
+                        <td>GH₵ 4,250.00</td>
+                        <td>GH₵ 4,250.00</td>
+                        <td>85</td>
+
+                        <td>
+                            <a href="{% url 'dues_department_detail' 'CS' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Information Technology</td>
+                        <td>Faculty of Computing</td>
+                        <td>GH₵ 6,200.00</td>
+                        <td>GH₵ 3,100.00</td>
+                        <td>GH₵ 3,100.00</td>
+                        <td>62</td>
+
+                        <td>
+                            <a href="{% url 'dues_department_detail' 'IT' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Accounting</td>
+                        <td>Faculty of Business</td>
+                        <td>GH₵ 7,400.00</td>
+                        <td>GH₵ 3,700.00</td>
+                        <td>GH₵ 3,700.00</td>
+                        <td>74</td>
+
+                        <td>
+                            <a href="{% url 'dues_department_detail' 'ACC' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Mechanical Engineering</td>
+                        <td>Faculty of Engineering</td>
+                        <td>GH₵ 9,100.00</td>
+                        <td>GH₵ 4,550.00</td>
+                        <td>GH₵ 4,550.00</td>
+                        <td>91</td>
+
+                        <td>
+                            <a href="{% url 'dues_department_detail' 'ME' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Biological Science</td>
+                        <td>Faculty of Science</td>
+                        <td>GH₵ 5,800.00</td>
+                        <td>GH₵ 2,900.00</td>
+                        <td>GH₵ 2,900.00</td>
+                        <td>58</td>
+
+                        <td>
+                            <a href="{% url 'dues_department_detail' 'BIO' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

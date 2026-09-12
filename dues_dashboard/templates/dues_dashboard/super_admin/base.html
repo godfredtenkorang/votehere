@@ -1,0 +1,529 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="IE=edge"
+    >
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+
+    <link
+        rel="icon"
+        href="{% static 'vote/img/our-logo.jpg' %}"
+        type="image/jpeg"
+    >
+
+
+    <title>
+        {% block title %}
+            VoteAfric Dues Dashboard
+        {% endblock %}
+    </title>
+
+
+    <!-- EXISTING VOTEAFRIC CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/admin.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/darkmode.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/admin2.css' %}"
+    >
+
+
+    <!-- DUES DASHBOARD CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/dues_dash.css' %}"
+    >
+
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    >
+
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     SHARED BY ALL ADMIN TYPES
+========================================================= -->
+
+<header>
+
+    <div class="logo-and-date-greetings">
+
+        <div class="logosec">
+
+            <div class="logo">
+
+                <a href="{% url 'index' %}">
+
+                    <img
+                        src="{% static 'vote/img/voteafric-logo.png' %}"
+                        alt="VoteAfric"
+                    >
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="message">
+
+
+        <!-- SIDEBAR TOGGLE -->
+
+        <img
+            src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+            class="icn menuicn"
+            id="menuicn"
+            alt="menu"
+        >
+
+
+
+        <!-- DARK MODE -->
+
+        <label
+            class="dark-toggle"
+            title="Toggle dark mode"
+        >
+
+            <input
+                type="checkbox"
+                id="darkModeToggle"
+            >
+
+            <span class="dark-toggle-track">
+
+                <span class="dark-toggle-thumb">
+
+                    <i
+                        class="fa-solid fa-sun dark-toggle-icon sun"
+                    ></i>
+
+                    <i
+                        class="fa-solid fa-moon dark-toggle-icon moon"
+                    ></i>
+
+                </span>
+
+            </span>
+
+        </label>
+
+
+
+        <!-- SETTINGS
+             Backend can later show only to Super Admin -->
+
+        <a
+            href="{% url 'dues_settings' %}"
+            class="fullscreen-btn"
+            title="Settings"
+        >
+
+            <i class="fa-solid fa-gear"></i>
+
+        </a>
+
+
+
+        <!-- FULLSCREEN -->
+
+        <button
+            type="button"
+            class="fullscreen-btn"
+            id="fullscreenBtn"
+            title="Toggle fullscreen"
+        >
+
+            <i
+                class="fa-solid fa-expand"
+                id="fullscreenIcon"
+            ></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN DASHBOARD CONTAINER
+========================================================= -->
+
+<div class="main-container">
+
+
+    <!-- =====================================================
+         SIMPLE SHARED SIDEBAR
+
+         SAME LINKS FOR:
+         - SUPER ADMIN
+         - FACULTY ADMIN
+         - DEPARTMENT ADMIN
+
+         Backend will later control the data each role sees.
+    ====================================================== -->
+
+    <div class="navcontainer sidebar">
+
+        <nav class="nav">
+
+            <div class="nav-upper-options">
+
+
+                <!-- DASHBOARD -->
+
+                <a href="{% url 'dashboard' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-gauge-high"></i>
+
+                            Dashboard
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- PAYMENTS -->
+
+                <a href="{% url 'dues_payments' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+
+                            Payments
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- STUDENTS -->
+
+                <a href="{% url 'dues_students' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-user-graduate"></i>
+
+                            Students
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- REPORTS -->
+
+                <a href="{% url 'dues_reports' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-chart-column"></i>
+
+                            Reports
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- LOGOUT -->
+
+                <div
+                    class="nav-option option1 button logout-btn"
+                >
+
+                    <h3>
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+        </nav>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PAGE CONTENT
+
+         dashboard.html
+         payments.html
+         students.html
+         reports.html
+         settings.html
+         etc.
+    ====================================================== -->
+
+    {% block content %}
+
+    {% endblock %}
+
+
+</div>
+
+
+
+<!-- =========================================================
+     LOGOUT POPUP
+     SHARED ACROSS DASHBOARD
+========================================================= -->
+
+<div class="logout-pop">
+
+    <div class="logout">
+
+        <p>
+            Are you sure you want to log out?
+        </p>
+
+
+        <div class="log-button">
+
+            <a href="{% url 'logout' %}">
+
+                <button type="button">
+                    Log Out
+                </button>
+
+            </a>
+
+
+            <p>Or</p>
+
+
+            <button
+                type="button"
+                class="DontLogout"
+            >
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     EXISTING VOTEAFRIC SCRIPTS
+========================================================= -->
+
+<script
+    defer
+    src="{% static 'vote/adminScript.js' %}"
+></script>
+
+<script
+    defer
+    src="{% static 'vote/adminScript2.js' %}"
+></script>
+
+
+
+<!-- =========================================================
+     FULLSCREEN SCRIPT
+========================================================= -->
+
+<script>
+
+    const fullscreenBtn =
+        document.getElementById("fullscreenBtn");
+
+    const fullscreenIcon =
+        document.getElementById("fullscreenIcon");
+
+
+    function enterFullscreen() {
+
+        document.documentElement
+            .requestFullscreen()
+            .catch(() => {});
+
+    }
+
+
+    function exitFullscreen() {
+
+        if (document.fullscreenElement) {
+
+            document.exitFullscreen();
+
+        }
+
+    }
+
+
+    function updateFullscreenIcon(isFullscreen) {
+
+        if (isFullscreen) {
+
+            fullscreenIcon.classList.replace(
+                "fa-expand",
+                "fa-compress"
+            );
+
+            fullscreenBtn.title =
+                "Exit fullscreen";
+
+        }
+
+        else {
+
+            fullscreenIcon.classList.replace(
+                "fa-compress",
+                "fa-expand"
+            );
+
+            fullscreenBtn.title =
+                "Enter fullscreen";
+
+        }
+
+    }
+
+
+    fullscreenBtn.addEventListener(
+        "click",
+        function () {
+
+            if (!document.fullscreenElement) {
+
+                enterFullscreen();
+
+                localStorage.setItem(
+                    "isFullscreen",
+                    "true"
+                );
+
+            }
+
+            else {
+
+                exitFullscreen();
+
+                localStorage.setItem(
+                    "isFullscreen",
+                    "false"
+                );
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "fullscreenchange",
+        function () {
+
+            const isFullscreen =
+                !!document.fullscreenElement;
+
+
+            updateFullscreenIcon(
+                isFullscreen
+            );
+
+
+            if (!isFullscreen) {
+
+                localStorage.setItem(
+                    "isFullscreen",
+                    "false"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+
+<!-- =========================================================
+     PAGE-SPECIFIC JAVASCRIPT
+========================================================= -->
+
+{% block extra_js %}
+
+{% endblock %}
+
+
+</body>
+
+</html>

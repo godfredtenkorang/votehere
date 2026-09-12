@@ -1,0 +1,1223 @@
+{% extends 'dues_dashboard/faculty_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Faculty Reports | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Reports</h1>
+
+            <p>
+                View dues collection reports for Faculty of Computing.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="dashboard-filter">
+
+
+        <select id="facultyReportAcademicYear">
+
+            <option value="2026/2027" selected>
+                2026/2027
+            </option>
+
+        </select>
+
+
+        <select id="facultyReportSemester">
+
+            <option value="">
+                All Semesters
+            </option>
+
+            <option value="First Semester">
+                First Semester
+            </option>
+
+            <option value="Second Semester">
+                Second Semester
+            </option>
+
+        </select>
+
+
+        <select id="facultyReportDepartment">
+
+            <option value="">
+                All Departments
+            </option>
+
+            <option value="Computer Science">
+                Computer Science
+            </option>
+
+            <option value="Information Technology">
+                Information Technology
+            </option>
+
+            <option value="Cyber Security">
+                Cyber Security
+            </option>
+
+            <option value="Software Engineering">
+                Software Engineering
+            </option>
+
+        </select>
+
+
+        <select id="facultyReportStatus">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="Paid">
+                Paid
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="Failed">
+                Failed
+            </option>
+
+        </select>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="dues-summary">
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+
+                <p>Total Collected</p>
+
+                <h2 id="facultyReportTotal">
+                    GH₵24,500.00
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+
+                <p>Faculty Share</p>
+
+                <h2 id="facultyReportFacultyShare">
+                    GH₵12,250.00
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <div>
+
+                <p>Department Share</p>
+
+                <h2 id="facultyReportDepartmentShare">
+                    GH₵12,250.00
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+
+                <p>Students Paid</p>
+
+                <h2 id="facultyReportStudentsPaid">
+                    245
+                </h2>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DEPARTMENT REPORT
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Department Collection Report</h2>
+
+                <p id="facultyReportResultText">
+                    Collection summary for departments under this faculty.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="table-action-btn"
+                id="exportFacultyReportBtn"
+            >
+
+                <i class="fa-solid fa-file-excel"></i>
+
+                Export Excel
+
+            </button>
+
+        </div>
+
+
+
+        <div class="table-responsive">
+
+            <table
+                class="dashboard-table"
+                id="facultyReportTable"
+            >
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Department</th>
+
+                        <th>Students Paid</th>
+
+                        <th>Total Collected</th>
+
+                        <th>Faculty Share</th>
+
+                        <th>Department Share</th>
+
+                        <th>Pending</th>
+
+                        <th>Failed</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <!-- COMPUTER SCIENCE -->
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-department="Computer Science"
+                        data-paid="85"
+                        data-pending="3"
+                        data-failed="1"
+                    >
+
+                        <td>
+                            Computer Science
+                        </td>
+
+                        <td>
+                            85
+                        </td>
+
+                        <td>
+                            GH₵8,500.00
+                        </td>
+
+                        <td>
+                            GH₵4,250.00
+                        </td>
+
+                        <td>
+                            GH₵4,250.00
+                        </td>
+
+                        <td>
+                            3
+                        </td>
+
+                        <td>
+                            1
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- INFORMATION TECHNOLOGY -->
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-department="Information Technology"
+                        data-paid="62"
+                        data-pending="2"
+                        data-failed="1"
+                    >
+
+                        <td>
+                            Information Technology
+                        </td>
+
+                        <td>
+                            62
+                        </td>
+
+                        <td>
+                            GH₵6,200.00
+                        </td>
+
+                        <td>
+                            GH₵3,100.00
+                        </td>
+
+                        <td>
+                            GH₵3,100.00
+                        </td>
+
+                        <td>
+                            2
+                        </td>
+
+                        <td>
+                            1
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- CYBER SECURITY -->
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-department="Cyber Security"
+                        data-paid="48"
+                        data-pending="4"
+                        data-failed="1"
+                    >
+
+                        <td>
+                            Cyber Security
+                        </td>
+
+                        <td>
+                            48
+                        </td>
+
+                        <td>
+                            GH₵4,800.00
+                        </td>
+
+                        <td>
+                            GH₵2,400.00
+                        </td>
+
+                        <td>
+                            GH₵2,400.00
+                        </td>
+
+                        <td>
+                            4
+                        </td>
+
+                        <td>
+                            1
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- SOFTWARE ENGINEERING -->
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-department="Software Engineering"
+                        data-paid="50"
+                        data-pending="3"
+                        data-failed="1"
+                    >
+
+                        <td>
+                            Software Engineering
+                        </td>
+
+                        <td>
+                            50
+                        </td>
+
+                        <td>
+                            GH₵5,000.00
+                        </td>
+
+                        <td>
+                            GH₵2,500.00
+                        </td>
+
+                        <td>
+                            GH₵2,500.00
+                        </td>
+
+                        <td>
+                            3
+                        </td>
+
+                        <td>
+                            1
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PAYMENT STATUS SUMMARY
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Payment Status</h2>
+
+                <p>
+                    Status totals for the current report selection.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Status</th>
+
+                        <th>Students</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td id="facultyPaidCount">
+                            245
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        </td>
+
+                        <td id="facultyPendingCount">
+                            12
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+
+                            <span class="status-failed">
+                                Failed
+                            </span>
+
+                        </td>
+
+                        <td id="facultyFailedCount">
+                            4
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"
+></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const academicYearFilter =
+            document.getElementById(
+                "facultyReportAcademicYear"
+            );
+
+
+        const semesterFilter =
+            document.getElementById(
+                "facultyReportSemester"
+            );
+
+
+        const departmentFilter =
+            document.getElementById(
+                "facultyReportDepartment"
+            );
+
+
+        const statusFilter =
+            document.getElementById(
+                "facultyReportStatus"
+            );
+
+
+        const table =
+            document.getElementById(
+                "facultyReportTable"
+            );
+
+
+        const exportButton =
+            document.getElementById(
+                "exportFacultyReportBtn"
+            );
+
+
+        const resultText =
+            document.getElementById(
+                "facultyReportResultText"
+            );
+
+
+        const totalElement =
+            document.getElementById(
+                "facultyReportTotal"
+            );
+
+
+        const facultyShareElement =
+            document.getElementById(
+                "facultyReportFacultyShare"
+            );
+
+
+        const departmentShareElement =
+            document.getElementById(
+                "facultyReportDepartmentShare"
+            );
+
+
+        const studentsPaidElement =
+            document.getElementById(
+                "facultyReportStudentsPaid"
+            );
+
+
+        const paidCountElement =
+            document.getElementById(
+                "facultyPaidCount"
+            );
+
+
+        const pendingCountElement =
+            document.getElementById(
+                "facultyPendingCount"
+            );
+
+
+        const failedCountElement =
+            document.getElementById(
+                "facultyFailedCount"
+            );
+
+
+        const rows = Array.from(
+            table.querySelectorAll(
+                "tbody tr"
+            )
+        );
+
+
+
+        /* =====================================================
+           MONEY HELPERS
+        ====================================================== */
+
+        function moneyToNumber(value) {
+
+            return Number(
+                value
+                    .replace("GH₵", "")
+                    .replace(/,/g, "")
+                    .trim()
+            ) || 0;
+
+        }
+
+
+        function formatMoney(value) {
+
+            return "GH₵" +
+                value.toLocaleString(
+                    "en-GH",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+
+        /* =====================================================
+           FILTER + UPDATE SUMMARY
+        ====================================================== */
+
+        function filterReport() {
+
+
+            const academicYear =
+                academicYearFilter.value;
+
+
+            const semester =
+                semesterFilter.value;
+
+
+            const department =
+                departmentFilter.value;
+
+
+            const status =
+                statusFilter.value;
+
+
+            let visibleCount = 0;
+
+            let totalCollected = 0;
+
+            let facultyShare = 0;
+
+            let departmentShare = 0;
+
+            let studentsPaid = 0;
+
+            let pending = 0;
+
+            let failed = 0;
+
+
+
+            rows.forEach(
+                function (row) {
+
+
+                    const paidCount =
+                        Number(
+                            row.dataset.paid
+                        ) || 0;
+
+
+                    const pendingCount =
+                        Number(
+                            row.dataset.pending
+                        ) || 0;
+
+
+                    const failedCount =
+                        Number(
+                            row.dataset.failed
+                        ) || 0;
+
+
+
+                    const matchesAcademicYear =
+                        !academicYear ||
+                        row.dataset.academicYear === academicYear;
+
+
+
+                    const matchesSemester =
+                        !semester ||
+                        row.dataset.semester === semester;
+
+
+
+                    const matchesDepartment =
+                        !department ||
+                        row.dataset.department === department;
+
+
+
+                    let matchesStatus = true;
+
+
+                    if (status === "Paid") {
+
+                        matchesStatus =
+                            paidCount > 0;
+
+                    }
+
+
+                    if (status === "Pending") {
+
+                        matchesStatus =
+                            pendingCount > 0;
+
+                    }
+
+
+                    if (status === "Failed") {
+
+                        matchesStatus =
+                            failedCount > 0;
+
+                    }
+
+
+
+                    const showRow =
+                        matchesAcademicYear &&
+                        matchesSemester &&
+                        matchesDepartment &&
+                        matchesStatus;
+
+
+
+                    row.style.display =
+                        showRow ? "" : "none";
+
+
+
+                    if (showRow) {
+
+
+                        visibleCount++;
+
+
+                        studentsPaid +=
+                            Number(
+                                row.cells[1]
+                                    .textContent
+                                    .trim()
+                            ) || 0;
+
+
+
+                        totalCollected +=
+                            moneyToNumber(
+                                row.cells[2]
+                                    .textContent
+                            );
+
+
+
+                        facultyShare +=
+                            moneyToNumber(
+                                row.cells[3]
+                                    .textContent
+                            );
+
+
+
+                        departmentShare +=
+                            moneyToNumber(
+                                row.cells[4]
+                                    .textContent
+                            );
+
+
+
+                        pending +=
+                            Number(
+                                row.cells[5]
+                                    .textContent
+                                    .trim()
+                            ) || 0;
+
+
+
+                        failed +=
+                            Number(
+                                row.cells[6]
+                                    .textContent
+                                    .trim()
+                            ) || 0;
+
+
+                    }
+
+                }
+            );
+
+
+
+            /* SUMMARY CARDS */
+
+            totalElement.textContent =
+                formatMoney(
+                    totalCollected
+                );
+
+
+            facultyShareElement.textContent =
+                formatMoney(
+                    facultyShare
+                );
+
+
+            departmentShareElement.textContent =
+                formatMoney(
+                    departmentShare
+                );
+
+
+            studentsPaidElement.textContent =
+                studentsPaid;
+
+
+
+            /* STATUS SUMMARY */
+
+            paidCountElement.textContent =
+                studentsPaid;
+
+
+            pendingCountElement.textContent =
+                pending;
+
+
+            failedCountElement.textContent =
+                failed;
+
+
+
+            /* RESULT COUNT */
+
+            resultText.textContent =
+                visibleCount +
+                " department" +
+                (visibleCount === 1 ? "" : "s") +
+                " found.";
+
+        }
+
+
+
+        /* =====================================================
+           FILTER EVENTS
+        ====================================================== */
+
+        academicYearFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        semesterFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        departmentFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+
+        /* =====================================================
+           EXCEL EXPORT
+        ====================================================== */
+
+        exportButton.addEventListener(
+            "click",
+            function () {
+
+
+                const visibleRows =
+                    rows.filter(
+                        function (row) {
+
+                            return (
+                                row.style.display !== "none"
+                            );
+
+                        }
+                    );
+
+
+                if (visibleRows.length === 0) {
+
+                    alert(
+                        "There are no report records to export."
+                    );
+
+                    return;
+
+                }
+
+
+
+                /* TABLE HEADERS */
+
+                const headers =
+                    Array.from(
+                        table.querySelectorAll(
+                            "thead th"
+                        )
+                    ).map(
+                        function (header) {
+
+                            return header
+                                .textContent
+                                .trim();
+
+                        }
+                    );
+
+
+
+                /* VISIBLE DATA */
+
+                const reportData =
+                    visibleRows.map(
+                        function (row) {
+
+                            return Array.from(
+                                row.cells
+                            ).map(
+                                function (cell) {
+
+                                    return cell
+                                        .textContent
+                                        .trim();
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+
+                /* REPORT WORKSHEET */
+
+                const reportWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        [
+                            headers,
+                            ...reportData
+                        ]
+                    );
+
+
+                reportWorksheet["!cols"] = [
+
+                    { wch: 28 },
+                    { wch: 16 },
+                    { wch: 18 },
+                    { wch: 18 },
+                    { wch: 20 },
+                    { wch: 12 },
+                    { wch: 12 }
+
+                ];
+
+
+
+                /* REPORT INFORMATION */
+
+                const infoData = [
+
+                    [
+                        "VoteAfric Faculty Dues Report"
+                    ],
+
+                    [],
+
+                    [
+                        "Faculty",
+                        "Faculty of Computing"
+                    ],
+
+                    [
+                        "Academic Year",
+                        academicYearFilter.value
+                        || "All Academic Years"
+                    ],
+
+                    [
+                        "Semester",
+                        semesterFilter.value
+                        || "All Semesters"
+                    ],
+
+                    [
+                        "Department",
+                        departmentFilter.value
+                        || "All Departments"
+                    ],
+
+                    [
+                        "Status",
+                        statusFilter.value
+                        || "All Status"
+                    ],
+
+                    [],
+
+                    [
+                        "Total Collected",
+                        totalElement
+                            .textContent
+                            .trim()
+                    ],
+
+                    [
+                        "Faculty Share",
+                        facultyShareElement
+                            .textContent
+                            .trim()
+                    ],
+
+                    [
+                        "Department Share",
+                        departmentShareElement
+                            .textContent
+                            .trim()
+                    ],
+
+                    [
+                        "Students Paid",
+                        studentsPaidElement
+                            .textContent
+                            .trim()
+                    ],
+
+                    [
+                        "Pending",
+                        pendingCountElement
+                            .textContent
+                            .trim()
+                    ],
+
+                    [
+                        "Failed",
+                        failedCountElement
+                            .textContent
+                            .trim()
+                    ],
+
+                    [
+                        "Departments Exported",
+                        visibleRows.length
+                    ]
+
+                ];
+
+
+
+                const infoWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        infoData
+                    );
+
+
+                infoWorksheet["!cols"] = [
+
+                    { wch: 24 },
+
+                    { wch: 30 }
+
+                ];
+
+
+
+                /* =================================================
+                   WORKBOOK
+                ================================================= */
+
+                const workbook =
+                    XLSX.utils.book_new();
+
+
+
+                /*
+                    Actual collection report FIRST.
+                */
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    reportWorksheet,
+                    "Collection Report"
+                );
+
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    infoWorksheet,
+                    "Report Info"
+                );
+
+
+
+                XLSX.writeFile(
+                    workbook,
+                    "Faculty_of_Computing_Dues_Report.xlsx"
+                );
+
+            }
+        );
+
+
+
+        /* INITIAL REPORT */
+
+        filterReport();
+
+    }
+);
+
+</script>
+
+{% endblock %}

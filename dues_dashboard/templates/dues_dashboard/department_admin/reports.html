@@ -1,0 +1,1074 @@
+{% extends 'dues_dashboard/department_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Department Reports | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Reports</h1>
+
+            <p>
+                View dues collection reports for Computer Science Department.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="dashboard-filter">
+
+
+        <select id="departmentReportAcademicYear">
+
+            <option value="2026/2027" selected>
+                2026/2027
+            </option>
+
+        </select>
+
+
+        <select id="departmentReportSemester">
+
+            <option value="">
+                All Semesters
+            </option>
+
+            <option value="First Semester">
+                First Semester
+            </option>
+
+            <option value="Second Semester">
+                Second Semester
+            </option>
+
+        </select>
+
+
+        <select id="departmentReportLevel">
+
+            <option value="">
+                All Levels
+            </option>
+
+            <option value="100">
+                Level 100
+            </option>
+
+            <option value="200">
+                Level 200
+            </option>
+
+            <option value="300">
+                Level 300
+            </option>
+
+            <option value="400">
+                Level 400
+            </option>
+
+        </select>
+
+
+        <select id="departmentReportStatus">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="Paid">
+                Paid
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="Failed">
+                Failed
+            </option>
+
+        </select>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="dues-summary">
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+
+                <p>Total Collected</p>
+
+                <h2 id="departmentReportTotal">
+                    GH₵8,500.00
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+
+                <p>Faculty Share</p>
+
+                <h2 id="departmentReportFacultyShare">
+                    GH₵4,250.00
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <div>
+
+                <p>Department Share</p>
+
+                <h2 id="departmentReportDepartmentShare">
+                    GH₵4,250.00
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+
+                <p>Students Paid</p>
+
+                <h2 id="departmentReportStudentsPaid">
+                    85
+                </h2>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         COLLECTION REPORT
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Level Collection Report</h2>
+
+                <p id="departmentReportResultText">
+                    Dues collection summary by student level.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="table-action-btn"
+                id="exportDepartmentReportBtn"
+            >
+
+                <i class="fa-solid fa-file-excel"></i>
+
+                Export Excel
+
+            </button>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table
+                class="dashboard-table"
+                id="departmentReportTable"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>Level</th>
+
+                        <th>Dues Amount</th>
+
+                        <th>Students Paid</th>
+
+                        <th>Total Collected</th>
+
+                        <th>Faculty Share</th>
+
+                        <th>Department Share</th>
+
+                        <th>Pending</th>
+
+                        <th>Failed</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="100"
+                        data-paid="20"
+                        data-pending="2"
+                        data-failed="1"
+                    >
+
+                        <td>Level 100</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>20</td>
+
+                        <td>GH₵2,400.00</td>
+
+                        <td>GH₵1,200.00</td>
+
+                        <td>GH₵1,200.00</td>
+
+                        <td>2</td>
+
+                        <td>1</td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="200"
+                        data-paid="20"
+                        data-pending="1"
+                        data-failed="1"
+                    >
+
+                        <td>Level 200</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>20</td>
+
+                        <td>GH₵2,000.00</td>
+
+                        <td>GH₵1,000.00</td>
+
+                        <td>GH₵1,000.00</td>
+
+                        <td>1</td>
+
+                        <td>1</td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="300"
+                        data-paid="25"
+                        data-pending="2"
+                        data-failed="0"
+                    >
+
+                        <td>Level 300</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>25</td>
+
+                        <td>GH₵2,500.00</td>
+
+                        <td>GH₵1,250.00</td>
+
+                        <td>GH₵1,250.00</td>
+
+                        <td>2</td>
+
+                        <td>0</td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="400"
+                        data-paid="20"
+                        data-pending="1"
+                        data-failed="0"
+                    >
+
+                        <td>Level 400</td>
+
+                        <td>GH₵80.00</td>
+
+                        <td>20</td>
+
+                        <td>GH₵1,600.00</td>
+
+                        <td>GH₵800.00</td>
+
+                        <td>GH₵800.00</td>
+
+                        <td>1</td>
+
+                        <td>0</td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATUS SUMMARY
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Payment Status</h2>
+
+                <p>
+                    Status totals for the current report selection.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Status</th>
+                        <th>Students</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            <span class="status-paid">
+                                Paid
+                            </span>
+                        </td>
+
+                        <td id="departmentPaidCount">
+                            85
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <span class="status-pending">
+                                Pending
+                            </span>
+                        </td>
+
+                        <td id="departmentPendingCount">
+                            6
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            <span class="status-failed">
+                                Failed
+                            </span>
+                        </td>
+
+                        <td id="departmentFailedCount">
+                            2
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"
+></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const academicYearFilter =
+            document.getElementById(
+                "departmentReportAcademicYear"
+            );
+
+        const semesterFilter =
+            document.getElementById(
+                "departmentReportSemester"
+            );
+
+        const levelFilter =
+            document.getElementById(
+                "departmentReportLevel"
+            );
+
+        const statusFilter =
+            document.getElementById(
+                "departmentReportStatus"
+            );
+
+        const table =
+            document.getElementById(
+                "departmentReportTable"
+            );
+
+        const exportButton =
+            document.getElementById(
+                "exportDepartmentReportBtn"
+            );
+
+        const resultText =
+            document.getElementById(
+                "departmentReportResultText"
+            );
+
+
+        const totalElement =
+            document.getElementById(
+                "departmentReportTotal"
+            );
+
+        const facultyShareElement =
+            document.getElementById(
+                "departmentReportFacultyShare"
+            );
+
+        const departmentShareElement =
+            document.getElementById(
+                "departmentReportDepartmentShare"
+            );
+
+        const studentsPaidElement =
+            document.getElementById(
+                "departmentReportStudentsPaid"
+            );
+
+
+        const paidCountElement =
+            document.getElementById(
+                "departmentPaidCount"
+            );
+
+        const pendingCountElement =
+            document.getElementById(
+                "departmentPendingCount"
+            );
+
+        const failedCountElement =
+            document.getElementById(
+                "departmentFailedCount"
+            );
+
+
+        const rows = Array.from(
+            table.querySelectorAll(
+                "tbody tr"
+            )
+        );
+
+
+        /* =====================================================
+           MONEY HELPERS
+        ====================================================== */
+
+        function moneyToNumber(value) {
+
+            return Number(
+                value
+                    .replace("GH₵", "")
+                    .replace(/,/g, "")
+                    .trim()
+            ) || 0;
+
+        }
+
+
+        function formatMoney(value) {
+
+            return "GH₵" +
+                value.toLocaleString(
+                    "en-GH",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+        /* =====================================================
+           FILTER + RECALCULATE REPORT
+        ====================================================== */
+
+        function filterReport() {
+
+            const academicYear =
+                academicYearFilter.value;
+
+            const semester =
+                semesterFilter.value;
+
+            const level =
+                levelFilter.value;
+
+            const status =
+                statusFilter.value;
+
+
+            let visibleCount = 0;
+
+            let totalCollected = 0;
+
+            let facultyShare = 0;
+
+            let departmentShare = 0;
+
+            let studentsPaid = 0;
+
+            let pending = 0;
+
+            let failed = 0;
+
+
+            rows.forEach(
+                function (row) {
+
+                    const paidCount =
+                        Number(
+                            row.dataset.paid
+                        ) || 0;
+
+                    const pendingCount =
+                        Number(
+                            row.dataset.pending
+                        ) || 0;
+
+                    const failedCount =
+                        Number(
+                            row.dataset.failed
+                        ) || 0;
+
+
+                    const matchesAcademicYear =
+                        !academicYear ||
+                        row.dataset.academicYear === academicYear;
+
+
+                    const matchesSemester =
+                        !semester ||
+                        row.dataset.semester === semester;
+
+
+                    const matchesLevel =
+                        !level ||
+                        row.dataset.level === level;
+
+
+                    let matchesStatus = true;
+
+
+                    if (status === "Paid") {
+
+                        matchesStatus =
+                            paidCount > 0;
+
+                    }
+
+
+                    if (status === "Pending") {
+
+                        matchesStatus =
+                            pendingCount > 0;
+
+                    }
+
+
+                    if (status === "Failed") {
+
+                        matchesStatus =
+                            failedCount > 0;
+
+                    }
+
+
+                    const showRow =
+                        matchesAcademicYear &&
+                        matchesSemester &&
+                        matchesLevel &&
+                        matchesStatus;
+
+
+                    row.style.display =
+                        showRow ? "" : "none";
+
+
+                    if (showRow) {
+
+                        visibleCount++;
+
+
+                        studentsPaid +=
+                            Number(
+                                row.cells[2]
+                                    .textContent
+                                    .trim()
+                            ) || 0;
+
+
+                        totalCollected +=
+                            moneyToNumber(
+                                row.cells[3]
+                                    .textContent
+                            );
+
+
+                        facultyShare +=
+                            moneyToNumber(
+                                row.cells[4]
+                                    .textContent
+                            );
+
+
+                        departmentShare +=
+                            moneyToNumber(
+                                row.cells[5]
+                                    .textContent
+                            );
+
+
+                        pending +=
+                            Number(
+                                row.cells[6]
+                                    .textContent
+                                    .trim()
+                            ) || 0;
+
+
+                        failed +=
+                            Number(
+                                row.cells[7]
+                                    .textContent
+                                    .trim()
+                            ) || 0;
+
+                    }
+
+                }
+            );
+
+
+            totalElement.textContent =
+                formatMoney(
+                    totalCollected
+                );
+
+
+            facultyShareElement.textContent =
+                formatMoney(
+                    facultyShare
+                );
+
+
+            departmentShareElement.textContent =
+                formatMoney(
+                    departmentShare
+                );
+
+
+            studentsPaidElement.textContent =
+                studentsPaid;
+
+
+            paidCountElement.textContent =
+                studentsPaid;
+
+
+            pendingCountElement.textContent =
+                pending;
+
+
+            failedCountElement.textContent =
+                failed;
+
+
+            resultText.textContent =
+                visibleCount +
+                " level" +
+                (visibleCount === 1 ? "" : "s") +
+                " found.";
+
+        }
+
+
+        /* =====================================================
+           FILTER EVENTS
+        ====================================================== */
+
+        academicYearFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        semesterFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        levelFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        /* =====================================================
+           EXPORT FILTERED REPORT
+        ====================================================== */
+
+        exportButton.addEventListener(
+            "click",
+            function () {
+
+                const visibleRows =
+                    rows.filter(
+                        function (row) {
+
+                            return (
+                                row.style.display !== "none"
+                            );
+
+                        }
+                    );
+
+
+                if (visibleRows.length === 0) {
+
+                    alert(
+                        "There are no report records to export."
+                    );
+
+                    return;
+
+                }
+
+
+                const headers =
+                    Array.from(
+                        table.querySelectorAll(
+                            "thead th"
+                        )
+                    ).map(
+                        function (header) {
+
+                            return header
+                                .textContent
+                                .trim();
+
+                        }
+                    );
+
+
+                const reportData =
+                    visibleRows.map(
+                        function (row) {
+
+                            return Array.from(
+                                row.cells
+                            ).map(
+                                function (cell) {
+
+                                    return cell
+                                        .textContent
+                                        .trim();
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+                /* REPORT SHEET */
+
+                const reportWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        [
+                            headers,
+                            ...reportData
+                        ]
+                    );
+
+
+                reportWorksheet["!cols"] = [
+
+                    { wch: 14 },
+                    { wch: 16 },
+                    { wch: 16 },
+                    { wch: 18 },
+                    { wch: 18 },
+                    { wch: 20 },
+                    { wch: 12 },
+                    { wch: 12 }
+
+                ];
+
+
+                /* REPORT INFO */
+
+                const infoData = [
+
+                    [
+                        "VoteAfric Department Dues Report"
+                    ],
+
+                    [],
+
+                    [
+                        "Faculty",
+                        "Faculty of Computing"
+                    ],
+
+                    [
+                        "Department",
+                        "Computer Science"
+                    ],
+
+                    [
+                        "Academic Year",
+                        academicYearFilter.value
+                        || "All Academic Years"
+                    ],
+
+                    [
+                        "Semester",
+                        semesterFilter.value
+                        || "All Semesters"
+                    ],
+
+                    [
+                        "Level",
+                        levelFilter.value
+                            ? "Level " + levelFilter.value
+                            : "All Levels"
+                    ],
+
+                    [
+                        "Status",
+                        statusFilter.value
+                        || "All Status"
+                    ],
+
+                    [],
+
+                    [
+                        "Total Collected",
+                        totalElement.textContent.trim()
+                    ],
+
+                    [
+                        "Faculty Share",
+                        facultyShareElement.textContent.trim()
+                    ],
+
+                    [
+                        "Department Share",
+                        departmentShareElement.textContent.trim()
+                    ],
+
+                    [
+                        "Students Paid",
+                        studentsPaidElement.textContent.trim()
+                    ],
+
+                    [
+                        "Pending",
+                        pendingCountElement.textContent.trim()
+                    ],
+
+                    [
+                        "Failed",
+                        failedCountElement.textContent.trim()
+                    ],
+
+                    [
+                        "Rows Exported",
+                        visibleRows.length
+                    ]
+
+                ];
+
+
+                const infoWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        infoData
+                    );
+
+
+                infoWorksheet["!cols"] = [
+
+                    { wch: 24 },
+                    { wch: 30 }
+
+                ];
+
+
+                /* WORKBOOK */
+
+                const workbook =
+                    XLSX.utils.book_new();
+
+
+                /*
+                    Real report FIRST.
+                */
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    reportWorksheet,
+                    "Collection Report"
+                );
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    infoWorksheet,
+                    "Report Info"
+                );
+
+
+                XLSX.writeFile(
+                    workbook,
+                    "Computer_Science_Dues_Report.xlsx"
+                );
+
+            }
+        );
+
+
+        /* INITIAL REPORT */
+
+        filterReport();
+
+    }
+);
+
+</script>
+
+{% endblock %}

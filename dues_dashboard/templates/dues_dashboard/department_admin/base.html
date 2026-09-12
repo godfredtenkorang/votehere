@@ -1,0 +1,432 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="icon"
+        href="{% static 'vote/img/our-logo.jpg' %}"
+        type="image/jpeg"
+    >
+
+    <title>
+        {% block title %}
+        Department Dues Dashboard
+        {% endblock %}
+    </title>
+
+
+    <!-- Existing VoteAfric CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/admin.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/darkmode.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/admin2.css' %}"
+    >
+
+
+    <!-- Dues Dashboard CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'vote/dues_dash.css' %}"
+    >
+
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    >
+
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     DEPARTMENT ADMIN HEADER
+========================================================= -->
+
+<header>
+
+
+    <div class="logo-and-date-greetings">
+
+        <div class="logosec">
+
+            <div class="logo">
+
+                <a href="{% url 'index' %}">
+
+                    <img
+                        src="{% static 'vote/img/voteafric-logo.png' %}"
+                        alt="VoteAfric"
+                    >
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="message">
+
+
+        <!-- Sidebar Toggle -->
+
+        <img
+            src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+            class="icn menuicn"
+            id="menuicn"
+            alt="menu"
+        >
+
+
+
+        <!-- Dark Mode -->
+
+        <label
+            class="dark-toggle"
+            title="Toggle dark mode"
+        >
+
+            <input
+                type="checkbox"
+                id="darkModeToggle"
+            >
+
+            <span class="dark-toggle-track">
+
+                <span class="dark-toggle-thumb">
+
+                    <i
+                        class="fa-solid fa-sun dark-toggle-icon sun"
+                    ></i>
+
+                    <i
+                        class="fa-solid fa-moon dark-toggle-icon moon"
+                    ></i>
+
+                </span>
+
+            </span>
+
+        </label>
+
+
+
+        <!-- Fullscreen -->
+
+        <button
+            type="button"
+            class="fullscreen-btn"
+            id="fullscreenBtn"
+            title="Toggle fullscreen"
+        >
+
+            <i
+                class="fa-solid fa-expand"
+                id="fullscreenIcon"
+            ></i>
+
+        </button>
+
+
+    </div>
+
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN CONTAINER
+========================================================= -->
+
+<div class="main-container">
+
+
+    <!-- =====================================================
+         DEPARTMENT ADMIN SIDEBAR
+    ====================================================== -->
+
+    <div class="navcontainer sidebar">
+
+        <nav class="nav">
+
+            <div class="nav-upper-options">
+
+
+                <!-- Dashboard -->
+
+                <a href="{% url 'department_dashboard' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-gauge-high"></i>
+
+                            Dashboard
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- Payments -->
+
+                <a href="{% url 'department_payments' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+
+                            Payments
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- Students -->
+
+                <a href="{% url 'department_students' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-user-graduate"></i>
+
+                            Students
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- Reports -->
+
+                <a href="{% url 'department_reports' %}">
+
+                    <div class="nav-option option1 button">
+
+                        <h3>
+
+                            <i class="fa-solid fa-chart-column"></i>
+
+                            Reports
+
+                        </h3>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- Logout -->
+
+                <div
+                    class="nav-option option1 button logout-btn"
+                >
+
+                    <h3>
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+        </nav>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PAGE CONTENT
+    ====================================================== -->
+
+    {% block content %}
+
+    {% endblock %}
+
+
+</div>
+
+
+
+<!-- =========================================================
+     LOGOUT POPUP
+========================================================= -->
+
+<div class="logout-pop">
+
+    <div class="logout">
+
+        <p>
+            Are you sure you want to log out?
+        </p>
+
+
+        <div class="log-button">
+
+            <a href="{% url 'logout' %}">
+
+                <button type="button">
+                    Log Out
+                </button>
+
+            </a>
+
+
+            <p>Or</p>
+
+
+            <button
+                type="button"
+                class="DontLogout"
+            >
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- Existing VoteAfric Scripts -->
+
+<script
+    defer
+    src="{% static 'vote/adminScript.js' %}"
+></script>
+
+<script
+    defer
+    src="{% static 'vote/adminScript2.js' %}"
+></script>
+
+
+
+<!-- =========================================================
+     FULLSCREEN
+========================================================= -->
+
+<script>
+
+    const fullscreenBtn =
+        document.getElementById("fullscreenBtn");
+
+    const fullscreenIcon =
+        document.getElementById("fullscreenIcon");
+
+
+    fullscreenBtn.addEventListener(
+        "click",
+        function () {
+
+            if (!document.fullscreenElement) {
+
+                document.documentElement
+                    .requestFullscreen()
+                    .catch(() => {});
+
+            }
+
+            else {
+
+                document.exitFullscreen();
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "fullscreenchange",
+        function () {
+
+            if (document.fullscreenElement) {
+
+                fullscreenIcon.classList.replace(
+                    "fa-expand",
+                    "fa-compress"
+                );
+
+            }
+
+            else {
+
+                fullscreenIcon.classList.replace(
+                    "fa-compress",
+                    "fa-expand"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+{% block extra_js %}{% endblock %}
+
+
+</body>
+
+</html>

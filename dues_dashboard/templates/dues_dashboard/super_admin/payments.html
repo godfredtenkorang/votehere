@@ -1,0 +1,1083 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Payments | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Payments</h1>
+
+            <p>
+                View and monitor all dues transactions.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="dashboard-filter">
+
+
+        <div class="payment-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="superPaymentSearch"
+                placeholder="Search Student ID, Name or Transaction Ref."
+            >
+
+        </div>
+
+
+        <select id="superPaymentAcademicYear">
+
+            <option value="2026/2027" selected>
+                2026/2027
+            </option>
+
+        </select>
+
+
+        <select id="superPaymentSemester">
+
+            <option value="">
+                All Semesters
+            </option>
+
+            <option value="First Semester">
+                First Semester
+            </option>
+
+            <option value="Second Semester">
+                Second Semester
+            </option>
+
+        </select>
+
+
+        <select id="superPaymentFaculty">
+
+            <option value="">
+                All Faculties
+            </option>
+
+            <option value="Faculty of Computing">
+                Faculty of Computing
+            </option>
+
+            <option value="Faculty of Business">
+                Faculty of Business
+            </option>
+
+            <option value="Faculty of Engineering">
+                Faculty of Engineering
+            </option>
+
+            <option value="Faculty of Science">
+                Faculty of Science
+            </option>
+
+        </select>
+
+
+        <select id="superPaymentDepartment">
+
+            <option value="">
+                All Departments
+            </option>
+
+            <option value="Computer Science">
+                Computer Science
+            </option>
+
+            <option value="Information Technology">
+                Information Technology
+            </option>
+
+            <option value="Accounting">
+                Accounting
+            </option>
+
+            <option value="Mechanical Engineering">
+                Mechanical Engineering
+            </option>
+
+            <option value="Biological Science">
+                Biological Science
+            </option>
+
+        </select>
+
+
+        <select id="superPaymentLevel">
+
+            <option value="">
+                All Levels
+            </option>
+
+            <option value="100">
+                Level 100
+            </option>
+
+            <option value="200">
+                Level 200
+            </option>
+
+            <option value="300">
+                Level 300
+            </option>
+
+            <option value="400">
+                Level 400
+            </option>
+
+        </select>
+
+
+        <select id="superPaymentStatus">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="Paid">
+                Paid
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="Failed">
+                Failed
+            </option>
+
+        </select>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PAYMENT TABLE
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>All Payments</h2>
+
+                <p id="superPaymentResultText">
+                    Dues transactions received through the system.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="table-action-btn"
+                id="exportSuperPaymentsBtn"
+            >
+
+                <i class="fa-solid fa-file-excel"></i>
+
+                Export Excel
+
+            </button>
+
+        </div>
+
+
+
+        <div class="table-responsive">
+
+            <table
+                class="dashboard-table"
+                id="superPaymentsTable"
+            >
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Transaction Ref.</th>
+
+                        <th>Student ID</th>
+
+                        <th>Student</th>
+
+                        <th>Faculty</th>
+
+                        <th>Department</th>
+
+                        <th>Level</th>
+
+                        <th>Amount</th>
+
+                        <th>Faculty Share</th>
+
+                        <th>Department Share</th>
+
+                        <th>Date</th>
+
+                        <th>Time</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Computing"
+                        data-department="Computer Science"
+                        data-level="300"
+                        data-status="Paid"
+                    >
+
+                        <td>TXN-260912-001</td>
+
+                        <td>CS2026001</td>
+
+                        <td>Michael Owusu</td>
+
+                        <td>Faculty of Computing</td>
+
+                        <td>Computer Science</td>
+
+                        <td>300</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>12/09/2026</td>
+
+                        <td>08:42 AM</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'dues_payment_detail' 'TXN-260912-001' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Business"
+                        data-department="Accounting"
+                        data-level="200"
+                        data-status="Paid"
+                    >
+
+                        <td>TXN-260912-002</td>
+
+                        <td>BA2026014</td>
+
+                        <td>Akosua Mensah</td>
+
+                        <td>Faculty of Business</td>
+
+                        <td>Accounting</td>
+
+                        <td>200</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>12/09/2026</td>
+
+                        <td>09:14 AM</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'dues_payment_detail' 'TXN-260912-002' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Engineering"
+                        data-department="Mechanical Engineering"
+                        data-level="400"
+                        data-status="Pending"
+                    >
+
+                        <td>TXN-260912-003</td>
+
+                        <td>EN2026042</td>
+
+                        <td>Kwame Asante</td>
+
+                        <td>Faculty of Engineering</td>
+
+                        <td>Mechanical Engineering</td>
+
+                        <td>400</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>12/09/2026</td>
+
+                        <td>09:37 AM</td>
+
+                        <td>
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'dues_payment_detail' 'TXN-260912-003' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Science"
+                        data-department="Biological Science"
+                        data-level="100"
+                        data-status="Failed"
+                    >
+
+                        <td>TXN-260912-004</td>
+
+                        <td>SC2026028</td>
+
+                        <td>Abena Boateng</td>
+
+                        <td>Faculty of Science</td>
+
+                        <td>Biological Science</td>
+
+                        <td>100</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>12/09/2026</td>
+
+                        <td>10:06 AM</td>
+
+                        <td>
+
+                            <span class="status-failed">
+                                Failed
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'dues_payment_detail' 'TXN-260912-004' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-faculty="Faculty of Computing"
+                        data-department="Information Technology"
+                        data-level="100"
+                        data-status="Paid"
+                    >
+
+                        <td>TXN-260912-005</td>
+
+                        <td>IT2026072</td>
+
+                        <td>Priscilla Asare</td>
+
+                        <td>Faculty of Computing</td>
+
+                        <td>Information Technology</td>
+
+                        <td>100</td>
+
+                        <td>GH₵150.00</td>
+
+                        <td>GH₵75.00</td>
+
+                        <td>GH₵75.00</td>
+
+                        <td>12/09/2026</td>
+
+                        <td>10:45 AM</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'dues_payment_detail' 'TXN-260912-005' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"
+></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const searchInput =
+            document.getElementById(
+                "superPaymentSearch"
+            );
+
+
+        const academicYearFilter =
+            document.getElementById(
+                "superPaymentAcademicYear"
+            );
+
+
+        const semesterFilter =
+            document.getElementById(
+                "superPaymentSemester"
+            );
+
+
+        const facultyFilter =
+            document.getElementById(
+                "superPaymentFaculty"
+            );
+
+
+        const departmentFilter =
+            document.getElementById(
+                "superPaymentDepartment"
+            );
+
+
+        const levelFilter =
+            document.getElementById(
+                "superPaymentLevel"
+            );
+
+
+        const statusFilter =
+            document.getElementById(
+                "superPaymentStatus"
+            );
+
+
+        const resultText =
+            document.getElementById(
+                "superPaymentResultText"
+            );
+
+
+        const table =
+            document.getElementById(
+                "superPaymentsTable"
+            );
+
+
+        const exportButton =
+            document.getElementById(
+                "exportSuperPaymentsBtn"
+            );
+
+
+        const rows = Array.from(
+            table.querySelectorAll(
+                "tbody tr"
+            )
+        );
+
+
+
+        /* =====================================================
+           FILTER PAYMENTS
+        ====================================================== */
+
+        function filterPayments() {
+
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const academicYear =
+                academicYearFilter.value;
+
+
+            const semester =
+                semesterFilter.value;
+
+
+            const faculty =
+                facultyFilter.value;
+
+
+            const department =
+                departmentFilter.value;
+
+
+            const level =
+                levelFilter.value;
+
+
+            const status =
+                statusFilter.value;
+
+
+            let visibleCount = 0;
+
+
+
+            rows.forEach(
+                function (row) {
+
+
+                    const transactionRef =
+                        row.cells[0]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    const studentId =
+                        row.cells[1]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    const studentName =
+                        row.cells[2]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+
+
+                    const matchesSearch =
+                        !search ||
+                        transactionRef.includes(search) ||
+                        studentId.includes(search) ||
+                        studentName.includes(search);
+
+
+
+                    const matchesAcademicYear =
+                        !academicYear ||
+                        row.dataset.academicYear === academicYear;
+
+
+
+                    const matchesSemester =
+                        !semester ||
+                        row.dataset.semester === semester;
+
+
+
+                    const matchesFaculty =
+                        !faculty ||
+                        row.dataset.faculty === faculty;
+
+
+
+                    const matchesDepartment =
+                        !department ||
+                        row.dataset.department === department;
+
+
+
+                    const matchesLevel =
+                        !level ||
+                        row.dataset.level === level;
+
+
+
+                    const matchesStatus =
+                        !status ||
+                        row.dataset.status === status;
+
+
+
+                    const showRow =
+                        matchesSearch &&
+                        matchesAcademicYear &&
+                        matchesSemester &&
+                        matchesFaculty &&
+                        matchesDepartment &&
+                        matchesLevel &&
+                        matchesStatus;
+
+
+
+                    row.style.display =
+                        showRow ? "" : "none";
+
+
+                    if (showRow) {
+
+                        visibleCount++;
+
+                    }
+
+                }
+            );
+
+
+            resultText.textContent =
+                visibleCount +
+                " payment" +
+                (visibleCount === 1 ? "" : "s") +
+                " found.";
+
+        }
+
+
+
+        /* =====================================================
+           FILTER EVENTS
+        ====================================================== */
+
+        searchInput.addEventListener(
+            "input",
+            filterPayments
+        );
+
+
+        academicYearFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        semesterFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        facultyFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        departmentFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        levelFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+
+        /* =====================================================
+           EXPORT FILTERED PAYMENTS
+        ====================================================== */
+
+        exportButton.addEventListener(
+            "click",
+            function () {
+
+
+                const visibleRows =
+                    rows.filter(
+                        function (row) {
+
+                            return (
+                                row.style.display !== "none"
+                            );
+
+                        }
+                    );
+
+
+                if (visibleRows.length === 0) {
+
+                    alert(
+                        "There are no payment records to export."
+                    );
+
+                    return;
+
+                }
+
+
+
+                /*
+                    Exclude Action column.
+                */
+
+                const headers =
+                    Array.from(
+                        table.querySelectorAll(
+                            "thead th"
+                        )
+                    )
+                    .slice(0, -1)
+                    .map(
+                        function (header) {
+
+                            return header
+                                .textContent
+                                .trim();
+
+                        }
+                    );
+
+
+
+                const paymentData =
+                    visibleRows.map(
+                        function (row) {
+
+                            return Array.from(
+                                row.cells
+                            )
+                            .slice(0, -1)
+                            .map(
+                                function (cell) {
+
+                                    return cell
+                                        .textContent
+                                        .trim();
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+
+                /* PAYMENT WORKSHEET */
+
+                const paymentWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        [
+                            headers,
+                            ...paymentData
+                        ]
+                    );
+
+
+                paymentWorksheet["!cols"] = [
+
+                    { wch: 22 },
+                    { wch: 16 },
+                    { wch: 24 },
+                    { wch: 28 },
+                    { wch: 28 },
+                    { wch: 10 },
+                    { wch: 14 },
+                    { wch: 16 },
+                    { wch: 20 },
+                    { wch: 16 },
+                    { wch: 14 },
+                    { wch: 12 }
+
+                ];
+
+
+
+                /* REPORT INFO */
+
+                const infoData = [
+
+                    [
+                        "VoteAfric Institution Dues Payments"
+                    ],
+
+                    [],
+
+                    [
+                        "Academic Year",
+                        academicYearFilter.value
+                        || "All Academic Years"
+                    ],
+
+                    [
+                        "Semester",
+                        semesterFilter.value
+                        || "All Semesters"
+                    ],
+
+                    [
+                        "Faculty",
+                        facultyFilter.value
+                        || "All Faculties"
+                    ],
+
+                    [
+                        "Department",
+                        departmentFilter.value
+                        || "All Departments"
+                    ],
+
+                    [
+                        "Level",
+                        levelFilter.value
+                            ? "Level " + levelFilter.value
+                            : "All Levels"
+                    ],
+
+                    [
+                        "Status",
+                        statusFilter.value
+                        || "All Status"
+                    ],
+
+                    [
+                        "Records Exported",
+                        visibleRows.length
+                    ]
+
+                ];
+
+
+
+                const infoWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        infoData
+                    );
+
+
+                infoWorksheet["!cols"] = [
+
+                    { wch: 22 },
+
+                    { wch: 32 }
+
+                ];
+
+
+
+                /* =================================================
+                   WORKBOOK
+                ================================================= */
+
+                const workbook =
+                    XLSX.utils.book_new();
+
+
+
+                /*
+                    Actual payment data FIRST.
+                */
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    paymentWorksheet,
+                    "All Payments"
+                );
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    infoWorksheet,
+                    "Report Info"
+                );
+
+
+
+                XLSX.writeFile(
+                    workbook,
+                    "VoteAfric_All_Dues_Payments.xlsx"
+                );
+
+            }
+        );
+
+
+
+        /* INITIAL TABLE */
+
+        filterPayments();
+
+    }
+);
+
+</script>
+
+{% endblock %}

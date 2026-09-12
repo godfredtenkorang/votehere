@@ -1,0 +1,502 @@
+{% extends 'dues_dashboard/faculty_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+
+
+    <!-- HEADER -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Faculty of Computing</h1>
+
+            <p>
+                Faculty dues collection dashboard.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SUMMARY -->
+
+    <div class="dues-summary">
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+                <p>Total Collected</p>
+                <h2>GH₵24,500.00</h2>
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+                <p>Faculty Share</p>
+                <h2>GH₵12,250.00</h2>
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <div>
+                <p>Department Share</p>
+                <h2>GH₵12,250.00</h2>
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+                <p>Students Paid</p>
+                <h2>245</h2>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- FILTERS -->
+
+    <div class="dashboard-filter">
+
+
+        <select>
+
+            <option>
+                2026/2027
+            </option>
+
+        </select>
+
+
+        <select>
+
+            <option>
+                First Semester
+            </option>
+
+            <option>
+                Second Semester
+            </option>
+
+        </select>
+
+
+        <select>
+
+            <option>
+                All Departments
+            </option>
+
+            <option>
+                Computer Science
+            </option>
+
+            <option>
+                Information Technology
+            </option>
+
+            <option>
+                Cyber Security
+            </option>
+
+            <option>
+                Software Engineering
+            </option>
+
+        </select>
+
+
+        <select>
+
+            <option>All Levels</option>
+            <option>Level 100</option>
+            <option>Level 200</option>
+            <option>Level 300</option>
+            <option>Level 400</option>
+
+        </select>
+
+
+    </div>
+
+
+
+    <!-- DEPARTMENTS -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Departments</h2>
+
+                <p>
+                    Departments under Faculty of Computing.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Department</th>
+
+                        <th>Total Collected</th>
+
+                        <th>Faculty Share</th>
+
+                        <th>Department Share</th>
+
+                        <th>Students Paid</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            Computer Science
+                        </td>
+
+                        <td>
+                            GH₵8,500.00
+                        </td>
+
+                        <td>
+                            GH₵4,250.00
+                        </td>
+
+                        <td>
+                            GH₵4,250.00
+                        </td>
+
+                        <td>
+                            85
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'faculty_department_detail' 'CS' %}"
+                            >
+
+                                <button
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Information Technology
+                        </td>
+
+                        <td>
+                            GH₵6,200.00
+                        </td>
+
+                        <td>
+                            GH₵3,100.00
+                        </td>
+
+                        <td>
+                            GH₵3,100.00
+                        </td>
+
+                        <td>
+                            62
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'faculty_department_detail' 'IT' %}"
+                            >
+
+                                <button
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Cyber Security
+                        </td>
+
+                        <td>
+                            GH₵4,800.00
+                        </td>
+
+                        <td>
+                            GH₵2,400.00
+                        </td>
+
+                        <td>
+                            GH₵2,400.00
+                        </td>
+
+                        <td>
+                            48
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'faculty_department_detail' 'CYB' %}"
+                            >
+
+                                <button
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Software Engineering
+                        </td>
+
+                        <td>
+                            GH₵5,000.00
+                        </td>
+
+                        <td>
+                            GH₵2,500.00
+                        </td>
+
+                        <td>
+                            GH₵2,500.00
+                        </td>
+
+                        <td>
+                            50
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'faculty_department_detail' 'SE' %}"
+                            >
+
+                                <button
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RECENT PAYMENTS -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Recent Payments</h2>
+
+                <p>
+                    Latest payments from this faculty only.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Transaction Ref.</th>
+
+                        <th>Student ID</th>
+
+                        <th>Student</th>
+
+                        <th>Department</th>
+
+                        <th>Level</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>TXN-260912-001</td>
+
+                        <td>CS2026001</td>
+
+                        <td>Michael Owusu</td>
+
+                        <td>Computer Science</td>
+
+                        <td>300</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>
+                            <span class="status-paid">
+                                Paid
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>TXN-260912-002</td>
+
+                        <td>IT2026014</td>
+
+                        <td>Akosua Mensah</td>
+
+                        <td>Information Technology</td>
+
+                        <td>200</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>
+                            <span class="status-paid">
+                                Paid
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

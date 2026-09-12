@@ -1,0 +1,531 @@
+{% extends 'dues_dashboard/department_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Computer Science Dashboard | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Computer Science Department</h1>
+
+            <p>
+                Department dues collection dashboard.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="dues-summary">
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+            <div>
+
+                <p>Total Collected</p>
+
+                <h2>GH₵8,500.00</h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+
+                <i class="fa-solid fa-building-columns"></i>
+
+            </div>
+
+            <div>
+
+                <p>Faculty Share</p>
+
+                <h2>GH₵4,250.00</h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+
+                <i class="fa-solid fa-building"></i>
+
+            </div>
+
+            <div>
+
+                <p>Department Share</p>
+
+                <h2>GH₵4,250.00</h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+            </div>
+
+            <div>
+
+                <p>Students Paid</p>
+
+                <h2>85</h2>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="dashboard-filter">
+
+
+        <select>
+
+            <option>
+                2026/2027
+            </option>
+
+        </select>
+
+
+
+        <select>
+
+            <option>
+                First Semester
+            </option>
+
+            <option>
+                Second Semester
+            </option>
+
+        </select>
+
+
+
+        <select>
+
+            <option>
+                All Levels
+            </option>
+
+            <option>
+                Level 100
+            </option>
+
+            <option>
+                Level 200
+            </option>
+
+            <option>
+                Level 300
+            </option>
+
+            <option>
+                Level 400
+            </option>
+
+        </select>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         LEVEL OVERVIEW
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Level Overview</h2>
+
+                <p>
+                    Dues collection by student level.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Level</th>
+
+                        <th>Dues Amount</th>
+
+                        <th>Students Paid</th>
+
+                        <th>Total Collected</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            Level 100
+                        </td>
+
+                        <td>
+                            GH₵120.00
+                        </td>
+
+                        <td>
+                            20
+                        </td>
+
+                        <td>
+                            GH₵2,400.00
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Level 200
+                        </td>
+
+                        <td>
+                            GH₵100.00
+                        </td>
+
+                        <td>
+                            20
+                        </td>
+
+                        <td>
+                            GH₵2,000.00
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Level 300
+                        </td>
+
+                        <td>
+                            GH₵100.00
+                        </td>
+
+                        <td>
+                            25
+                        </td>
+
+                        <td>
+                            GH₵2,500.00
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            Level 400
+                        </td>
+
+                        <td>
+                            GH₵80.00
+                        </td>
+
+                        <td>
+                            20
+                        </td>
+
+                        <td>
+                            GH₵1,600.00
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RECENT PAYMENTS
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Recent Payments</h2>
+
+                <p>
+                    Latest dues payments from Computer Science students.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Transaction Ref.</th>
+
+                        <th>Student ID</th>
+
+                        <th>Student</th>
+
+                        <th>Level</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            TXN-260912-001
+                        </td>
+
+                        <td>
+                            CS2026001
+                        </td>
+
+                        <td>
+                            Michael Owusu
+                        </td>
+
+                        <td>
+                            300
+                        </td>
+
+                        <td>
+                            GH₵100.00
+                        </td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            TXN-260912-005
+                        </td>
+
+                        <td>
+                            CS2026063
+                        </td>
+
+                        <td>
+                            Samuel Mensah
+                        </td>
+
+                        <td>
+                            200
+                        </td>
+
+                        <td>
+                            GH₵100.00
+                        </td>
+
+                        <td>
+
+                            <span class="status-failed">
+                                Failed
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            TXN-260912-008
+                        </td>
+
+                        <td>
+                            CS2026078
+                        </td>
+
+                        <td>
+                            Grace Addo
+                        </td>
+
+                        <td>
+                            100
+                        </td>
+
+                        <td>
+                            GH₵120.00
+                        </td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td>
+                            TXN-260912-009
+                        </td>
+
+                        <td>
+                            CS2026085
+                        </td>
+
+                        <td>
+                            Emmanuel Tetteh
+                        </td>
+
+                        <td>
+                            400
+                        </td>
+
+                        <td>
+                            GH₵80.00
+                        </td>
+
+                        <td>
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
