@@ -1,0 +1,393 @@
+{% extends 'dues_dashboard/department_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Student Details | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Student Details</h1>
+
+            <p>
+                View dues information and payment history for this student.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
+
+    <div class="dues-summary">
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-id-card"></i>
+            </div>
+
+            <div>
+
+                <p>Student ID</p>
+
+                <h2>CS2026001</h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+
+            <div>
+
+                <p>Amount Due</p>
+
+                <h2>GH₵100.00</h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+
+                <p>Amount Paid</p>
+
+                <h2>GH₵100.00</h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="dues-card">
+
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div>
+
+                <p>Status</p>
+
+                <h2>Paid</h2>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STUDENT INFORMATION
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Student Information</h2>
+
+                <p>
+                    Basic student and academic details.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="student-info-grid">
+
+
+            <div class="settings-field">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    value="Michael Owusu"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <div class="settings-field">
+
+                <label>
+                    Student ID
+                </label>
+
+                <input
+                    type="text"
+                    value="CS2026001"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <div class="settings-field">
+
+                <label>
+                    Faculty
+                </label>
+
+                <input
+                    type="text"
+                    value="Faculty of Computing"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <div class="settings-field">
+
+                <label>
+                    Department
+                </label>
+
+                <input
+                    type="text"
+                    value="Computer Science"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <div class="settings-field">
+
+                <label>
+                    Level
+                </label>
+
+                <input
+                    type="text"
+                    value="300"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <div class="settings-field">
+
+                <label>
+                    Academic Year
+                </label>
+
+                <input
+                    type="text"
+                    value="2026/2027"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <div class="settings-field">
+
+                <label>
+                    Semester
+                </label>
+
+                <input
+                    type="text"
+                    value="First Semester"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <div class="settings-field">
+
+                <label>
+                    Payment Status
+                </label>
+
+                <input
+                    type="text"
+                    value="Paid"
+                    readonly
+                >
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PAYMENT HISTORY
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Payment History</h2>
+
+                <p>
+                    Dues payments made by this student.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Transaction Ref.</th>
+
+                        <th>Academic Year</th>
+
+                        <th>Semester</th>
+
+                        <th>Amount</th>
+
+                        <th>Faculty Share</th>
+
+                        <th>Department Share</th>
+
+                        <th>Date</th>
+
+                        <th>Time</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    <tr>
+
+                        <td>
+                            TXN-260912-001
+                        </td>
+
+                        <td>
+                            2026/2027
+                        </td>
+
+                        <td>
+                            First Semester
+                        </td>
+
+                        <td>
+                            GH₵100.00
+                        </td>
+
+                        <td>
+                            GH₵50.00
+                        </td>
+
+                        <td>
+                            GH₵50.00
+                        </td>
+
+                        <td>
+                            12 Sep 2026
+                        </td>
+
+                        <td>
+                            08:42 AM
+                        </td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="heading">
+
+        <div class="heading-left">
+            <h1>Student Details</h1>
+            <p>View student information and dues payment history.</p>
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT SUMMARY -->
+    <div class="dues-summary">
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+                <p>Student ID</p>
+                <h2>CS2026001</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+                <p>Total Paid</p>
+                <h2>GH₵100.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+                <p>Faculty Share</p>
+                <h2>GH₵50.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <div>
+                <p>Department Share</p>
+                <h2>GH₵50.00</h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT INFORMATION -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>Student Information</h2>
+                <p>Basic student details.</p>
+            </div>
+        </div>
+
+
+        <div class="student-info-grid">
+
+            <div class="student-info-item">
+                <span>Full Name</span>
+                <strong>Michael Owusu</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Student ID</span>
+                <strong>CS2026001</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Faculty</span>
+                <strong>Faculty of Computing</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Department</span>
+                <strong>Computer Science</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Level</span>
+                <strong>300</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Academic Year</span>
+                <strong>2026/2027</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Semester</span>
+                <strong>First Semester</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Payment Status</span>
+                <strong>
+                    <span class="status-paid">Paid</span>
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT HISTORY -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>Payment History</h2>
+                <p>All dues transactions for this student.</p>
+            </div>
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>Transaction Ref.</th>
+                        <th>Amount</th>
+                        <th>Faculty Share</th>
+                        <th>Department Share</th>
+                        <th>Academic Year</th>
+                        <th>Semester</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    <!-- SAMPLE DATA -->
+
+                    <tr>
+                        <td>TXN-260912-001</td>
+                        <td>GH₵100.00</td>
+                        <td>GH₵50.00</td>
+                        <td>GH₵50.00</td>
+                        <td>2026/2027</td>
+                        <td>First Semester</td>
+                        <td>12/09/2026</td>
+                        <td>08:42 AM</td>
+                        <td>
+                            <span class="status-paid">Paid</span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

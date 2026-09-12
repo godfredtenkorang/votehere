@@ -1,0 +1,342 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+
+    <!-- =====================================================
+         SUPER ADMIN DASHBOARD HEADER
+    ====================================================== -->
+    <div class="heading">
+
+        <div class="heading-accent-ring"></div>
+        <div class="heading-ticker"></div>
+
+        <div class="heading-left">
+            <h1>
+                Dues Super Admin Dashboard
+            </h1>
+
+            <p>
+                Monitor dues collections across all faculties and departments.
+            </p>
+        </div>
+
+        <div class="heading-stats">
+
+            <!-- Backend: link to all payments -->
+            <a href="#">
+                <button class="tbl-add-btn">
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+                    View Payments
+                </button>
+            </a>
+
+            <!-- Backend: link to reports -->
+            <a href="#">
+                <button class="tbl-add-btn">
+                    <i class="fa-solid fa-chart-column"></i>
+                    Reports
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN SUMMARY CARDS
+    ====================================================== -->
+    <div class="dues-summary">
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+                <p>Total Collected</p>
+                <h2>GH₵ 0.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+                <p>Faculty Share</p>
+                <h2>GH₵ 0.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <div>
+                <p>Department Share</p>
+                <h2>GH₵ 0.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+                <p>Students Paid</p>
+                <h2>0</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div>
+                <p>Pending</p>
+                <h2>0</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+
+            <div>
+                <p>Failed</p>
+                <h2>0</h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+    <div class="dashboard-filter">
+
+        <select>
+            <option>Academic Year</option>
+            <option>2026/2027</option>
+        </select>
+
+        <select>
+            <option>Semester</option>
+            <option>First Semester</option>
+            <option>Second Semester</option>
+        </select>
+
+        <select>
+            <option>All Faculties</option>
+        </select>
+
+        <select>
+            <option>All Departments</option>
+        </select>
+
+        <select>
+            <option>All Levels</option>
+            <option>Level 100</option>
+            <option>Level 200</option>
+            <option>Level 300</option>
+            <option>Level 400</option>
+        </select>
+
+    </div>
+
+
+    <!-- =====================================================
+         FACULTY COLLECTION OVERVIEW
+    ====================================================== -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+          <h2>Faculty Collection Overview TEST123</h2>
+                <p>Collection summary for all faculties.</p>
+            </div>
+
+            <!-- Backend: Faculties page -->
+            <a href="#">View All</a>
+        </div>
+
+
+        <div class="table-responsive">
+<table class="dashboard-table" id="facultyCollectionTable">
+
+    <thead>
+        <tr>
+            <th>Faculty Code</th>
+            <th>Faculty</th>
+            <th>Total Collected</th>
+            <th>Faculty Share</th>
+            <th>Department Share</th>
+            <th>Students Paid</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+ <tbody>
+
+    <tr>
+        <td>FOC</td>
+        <td>Faculty of Computing</td>
+        <td>GH₵ 24,500.00</td>
+        <td>GH₵ 12,250.00</td>
+        <td>GH₵ 12,250.00</td>
+        <td>245</td>
+        <td>
+            <button class="table-action-btn">View</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>FOB</td>
+        <td>Faculty of Business</td>
+        <td>GH₵ 18,600.00</td>
+        <td>GH₵ 9,300.00</td>
+        <td>GH₵ 9,300.00</td>
+        <td>186</td>
+        <td>
+            <button class="table-action-btn">View</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>FOE</td>
+        <td>Faculty of Engineering</td>
+        <td>GH₵ 21,800.00</td>
+        <td>GH₵ 10,900.00</td>
+        <td>GH₵ 10,900.00</td>
+        <td>218</td>
+        <td>
+            <button class="table-action-btn">View</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>FOS</td>
+        <td>Faculty of Science</td>
+        <td>GH₵ 15,400.00</td>
+        <td>GH₵ 7,700.00</td>
+        <td>GH₵ 7,700.00</td>
+        <td>154</td>
+        <td>
+            <button class="table-action-btn">View</button>
+        </td>
+    </tr>
+
+</tbody>
+</table>
+        </div>
+
+    </div>
+
+
+
+
+
+
+    <!-- =====================================================
+         RECENT DUES PAYMENTS
+    ====================================================== -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>Recent Payments</h2>
+                <p>Latest dues transactions received through the system.</p>
+            </div>
+
+            <!-- Backend: Payments page -->
+            <a href="#">View All Payments</a>
+        </div>
+
+
+        <div class="table-responsive">
+
+          <table class="dashboard-table" id="paymentsTable">
+
+                <thead>
+                    <tr>
+                        <th>Transaction Ref.</th>
+                        <th>Student ID</th>
+                        <th>Student</th>
+                        <th>Faculty</th>
+                        <th>Department</th>
+                        <th>Level</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <!-- Backend: loop through recent payments here -->
+
+                    <tr>
+                        <td colspan="9" style="text-align:center;">
+                            No payment records available.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     LOGOUT POPUP
+====================================================== -->
+
+<div class="logout-pop">
+
+    <div class="logout">
+
+        <p>
+            Are you sure you want to log out from the admin panel?
+        </p>
+
+        <div class="log-button">
+
+            <a href="{% url 'logout' %}">
+                <button>Log Out</button>
+            </a>
+
+            <p>Or</p>
+
+            <button class="DontLogout">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

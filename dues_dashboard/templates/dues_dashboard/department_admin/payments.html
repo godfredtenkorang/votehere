@@ -1,0 +1,805 @@
+{% extends 'dues_dashboard/department_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Department Payments | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Payments</h1>
+
+            <p>
+                View dues payments for Computer Science Department.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="dashboard-filter">
+
+
+        <div class="payment-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="departmentPaymentSearch"
+                placeholder="Search Student ID, Name or Transaction Ref."
+            >
+
+        </div>
+
+
+        <select id="departmentPaymentAcademicYear">
+
+            <option value="2026/2027" selected>
+                2026/2027
+            </option>
+
+        </select>
+
+
+        <select id="departmentPaymentSemester">
+
+            <option value="">
+                All Semesters
+            </option>
+
+            <option value="First Semester">
+                First Semester
+            </option>
+
+            <option value="Second Semester">
+                Second Semester
+            </option>
+
+        </select>
+
+
+        <select id="departmentPaymentLevel">
+
+            <option value="">
+                All Levels
+            </option>
+
+            <option value="100">
+                Level 100
+            </option>
+
+            <option value="200">
+                Level 200
+            </option>
+
+            <option value="300">
+                Level 300
+            </option>
+
+            <option value="400">
+                Level 400
+            </option>
+
+        </select>
+
+
+        <select id="departmentPaymentStatus">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="Paid">
+                Paid
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="Failed">
+                Failed
+            </option>
+
+        </select>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         PAYMENTS TABLE
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Department Payments</h2>
+
+                <p id="departmentPaymentResultText">
+                    Payments from Computer Science students.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="table-action-btn"
+                id="exportDepartmentPaymentsBtn"
+            >
+
+                <i class="fa-solid fa-file-excel"></i>
+
+                Export Excel
+
+            </button>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table
+                class="dashboard-table"
+                id="departmentPaymentsTable"
+            >
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Transaction Ref.</th>
+
+                        <th>Student ID</th>
+
+                        <th>Student</th>
+
+                        <th>Level</th>
+
+                        <th>Amount</th>
+
+                        <th>Faculty Share</th>
+
+                        <th>Department Share</th>
+
+                        <th>Date</th>
+
+                        <th>Time</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="300"
+                        data-status="Paid"
+                    >
+
+                        <td>TXN-260912-001</td>
+
+                        <td>CS2026001</td>
+
+                        <td>Michael Owusu</td>
+
+                        <td>300</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>12 Sep 2026</td>
+
+                        <td>08:42 AM</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="200"
+                        data-status="Failed"
+                    >
+
+                        <td>TXN-260912-005</td>
+
+                        <td>CS2026063</td>
+
+                        <td>Samuel Mensah</td>
+
+                        <td>200</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>12 Sep 2026</td>
+
+                        <td>10:28 AM</td>
+
+                        <td>
+
+                            <span class="status-failed">
+                                Failed
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="100"
+                        data-status="Paid"
+                    >
+
+                        <td>TXN-260912-008</td>
+
+                        <td>CS2026078</td>
+
+                        <td>Grace Addo</td>
+
+                        <td>100</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>GH₵60.00</td>
+
+                        <td>GH₵60.00</td>
+
+                        <td>12 Sep 2026</td>
+
+                        <td>10:52 AM</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="400"
+                        data-status="Pending"
+                    >
+
+                        <td>TXN-260912-009</td>
+
+                        <td>CS2026085</td>
+
+                        <td>Emmanuel Tetteh</td>
+
+                        <td>400</td>
+
+                        <td>GH₵80.00</td>
+
+                        <td>GH₵40.00</td>
+
+                        <td>GH₵40.00</td>
+
+                        <td>12 Sep 2026</td>
+
+                        <td>11:05 AM</td>
+
+                        <td>
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="300"
+                        data-status="Paid"
+                    >
+
+                        <td>TXN-260912-010</td>
+
+                        <td>CS2026091</td>
+
+                        <td>Linda Asamoah</td>
+
+                        <td>300</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>GH₵50.00</td>
+
+                        <td>12 Sep 2026</td>
+
+                        <td>11:12 AM</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"
+></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const searchInput =
+            document.getElementById(
+                "departmentPaymentSearch"
+            );
+
+        const academicYearFilter =
+            document.getElementById(
+                "departmentPaymentAcademicYear"
+            );
+
+        const semesterFilter =
+            document.getElementById(
+                "departmentPaymentSemester"
+            );
+
+        const levelFilter =
+            document.getElementById(
+                "departmentPaymentLevel"
+            );
+
+        const statusFilter =
+            document.getElementById(
+                "departmentPaymentStatus"
+            );
+
+        const resultText =
+            document.getElementById(
+                "departmentPaymentResultText"
+            );
+
+        const table =
+            document.getElementById(
+                "departmentPaymentsTable"
+            );
+
+        const exportButton =
+            document.getElementById(
+                "exportDepartmentPaymentsBtn"
+            );
+
+
+        const rows = Array.from(
+            table.querySelectorAll(
+                "tbody tr"
+            )
+        );
+
+
+        /* =====================================================
+           FILTER PAYMENTS
+        ====================================================== */
+
+        function filterPayments() {
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+            const academicYear =
+                academicYearFilter.value;
+
+            const semester =
+                semesterFilter.value;
+
+            const level =
+                levelFilter.value;
+
+            const status =
+                statusFilter.value;
+
+
+            let visibleCount = 0;
+
+
+            rows.forEach(
+                function (row) {
+
+                    const transactionRef =
+                        row.cells[0]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+                    const studentId =
+                        row.cells[1]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+                    const studentName =
+                        row.cells[2]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    const matchesSearch =
+                        !search ||
+                        transactionRef.includes(search) ||
+                        studentId.includes(search) ||
+                        studentName.includes(search);
+
+
+                    const matchesAcademicYear =
+                        !academicYear ||
+                        row.dataset.academicYear === academicYear;
+
+
+                    const matchesSemester =
+                        !semester ||
+                        row.dataset.semester === semester;
+
+
+                    const matchesLevel =
+                        !level ||
+                        row.dataset.level === level;
+
+
+                    const matchesStatus =
+                        !status ||
+                        row.dataset.status === status;
+
+
+                    const showRow =
+                        matchesSearch &&
+                        matchesAcademicYear &&
+                        matchesSemester &&
+                        matchesLevel &&
+                        matchesStatus;
+
+
+                    row.style.display =
+                        showRow ? "" : "none";
+
+
+                    if (showRow) {
+                        visibleCount++;
+                    }
+
+                }
+            );
+
+
+            resultText.textContent =
+                visibleCount +
+                " payment" +
+                (visibleCount === 1 ? "" : "s") +
+                " found.";
+
+        }
+
+
+        /* =====================================================
+           FILTER EVENTS
+        ====================================================== */
+
+        searchInput.addEventListener(
+            "input",
+            filterPayments
+        );
+
+
+        academicYearFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        semesterFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        levelFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterPayments
+        );
+
+
+        /* =====================================================
+           EXCEL EXPORT
+        ====================================================== */
+
+        exportButton.addEventListener(
+            "click",
+            function () {
+
+                const visibleRows =
+                    rows.filter(
+                        function (row) {
+
+                            return (
+                                row.style.display !== "none"
+                            );
+
+                        }
+                    );
+
+
+                if (visibleRows.length === 0) {
+
+                    alert(
+                        "There are no payment records to export."
+                    );
+
+                    return;
+
+                }
+
+
+                /* TABLE HEADERS */
+
+                const headers =
+                    Array.from(
+                        table.querySelectorAll(
+                            "thead th"
+                        )
+                    ).map(
+                        function (header) {
+
+                            return header
+                                .textContent
+                                .trim();
+
+                        }
+                    );
+
+
+                /* FILTERED ROW DATA */
+
+                const paymentData =
+                    visibleRows.map(
+                        function (row) {
+
+                            return Array.from(
+                                row.cells
+                            ).map(
+                                function (cell) {
+
+                                    return cell
+                                        .textContent
+                                        .trim();
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+                /* PAYMENT WORKSHEET */
+
+                const paymentWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        [
+                            headers,
+                            ...paymentData
+                        ]
+                    );
+
+
+                paymentWorksheet["!cols"] = [
+
+                    { wch: 22 },
+                    { wch: 16 },
+                    { wch: 24 },
+                    { wch: 10 },
+                    { wch: 14 },
+                    { wch: 16 },
+                    { wch: 20 },
+                    { wch: 16 },
+                    { wch: 14 },
+                    { wch: 12 }
+
+                ];
+
+
+                /* FILTER INFORMATION */
+
+                const reportInfo = [
+
+                    [
+                        "VoteAfric Department Dues Payments"
+                    ],
+
+                    [],
+
+                    [
+                        "Faculty",
+                        "Faculty of Computing"
+                    ],
+
+                    [
+                        "Department",
+                        "Computer Science"
+                    ],
+
+                    [
+                        "Academic Year",
+                        academicYearFilter.value
+                        || "All Academic Years"
+                    ],
+
+                    [
+                        "Semester",
+                        semesterFilter.value
+                        || "All Semesters"
+                    ],
+
+                    [
+                        "Level",
+                        levelFilter.value
+                            ? "Level " + levelFilter.value
+                            : "All Levels"
+                    ],
+
+                    [
+                        "Status",
+                        statusFilter.value
+                        || "All Status"
+                    ],
+
+                    [
+                        "Records Exported",
+                        visibleRows.length
+                    ]
+
+                ];
+
+
+                const infoWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        reportInfo
+                    );
+
+
+                infoWorksheet["!cols"] = [
+
+                    { wch: 22 },
+                    { wch: 30 }
+
+                ];
+
+
+                /* WORKBOOK */
+
+                const workbook =
+                    XLSX.utils.book_new();
+
+
+                /*
+                    Actual records FIRST.
+                */
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    paymentWorksheet,
+                    "Department Payments"
+                );
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    infoWorksheet,
+                    "Report Info"
+                );
+
+
+                /* DOWNLOAD */
+
+                XLSX.writeFile(
+                    workbook,
+                    "Computer_Science_Dues_Payments.xlsx"
+                );
+
+            }
+        );
+
+
+        /* INITIAL FILTER */
+
+        filterPayments();
+
+    }
+);
+
+</script>
+
+{% endblock %}

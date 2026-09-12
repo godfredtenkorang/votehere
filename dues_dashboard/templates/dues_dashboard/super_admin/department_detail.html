@@ -1,0 +1,224 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="heading">
+        <div class="heading-left">
+            <h1>Computer Science Department</h1>
+            <p>Department dues collection and student payment overview.</p>
+        </div>
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+    <div class="dues-summary">
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+
+            <div>
+                <p>Total Collected</p>
+                <h2>GH₵8,500.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+                <p>Faculty Share</p>
+                <h2>GH₵4,250.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+
+            <div>
+                <p>Department Share</p>
+                <h2>GH₵4,250.00</h2>
+            </div>
+        </div>
+
+
+        <div class="dues-card">
+            <div class="dues-card-icon">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <div>
+                <p>Students Paid</p>
+                <h2>85</h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- DEPARTMENT INFORMATION -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>Department Information</h2>
+                <p>Basic department details.</p>
+            </div>
+        </div>
+
+
+        <div class="student-info-grid">
+
+            <div class="student-info-item">
+                <span>Department</span>
+                <strong>Computer Science</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Faculty</span>
+                <strong>Faculty of Computing</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Faculty Code</span>
+                <strong>FOC</strong>
+            </div>
+
+            <div class="student-info-item">
+                <span>Academic Year</span>
+                <strong>2026/2027</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT PAYMENTS -->
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>Student Payments</h2>
+                <p>Recent dues payments from students in this department.</p>
+            </div>
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Level</th>
+                        <th>Amount</th>
+                        <th>Faculty Share</th>
+                        <th>Department Share</th>
+                        <th>Transaction Ref.</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    <!-- SAMPLE DATA -->
+
+                    <tr>
+                        <td>CS2026001</td>
+                        <td>Michael Owusu</td>
+                        <td>300</td>
+                        <td>GH₵100.00</td>
+                        <td>GH₵50.00</td>
+                        <td>GH₵50.00</td>
+                        <td>TXN-260912-001</td>
+                        <td>12/09/2026</td>
+
+                        <td>
+                            <span class="status-paid">Paid</span>
+                        </td>
+
+                        <td>
+                            <a href="{% url 'dues_student_detail' 'CS2026001' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>CS2026018</td>
+                        <td>Daniel Mensah</td>
+                        <td>200</td>
+                        <td>GH₵100.00</td>
+                        <td>GH₵50.00</td>
+                        <td>GH₵50.00</td>
+                        <td>TXN-260912-018</td>
+                        <td>12/09/2026</td>
+
+                        <td>
+                            <span class="status-paid">Paid</span>
+                        </td>
+
+                        <td>
+                            <a href="{% url 'dues_student_detail' 'CS2026018' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>CS2026031</td>
+                        <td>Abigail Boateng</td>
+                        <td>100</td>
+                        <td>GH₵100.00</td>
+                        <td>GH₵50.00</td>
+                        <td>GH₵50.00</td>
+                        <td>TXN-260912-031</td>
+                        <td>12/09/2026</td>
+
+                        <td>
+                            <span class="status-pending">Pending</span>
+                        </td>
+
+                        <td>
+                            <a href="{% url 'dues_student_detail' 'CS2026031' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

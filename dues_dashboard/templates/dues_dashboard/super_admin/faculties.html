@@ -1,0 +1,133 @@
+{% extends 'dues_dashboard/super_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main">
+
+    <div class="heading">
+        <div class="heading-left">
+            <h1>Faculties</h1>
+            <p>View dues collections across all faculties.</p>
+        </div>
+    </div>
+
+
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h2>All Faculties</h2>
+                <p>Collection summary by faculty.</p>
+            </div>
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>Faculty Code</th>
+                        <th>Faculty</th>
+                        <th>Departments</th>
+                        <th>Total Collected</th>
+                        <th>Faculty Share</th>
+                        <th>Department Share</th>
+                        <th>Students Paid</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    <!-- SAMPLE DATA - Backend will replace later -->
+
+                    <tr>
+                        <td>FOC</td>
+                        <td>Faculty of Computing</td>
+                        <td>4</td>
+                        <td>GH₵24,500.00</td>
+                        <td>GH₵12,250.00</td>
+                        <td>GH₵12,250.00</td>
+                        <td>245</td>
+
+                        <td>
+                            <a href="{% url 'dues_faculty_detail' 'FOC' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>FOB</td>
+                        <td>Faculty of Business</td>
+                        <td>5</td>
+                        <td>GH₵18,600.00</td>
+                        <td>GH₵9,300.00</td>
+                        <td>GH₵9,300.00</td>
+                        <td>186</td>
+
+                        <td>
+                            <a href="{% url 'dues_faculty_detail' 'FOB' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>FOE</td>
+                        <td>Faculty of Engineering</td>
+                        <td>6</td>
+                        <td>GH₵21,800.00</td>
+                        <td>GH₵10,900.00</td>
+                        <td>GH₵10,900.00</td>
+                        <td>218</td>
+
+                        <td>
+                            <a href="{% url 'dues_faculty_detail' 'FOE' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>FOS</td>
+                        <td>Faculty of Science</td>
+                        <td>4</td>
+                        <td>GH₵15,400.00</td>
+                        <td>GH₵7,700.00</td>
+                        <td>GH₵7,700.00</td>
+                        <td>154</td>
+
+                        <td>
+                            <a href="{% url 'dues_faculty_detail' 'FOS' %}">
+                                <button class="table-action-btn">
+                                    View
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,859 @@
+{% extends 'dues_dashboard/department_admin/base.html' %}
+{% load static %}
+
+{% block title %}
+Department Students | VoteAfric
+{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="heading">
+
+        <div class="heading-left">
+
+            <h1>Students</h1>
+
+            <p>
+                View students under Computer Science Department.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="dashboard-filter">
+
+        <div class="payment-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="departmentStudentSearch"
+                placeholder="Search Student ID or Name"
+            >
+
+        </div>
+
+
+        <select id="departmentStudentAcademicYear">
+
+            <option value="2026/2027" selected>
+                2026/2027
+            </option>
+
+        </select>
+
+
+        <select id="departmentStudentSemester">
+
+            <option value="">
+                All Semesters
+            </option>
+
+            <option value="First Semester">
+                First Semester
+            </option>
+
+            <option value="Second Semester">
+                Second Semester
+            </option>
+
+        </select>
+
+
+        <select id="departmentStudentLevel">
+
+            <option value="">
+                All Levels
+            </option>
+
+            <option value="100">
+                Level 100
+            </option>
+
+            <option value="200">
+                Level 200
+            </option>
+
+            <option value="300">
+                Level 300
+            </option>
+
+            <option value="400">
+                Level 400
+            </option>
+
+        </select>
+
+
+        <select id="departmentStudentStatus">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="Paid">
+                Paid
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="Failed">
+                Failed
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- =====================================================
+         STUDENTS TABLE
+    ====================================================== -->
+
+    <div class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Computer Science Students</h2>
+
+                <p id="departmentStudentResultText">
+                    Students registered under this department.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="table-action-btn"
+                id="exportDepartmentStudentsBtn"
+            >
+
+                <i class="fa-solid fa-file-excel"></i>
+
+                Export Excel
+
+            </button>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table
+                class="dashboard-table"
+                id="departmentStudentsTable"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>Student ID</th>
+
+                        <th>Student</th>
+
+                        <th>Level</th>
+
+                        <th>Academic Year</th>
+
+                        <th>Semester</th>
+
+                        <th>Amount Due</th>
+
+                        <th>Amount Paid</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="300"
+                        data-status="Paid"
+                    >
+
+                        <td>CS2026001</td>
+
+                        <td>Michael Owusu</td>
+
+                        <td>300</td>
+
+                        <td>2026/2027</td>
+
+                        <td>First Semester</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'department_student_detail' 'CS2026001' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="200"
+                        data-status="Failed"
+                    >
+
+                        <td>CS2026063</td>
+
+                        <td>Samuel Mensah</td>
+
+                        <td>200</td>
+
+                        <td>2026/2027</td>
+
+                        <td>First Semester</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵0.00</td>
+
+                        <td>
+
+                            <span class="status-failed">
+                                Failed
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'department_student_detail' 'CS2026063' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="100"
+                        data-status="Paid"
+                    >
+
+                        <td>CS2026078</td>
+
+                        <td>Grace Addo</td>
+
+                        <td>100</td>
+
+                        <td>2026/2027</td>
+
+                        <td>First Semester</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>GH₵120.00</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'department_student_detail' 'CS2026078' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="400"
+                        data-status="Pending"
+                    >
+
+                        <td>CS2026085</td>
+
+                        <td>Emmanuel Tetteh</td>
+
+                        <td>400</td>
+
+                        <td>2026/2027</td>
+
+                        <td>First Semester</td>
+
+                        <td>GH₵80.00</td>
+
+                        <td>GH₵0.00</td>
+
+                        <td>
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'department_student_detail' 'CS2026085' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr
+                        data-academic-year="2026/2027"
+                        data-semester="First Semester"
+                        data-level="300"
+                        data-status="Paid"
+                    >
+
+                        <td>CS2026091</td>
+
+                        <td>Linda Asamoah</td>
+
+                        <td>300</td>
+
+                        <td>2026/2027</td>
+
+                        <td>First Semester</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>GH₵100.00</td>
+
+                        <td>
+
+                            <span class="status-paid">
+                                Paid
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'department_student_detail' 'CS2026091' %}"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="table-action-btn"
+                                >
+                                    View
+                                </button>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"
+></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const searchInput =
+            document.getElementById(
+                "departmentStudentSearch"
+            );
+
+        const academicYearFilter =
+            document.getElementById(
+                "departmentStudentAcademicYear"
+            );
+
+        const semesterFilter =
+            document.getElementById(
+                "departmentStudentSemester"
+            );
+
+        const levelFilter =
+            document.getElementById(
+                "departmentStudentLevel"
+            );
+
+        const statusFilter =
+            document.getElementById(
+                "departmentStudentStatus"
+            );
+
+        const resultText =
+            document.getElementById(
+                "departmentStudentResultText"
+            );
+
+        const table =
+            document.getElementById(
+                "departmentStudentsTable"
+            );
+
+        const exportButton =
+            document.getElementById(
+                "exportDepartmentStudentsBtn"
+            );
+
+
+        const rows = Array.from(
+            table.querySelectorAll(
+                "tbody tr"
+            )
+        );
+
+
+        /* =====================================================
+           FILTER STUDENTS
+        ====================================================== */
+
+        function filterStudents() {
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+            const academicYear =
+                academicYearFilter.value;
+
+            const semester =
+                semesterFilter.value;
+
+            const level =
+                levelFilter.value;
+
+            const status =
+                statusFilter.value;
+
+
+            let visibleCount = 0;
+
+
+            rows.forEach(
+                function (row) {
+
+                    const studentId =
+                        row.cells[0]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+                    const studentName =
+                        row.cells[1]
+                            .textContent
+                            .trim()
+                            .toLowerCase();
+
+
+                    const matchesSearch =
+                        !search ||
+                        studentId.includes(search) ||
+                        studentName.includes(search);
+
+
+                    const matchesAcademicYear =
+                        !academicYear ||
+                        row.dataset.academicYear === academicYear;
+
+
+                    const matchesSemester =
+                        !semester ||
+                        row.dataset.semester === semester;
+
+
+                    const matchesLevel =
+                        !level ||
+                        row.dataset.level === level;
+
+
+                    const matchesStatus =
+                        !status ||
+                        row.dataset.status === status;
+
+
+                    const showRow =
+                        matchesSearch &&
+                        matchesAcademicYear &&
+                        matchesSemester &&
+                        matchesLevel &&
+                        matchesStatus;
+
+
+                    row.style.display =
+                        showRow ? "" : "none";
+
+
+                    if (showRow) {
+                        visibleCount++;
+                    }
+
+                }
+            );
+
+
+            resultText.textContent =
+                visibleCount +
+                " student" +
+                (visibleCount === 1 ? "" : "s") +
+                " found.";
+
+        }
+
+
+        /* =====================================================
+           FILTER EVENTS
+        ====================================================== */
+
+        searchInput.addEventListener(
+            "input",
+            filterStudents
+        );
+
+
+        academicYearFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        semesterFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        levelFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+
+        /* =====================================================
+           EXCEL EXPORT
+        ====================================================== */
+
+        exportButton.addEventListener(
+            "click",
+            function () {
+
+                const visibleRows =
+                    rows.filter(
+                        function (row) {
+
+                            return (
+                                row.style.display !== "none"
+                            );
+
+                        }
+                    );
+
+
+                if (visibleRows.length === 0) {
+
+                    alert(
+                        "There are no student records to export."
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                    Remove Action column from export.
+                */
+
+                const headers =
+                    Array.from(
+                        table.querySelectorAll(
+                            "thead th"
+                        )
+                    )
+                    .slice(0, -1)
+                    .map(
+                        function (header) {
+
+                            return header
+                                .textContent
+                                .trim();
+
+                        }
+                    );
+
+
+                const studentData =
+                    visibleRows.map(
+                        function (row) {
+
+                            return Array.from(
+                                row.cells
+                            )
+                            .slice(0, -1)
+                            .map(
+                                function (cell) {
+
+                                    return cell
+                                        .textContent
+                                        .trim();
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+                /* STUDENT WORKSHEET */
+
+                const studentWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        [
+                            headers,
+                            ...studentData
+                        ]
+                    );
+
+
+                studentWorksheet["!cols"] = [
+
+                    { wch: 16 },  // Student ID
+                    { wch: 24 },  // Name
+                    { wch: 10 },  // Level
+                    { wch: 16 },  // Academic Year
+                    { wch: 20 },  // Semester
+                    { wch: 16 },  // Amount Due
+                    { wch: 16 },  // Amount Paid
+                    { wch: 12 }   // Status
+
+                ];
+
+
+                /* FILTER INFORMATION */
+
+                const infoData = [
+
+                    [
+                        "VoteAfric Department Student Report"
+                    ],
+
+                    [],
+
+                    [
+                        "Faculty",
+                        "Faculty of Computing"
+                    ],
+
+                    [
+                        "Department",
+                        "Computer Science"
+                    ],
+
+                    [
+                        "Academic Year",
+                        academicYearFilter.value
+                        || "All Academic Years"
+                    ],
+
+                    [
+                        "Semester",
+                        semesterFilter.value
+                        || "All Semesters"
+                    ],
+
+                    [
+                        "Level",
+                        levelFilter.value
+                            ? "Level " + levelFilter.value
+                            : "All Levels"
+                    ],
+
+                    [
+                        "Status",
+                        statusFilter.value
+                        || "All Status"
+                    ],
+
+                    [
+                        "Records Exported",
+                        visibleRows.length
+                    ]
+
+                ];
+
+
+                const infoWorksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        infoData
+                    );
+
+
+                infoWorksheet["!cols"] = [
+
+                    { wch: 22 },
+                    { wch: 30 }
+
+                ];
+
+
+                /* WORKBOOK */
+
+                const workbook =
+                    XLSX.utils.book_new();
+
+
+                /*
+                    Student records FIRST.
+                */
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    studentWorksheet,
+                    "Students"
+                );
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    infoWorksheet,
+                    "Report Info"
+                );
+
+
+                /* DOWNLOAD */
+
+                XLSX.writeFile(
+                    workbook,
+                    "Computer_Science_Students.xlsx"
+                );
+
+            }
+        );
+
+
+        /* INITIAL FILTER */
+
+        filterStudents();
+
+    }
+);
+
+</script>
+
+{% endblock %}
