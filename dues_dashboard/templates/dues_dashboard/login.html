@@ -1,37 +1,381 @@
-{% extends 'voting/base.html' %}
+{% extends 'base.html' %}
+
 {% load static %}
 {% block content %}
 
+<style>
+    /* =========================================
+       FACULTY / DEPARTMENT LOGIN PAGE
+    ========================================= */
+
+    .adminLogin-form {
+        min-height: calc(100vh - 70px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 20px;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    /* soft background effect */
+    .adminLogin-form::before {
+        content: "";
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: rgba(121, 72, 177, 0.10);
+        filter: blur(70px);
+        pointer-events: none;
+    }
+
+
+    /* =========================================
+       FORM CARD
+    ========================================= */
+
+    .adminLogin-form .form-for-voting {
+        width: 100%;
+        max-width: 430px;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 38px;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 2;
+
+        box-shadow:
+            0 25px 60px rgba(0, 0, 0, 0.22),
+            0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    /* top purple accent */
+    .adminLogin-form .form-for-voting::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 35px;
+        right: 35px;
+        height: 4px;
+        border-radius: 0 0 5px 5px;
+        background: linear-gradient(
+            90deg,
+            #5e318f,
+            #7a47af,
+            #9a68c5
+        );
+    }
+
+
+    /* =========================================
+       HEADING
+    ========================================= */
+
+    .adminLogin-form .welcome-area {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .adminLogin-form .welcome-area::before {
+        content: "";
+        display: block;
+        width: 56px;
+        height: 56px;
+        margin: 0 auto 18px;
+        border-radius: 16px;
+
+        background:
+            #f3edf9
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%236b3fa0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E")
+            center / 28px
+            no-repeat;
+    }
+
+    .adminLogin-form .welcome-area h2 {
+        margin: 0;
+        color: #202020;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.3;
+        letter-spacing: -0.3px;
+    }
+
+    .adminLogin-form .welcome-area h2::after {
+        content: "Sign in with your assigned credentials";
+        display: block;
+        margin-top: 9px;
+
+        color: #858585;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0;
+    }
+
+
+    /* =========================================
+       INPUTS
+    ========================================= */
+
+    .adminLogin-form .t-input {
+        width: 100%;
+    }
+
+    .adminLogin-form .t-input label {
+        display: inline-block;
+        margin-bottom: 8px;
+
+        color: #292929;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .adminLogin-form .t-input input {
+        display: block;
+        width: 100%;
+        height: 52px;
+
+        padding: 0 15px;
+
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+
+        background: #fafafa;
+        color: #222222;
+
+        font-size: 14px;
+        font-family: inherit;
+
+        outline: none;
+        box-sizing: border-box;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease;
+    }
+
+    .adminLogin-form .t-input input::placeholder {
+        color: #a1a1a1;
+    }
+
+    .adminLogin-form .t-input input:focus {
+        background: #ffffff;
+        border-color: #7545aa;
+        box-shadow: 0 0 0 4px rgba(117, 69, 170, 0.10);
+    }
+
+
+    /* Remove excessive spacing created by br */
+    .adminLogin-form .form-for-voting > br {
+        line-height: 10px;
+    }
+
+
+    /* =========================================
+       LOGIN BUTTON
+    ========================================= */
+
+    .adminLogin-form .form-for-voting > button {
+        width: 100%;
+        height: 52px;
+
+        margin-top: 25px;
+
+        border: none;
+        border-radius: 10px;
+
+        background: linear-gradient(
+            135deg,
+            #60328f,
+            #7946ad
+        );
+
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: inherit;
+
+        cursor: pointer;
+
+        box-shadow: 0 7px 16px rgba(100, 53, 148, 0.18);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            filter 0.2s ease;
+    }
+
+    .adminLogin-form .form-for-voting > button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(100, 53, 148, 0.28);
+        filter: brightness(1.05);
+    }
+
+    .adminLogin-form .form-for-voting > button:active {
+        transform: translateY(0);
+    }
+
+
+    /* =========================================
+       DJANGO MESSAGES
+    ========================================= */
+
+    .alert {
+        width: calc(100% - 40px);
+        max-width: 430px;
+
+        margin: 20px auto 0;
+        padding: 13px 16px;
+
+        box-sizing: border-box;
+        border-radius: 10px;
+
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .alert-error,
+    .alert-danger {
+        background: #fff2f2;
+        border: 1px solid #ffd0d0;
+        color: #be2929;
+    }
+
+    .alert-success {
+        background: #effaf3;
+        border: 1px solid #c9ecd5;
+        color: #24733f;
+    }
+
+    .alert-warning {
+        background: #fff8e9;
+        border: 1px solid #f4dfae;
+        color: #8c6210;
+    }
+
+    .alert-info {
+        background: #eef6ff;
+        border: 1px solid #cbdff7;
+        color: #315f91;
+    }
+
+
+    /* =========================================
+       MOBILE
+    ========================================= */
+
+    @media (max-width: 600px) {
+
+        .adminLogin-form {
+            padding: 30px 16px;
+        }
+
+        .adminLogin-form .form-for-voting {
+            max-width: 100%;
+            padding: 32px 22px;
+            border-radius: 17px;
+        }
+
+        .adminLogin-form .welcome-area {
+            margin-bottom: 27px;
+        }
+
+        .adminLogin-form .welcome-area h2 {
+            font-size: 21px;
+        }
+
+        .adminLogin-form .welcome-area::before {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+        }
+
+        .adminLogin-form .t-input input {
+            height: 50px;
+        }
+
+        .adminLogin-form .form-for-voting > button {
+            height: 50px;
+        }
+    }
+.welcome-area h2{
+    color: #ffff !important;
+}
+</style>
+
+
 {% if messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}">{{ message }}</div>
-{% endfor %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
 {% endif %}
+
 
 <section class="paymentForm adminLogin-form">
 
-
-
     <form class="form-for-voting" method="POST">
+
         <div class="welcome-area">
             <h2>Faculty or Department Login</h2>
         </div>
 
+
         {% csrf_token %}
-        
+
+
         <div class="t-input">
-            <label for="username">Username</label><br>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            </div>
+
+            <label for="username">
+                Username
+            </label>
             <br>
-            <div class="t-input">
-                <label for="password">Password</label><br>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+                required
+            >
+
+        </div>
+
+
+        <br>
+
+
+        <div class="t-input">
+
+            <label for="password">
+                Password
+            </label>
+            <br>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+        </div>
+
+
         <!-- pay button -->
-        <button type="submit">Login</button>
+        <button type="submit">
+            Login
+        </button>
 
     </form>
+
 </section>
 
 {% endblock content %}
