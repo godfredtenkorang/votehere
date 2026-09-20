@@ -4,6 +4,7 @@ import uuid
 from vote.models import Category
 from django.utils import timezone
 from ticket.models import Event
+from django.contrib.auth.models import User
 
 class CustomSession(models.Model):
     SESSION_TYPES = (
@@ -105,6 +106,16 @@ class PaymentTransaction(models.Model):
     # Donation-specific fields
     donation_code = models.CharField(max_length=10, null=True, blank=True) # New
     
+    # For dues
+    student_number = models.CharField(max_length=50, null=True, blank=True)
+    student_name = models.CharField(max_length=200, null=True, blank=True)
+    department = models.CharField(max_length=100, null=True, blank=True)
+    level = models.IntegerField(null=True, blank=True)
+    academic_year = models.CharField(max_length=20, null=True, blank=True)
+    
+    # Additional data
+    extra_data = models.JSONField(default=dict, blank=True)
+    
     timestamp = models.DateTimeField(null=True, blank=True)  # To store the timestamp of the transaction
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -135,6 +146,7 @@ class SMSLog(models.Model):
 class Faculty(models.Model):
     code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)  # Optional user association
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -144,6 +156,7 @@ class Faculty(models.Model):
 class Department(models.Model):
     code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)  # Optional user association
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='departments')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

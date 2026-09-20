@@ -1,5 +1,56 @@
 from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from ussd.models import Faculty, Department
 
+
+def dues_login(request):
+    """Step 1: validate credentials, stash user in session, go to code entry."""
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Do NOT log in yet — wait for code verification
+            request.session['pending_user_id'] = user.id
+            return redirect('enter_code')
+        else:
+            messages.error(request, 'Invalid credentials.')
+
+    return render(request, 'dues_dashboard/login.html')
+
+
+def enter_code(request):
+    """Step 2: user enters a Faculty or Department code to determine their role."""
+    pending_id = request.session.get('pending_user_id')
+    if not pending_id:
+        messages.error(request, 'Session expired. Please log in again.')
+        return redirect('dues_login')
+    
+    if request.method == 'POST':
+        code = request.POST.get('code', '').strip()
+        
+        faculty = Faculty.objects.filter(code__iexact=code).first()
+        department = Department.objects.filter(code__iexact=code).first()
+        
+        if faculty and faculty.user_id == pending_id:
+            request.session['scope'] = 'faculty'
+            request.session['scope_id'] = faculty.id
+            return redirect('faculty_dashboard')
+        
+        elif department and department.user_id == pending_id:
+            request.session['scope'] = 'department'
+            request.session['scope_id'] = department.id
+            return redirect('department_dashboard')
+        else:
+            messages.error(request, 'You are not authorized for this code.')
+        
+        messages.error(request, 'Invalid faculty or department code. Please try again.')
+        
+    return render(request, 'dues_dashboard/enter_code.html')
 
 # =========================================================
 # SUPER ADMIN

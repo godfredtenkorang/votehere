@@ -3,6 +3,8 @@ from . import views
 
 
 urlpatterns = [
+    path("login/", views.dues_login, name="dues_login"),
+    path("enter-code/", views.enter_code, name="enter_code"),
 
     # =====================================================
     # SUPER ADMIN
