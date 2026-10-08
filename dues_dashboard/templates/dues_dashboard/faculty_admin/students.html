@@ -22,7 +22,7 @@ Faculty Students | VoteAfric
             <h1>Students</h1>
 
             <p>
-                View students under the Faculty of Computing.
+                View students under the {{ faculty.name }}.
             </p>
 
         </div>
@@ -35,7 +35,7 @@ Faculty Students | VoteAfric
          FILTERS
     ====================================================== -->
 
-    <div class="dashboard-filter">
+    <form method="get" class="dashboard-filter" id="facultyStudentFilter">
 
 
         <div class="payment-search">
@@ -45,110 +45,100 @@ Faculty Students | VoteAfric
             <input
                 type="text"
                 id="facultyStudentSearch"
+                name="q"
+                value="{{ search }}"
                 placeholder="Search Student ID or Name"
             >
 
         </div>
 
 
-        <select id="facultyStudentAcademicYear">
-
-            <option value="2026/2027" selected>
-                2026/2027
-            </option>
-
+        <select id="facultyStudentAcademicYear" name="academic_year">
+            {% for year in academic_years %}
+                <option value="{{ year }}" {% if year == academic_year %}selected{% endif %}>
+                    {{ year }}
+                </option>
+            {% endfor %}
         </select>
 
 
-        <select id="facultyStudentSemester">
+        <select id="facultyStudentSemester" name="semester">
 
             <option value="">
                 All Semesters
             </option>
 
-            <option value="First Semester">
+            <option value="First Semester" {% if semester == "First Semester" %}selected{% endif %}>
                 First Semester
             </option>
 
-            <option value="Second Semester">
+            <option value="Second Semester" {% if semester == "Second Semester" %}selected{% endif %}>
                 Second Semester
             </option>
 
         </select>
 
 
-        <select id="facultyStudentDepartment">
+        <select id="facultyStudentDepartment" name="department">
 
             <option value="">
                 All Departments
             </option>
-
-            <option value="Computer Science">
-                Computer Science
-            </option>
-
-            <option value="Information Technology">
-                Information Technology
-            </option>
-
-            <option value="Cyber Security">
-                Cyber Security
-            </option>
-
-            <option value="Software Engineering">
-                Software Engineering
-            </option>
-
+            {% for dept in departments %}
+                <option value="{{ dept.code }}" {% if dept.code == department %}selected{% endif %}>
+                    {{ dept.name }}
+                </option>
+            {% endfor %}
         </select>
 
 
-        <select id="facultyStudentLevel">
+        <select id="facultyStudentLevel" name="level">
 
             <option value="">
                 All Levels
             </option>
 
-            <option value="100">
+            <option value="100" {% if level == "100" %}selected{% endif %}>
                 Level 100
             </option>
 
-            <option value="200">
+            <option value="200" {% if level == "200" %}selected{% endif %}>
                 Level 200
             </option>
 
-            <option value="300">
+            <option value="300" {% if level == "300" %}selected{% endif %}>
                 Level 300
             </option>
 
-            <option value="400">
+            <option value="400" {% if level == "400" %}selected{% endif %}>
                 Level 400
             </option>
 
         </select>
 
 
-        <select id="facultyStudentStatus">
+        <select id="facultyStudentStatus" name="status">
 
             <option value="">
                 All Status
             </option>
 
-            <option value="Paid">
+            <option value="Paid" {% if status == "Paid" %}selected{% endif %}>
                 Paid
             </option>
 
-            <option value="Pending">
+            <option value="Pending" {% if status == "Pending" %}selected{% endif %}>
                 Pending
             </option>
 
-            <option value="Failed">
+            <option value="Failed" {% if status == "Failed" %}selected{% endif %}>
                 Failed
             </option>
 
         </select>
 
 
-    </div>
+    </form>
 
 
 
@@ -166,7 +156,7 @@ Faculty Students | VoteAfric
                 <h2>Faculty Students</h2>
 
                 <p id="facultyStudentResultText">
-                    Students from departments under Faculty of Computing.
+                    Students from departments under {{ faculty.name }}.
                 </p>
 
             </div>
@@ -228,43 +218,52 @@ Faculty Students | VoteAfric
 
                 <tbody>
 
-
+                    {% for s in students %}
                     <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Computer Science"
-                        data-level="300"
-                        data-status="Paid"
+                        data-academic-year="{{ s.academic_year|default:'' }}"
+                        data-semester="{{ s.semester|default:'' }}"
+                        data-department="{{ s.department_name|default:'' }}"
+                        data-level="{{ s.level|default:'' }}"
+                        data-status="{{ s.status }}"
                     >
 
-                        <td>CS2026001</td>
+                        <td>{{ s.student_number|default:'-' }}</td>
 
-                        <td>Michael Owusu</td>
+                        <td>{{ s.student_name|default:'-' }}</td>
 
-                        <td>Computer Science</td>
+                        <td>{{ s.department_name }}</td>
 
-                        <td>300</td>
+                        <td>{{ s.level|default:'-' }}</td>
 
-                        <td>2026/2027</td>
+                        <td>{{ s.academic_year|default:'-' }}</td>
 
-                        <td>First Semester</td>
+                        <td>{{ s.semester|default:'-' }}</td>
 
-                        <td>GH₵100.00</td>
+                        <td>GH₵{{ s.amount_due|floatformat:2 }}</td>
 
-                        <td>GH₵100.00</td>
+                        <td>GH₵{{ s.amount_paid|floatformat:2 }}</td>
 
                         <td>
-
-                            <span class="status-paid">
-                                Paid
-                            </span>
+                            {% if s.status == 'Paid' %}
+                                <span class="status-paid">
+                                    Paid
+                                </span>
+                            {% elif s.status == 'Pending' %}
+                                <span class="status-pending">
+                                    Pending
+                                </span>
+                            {% else %}
+                                <span class="status-pending">
+                                    {{ s.status }}
+                                </span>
+                            {% endif %}
 
                         </td>
 
                         <td>
 
                             <a
-                                href="{% url 'faculty_student_detail' 'CS2026001' %}"
+                                href="{% url 'faculty_student_detail' s.student_number %}"
                             >
 
                                 <button
@@ -279,271 +278,19 @@ Faculty Students | VoteAfric
                         </td>
 
                     </tr>
+                    {% empty %}
 
+                        <tr>
 
+                            <td colspan="10" class="text-center; padding:24px;">
 
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Information Technology"
-                        data-level="200"
-                        data-status="Paid"
-                    >
+                                No student records found for the selected filters.
 
-                        <td>IT2026014</td>
+                            </td>
 
-                        <td>Akosua Mensah</td>
+                        </tr>
 
-                        <td>Information Technology</td>
-
-                        <td>200</td>
-
-                        <td>2026/2027</td>
-
-                        <td>First Semester</td>
-
-                        <td>GH₵120.00</td>
-
-                        <td>GH₵120.00</td>
-
-                        <td>
-
-                            <span class="status-paid">
-                                Paid
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_student_detail' 'IT2026014' %}"
-                            >
-
-                                <button
-                                    type="button"
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Cyber Security"
-                        data-level="100"
-                        data-status="Pending"
-                    >
-
-                        <td>CYB2026028</td>
-
-                        <td>Daniel Ofori</td>
-
-                        <td>Cyber Security</td>
-
-                        <td>100</td>
-
-                        <td>2026/2027</td>
-
-                        <td>First Semester</td>
-
-                        <td>GH₵120.00</td>
-
-                        <td>GH₵0.00</td>
-
-                        <td>
-
-                            <span class="status-pending">
-                                Pending
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_student_detail' 'CYB2026028' %}"
-                            >
-
-                                <button
-                                    type="button"
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Software Engineering"
-                        data-level="400"
-                        data-status="Paid"
-                    >
-
-                        <td>SE2026041</td>
-
-                        <td>Abena Boateng</td>
-
-                        <td>Software Engineering</td>
-
-                        <td>400</td>
-
-                        <td>2026/2027</td>
-
-                        <td>First Semester</td>
-
-                        <td>GH₵80.00</td>
-
-                        <td>GH₵80.00</td>
-
-                        <td>
-
-                            <span class="status-paid">
-                                Paid
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_student_detail' 'SE2026041' %}"
-                            >
-
-                                <button
-                                    type="button"
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Computer Science"
-                        data-level="200"
-                        data-status="Failed"
-                    >
-
-                        <td>CS2026063</td>
-
-                        <td>Samuel Mensah</td>
-
-                        <td>Computer Science</td>
-
-                        <td>200</td>
-
-                        <td>2026/2027</td>
-
-                        <td>First Semester</td>
-
-                        <td>GH₵100.00</td>
-
-                        <td>GH₵0.00</td>
-
-                        <td>
-
-                            <span class="status-failed">
-                                Failed
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_student_detail' 'CS2026063' %}"
-                            >
-
-                                <button
-                                    type="button"
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Information Technology"
-                        data-level="100"
-                        data-status="Paid"
-                    >
-
-                        <td>IT2026072</td>
-
-                        <td>Priscilla Asare</td>
-
-                        <td>Information Technology</td>
-
-                        <td>100</td>
-
-                        <td>2026/2027</td>
-
-                        <td>First Semester</td>
-
-                        <td>GH₵150.00</td>
-
-                        <td>GH₵150.00</td>
-
-                        <td>
-
-                            <span class="status-paid">
-                                Paid
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_student_detail' 'IT2026072' %}"
-                            >
-
-                                <button
-                                    type="button"
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
+                    {% endfor %}
 
 
                 </tbody>

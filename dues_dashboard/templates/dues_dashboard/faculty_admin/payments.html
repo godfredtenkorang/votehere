@@ -15,14 +15,14 @@ Faculty Payments | VoteAfric
 
         <div class="heading-left">
             <h1>Payments</h1>
-            <p>View dues payments made under the Faculty of Computing.</p>
+            <p>View dues payments made under the {{ faculty.name }}</p>
         </div>
 
     </div>
 
 
     <!-- FILTERS -->
-    <div class="dashboard-filter">
+    <form method="get" class="dashboard-filter" id="facultyPaymentFilter">
 
         <div class="payment-search">
 
@@ -31,109 +31,99 @@ Faculty Payments | VoteAfric
             <input
                 type="text"
                 id="facultyPaymentSearch"
+                name="q"
+                value="{{ search }}"
                 placeholder="Search Student ID or Transaction Ref."
             >
 
         </div>
 
 
-        <select id="facultyPaymentAcademicYear">
-
-            <option value="2026/2027" selected>
-                2026/2027
-            </option>
+        <select id="facultyPaymentAcademicYear" name="academic_year">
+            {% for year in academic_years %}
+                <option value="{{ year }}" {% if year == academic_year %}selected{% endif %}>
+                    {{ year }}
+                </option>
+            {% endfor %}
 
         </select>
 
 
-        <select id="facultyPaymentSemester">
+        <select id="facultyPaymentSemester" name="semester">
 
             <option value="">
                 All Semesters
             </option>
 
-            <option value="First Semester">
+            <option value="First Semester" {% if semester == "First Semester" %}selected{% endif %}>
                 First Semester
             </option>
 
-            <option value="Second Semester">
+            <option value="Second Semester" {% if semester == "Second Semester" %}selected{% endif %}>
                 Second Semester
             </option>
 
         </select>
 
 
-        <select id="facultyPaymentDepartment">
+        <select id="facultyPaymentDepartment" name="department">
 
             <option value="">
                 All Departments
             </option>
-
-            <option value="Computer Science">
-                Computer Science
-            </option>
-
-            <option value="Information Technology">
-                Information Technology
-            </option>
-
-            <option value="Cyber Security">
-                Cyber Security
-            </option>
-
-            <option value="Software Engineering">
-                Software Engineering
-            </option>
-
+            {% for dept in departments %}
+                <option value="{{ dept.code }}" {% if dept == selected_department %}selected{% endif %}>
+                    {{ dept }}
+                </option>
+            {% endfor %}
         </select>
 
-
-        <select id="facultyPaymentLevel">
+        <select id="facultyPaymentLevel" name="level">
 
             <option value="">
                 All Levels
             </option>
 
-            <option value="100">
+            <option value="100" {% if level == "100" %}selected{% endif %}>
                 Level 100
             </option>
 
-            <option value="200">
+            <option value="200" {% if level == "200" %}selected{% endif %}>
                 Level 200
             </option>
 
-            <option value="300">
+            <option value="300" {% if level == "300" %}selected{% endif %}>
                 Level 300
             </option>
 
-            <option value="400">
+            <option value="400" {% if level == "400" %}selected{% endif %}>
                 Level 400
             </option>
 
         </select>
 
 
-        <select id="facultyPaymentStatus">
+        <select id="facultyPaymentStatus" name="status">
 
             <option value="">
                 All Status
             </option>
 
-            <option value="Paid">
+            <option value="Paid" {% if status == "Paid" %}selected{% endif %}>
                 Paid
             </option>
 
-            <option value="Pending">
+            <option value="Pending" {% if status == "Pending" %}selected{% endif %}>
                 Pending
             </option>
 
-            <option value="Failed">
+            <option value="Failed" {% if status == "Failed" %}selected{% endif %}>
                 Failed
             </option>
 
         </select>
 
-    </div>
+    </form>
 
 
     <!-- PAYMENT TABLE -->
@@ -146,7 +136,7 @@ Faculty Payments | VoteAfric
                 <h2>Faculty Payments</h2>
 
                 <p id="facultyPaymentResultText">
-                    Payments from departments under Faculty of Computing.
+                    Payments from departments under {{ faculty.name }}.
                 </p>
 
             </div>
@@ -196,174 +186,35 @@ Faculty Payments | VoteAfric
 
                 <tbody>
 
-
+                    {% for p in payments %}
                     <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Computer Science"
-                        data-level="300"
-                        data-status="Paid"
+                        data-academic-year="{{ p.academic_year|default:'' }}"
+                        data-semester="{{ p.extra_data.semester|default:'' }}"
+                        data-department="{{ p.department.name|default:'' }}"
+                        data-level="{{ p.level|default:'' }}"
+                        data-status="{{ p.get_status_display }}"
                     >
-
-                        <td>TXN-260912-001</td>
-                        <td>CS2026001</td>
-                        <td>Michael Owusu</td>
-                        <td>Computer Science</td>
-                        <td>300</td>
-                        <td>GH₵100.00</td>
-                        <td>GH₵50.00</td>
-                        <td>GH₵50.00</td>
-                        <td>12 Sep 2026</td>
-                        <td>08:42 AM</td>
-
+                        <td>{{ p.order_id }}</td>
+                        <td>{{ p.student_number|default:"—" }}</td>
+                        <td>{{ p.student_name|default:"—" }}</td>
+                        <td>{{ p.department.name|default:"—" }}</td>
+                        <td>{{ p.level|default:"—" }}</td>
+                        <td>GH₵{{ p.amount|floatformat:2 }}</td>
+                        <td>GH₵{{ p.faculty_share_amount|floatformat:2 }}</td>
+                        <td>GH₵{{ p.department_share_amount|floatformat:2 }}</td>
+                        <td>{{ p.timestamp|date:"d M Y" }}</td>
+                        <td>{{ p.timestamp|time:"h:i A" }}</td>
                         <td>
-                            <span class="status-paid">
-                                Paid
-                            </span>
+                            {% if p.status == 'PAID' %}
+                                <span class="status-paid">{{ p.get_status_display }}</span>
+                            {% elif p.status == 'PENDING' %}
+                                <span class="status-pending">{{ p.get_status_display }}</span>
+                            {% else %}
+                                <span class="status-failed">{{ p.get_status_display }}</span>
+                            {% endif %}
                         </td>
-
                     </tr>
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Information Technology"
-                        data-level="200"
-                        data-status="Paid"
-                    >
-
-                        <td>TXN-260912-002</td>
-                        <td>IT2026014</td>
-                        <td>Akosua Mensah</td>
-                        <td>Information Technology</td>
-                        <td>200</td>
-                        <td>GH₵120.00</td>
-                        <td>GH₵60.00</td>
-                        <td>GH₵60.00</td>
-                        <td>12 Sep 2026</td>
-                        <td>09:15 AM</td>
-
-                        <td>
-                            <span class="status-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                    </tr>
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Cyber Security"
-                        data-level="100"
-                        data-status="Pending"
-                    >
-
-                        <td>TXN-260912-003</td>
-                        <td>CYB2026028</td>
-                        <td>Daniel Ofori</td>
-                        <td>Cyber Security</td>
-                        <td>100</td>
-                        <td>GH₵120.00</td>
-                        <td>GH₵60.00</td>
-                        <td>GH₵60.00</td>
-                        <td>12 Sep 2026</td>
-                        <td>09:36 AM</td>
-
-                        <td>
-                            <span class="status-pending">
-                                Pending
-                            </span>
-                        </td>
-
-                    </tr>
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Software Engineering"
-                        data-level="400"
-                        data-status="Paid"
-                    >
-
-                        <td>TXN-260912-004</td>
-                        <td>SE2026041</td>
-                        <td>Abena Boateng</td>
-                        <td>Software Engineering</td>
-                        <td>400</td>
-                        <td>GH₵80.00</td>
-                        <td>GH₵40.00</td>
-                        <td>GH₵40.00</td>
-                        <td>12 Sep 2026</td>
-                        <td>10:04 AM</td>
-
-                        <td>
-                            <span class="status-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                    </tr>
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Computer Science"
-                        data-level="200"
-                        data-status="Failed"
-                    >
-
-                        <td>TXN-260912-005</td>
-                        <td>CS2026063</td>
-                        <td>Samuel Mensah</td>
-                        <td>Computer Science</td>
-                        <td>200</td>
-                        <td>GH₵100.00</td>
-                        <td>GH₵50.00</td>
-                        <td>GH₵50.00</td>
-                        <td>12 Sep 2026</td>
-                        <td>10:28 AM</td>
-
-                        <td>
-                            <span class="status-failed">
-                                Failed
-                            </span>
-                        </td>
-
-                    </tr>
-
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Information Technology"
-                        data-level="100"
-                        data-status="Paid"
-                    >
-
-                        <td>TXN-260912-006</td>
-                        <td>IT2026072</td>
-                        <td>Priscilla Asare</td>
-                        <td>Information Technology</td>
-                        <td>100</td>
-                        <td>GH₵150.00</td>
-                        <td>GH₵75.00</td>
-                        <td>GH₵75.00</td>
-                        <td>12 Sep 2026</td>
-                        <td>10:45 AM</td>
-
-                        <td>
-                            <span class="status-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                    </tr>
-
+                    {% endfor %}
 
                 </tbody>
 

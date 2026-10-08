@@ -1297,9 +1297,6 @@ def process_dues_payment(session, order_id, amount, status, timestamp):
             status=status,
             payment_type='DUES',
             invoice_no=invoice_no,
-            # nominee_code=nominee_code,
-            # votes=votes,
-            # category=nominee.category,
             timestamp=timestamp
         )
         

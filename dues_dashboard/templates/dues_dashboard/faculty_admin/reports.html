@@ -22,7 +22,7 @@ Faculty Reports | VoteAfric
             <h1>Reports</h1>
 
             <p>
-                View dues collection reports for Faculty of Computing.
+                View dues collection reports for {{ faculty.name }}.
             </p>
 
         </div>
@@ -35,82 +35,71 @@ Faculty Reports | VoteAfric
          FILTERS
     ====================================================== -->
 
-    <div class="dashboard-filter">
+    <form method="get" id="facultyReportFilters" class="dashboard-filter">
 
 
-        <select id="facultyReportAcademicYear">
-
-            <option value="2026/2027" selected>
-                2026/2027
+        <select id="facultyReportAcademicYear" name="academic_year">
+            {% for year in academic_years %}
+            <option value="{{ year }}" {% if year == academic_year %}selected{% endif %}>
+                {{ year }}
             </option>
-
+            {% endfor %}
         </select>
 
 
-        <select id="facultyReportSemester">
+        <select id="facultyReportSemester" name="semester">
 
             <option value="">
                 All Semesters
             </option>
 
-            <option value="First Semester">
+            <option value="First Semester" {% if semester == "First Semester" %}selected{% endif %}>
                 First Semester
             </option>
 
-            <option value="Second Semester">
+            <option value="Second Semester" {% if semester == "Second Semester" %}selected{% endif %}>
                 Second Semester
             </option>
 
         </select>
 
 
-        <select id="facultyReportDepartment">
+        <select id="facultyReportDepartment" name="department">
 
             <option value="">
                 All Departments
             </option>
-
-            <option value="Computer Science">
-                Computer Science
+            {% for dept in departments %}
+            <option value="{{ dept.code }}" {% if dept.code == department %}selected{% endif %}>
+                {{ dept.name }}
             </option>
-
-            <option value="Information Technology">
-                Information Technology
-            </option>
-
-            <option value="Cyber Security">
-                Cyber Security
-            </option>
-
-            <option value="Software Engineering">
-                Software Engineering
-            </option>
+            {% endfor %}
 
         </select>
 
 
-        <select id="facultyReportStatus">
+        <select id="facultyReportStatus" name="status">
 
             <option value="">
                 All Status
             </option>
 
-            <option value="Paid">
+            <option value="Paid" {% if status == "Paid" %}selected{% endif %}>
                 Paid
             </option>
 
-            <option value="Pending">
+            <option value="Pending" {% if status == "Pending" %}selected{% endif %}>
                 Pending
             </option>
 
-            <option value="Failed">
+            <option value="Failed" {% if status == "Failed" %}selected{% endif %}>
                 Failed
             </option>
 
         </select>
 
 
-    </div>
+    </form>
 
 
 
@@ -132,7 +121,7 @@ Faculty Reports | VoteAfric
                 <p>Total Collected</p>
 
                 <h2 id="facultyReportTotal">
-                    GH₵24,500.00
+                    GH₵{{ total_collected|floatformat:2 }}
                 </h2>
 
             </div>
@@ -152,7 +141,7 @@ Faculty Reports | VoteAfric
                 <p>Faculty Share</p>
 
                 <h2 id="facultyReportFacultyShare">
-                    GH₵12,250.00
+                    GH₵{{ faculty_share|floatformat:2 }}
                 </h2>
 
             </div>
@@ -172,7 +161,7 @@ Faculty Reports | VoteAfric
                 <p>Department Share</p>
 
                 <h2 id="facultyReportDepartmentShare">
-                    GH₵12,250.00
+                    GH₵{{ department_share|floatformat:2 }}
                 </h2>
 
             </div>
@@ -192,7 +181,7 @@ Faculty Reports | VoteAfric
                 <p>Students Paid</p>
 
                 <h2 id="facultyReportStudentsPaid">
-                    245
+                    {{ students_paid }}
                 </h2>
 
             </div>
@@ -275,175 +264,54 @@ Faculty Reports | VoteAfric
                 <tbody>
 
 
-                    <!-- COMPUTER SCIENCE -->
+                    {% for d in department_rows %}
 
                     <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Computer Science"
-                        data-paid="85"
-                        data-pending="3"
-                        data-failed="1"
+                        data-academic-year="{{ academic_year }}"
+                        data-semester="{{ d.semester|default:'' }}"
+                        data-department="{{ d.name }}"
+                        data-paid="{{ d.students_paid }}"
+                        data-pending="{{ d.pending }}"
+                        data-failed="{{ d.failed }}"
                     >
 
                         <td>
-                            Computer Science
+                            {{ d.name }}
                         </td>
 
                         <td>
-                            85
+                            {{ d.students_paid }}
                         </td>
 
                         <td>
-                            GH₵8,500.00
+                            GH₵{{ d.total_collected|floatformat:2 }}
                         </td>
 
                         <td>
-                            GH₵4,250.00
+                            GH₵{{ d.faculty_share|floatformat:2 }}
                         </td>
 
                         <td>
-                            GH₵4,250.00
+                            GH₵{{ d.department_share|floatformat:2 }}
                         </td>
 
                         <td>
-                            3
+                            {{ d.pending }}
                         </td>
 
                         <td>
-                            1
+                            {{ d.failed }}
                         </td>
 
                     </tr>
-
-
-
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:24px;">No report data available for the selected filters.</td>
+                    </tr>
+                    {% endfor %}
                     <!-- INFORMATION TECHNOLOGY -->
 
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Information Technology"
-                        data-paid="62"
-                        data-pending="2"
-                        data-failed="1"
-                    >
-
-                        <td>
-                            Information Technology
-                        </td>
-
-                        <td>
-                            62
-                        </td>
-
-                        <td>
-                            GH₵6,200.00
-                        </td>
-
-                        <td>
-                            GH₵3,100.00
-                        </td>
-
-                        <td>
-                            GH₵3,100.00
-                        </td>
-
-                        <td>
-                            2
-                        </td>
-
-                        <td>
-                            1
-                        </td>
-
-                    </tr>
-
-
-
-                    <!-- CYBER SECURITY -->
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Cyber Security"
-                        data-paid="48"
-                        data-pending="4"
-                        data-failed="1"
-                    >
-
-                        <td>
-                            Cyber Security
-                        </td>
-
-                        <td>
-                            48
-                        </td>
-
-                        <td>
-                            GH₵4,800.00
-                        </td>
-
-                        <td>
-                            GH₵2,400.00
-                        </td>
-
-                        <td>
-                            GH₵2,400.00
-                        </td>
-
-                        <td>
-                            4
-                        </td>
-
-                        <td>
-                            1
-                        </td>
-
-                    </tr>
-
-
-
-                    <!-- SOFTWARE ENGINEERING -->
-
-                    <tr
-                        data-academic-year="2026/2027"
-                        data-semester="First Semester"
-                        data-department="Software Engineering"
-                        data-paid="50"
-                        data-pending="3"
-                        data-failed="1"
-                    >
-
-                        <td>
-                            Software Engineering
-                        </td>
-
-                        <td>
-                            50
-                        </td>
-
-                        <td>
-                            GH₵5,000.00
-                        </td>
-
-                        <td>
-                            GH₵2,500.00
-                        </td>
-
-                        <td>
-                            GH₵2,500.00
-                        </td>
-
-                        <td>
-                            3
-                        </td>
-
-                        <td>
-                            1
-                        </td>
-
-                    </tr>
+                    
 
 
                 </tbody>
@@ -508,7 +376,7 @@ Faculty Reports | VoteAfric
                         </td>
 
                         <td id="facultyPaidCount">
-                            245
+                            {{ students_paid }}
                         </td>
 
                     </tr>
@@ -525,7 +393,7 @@ Faculty Reports | VoteAfric
                         </td>
 
                         <td id="facultyPendingCount">
-                            12
+                            {{ pending_count }}
                         </td>
 
                     </tr>
@@ -542,7 +410,7 @@ Faculty Reports | VoteAfric
                         </td>
 
                         <td id="facultyFailedCount">
-                            4
+                            {{ failed_count }}
                         </td>
 
                     </tr>

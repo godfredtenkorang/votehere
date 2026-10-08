@@ -12,7 +12,7 @@
 
         <div class="heading-left">
 
-            <h1>Faculty of Computing</h1>
+            <h1>{{faculty.name}}</h1>
 
             <p>
                 Faculty dues collection dashboard.
@@ -37,7 +37,7 @@
 
             <div>
                 <p>Total Collected</p>
-                <h2>GH₵24,500.00</h2>
+                <h2>GH₵{{ total_collected|floatformat:2 }}</h2>
             </div>
 
         </div>
@@ -52,7 +52,7 @@
 
             <div>
                 <p>Faculty Share</p>
-                <h2>GH₵12,250.00</h2>
+                <h2>GH₵{{ faculty_share|floatformat:2 }}</h2>
             </div>
 
         </div>
@@ -67,7 +67,7 @@
 
             <div>
                 <p>Department Share</p>
-                <h2>GH₵12,250.00</h2>
+                <h2>GH₵{{ department_share|floatformat:2 }}</h2>
             </div>
 
         </div>
@@ -82,7 +82,7 @@
 
             <div>
                 <p>Students Paid</p>
-                <h2>245</h2>
+                <h2>{{ students_paid }}</h2>
             </div>
 
         </div>
@@ -94,63 +94,59 @@
 
     <!-- FILTERS -->
 
-    <div class="dashboard-filter">
+    <div method="get" class="dashboard-filter">
 
 
-        <select>
+        <select name="academic_year" onchange="this.form.submit()">
 
-            <option>
+            <option value="2026/2027" {% if academic_year == "2026/2027" %}selected{% endif %}>
                 2026/2027
             </option>
 
         </select>
 
 
-        <select>
+        <select name="semester" onchange="this.form.submit()">
 
-            <option>
+
+            <option value="First Semester" {% if semester == "First Semester" %}selected{% endif %}>
                 First Semester
             </option>
 
-            <option>
+            <option value="Second Semester" {% if semester == "Second Semester" %}selected{% endif %}>
                 Second Semester
             </option>
 
         </select>
 
 
-        <select>
+        <select name="department" onchange="this.form.submit()">
 
-            <option>
-                All Departments
-            </option>
-
-            <option>
-                Computer Science
-            </option>
-
-            <option>
-                Information Technology
-            </option>
-
-            <option>
-                Cyber Security
-            </option>
-
-            <option>
-                Software Engineering
-            </option>
-
+            <option value="">All Departments</option>
+            {% for dept in departments %}
+                <option value="{{ dept.code }}" {% if department_code == dept.code %}selected{% endif %}>
+                    {{ dept.name }}
+                </option>
+            {% endfor %}
         </select>
 
 
-        <select>
+        <select name="level" onchange="this.form.submit()">
 
-            <option>All Levels</option>
-            <option>Level 100</option>
-            <option>Level 200</option>
-            <option>Level 300</option>
-            <option>Level 400</option>
+            <option value="">All Levels</option>
+            {% for lvl in "100,200,300,400"|slice:":0" %}{% endfor %}
+            <option value="100" {% if level == "100" %}selected{% endif %}>
+                Level 100
+            </option>
+            <option value="200" {% if level == "200" %}selected{% endif %}>
+                Level 200
+            </option>
+            <option value="300" {% if level == "300" %}selected{% endif %}>
+                Level 300
+            </option>
+            <option value="400" {% if level == "400" %}selected{% endif %}>
+                Level 400
+            </option>
 
         </select>
 
@@ -170,9 +166,7 @@
 
                 <h2>Departments</h2>
 
-                <p>
-                    Departments under Faculty of Computing.
-                </p>
+                <p>Departments under {{ faculty.name }}.</p>
 
             </div>
 
@@ -208,34 +202,21 @@
 
 
                 <tbody>
+                    {% for dept in departments %}
+                        <tr>
+                            <td>
+                                {{ dept.name }}
+                            </td>
 
-
-                    <tr>
-
-                        <td>
-                            Computer Science
-                        </td>
-
-                        <td>
-                            GH₵8,500.00
-                        </td>
-
-                        <td>
-                            GH₵4,250.00
-                        </td>
-
-                        <td>
-                            GH₵4,250.00
-                        </td>
-
-                        <td>
-                            85
-                        </td>
+                        <td>GH₵{{ dept.total|floatformat:2}}</td>
+                        <td>GH₵{{ dept.faculty_share|floatformat:2}}</td>
+                        <td>GH₵{{ dept.department_share|floatformat:2}}</td>
+                        <td>{{ dept.students_paid }}</td>
 
                         <td>
 
                             <a
-                                href="{% url 'faculty_department_detail' 'CS' %}"
+                                href="{% url 'faculty_department_detail' dept.code %}"
                             >
 
                                 <button
@@ -249,132 +230,9 @@
                         </td>
 
                     </tr>
-
-
-
-                    <tr>
-
-                        <td>
-                            Information Technology
-                        </td>
-
-                        <td>
-                            GH₵6,200.00
-                        </td>
-
-                        <td>
-                            GH₵3,100.00
-                        </td>
-
-                        <td>
-                            GH₵3,100.00
-                        </td>
-
-                        <td>
-                            62
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_department_detail' 'IT' %}"
-                            >
-
-                                <button
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr>
-
-                        <td>
-                            Cyber Security
-                        </td>
-
-                        <td>
-                            GH₵4,800.00
-                        </td>
-
-                        <td>
-                            GH₵2,400.00
-                        </td>
-
-                        <td>
-                            GH₵2,400.00
-                        </td>
-
-                        <td>
-                            48
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_department_detail' 'CYB' %}"
-                            >
-
-                                <button
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr>
-
-                        <td>
-                            Software Engineering
-                        </td>
-
-                        <td>
-                            GH₵5,000.00
-                        </td>
-
-                        <td>
-                            GH₵2,500.00
-                        </td>
-
-                        <td>
-                            GH₵2,500.00
-                        </td>
-
-                        <td>
-                            50
-                        </td>
-
-                        <td>
-
-                            <a
-                                href="{% url 'faculty_department_detail' 'SE' %}"
-                            >
-
-                                <button
-                                    class="table-action-btn"
-                                >
-                                    View
-                                </button>
-
-                            </a>
-
-                        </td>
-
-                    </tr>
+                    {% empty %}
+                    <tr><td colSpan="6">No departments found.</td></tr>
+                    {% endfor %}
 
 
                 </tbody>
@@ -439,64 +297,27 @@
 
 
                 <tbody>
-
-
+                    {% for payment in recent_payments %}
                     <tr>
-
-                        <td>TXN-260912-001</td>
-
-                        <td>CS2026001</td>
-
-                        <td>Michael Owusu</td>
-
-                        <td>Computer Science</td>
-
-                        <td>300</td>
-
-                        <td>GH₵100.00</td>
-
+                        <td>{{ payment.invoice_no }}</td>
+                        <td>{{ payment.student_number }}</td>
+                        <td>{{ payment.student_name }}</td>
+                        <td>{{ payment.department }}</td>
+                        <td>{{ payment.level }}</td>
+                        <td>GH₵{{ payment.amount|floatformat:2 }}</td>
                         <td>
                             <span class="status-paid">
                                 Paid
                             </span>
                         </td>
-
                     </tr>
-
-
-                    <tr>
-
-                        <td>TXN-260912-002</td>
-
-                        <td>IT2026014</td>
-
-                        <td>Akosua Mensah</td>
-
-                        <td>Information Technology</td>
-
-                        <td>200</td>
-
-                        <td>GH₵120.00</td>
-
-                        <td>
-                            <span class="status-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                    </tr>
-
-
+                    {% empty %}
+                    <tr><td colSpan="7">No recent payments found.</td></tr>
+                    {% endfor %}
                 </tbody>
-
-
             </table>
-
         </div>
-
     </div>
-
-
 </div>
 
 {% endblock %}

@@ -64,6 +64,50 @@ class CustomSession(models.Model):
     def __str__(self):
         return f"{self.session_key} - {self.candidate_id} - {self.event_id} - {self.msisdn} - {self.order_id}"
     
+    
+class Faculty(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)  # Optional user association
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.code} - {self.name}"
+
+class Department(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)  # Optional user association
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='departments')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.code} - {self.name}"
+
+class LevelDues(models.Model):
+    LEVEL_CHOICES = [
+        ('100', 'Level 100'),
+        ('200', 'Level 200'),
+        ('300', 'Level 300'),
+        ('400', 'Level 400'),
+    ]
+    
+    level = models.CharField(max_length=10, choices=LEVEL_CHOICES)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='level_dues')
+    academic_year = models.CharField(max_length=20)  # e.g., "2024/2025"
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['level', 'department', 'academic_year']
+
+    def __str__(self):
+        return f"{self.department.name} - {self.level} - {self.academic_year}"
+
 
 class PaymentTransaction(models.Model):
     PAYMENT_TYPES = (
@@ -113,6 +157,9 @@ class PaymentTransaction(models.Model):
     level = models.IntegerField(null=True, blank=True)
     academic_year = models.CharField(max_length=20, null=True, blank=True)
     
+    faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+    
     # Additional data
     extra_data = models.JSONField(default=dict, blank=True)
     
@@ -143,48 +190,6 @@ class SMSLog(models.Model):
         self.phone_number
         
         
-class Faculty(models.Model):
-    code = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=100)
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)  # Optional user association
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.code} - {self.name}"
-
-class Department(models.Model):
-    code = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=100)
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)  # Optional user association
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='departments')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.code} - {self.name}"
-
-class LevelDues(models.Model):
-    LEVEL_CHOICES = [
-        ('100', 'Level 100'),
-        ('200', 'Level 200'),
-        ('300', 'Level 300'),
-        ('400', 'Level 400'),
-    ]
-    
-    level = models.CharField(max_length=10, choices=LEVEL_CHOICES)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='level_dues')
-    academic_year = models.CharField(max_length=20)  # e.g., "2024/2025"
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ['level', 'department', 'academic_year']
-
-    def __str__(self):
-        return f"{self.department.name} - {self.level} - {self.academic_year}"
 
 class StudentDuesPayment(models.Model):
     PAYMENT_STATUS = [
